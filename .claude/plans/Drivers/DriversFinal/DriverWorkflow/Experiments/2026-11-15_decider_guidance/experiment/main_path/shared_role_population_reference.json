@@ -1,0 +1,728 @@
+{
+  "scope": "Source-based amount-role key only, frozen before shared_role_population inference. Not full-record gold. All 120 seeds in retained passages accounted for. Four supporting/reference occurrences are separately reported because role is context-dependent, never removed silently.",
+  "current_required": 16,
+  "not_current": 100,
+  "support_role_requires_review": 4,
+  "rows": [
+    {
+      "tag": "V0",
+      "text": "[78]:",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V1",
+      "text": "8.9%",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V2",
+      "text": "$2.84",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V3",
+      "text": "8.2%.",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V4",
+      "text": "51%,",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V5",
+      "text": "40",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V6",
+      "text": "$659.9",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V7",
+      "text": "8.2%",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V8",
+      "text": "11%.",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V9",
+      "text": "$1.24",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V10",
+      "text": "9.7%",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V11",
+      "text": "12.7%.",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V12",
+      "text": "2026",
+      "passage": "PR002",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V13",
+      "text": "$11.21",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V14",
+      "text": "$11.24",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V15",
+      "text": "8.4%",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V16",
+      "text": "8.7%.",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V17",
+      "text": "$4.86",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V18",
+      "text": "$4.90,",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V19",
+      "text": "10.5%",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V20",
+      "text": "11.4%.",
+      "passage": "PR002",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V21",
+      "text": "[253]:",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V22",
+      "text": "7.3%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V23",
+      "text": "14.6%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V24",
+      "text": "10%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V25",
+      "text": "3.1%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V26",
+      "text": "50.3%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V27",
+      "text": "58.1%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V28",
+      "text": "50.5%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V29",
+      "text": "41.4%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V30",
+      "text": "30",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V31",
+      "text": "50.3%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V32",
+      "text": "58.1%.",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V33",
+      "text": "28%",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V34",
+      "text": "2026.",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V35",
+      "text": "2026",
+      "passage": "PR003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V36",
+      "text": "[438]:",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V37",
+      "text": "27.8%,",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V38",
+      "text": "60",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V39",
+      "text": "$659.9",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V40",
+      "text": "$609.9",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V41",
+      "text": "23.2%",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V42",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V43",
+      "text": "23.4%",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V44",
+      "text": "40",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V45",
+      "text": "20.6%",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V46",
+      "text": "21%",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V47",
+      "text": "$502.5",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V48",
+      "text": "$463.5",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V49",
+      "text": "$1.24",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V50",
+      "text": "$1.13",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V51",
+      "text": "9.7%.",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V52",
+      "text": "12.7%",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V53",
+      "text": "1.5",
+      "passage": "PR004",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V54",
+      "text": "2026,",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V55",
+      "text": "$1.45",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V56",
+      "text": "2025",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V57",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V58",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V59",
+      "text": "$101",
+      "passage": "PR004",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V60",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V61",
+      "text": "20%,",
+      "passage": "PR004",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V62",
+      "text": "2025,",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V63",
+      "text": "2026,",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V64",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V65",
+      "text": "$0.03",
+      "passage": "PR004",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V66",
+      "text": "$0.04.",
+      "passage": "PR004",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V67",
+      "text": "[783]:",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V68",
+      "text": "[818]:",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V69",
+      "text": "Q3",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V70",
+      "text": "60",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V71",
+      "text": "Q3",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V72",
+      "text": "100",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V73",
+      "text": "70",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V74",
+      "text": "24.",
+      "passage": "QA000",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V75",
+      "text": "[901]:",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V76",
+      "text": "[928]:",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V77",
+      "text": "1.7",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V78",
+      "text": "10",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V79",
+      "text": "60%",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V80",
+      "text": "100",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V81",
+      "text": "30%",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V82",
+      "text": "30",
+      "passage": "QA001",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V83",
+      "text": "[1084]:",
+      "passage": "QA003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V84",
+      "text": "[1108]:",
+      "passage": "QA003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V85",
+      "text": "[1132]:",
+      "passage": "QA003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V86",
+      "text": "100",
+      "passage": "QA003",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V87",
+      "text": "[1443]:",
+      "passage": "QA006",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V88",
+      "text": "[1471]:",
+      "passage": "QA006",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V89",
+      "text": "95%",
+      "passage": "QA006",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V90",
+      "text": "2%",
+      "passage": "QA006",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V91",
+      "text": "3%",
+      "passage": "QA006",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V92",
+      "text": "[2548]:",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V93",
+      "text": "4Q",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V94",
+      "text": "4Q",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V95",
+      "text": "[2571]:",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V96",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V97",
+      "text": "9%.",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V98",
+      "text": "18.5%",
+      "passage": "QA016",
+      "expected_category": "support_role_requires_review"
+    },
+    {
+      "tag": "V99",
+      "text": "Q4.",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V100",
+      "text": "[2638]:",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V101",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V102",
+      "text": "8%.",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V103",
+      "text": "8%.",
+      "passage": "QA016",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V104",
+      "text": "7.8%.",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V105",
+      "text": "Q3,",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V106",
+      "text": "8.2%",
+      "passage": "QA016",
+      "expected_category": "support_role_requires_review"
+    },
+    {
+      "tag": "V107",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V108",
+      "text": "7.6,",
+      "passage": "QA016",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V109",
+      "text": "7.9.",
+      "passage": "QA016",
+      "expected_category": "current_required"
+    },
+    {
+      "tag": "V110",
+      "text": "[3112]:",
+      "passage": "QA020",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V111",
+      "text": "4Q",
+      "passage": "QA020",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V112",
+      "text": "[3142]:",
+      "passage": "QA020",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V113",
+      "text": "Q4",
+      "passage": "QA020",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V114",
+      "text": "[3270]:",
+      "passage": "QA022",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V115",
+      "text": "100",
+      "passage": "QA022",
+      "expected_category": "support_role_requires_review"
+    },
+    {
+      "tag": "V116",
+      "text": "27.",
+      "passage": "QA022",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V117",
+      "text": "[3296]:",
+      "passage": "QA022",
+      "expected_category": "not_current"
+    },
+    {
+      "tag": "V118",
+      "text": "100",
+      "passage": "QA022",
+      "expected_category": "support_role_requires_review"
+    },
+    {
+      "tag": "V119",
+      "text": "1st.",
+      "passage": "QA022",
+      "expected_category": "not_current"
+    }
+  ]
+}

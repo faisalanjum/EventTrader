@@ -1,0 +1,131 @@
+{
+  "rows": [
+    {
+      "id": "F0",
+      "target": "$11.21 billion to $11.24",
+      "selected": "S14",
+      "probability": 0.990445927296028,
+      "matches_preselected_reference": true,
+      "selected_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+    },
+    {
+      "id": "F1",
+      "target": "8.4% to 8.7%.",
+      "selected": "S14",
+      "probability": 0.9754505074249701,
+      "matches_preselected_reference": true,
+      "selected_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+    },
+    {
+      "id": "F2",
+      "target": "$4.86 to $4.90,",
+      "selected": "S15",
+      "probability": 0.9956376278221958,
+      "matches_preselected_reference": true,
+      "selected_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+    },
+    {
+      "id": "F3",
+      "target": "10.5% to 11.4%.",
+      "selected": "S15",
+      "probability": 0.9897901945192756,
+      "matches_preselected_reference": true,
+      "selected_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+    },
+    {
+      "id": "F4",
+      "target": "$101",
+      "selected": "S71",
+      "probability": 0.9879878645095072,
+      "matches_preselected_reference": true,
+      "selected_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+    },
+    {
+      "id": "F5",
+      "target": "20%,",
+      "selected": "S71",
+      "probability": 0.9816281876741175,
+      "matches_preselected_reference": true,
+      "selected_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+    },
+    {
+      "id": "V53",
+      "target": "1.5",
+      "selected": "S65",
+      "probability": 0.9888265852560212,
+      "matches_preselected_reference": true,
+      "selected_text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. "
+    },
+    {
+      "id": "V65",
+      "target": "$0.03",
+      "selected": "S75",
+      "probability": 0.9691686663648711,
+      "matches_preselected_reference": true,
+      "selected_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+    },
+    {
+      "id": "V66",
+      "target": "$0.04.",
+      "selected": "S75",
+      "probability": 0.9870107736999105,
+      "matches_preselected_reference": true,
+      "selected_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+    },
+    {
+      "id": "V90",
+      "target": "2%",
+      "selected": "S146",
+      "probability": 0.9739688069365288,
+      "matches_preselected_reference": true,
+      "selected_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. "
+    },
+    {
+      "id": "V91",
+      "target": "3%",
+      "selected": "S146",
+      "probability": 0.978616761998909,
+      "matches_preselected_reference": true,
+      "selected_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. "
+    },
+    {
+      "id": "V103",
+      "target": "8%.",
+      "selected": "S182",
+      "probability": 0.7809919976775646,
+      "matches_preselected_reference": false,
+      "selected_text": "And if you look at the guide for this quarter, this quarter is also at 8%. "
+    },
+    {
+      "id": "V108",
+      "target": "7.6,",
+      "selected": "S185",
+      "probability": 0.7584076718460875,
+      "matches_preselected_reference": false,
+      "selected_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+    },
+    {
+      "id": "V109",
+      "target": "7.9.",
+      "selected": "S185",
+      "probability": 0.6454760619350173,
+      "matches_preselected_reference": false,
+      "selected_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+    },
+    {
+      "id": "S212",
+      "target": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "selected": "S211",
+      "probability": 0.46260299783206127,
+      "matches_preselected_reference": false,
+      "selected_text": "If you looked at an entire year, it would be the 100 basis points that you referenced. "
+    }
+  ],
+  "seconds": 220.1999982399866,
+  "usage": {
+    "input_tokens": 19398,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "note": "Reference mismatch must be read before marking wrong; useful alternate source evidence is possible. Sentence selection is not measure extraction or complete records."
+}

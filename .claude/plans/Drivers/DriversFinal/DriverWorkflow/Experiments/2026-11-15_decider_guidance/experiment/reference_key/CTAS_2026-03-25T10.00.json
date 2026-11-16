@@ -1,0 +1,929 @@
+{
+  "source_id": "CTAS_2026-03-25T10.00",
+  "source_text_sha256": "eca43afcdf7ccc9c52f7b4700dd35f7a90bed00c6d0169d5fc6a27865b5db470",
+  "snapshot_sha256": "bdfc67053cc2bedb28f411ab4f352c9841f4e1630210fb9ca6db9569e818b9b5",
+  "rulebook_sha256": "f9376dcb51f648d58fc1527ca3472fcce6f0ca1bb517969ccc250077cad78ff0",
+  "annotated_at": "2026-11-15T16:08:56.939240-05:00",
+  "method": "Root agent read every source passage before consulting draft labels or legacy rows for this pass. Prior conversation exposure exists; NOT blinded or double-reviewed. Annotations never enter extraction prompts.",
+  "status": "Source claim inventory with exact evidence; not an adjudicated complete-record key.",
+  "record_policy": "../record_policy.md",
+  "claims": [
+    {
+      "id": "MAR01",
+      "meaning": "Annual revenue level",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1277,
+          "end": 1348,
+          "global_start": 2583,
+          "global_end": 2654,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "annual period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1349,
+          "end": 1463,
+          "global_start": 2655,
+          "global_end": 2769,
+          "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%.",
+          "role": "revenue level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        },
+        {
+          "passage": "QA003",
+          "start": 385,
+          "end": 1055,
+          "global_start": 16401,
+          "global_end": 17071,
+          "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+          "role": "energy assumption, no stated 30% assumption here"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "11210",
+        "level_high": "11240",
+        "level_unit": "m_usd",
+        "measurement_words": []
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar and applicability of all shared assumptions; keep measurement exclusions separate from assumptions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2583,
+        "end": 17071
+      }
+    },
+    {
+      "id": "MAR02",
+      "meaning": "Annual revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1277,
+          "end": 1348,
+          "global_start": 2583,
+          "global_end": 2654,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "annual period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1349,
+          "end": 1463,
+          "global_start": 2655,
+          "global_end": 2769,
+          "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%.",
+          "role": "revenue level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        },
+        {
+          "passage": "QA003",
+          "start": 385,
+          "end": 1055,
+          "global_start": 16401,
+          "global_end": 17071,
+          "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+          "role": "energy assumption, no stated 30% assumption here"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "8.4",
+        "level_high": "8.7",
+        "level_unit": "unknown",
+        "measurement_words": [
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar and applicability of all shared assumptions; keep measurement exclusions separate from assumptions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2583,
+        "end": 17071
+      }
+    },
+    {
+      "id": "MAR03",
+      "meaning": "Annual adjusted diluted EPS",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1277,
+          "end": 1348,
+          "global_start": 2583,
+          "global_end": 2654,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "annual period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1464,
+          "end": 1565,
+          "global_start": 2770,
+          "global_end": 2871,
+          "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%.",
+          "role": "adjusted diluted EPS level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        },
+        {
+          "passage": "QA003",
+          "start": 385,
+          "end": 1055,
+          "global_start": 16401,
+          "global_end": 17071,
+          "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+          "role": "energy assumption, no stated 30% assumption here"
+        },
+        {
+          "passage": "PR002",
+          "start": 1566,
+          "end": 1675,
+          "global_start": 2872,
+          "global_end": 2981,
+          "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+          "role": "EPS measurement exclusion, not a separate assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "4.86",
+        "level_high": "4.90",
+        "level_unit": "usd",
+        "measurement_words": [
+          "adjusted",
+          "diluted"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar and applicability of all shared assumptions; keep measurement exclusions separate from assumptions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2583,
+        "end": 17071
+      }
+    },
+    {
+      "id": "MAR04",
+      "meaning": "Annual adjusted diluted EPS growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1277,
+          "end": 1348,
+          "global_start": 2583,
+          "global_end": 2654,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "annual period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1464,
+          "end": 1565,
+          "global_start": 2770,
+          "global_end": 2871,
+          "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%.",
+          "role": "adjusted diluted EPS level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        },
+        {
+          "passage": "QA003",
+          "start": 385,
+          "end": 1055,
+          "global_start": 16401,
+          "global_end": 17071,
+          "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+          "role": "energy assumption, no stated 30% assumption here"
+        },
+        {
+          "passage": "PR002",
+          "start": 1566,
+          "end": 1675,
+          "global_start": 2872,
+          "global_end": 2981,
+          "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+          "role": "EPS measurement exclusion, not a separate assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "10.5",
+        "level_high": "11.4",
+        "level_unit": "unknown",
+        "measurement_words": [
+          "adjusted",
+          "diluted",
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar and applicability of all shared assumptions; keep measurement exclusions separate from assumptions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2583,
+        "end": 17071
+      }
+    },
+    {
+      "id": "MAR05",
+      "meaning": "Annual net interest expense",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 2026",
+        "level_low": "101",
+        "level_high": "101",
+        "level_unit": "m_usd",
+        "qualifier": "approximately",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar; preserve net and approximation."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 9101,
+        "end": 9727
+      }
+    },
+    {
+      "id": "MAR06",
+      "meaning": "Annual effective tax rate",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1763,
+          "end": 2389,
+          "global_start": 9101,
+          "global_end": 9727,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "annual guidance assumptions with separate interest/tax forecasts"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 2026",
+        "level_low": "20",
+        "level_high": "20",
+        "level_unit": "percent",
+        "comparison_text": "same compared to our fiscal 2025",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar; prior actual comparison is not an earlier-forecast comparison."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 9101,
+        "end": 9727
+      }
+    },
+    {
+      "id": "MAR07",
+      "meaning": "Debt to EBITDA at acquisition closing",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 3240,
+          "end": 3333,
+          "global_start": 7107,
+          "global_end": 7200,
+          "text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026.",
+          "role": "expected acquisition timing, not a financial amount"
+        },
+        {
+          "passage": "PR004",
+          "start": 1333,
+          "end": 1610,
+          "global_start": 8671,
+          "global_end": 8948,
+          "text": "Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities.",
+          "role": "company debt/EBITDA level conditional on closing"
+        }
+      ],
+      "expected_source_fields": {
+        "printed_value": "1.5",
+        "qualifier": "about",
+        "measure_text": "debt to EBITDA",
+        "time_type": "instant",
+        "period_text": "at closing",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not invent a closing date or pretend the whole H2 window is an exact instant; resolve permitted period representation.",
+        "Acquisition timing forecast itself follows planned-act/outside-approval rules, not automatic separate guidance."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 7107,
+        "end": 8948
+      }
+    },
+    {
+      "id": "MAR08",
+      "meaning": "Annual transaction-cost impact on diluted EPS",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 2390,
+          "end": 3087,
+          "global_start": 9728,
+          "global_end": 10425,
+          "text": "As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs.",
+          "role": "nonrecurring transaction costs and EPS impact excluded from adjusted guide"
+        },
+        {
+          "passage": "QA000",
+          "start": 0,
+          "end": 853,
+          "global_start": 12010,
+          "global_end": 12863,
+          "text": "Unknown [783]: Just two procedural ones. Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? in the fourth quarter. I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. So I thought maybe there was a little bit of deal related expense there in the third quarter. I'm not sure.\nScott Garula [818]: Yeah, Tim, good morning. Good question. The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. Any costs that were incurred in Q3 were immaterial.",
+          "role": "management explicitly assigns the stated EPS impact to both Q4 and fiscal-year guide"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 2026",
+        "printed_values": [
+          "0.03",
+          "0.04"
+        ],
+        "level_unit": "usd",
+        "measurement_words": [
+          "non-recurring transaction costs",
+          "impact on diluted earnings per share"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Preserve cost-impact direction without substituting total EPS; no computed adjusted-to-GAAP forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 9728,
+        "end": 12863
+      }
+    },
+    {
+      "id": "MAR09",
+      "meaning": "Q4 transaction-cost impact on diluted EPS",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 2390,
+          "end": 3087,
+          "global_start": 9728,
+          "global_end": 10425,
+          "text": "As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs.",
+          "role": "nonrecurring transaction costs and EPS impact excluded from adjusted guide"
+        },
+        {
+          "passage": "QA000",
+          "start": 0,
+          "end": 853,
+          "global_start": 12010,
+          "global_end": 12863,
+          "text": "Unknown [783]: Just two procedural ones. Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? in the fourth quarter. I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. So I thought maybe there was a little bit of deal related expense there in the third quarter. I'm not sure.\nScott Garula [818]: Yeah, Tim, good morning. Good question. The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. Any costs that were incurred in Q3 were immaterial.",
+          "role": "management explicitly assigns the stated EPS impact to both Q4 and fiscal-year guide"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fourth quarter",
+        "printed_values": [
+          "three",
+          "four"
+        ],
+        "level_unit": "usd",
+        "normalized_amounts": [
+          "0.03",
+          "0.04"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Same claim explicitly covers another target period; establish period-specific record and sign.",
+        "Amounts and cents wording are stated, not new calculations."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 9728,
+        "end": 12863
+      }
+    },
+    {
+      "id": "MAR10",
+      "meaning": "Fuel sensitivity versus actual guidance assumption",
+      "status": "claim_requires_interpretation",
+      "evidence": [
+        {
+          "passage": "QA001",
+          "start": 0,
+          "end": 1291,
+          "global_start": 13619,
+          "global_end": 14910,
+          "text": "Unknown [901]: Yeah, good point, Scott. I think maybe consensus didn't fully factor in everything because of the one-time gain last year. So that's a good reminder. Thank you. And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? I think this is an important question for investors.\nScott Garula [928]: Yeah, Tim, good question. Energy for the quarter was 1.7 percent, which was flat year over year, and up 10 basis points over the previous quarter. You know, certainly the increase in gas prices will have an impact. But just, you know, I want to remind everyone that, you know, only 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about 100 basis points. So if you just look at, you know, fuel's been, you know, continuing to increase. But if you assume a 30% increase in fuel costs, that would be sustained over an entire quarter, that would add 30 basis points of cost to our results. You know, so yes, it has an impact, but not something that we feel that we can't overcome. And we have contemplated this in our guide.",
+          "role": "conditional fuel sensitivity and general guidance inclusion; numerical assumption not unequivocally adopted"
+        },
+        {
+          "passage": "QA003",
+          "start": 385,
+          "end": 1055,
+          "global_start": 16401,
+          "global_end": 17071,
+          "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+          "role": "energy assumption, no stated 30% assumption here"
+        }
+      ],
+      "expected_source_fields": {
+        "conditional_input": "30% increase in fuel costs",
+        "conditional_effect": "30 basis points",
+        "duration": "an entire quarter",
+        "company_confirmed_actual_forecast_amount": false
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate illustration versus adopted forecast assumption. Preserve broad guide inclusion, but do not automatically make 30% or 30bp a current forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13619,
+        "end": 17071
+      }
+    },
+    {
+      "id": "MAR11",
+      "meaning": "Standing total growth target",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA006",
+          "start": 499,
+          "end": 784,
+          "global_start": 21207,
+          "global_end": 21492,
+          "text": "Jim Rosakis [1471]: Hey, Ronan, this is Jim. Good morning. I'll take that question. I'll start with it. And if we start to think about our growth formula and what we're attempting to achieve every quarter. You know, we do like to target that mid to high single-digit total growth rate.",
+          "role": "standing target; later retention and pricing are current drivers, not new forecasts"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "mid to high single-digit total growth rate",
+        "period_text": "every quarter",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Source says total, not organic; resolve recurring horizon without assigning a single fiscal quarter."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 21207,
+        "end": 21492
+      }
+    },
+    {
+      "id": "MAR12",
+      "meaning": "Q4 implied organic revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA016",
+          "start": 0,
+          "end": 2189,
+          "global_start": 37265,
+          "global_end": 39454,
+          "text": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+          "role": "company/Q4/organic context, actual and earlier guidance, and two current implied values"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "Q4",
+        "level_low": "7.6",
+        "level_high": "7.6",
+        "level_unit": "unknown",
+        "measurement_words": [
+          "organic"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not borrow actual Q3 8.2 or prior H2 7.8; fiscal calendar and full measure association required."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 37265,
+        "end": 39454
+      }
+    },
+    {
+      "id": "MAR13",
+      "meaning": "H2 implied average organic growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA016",
+          "start": 0,
+          "end": 2189,
+          "global_start": 37265,
+          "global_end": 39454,
+          "text": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+          "role": "company/Q4/organic context, actual and earlier guidance, and two current implied values"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "second half",
+        "level_low": "7.9",
+        "level_high": "7.9",
+        "level_unit": "unknown",
+        "qualifier": "average",
+        "previous_forecast_values": [
+          "7.8"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Management states 7.9; do not re-compute it or confuse H2 with Q4. Determine stated movement without inventing a revision."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 37265,
+        "end": 39454
+      }
+    },
+    {
+      "id": "MAR14",
+      "meaning": "Organic growth guide high end",
+      "status": "claim_requires_association",
+      "evidence": [
+        {
+          "passage": "QA016",
+          "start": 0,
+          "end": 2189,
+          "global_start": 37265,
+          "global_end": 39454,
+          "text": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+          "role": "company/Q4/organic context, actual and earlier guidance, and two current implied values"
+        }
+      ],
+      "expected_source_fields": {
+        "printed_value": "8%",
+        "qualifier": "at the high end of the range",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve precise current versus previous guided period from discourse; no invented lower endpoint."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 37265,
+        "end": 39454
+      }
+    },
+    {
+      "id": "MAR15",
+      "meaning": "First-aid exceptional prior growth not repeated",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA016",
+          "start": 0,
+          "end": 2189,
+          "global_start": 37265,
+          "global_end": 39454,
+          "text": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+          "role": "company/Q4/organic context, actual and earlier guidance, and two current implied values"
+        }
+      ],
+      "expected_source_fields": {
+        "business_scope": "first aid",
+        "period_text": "Q4",
+        "earlier_actual_value": "18.5%",
+        "value_text": "We certainly do not anticipate that again.",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Earlier 18.5% is not the current point; determine admissible qualitative representation without inventing a precise bound."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 37265,
+        "end": 39454
+      }
+    },
+    {
+      "id": "MAR16",
+      "meaning": "FY27 fire ERP margin impact below full-year scenario",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA022",
+          "start": 0,
+          "end": 1032,
+          "global_start": 46592,
+          "global_end": 47624,
+          "text": "Unknown [3270]: Hi. Good morning, guys. Just a quick one for me. Just on the FHIR ERP implementation, I think we had previously talked about like 100 basis points margin headwind next year for 27. I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. Thank you. Just hard bits for this segment. Thank you.\nScott Garula [3296]: Yeah, this is Scott. Thanks for the question. You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. We're satisfied with our progress today. Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. If you looked at an entire year, it would be the 100 basis points that you referenced. And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+          "role": "analyst identifies margin headwind, management confirms full-year scenario and lesser FY27 impact with condition"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "next year / 27",
+        "printed_reference_value": "100 basis points",
+        "value_text": "something less than that",
+        "condition": "depending on when we actually go live with the entire business; not fully rolled out by June 1st",
+        "business_scope": "fire",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "The 100bp full-year scenario is not an unconditional actual FY27 point. Preserve both scenario and lesser realized forecast; resolve permitted numeric-bound/worded representation and sign."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 46592,
+        "end": 47624
+      }
+    },
+    {
+      "id": "MAR17",
+      "meaning": "Investment approach/level unchanged",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA009",
+          "start": 0,
+          "end": 692,
+          "global_start": 26211,
+          "global_end": 26903,
+          "text": "Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there.",
+          "role": "investment continuity, analyst asks FY26 exit/FY27"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "no material change",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Determine whether company commits to a level or merely its ongoing approach; do not invent CapEx/revenue or a spending amount."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 26211,
+        "end": 26903
+      }
+    },
+    {
+      "id": "MAR18",
+      "meaning": "Q4 incremental margins described as attractive",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA020",
+          "start": 0,
+          "end": 759,
+          "global_start": 44732,
+          "global_end": 45491,
+          "text": "Unknown [3112]: Great, thank you. And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? I see the implied kind of 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\nTodd Schneider [3142]: Yeah, thank you for the question, Faiza. Yeah, our incrementals that we're guiding towards in Q4 are very attractive. But that is not because of a change in approach. That's simply what we've been predicting and timing around for the year.",
+          "role": "Q4 incrementals described as attractive, no quantity"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "Q4",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Attractive is evaluative language, not necessarily a specific forecast value. No prior target may silently fill it."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 44732,
+        "end": 45491
+      }
+    }
+  ],
+  "passage_coverage": [
+    {
+      "passage": "PR000",
+      "reason": "Operator.",
+      "text_sha256": "bc08e4b60a70d7cd77061746a0d9b951413b68551aa8a4ded63d76f7a37888e8"
+    },
+    {
+      "passage": "PR001",
+      "reason": "Disclosure.",
+      "text_sha256": "1c51e8b8dde11d728ba189fccfd804ab9097a9c2ff1e09607b6dafeab96fa7e5"
+    },
+    {
+      "passage": "PR002",
+      "reason": "MAR01–04, EPS exclusion and acquisition closing conditions; deal itself not automatic guidance.",
+      "text_sha256": "638819f2daa5c12559e90a80eb03edf68375f72cda280664364e1a48b4f1717e"
+    },
+    {
+      "passage": "PR003",
+      "reason": "Reported segment figures; closing-timing context for MAR07.",
+      "text_sha256": "d9ae2c2cba12b09049360e520038078ab9b177321b05ae4bf2f98d558fda1650"
+    },
+    {
+      "passage": "PR004",
+      "reason": "MAR05–09 and shared assumptions; preceding results actual.",
+      "text_sha256": "da719f213bd208287a0740249a87ac46b5e4d2de62017333aeb3459b62b4fcc6"
+    },
+    {
+      "passage": "PR005",
+      "reason": "Broad future strategy.",
+      "text_sha256": "20c751f15706c0f5269126efd907297e1ae671f98c79dee3c2b575f50c0d185e"
+    },
+    {
+      "passage": "PR006",
+      "reason": "Question protocol and no deal-process detail.",
+      "text_sha256": "ca60464f14d25d3dac44bcf55538ecc00ee168718f8d5787afba96ded1aa18f5"
+    },
+    {
+      "passage": "PR007",
+      "reason": "Operator.",
+      "text_sha256": "1849c92dc39cdab14f9b43259cfa465db0cda7b0184e2cdcdfb1c8576dacf39f"
+    },
+    {
+      "passage": "QA000",
+      "reason": "MAR08/09 period confirmation; past SG&A comparisons not future forecasts.",
+      "text_sha256": "7082f0bc18ba6821f768d666ef6f03c139df24df80c07a50c976971493af8140"
+    },
+    {
+      "passage": "QA001",
+      "reason": "MAR10 uncertain sensitivity versus adopted assumption.",
+      "text_sha256": "2406b28052785371f0c23b47697b7fc25dd94be1b528d88bed7817318da3b131"
+    },
+    {
+      "passage": "QA002",
+      "reason": "Current customer behavior.",
+      "text_sha256": "ce42554209d98c55563083d63ddb480b91e38928e35f806c3913865b01e05b2d"
+    },
+    {
+      "passage": "QA003",
+      "reason": "Energy assumption; no-fuel-surcharge is current policy, not independent guidance.",
+      "text_sha256": "c716fb447b3794bd24705b510cf2739d79cae11b3906f3f356acbd887bd03e52"
+    },
+    {
+      "passage": "QA004",
+      "reason": "MAR07 repeated leverage; no specific CapEx ratio guidance confirmed.",
+      "text_sha256": "47156e8d4bfcd7db112aeb447b3458b91e0856a135354cceace5fc351dff0faa"
+    },
+    {
+      "passage": "QA005",
+      "reason": "Greeting.",
+      "text_sha256": "169d030a8388fa00de11a883316be64a7f4c2b413b458f2ece27c210f65801ac"
+    },
+    {
+      "passage": "QA006",
+      "reason": "MAR11 standing target; actual 95% retention and 2–3% pricing, illustrative arithmetic not independent forecasts.",
+      "text_sha256": "8c5291de3016e51b33c8e5b536fdc5e9038dbe4ec306f2e4f8b544c9b854a8da"
+    },
+    {
+      "passage": "QA007",
+      "reason": "Actual margin drivers and caution on variability; no specific future margin amount.",
+      "text_sha256": "8b29ccc320c1fc04128e70abfa9b62d3fa91f6b3bd470f3d21b9764b4f10f818"
+    },
+    {
+      "passage": "QA008",
+      "reason": "Tariff timing/current supply-chain context; nothing material said, no stated forecast level.",
+      "text_sha256": "a8dd4058cc81c962a051d5b08f80d125f4d79e674bcd5b83ccf21f308a50b541"
+    },
+    {
+      "passage": "QA009",
+      "reason": "MAR17 borderline investment outlook.",
+      "text_sha256": "2875393ca882910ec37825f0ea0faa53f3230975ec50c0048c51b7d4cb35da06"
+    },
+    {
+      "passage": "QA010",
+      "reason": "Buyback restriction/current policy and future opportunism, no fixed level.",
+      "text_sha256": "238b74f55d215493494933fd793d7ffda93278f4a831cf9daba231ad16c54560"
+    },
+    {
+      "passage": "QA011",
+      "reason": "Greeting.",
+      "text_sha256": "d7791fd52c4d5d0c9401bb2dca9f3bffd7a4b0905db54f1ca28e6dc67ec4dd6e"
+    },
+    {
+      "passage": "QA012",
+      "reason": "Current wearer/customer levels.",
+      "text_sha256": "416898b4fded1ac1d385d861676c83a597dfdda83d3fa74407544e8a2b35d319"
+    },
+    {
+      "passage": "QA013",
+      "reason": "Acquisition strategy, no promised amount.",
+      "text_sha256": "e8f4a4301b6013bf64a93c5e0630907ad7daf97979c1b7febdd4e20c81aa0871"
+    },
+    {
+      "passage": "QA014",
+      "reason": "Products/customer example and market opportunity.",
+      "text_sha256": "decc87fe8ceed1a24ae95cfab7c658fc49f4d94f3340b81a165220a07a900679"
+    },
+    {
+      "passage": "QA015",
+      "reason": "ERP implementation plans and general benefits, no numeric financial impact.",
+      "text_sha256": "68fdded6300e032e5372402096e1eeae64d86b72b06617f4ecd87b2821f0ef44"
+    },
+    {
+      "passage": "QA016",
+      "reason": "MAR12–15, separate target periods and old/actual/current values.",
+      "text_sha256": "f98e6d988adc98d2a153341c636f56f88827793b81e7839694410488738d97fa"
+    },
+    {
+      "passage": "QA017",
+      "reason": "Competition/current customer statistics.",
+      "text_sha256": "c8bd33ccaeb6f52d263c83d747878750b33133e7fdd8c0ced0cedc1a0f7a4008"
+    },
+    {
+      "passage": "QA018",
+      "reason": "Routing integration strategy, not quantified forecast.",
+      "text_sha256": "80540e9883dae57090dd8c8ddee835764ab96f426a2c3b3cf419704df2f79b35"
+    },
+    {
+      "passage": "QA019",
+      "reason": "Deal opportunities and one-time costs discussed generally; no additional amount or target period.",
+      "text_sha256": "ff7695a33c953b75d9fe62f9cabbef34ffb60eaab06b666e13e760a2998558e4"
+    },
+    {
+      "passage": "QA020",
+      "reason": "MAR18 evaluative Q4 margin comment.",
+      "text_sha256": "50e986eea4d794c7026a90b07088f2fde2f62b81440047349854a4e46819119a"
+    },
+    {
+      "passage": "QA021",
+      "reason": "Current conversion and employment conditions; broad optimism.",
+      "text_sha256": "204628998c2c6620b84f846b274d3fb26afc325e80154b8beb673d42bf64d11b"
+    },
+    {
+      "passage": "QA022",
+      "reason": "MAR16, full question is necessary to identify the headwind and FY27.",
+      "text_sha256": "cdb3a3e8f7536e92733d3060574e1bc60892dbc0866921087e77bb15c676c8e7"
+    },
+    {
+      "passage": "QA023",
+      "reason": "Closing and next results schedule.",
+      "text_sha256": "fcbfae0e6554df349f60cc9d4808b381eb0790b03f465a794205bab8cbd4ebfb"
+    }
+  ]
+}

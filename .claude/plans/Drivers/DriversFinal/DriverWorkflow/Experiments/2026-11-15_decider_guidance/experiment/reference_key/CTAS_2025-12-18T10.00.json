@@ -1,0 +1,880 @@
+{
+  "source_id": "CTAS_2025-12-18T10.00",
+  "source_text_sha256": "bb0c849c4f58a48ed05275c6ad7016f9af3feaca1036e0c06ef55df99552276b",
+  "snapshot_sha256": "1c6dc3f3b4832463df68631bab45a6a90c35984dae8d4e7b44be72b743a1c920",
+  "rulebook_sha256": "f9376dcb51f648d58fc1527ca3472fcce6f0ca1bb517969ccc250077cad78ff0",
+  "annotated_at": "2026-11-15T15:56:32.054949-05:00",
+  "method": "Root agent read every source passage before consulting draft labels or legacy rows for this pass. Prior conversation exposure exists; NOT blinded or double-reviewed. Annotations never enter extraction prompts.",
+  "status": "Source claim inventory with exact evidence; not an adjudicated complete-record key.",
+  "record_policy": "../record_policy.md",
+  "claims": [
+    {
+      "id": "DEC01",
+      "meaning": "Revenue level",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1428,
+          "end": 1499,
+          "global_start": 2733,
+          "global_end": 2804,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1500,
+          "end": 1614,
+          "global_start": 2805,
+          "global_end": 2919,
+          "text": "We expect our revenue to be in the range of $11.15 billion to $11.22 billion, a total growth rate of 7.8% to 8.5%.",
+          "role": "level and growth are distinct quantities"
+        },
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        },
+        {
+          "passage": "QA004",
+          "start": 1245,
+          "end": 1308,
+          "global_start": 22945,
+          "global_end": 23008,
+          "text": "The guide does contemplate the current environment for tariffs.",
+          "role": "stated guidance assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "11150",
+        "level_high": "11220",
+        "level_unit": "m_usd",
+        "value_shape": "range",
+        "measurement_words": []
+      },
+      "unresolved_fields_or_policy": [
+        "Verify subject fiscal-calendar normalization.",
+        "Associate each applicable assumption/measurement qualifier with the correct forecast; do not copy all numbers as conditions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2733,
+        "end": 23008
+      }
+    },
+    {
+      "id": "DEC02",
+      "meaning": "Revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1428,
+          "end": 1499,
+          "global_start": 2733,
+          "global_end": 2804,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1500,
+          "end": 1614,
+          "global_start": 2805,
+          "global_end": 2919,
+          "text": "We expect our revenue to be in the range of $11.15 billion to $11.22 billion, a total growth rate of 7.8% to 8.5%.",
+          "role": "level and growth are distinct quantities"
+        },
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        },
+        {
+          "passage": "QA004",
+          "start": 1245,
+          "end": 1308,
+          "global_start": 22945,
+          "global_end": 23008,
+          "text": "The guide does contemplate the current environment for tariffs.",
+          "role": "stated guidance assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "7.8",
+        "level_high": "8.5",
+        "level_unit": "unknown",
+        "value_shape": "range",
+        "measurement_words": [
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify subject fiscal-calendar normalization.",
+        "Associate each applicable assumption/measurement qualifier with the correct forecast; do not copy all numbers as conditions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2733,
+        "end": 23008
+      }
+    },
+    {
+      "id": "DEC03",
+      "meaning": "Diluted EPS level",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1428,
+          "end": 1499,
+          "global_start": 2733,
+          "global_end": 2804,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1615,
+          "end": 1706,
+          "global_start": 2920,
+          "global_end": 3011,
+          "text": "We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%.",
+          "role": "diluted EPS level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        },
+        {
+          "passage": "QA004",
+          "start": 1245,
+          "end": 1308,
+          "global_start": 22945,
+          "global_end": 23008,
+          "text": "The guide does contemplate the current environment for tariffs.",
+          "role": "stated guidance assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "4.81",
+        "level_high": "4.88",
+        "level_unit": "usd",
+        "value_shape": "range",
+        "measurement_words": [
+          "diluted"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify subject fiscal-calendar normalization.",
+        "Associate each applicable assumption/measurement qualifier with the correct forecast; do not copy all numbers as conditions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2733,
+        "end": 23008
+      }
+    },
+    {
+      "id": "DEC04",
+      "meaning": "Diluted EPS growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1428,
+          "end": 1499,
+          "global_start": 2733,
+          "global_end": 2804,
+          "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+          "role": "period and movement"
+        },
+        {
+          "passage": "PR002",
+          "start": 1615,
+          "end": 1706,
+          "global_start": 2920,
+          "global_end": 3011,
+          "text": "We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%.",
+          "role": "diluted EPS level and growth"
+        },
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        },
+        {
+          "passage": "QA004",
+          "start": 1245,
+          "end": 1308,
+          "global_start": 22945,
+          "global_end": 23008,
+          "text": "The guide does contemplate the current environment for tariffs.",
+          "role": "stated guidance assumption"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "level_low": "9.3",
+        "level_high": "10.9",
+        "level_unit": "unknown",
+        "value_shape": "range",
+        "measurement_words": [
+          "diluted",
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Verify subject fiscal-calendar normalization.",
+        "Associate each applicable assumption/measurement qualifier with the correct forecast; do not copy all numbers as conditions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2733,
+        "end": 23008
+      }
+    },
+    {
+      "id": "DEC05",
+      "meaning": "Net interest expense",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 2026",
+        "level_low": "104",
+        "level_high": "104",
+        "level_unit": "m_usd",
+        "qualifier": "approximately",
+        "driver_state": "unknown",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar normalization; preserve net and approximation."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 7918,
+        "end": 8810
+      }
+    },
+    {
+      "id": "DEC06",
+      "meaning": "Effective tax rate",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1968,
+          "end": 2860,
+          "global_start": 7918,
+          "global_end": 8810,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared assumptions, explicit tax/interest forecasts, and nonrecurring prior asset-sale comparison"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 2026",
+        "level_low": "20",
+        "level_high": "20",
+        "level_unit": "percent",
+        "comparison_text": "which is the same compared to our fiscal 2025",
+        "driver_state": "unknown",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar normalization; prior-year rate is not automatically previous guidance."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 7918,
+        "end": 8810
+      }
+    },
+    {
+      "id": "DEC07",
+      "meaning": "Standing organic growth target",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA001",
+          "start": 717,
+          "end": 866,
+          "global_start": 13104,
+          "global_end": 13253,
+          "text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility.",
+          "role": "worded standing organic-growth target"
+        },
+        {
+          "passage": "QA018",
+          "start": 2463,
+          "end": 2765,
+          "global_start": 46687,
+          "global_end": 46989,
+          "text": "But, you know, whether it's the first half of the year or our guide for the second half, we're right in the stated range of that mid to high single-digit growth. And as Todd mentioned, the growth algorithm we have, we have a lot of confidence in that we can sustain that level of growth moving forward.",
+          "role": "separate remaining-year and moving-forward horizons; reference back to growth algorithm"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "mid to high single-digit",
+        "measurement_words": [
+          "organic"
+        ],
+        "period_text": "moving forward",
+        "level_unit": "unknown",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Establish which growth framing the later statement confirms; retain current H2 and undefined future horizons separately if both established."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13104,
+        "end": 46989
+      }
+    },
+    {
+      "id": "DEC08",
+      "meaning": "Acquisition contribution to second-half revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA002",
+          "start": 0,
+          "end": 1453,
+          "global_start": 16166,
+          "global_end": 17619,
+          "text": "Andrew Steinerman [1076]: quite get a compilation if ad stops are changed year-over-year. I surely heard the separate point that you continue to grow with same customers. So just a comment on ad stops year-over-year. And then my second question is, with the acquisitions that were completed in this second quarter, how much will that add to second half of the year revenues?\nTodd Schneider [1104]: I'll take the first half. Andrew, so thank you for the question. You know, as we mentioned in Jim's example, we talked about all the various products and services we can provide for our customers. and it's broad and growing. So from that standpoint, growth from current customers, I would describe it as very stable, if anything, slightly positive. So, you know, we're in a good position. Our current customers see the value proposition that we can offer to them, and that actually helps with retention as well. Scott, if you want to address the second half.\nScott Garula [1144]: Yeah, thanks, Todd, and Hello, Andrew. We talked in the prepared remarks. The acquisition impact during the second quarter was about 70 bps. And if you think about the rest of the year and our guide, you know, we obviously assume no new acquisitions. You can assume that there's a normal tail when it comes to the acquisition volume. And generally for the second half of the year, you would assume about half of the second quarter impact. So call it, you know, 30 to 35 bids.",
+          "role": "analyst identifies second-half revenue contribution; management forecast with ambiguous transcript unit"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "second half of the year",
+        "printed_values": [
+          "30",
+          "35"
+        ],
+        "printed_unit": "bids",
+        "earlier_actual": "70 bps",
+        "condition": "no new acquisitions",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not silently correct bids to basis points; determine whether the explicit earlier 70 bps comparison supports the unit.",
+        "Do not calculate half of 70 as a new forecast or substitute the current actual."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 16166,
+        "end": 17619
+      }
+    },
+    {
+      "id": "DEC09",
+      "meaning": "Standing incremental-margin target",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA003",
+          "start": 2094,
+          "end": 4077,
+          "global_start": 19715,
+          "global_end": 21698,
+          "text": "Jim Rosakis [1335]: Yeah, Josh, I'll get to the second question regarding margins. So first of all, we ran a 27% incremental margin for the second quarter, which we really like. And that's right in our stated range of that 25% to 35%. That range is really important for us because that allows us to continue to invest in the future growth of the business. while the NL expand margin along the way. So we really like that. That allows us to make the investments in technology, the necessary investments in capacity, bench strength, selling resources. All of those are really critically important to us. So that would be really right in the sweet spot of the range. Now, a couple things to keep in mind with regards to incrementals this year. and how it plays out for the remainder of the year. First off, we're coming off of a comparison to last fiscal year, which is a really tough comp. Last fiscal year, we ran in the second quarter incrementals of 49.7. That's an outperform. That's not what we normally expect. So we're really pleased with the 27 this quarter, given that comparison. In fact, if you look at the whole first half of last year, we ran an incremental of 44.3%. So really, really high in the beginning of last fiscal year, settling back into our range this fiscal year. A couple other things maybe to keep in mind is what the guide implies with regards to incrementals for this fiscal year. If you look at the whole year across the board, incrementals would imply somewhere between the 29 and 30 when you adjust for the $15 million asset sale from last fiscal year. So that's right in the heart of where we want to be, a perfect level of investments continuing to fuel future growth. And if you look at the back half of the year, that would imply incrementals of 30% to 33%, so moving back up towards the high side of that range. So we're really pleased with where we are. We like the outlook of the year, and we think that's a great spot for us to run the business.",
+          "role": "standing target, current actuals and two distinct guided periods"
+        }
+      ],
+      "expected_source_fields": {
+        "level_low": "25",
+        "level_high": "35",
+        "level_unit": "percent",
+        "measure_text": "incremental margin",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Exact margin definition and explicit period/horizon must be resolved; analyst longer-term wording is not alone company confirmation."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 19715,
+        "end": 21698
+      }
+    },
+    {
+      "id": "DEC10",
+      "meaning": "Annual incremental margin excluding prior asset gain",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA003",
+          "start": 2094,
+          "end": 4077,
+          "global_start": 19715,
+          "global_end": 21698,
+          "text": "Jim Rosakis [1335]: Yeah, Josh, I'll get to the second question regarding margins. So first of all, we ran a 27% incremental margin for the second quarter, which we really like. And that's right in our stated range of that 25% to 35%. That range is really important for us because that allows us to continue to invest in the future growth of the business. while the NL expand margin along the way. So we really like that. That allows us to make the investments in technology, the necessary investments in capacity, bench strength, selling resources. All of those are really critically important to us. So that would be really right in the sweet spot of the range. Now, a couple things to keep in mind with regards to incrementals this year. and how it plays out for the remainder of the year. First off, we're coming off of a comparison to last fiscal year, which is a really tough comp. Last fiscal year, we ran in the second quarter incrementals of 49.7. That's an outperform. That's not what we normally expect. So we're really pleased with the 27 this quarter, given that comparison. In fact, if you look at the whole first half of last year, we ran an incremental of 44.3%. So really, really high in the beginning of last fiscal year, settling back into our range this fiscal year. A couple other things maybe to keep in mind is what the guide implies with regards to incrementals for this fiscal year. If you look at the whole year across the board, incrementals would imply somewhere between the 29 and 30 when you adjust for the $15 million asset sale from last fiscal year. So that's right in the heart of where we want to be, a perfect level of investments continuing to fuel future growth. And if you look at the back half of the year, that would imply incrementals of 30% to 33%, so moving back up towards the high side of that range. So we're really pleased with where we are. We like the outlook of the year, and we think that's a great spot for us to run the business.",
+          "role": "standing target, current actuals and two distinct guided periods"
+        }
+      ],
+      "expected_source_fields": {
+        "level_low": "29",
+        "level_high": "30",
+        "level_unit": "percent",
+        "period_text": "this fiscal year",
+        "measurement_words": [
+          "when you adjust for the $15 million asset sale from last fiscal year"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Verify margin meaning and calendar.",
+        "The $15 million adjustment defines the comparison, not a new current forecast value or an unrelated condition."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 19715,
+        "end": 21698
+      }
+    },
+    {
+      "id": "DEC11",
+      "meaning": "Second-half incremental margin",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA003",
+          "start": 2094,
+          "end": 4077,
+          "global_start": 19715,
+          "global_end": 21698,
+          "text": "Jim Rosakis [1335]: Yeah, Josh, I'll get to the second question regarding margins. So first of all, we ran a 27% incremental margin for the second quarter, which we really like. And that's right in our stated range of that 25% to 35%. That range is really important for us because that allows us to continue to invest in the future growth of the business. while the NL expand margin along the way. So we really like that. That allows us to make the investments in technology, the necessary investments in capacity, bench strength, selling resources. All of those are really critically important to us. So that would be really right in the sweet spot of the range. Now, a couple things to keep in mind with regards to incrementals this year. and how it plays out for the remainder of the year. First off, we're coming off of a comparison to last fiscal year, which is a really tough comp. Last fiscal year, we ran in the second quarter incrementals of 49.7. That's an outperform. That's not what we normally expect. So we're really pleased with the 27 this quarter, given that comparison. In fact, if you look at the whole first half of last year, we ran an incremental of 44.3%. So really, really high in the beginning of last fiscal year, settling back into our range this fiscal year. A couple other things maybe to keep in mind is what the guide implies with regards to incrementals for this fiscal year. If you look at the whole year across the board, incrementals would imply somewhere between the 29 and 30 when you adjust for the $15 million asset sale from last fiscal year. So that's right in the heart of where we want to be, a perfect level of investments continuing to fuel future growth. And if you look at the back half of the year, that would imply incrementals of 30% to 33%, so moving back up towards the high side of that range. So we're really pleased with where we are. We like the outlook of the year, and we think that's a great spot for us to run the business.",
+          "role": "standing target, current actuals and two distinct guided periods"
+        }
+      ],
+      "expected_source_fields": {
+        "level_low": "30",
+        "level_high": "33",
+        "level_unit": "percent",
+        "period_text": "back half of the year",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Verify margin meaning and calendar; determine applicability of the prior-asset-sale adjustment."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 19715,
+        "end": 21698
+      }
+    },
+    {
+      "id": "DEC12",
+      "meaning": "First-aid revenue growth outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA005",
+          "start": 362,
+          "end": 953,
+          "global_start": 23776,
+          "global_end": 24367,
+          "text": "Todd Schneider [1608]: Yeah, we're, you know, we love the first aid business. It is a great business for us. We're very pleased with that. And you've seen that they've had outsized performance for a period of time now. One of the things that the mantra that we have and the leadership of our organization there talks about there's nothing more important than the health and wellness of a business's employees and customers. We completely agree with that. You're seeing really good growth in that business. We see them as a low double-digit grower for the foreseeable future. So that's great.",
+          "role": "first-aid growth outlook; preserve attribution and horizon"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "low double-digit",
+        "period_text": "foreseeable future",
+        "level_unit": "unknown",
+        "business_scope": "first aid",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Horizon mapping must not default to long-term; determine permitted undefined horizon.",
+        "Source quantity is growth, not a percentage level; no numeric conversion of worded amount."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 23776,
+        "end": 24367
+      }
+    },
+    {
+      "id": "DEC13",
+      "meaning": "Explicit revenue-growth midpoint",
+      "status": "claim_requires_representation",
+      "evidence": [
+        {
+          "passage": "QA010",
+          "start": 0,
+          "end": 509,
+          "global_start": 30392,
+          "global_end": 30901,
+          "text": "George Tong [2072]: Got it. That's helpful. And then just to follow up, you took up your full year guide for revenue. Can you talk about how much of the increase reflects upside in the quarter versus what you were internally expecting compared to maybe a stronger outlook for the remainder of the year?\nTodd Schneider [2088]: Yeah. First off, our guide for the year is really good. It looks right where we want it to be. If you look at the guide for the years, showing growth of 7.8% to 8.5%. midpoint of 8.2.",
+          "role": "explicit management midpoint of previously stated revenue-growth range"
+        }
+      ],
+      "expected_source_fields": {
+        "level_low": "8.2",
+        "level_high": "8.2",
+        "level_unit": "unknown",
+        "qualifier": "midpoint",
+        "period_text": "full year",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "This midpoint is printed by management, not computed by extractor. Decide its representation with the same forecast range (DEC02), rather than automatically inventing a second independent forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 30392,
+        "end": 30901
+      }
+    },
+    {
+      "id": "DEC14",
+      "meaning": "Greater future fire ERP costs",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA011",
+          "start": 2035,
+          "end": 2175,
+          "global_start": 33550,
+          "global_end": 33690,
+          "text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "role": "analyst question begins in the preceding stored exchange"
+        },
+        {
+          "passage": "QA012",
+          "start": 0,
+          "end": 1565,
+          "global_start": 33692,
+          "global_end": 35257,
+          "text": "Jason Haas [2315]: a greater headwind to margins in FHIR in the second half of the year as that system gets turned on and start recognizing the amortization? Thank you.\nTodd Schneider [2325]: Jason, thanks for the question. You know, these ERP implementations take time, and we are experiencing some additional costs now, for sure, but there is more cost to come in the future. We're working really hard on On this implementation, we think it will be really valuable for our employee partners and our customers. So, you know, we're investing for the future in that business. You see that we're growing it really attractively. We're not only growing it attractively, but we are also – highly inquisitive in that business. So when you think about the fire business, think about it this way. We are also dealing with M&A that comes to us. And as I mentioned earlier, M&A, you can't predict it exactly. And in that business, some of our M&A allows us to be tuck-ins, but others are actually geographic expansion. And when we make M&A in that business and you get M&A expansion, It is – for a period of time, that doesn't run at the margin profile that we do. We've got to make sure that we get our operating protocols in place. And as you can see, M&A account for 340 basis points of total growth per fire in Q2. So that's a component of any margin profile. pressure that we have in that business, a little bit of SAP, but we're investing for that in that business because we think the future is really, really bright, and we're quite optimistic about the coming years.",
+          "role": "question continuation and current/future rollout costs"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "there is more cost to come in the future",
+        "business_scope": "fire",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Management confirms more future costs; do not assume it confirms every analyst proposed timing/margin detail.",
+        "Stored Q&A boundary splits the question; full source must remain available."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 33550,
+        "end": 35257
+      }
+    },
+    {
+      "id": "DEC15",
+      "meaning": "Fire ERP rollout margin impact",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA011",
+          "start": 2035,
+          "end": 2175,
+          "global_start": 33550,
+          "global_end": 33690,
+          "text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "role": "analyst question begins in the preceding stored exchange"
+        },
+        {
+          "passage": "QA012",
+          "start": 0,
+          "end": 1565,
+          "global_start": 33692,
+          "global_end": 35257,
+          "text": "Jason Haas [2315]: a greater headwind to margins in FHIR in the second half of the year as that system gets turned on and start recognizing the amortization? Thank you.\nTodd Schneider [2325]: Jason, thanks for the question. You know, these ERP implementations take time, and we are experiencing some additional costs now, for sure, but there is more cost to come in the future. We're working really hard on On this implementation, we think it will be really valuable for our employee partners and our customers. So, you know, we're investing for the future in that business. You see that we're growing it really attractively. We're not only growing it attractively, but we are also – highly inquisitive in that business. So when you think about the fire business, think about it this way. We are also dealing with M&A that comes to us. And as I mentioned earlier, M&A, you can't predict it exactly. And in that business, some of our M&A allows us to be tuck-ins, but others are actually geographic expansion. And when we make M&A in that business and you get M&A expansion, It is – for a period of time, that doesn't run at the margin profile that we do. We've got to make sure that we get our operating protocols in place. And as you can see, M&A account for 340 basis points of total growth per fire in Q2. So that's a component of any margin profile. pressure that we have in that business, a little bit of SAP, but we're investing for that in that business because we think the future is really, really bright, and we're quite optimistic about the coming years.",
+          "role": "question continuation and current/future rollout costs"
+        },
+        {
+          "passage": "QA012",
+          "start": 1566,
+          "end": 2006,
+          "global_start": 35258,
+          "global_end": 35698,
+          "text": "Scott Garula [2438]: Jason, this is Scott. I just might add, you know, as Todd mentioned, the VRP implementations take some time. We've got some experience with that, and, you know, a rental business as well as first aid and safety. And we are expecting the fire rollout to carry on into next fiscal year. And I would just look at the impact for fiscal year 27 to be around that, you know, 100 basis points for the fire protection business.",
+          "role": "management quantified future ERP margin impact"
+        }
+      ],
+      "expected_source_fields": {
+        "printed_values": [
+          "100"
+        ],
+        "level_unit": "basis_points",
+        "qualifier": "around",
+        "period_text": "fiscal year 27",
+        "business_scope": "fire protection",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve exact margin measure and negative headwind meaning from complete question and answer; do not infer positive growth from unsigned 100.",
+        "Verify fiscal dates."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 33550,
+        "end": 35698
+      }
+    },
+    {
+      "id": "DEC16",
+      "meaning": "Buyback approach remains opportunistic",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA016",
+          "start": 795,
+          "end": 1256,
+          "global_start": 40704,
+          "global_end": 41165,
+          "text": "So I wouldn't just simply model in that we are going to lever up and be highly aggressive on buybacks. We'll be opportunistic and handle that as we have in the past. And if you look at our history, even our 5, 10, 20-year history, we've been pretty consistent on that, our capital allocation approach. And I wouldn't expect a change to our approach there. We'll continue to look at that opportunistically and return that back to our shareholders as appropriate.",
+          "role": "capital-allocation policy continuity, not a stated buyback amount"
+        }
+      ],
+      "expected_source_fields": {
+        "company_confirmed": true,
+        "value_text": "I wouldn't expect a change to our approach there."
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate forecast of a policy level versus general strategy; do not create quantified buyback or leverage guidance."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 40704,
+        "end": 41165
+      }
+    },
+    {
+      "id": "DEC17",
+      "meaning": "Remaining-half growth outlook",
+      "status": "claim_requires_association",
+      "evidence": [
+        {
+          "passage": "QA001",
+          "start": 717,
+          "end": 866,
+          "global_start": 13104,
+          "global_end": 13253,
+          "text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility.",
+          "role": "worded standing organic-growth target"
+        },
+        {
+          "passage": "QA018",
+          "start": 2463,
+          "end": 2765,
+          "global_start": 46687,
+          "global_end": 46989,
+          "text": "But, you know, whether it's the first half of the year or our guide for the second half, we're right in the stated range of that mid to high single-digit growth. And as Todd mentioned, the growth algorithm we have, we have a lot of confidence in that we can sustain that level of growth moving forward.",
+          "role": "separate remaining-year and moving-forward horizons; reference back to growth algorithm"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "mid to high single-digit growth",
+        "period_text": "second half",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Confirm organic versus total definition from full source, and current fiscal dates; no source comparison basis may be invented."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13104,
+        "end": 46989
+      }
+    }
+  ],
+  "passage_coverage": [
+    {
+      "passage": "PR000",
+      "reason": "Operator introduction; no guidance.",
+      "text_sha256": "309fb29fd06eaca177df5a3846cadb27ccdb96497cc30cf18f277033726f1dde"
+    },
+    {
+      "passage": "PR001",
+      "reason": "Participants and cautionary disclaimer; no specific forecast.",
+      "text_sha256": "c64204c4402c0d5e732a2e6d24f577af35a1d6ea15a23d6fdc5d8553cebdd9a9"
+    },
+    {
+      "passage": "PR002",
+      "reason": "DEC01–04; earlier numbers are actual results.",
+      "text_sha256": "f39094e26b18e3c5435a1fd61a5af815328cc63ae974138946853dc5fdaab811"
+    },
+    {
+      "passage": "PR003",
+      "reason": "Reported segment performance, strategy and transition to guidance assumptions.",
+      "text_sha256": "0b2666328016222e7b579d89e43df5a9136a62ecd3542b69b031d8bef07548fc"
+    },
+    {
+      "passage": "PR004",
+      "reason": "DEC05–06, shared assumptions and prior asset gain that will not recur; actual capital allocation not guidance.",
+      "text_sha256": "c64bf854de77eb8870a9422395ffe298e28250e76313d7b880c5a17ef2a04db1"
+    },
+    {
+      "passage": "PR005",
+      "reason": "General future commitment, no separate specific metric forecast.",
+      "text_sha256": "d1aaf10be7e2b3a93892be365fd651df42f41e4fef5c2afe4e08e8a066c85df2"
+    },
+    {
+      "passage": "PR006",
+      "reason": "Question procedure.",
+      "text_sha256": "dd5c1b049054ad1906f359b0e330d9648d0ddeeaaa64666f32807cbebc1004a9"
+    },
+    {
+      "passage": "PR007",
+      "reason": "Operator procedure.",
+      "text_sha256": "73b0f6728a3be6c060703c334508bd17fb73190402269ce10d0b29610bad0444"
+    },
+    {
+      "passage": "QA000",
+      "reason": "Observed employment/customer environment; no new specific forecast.",
+      "text_sha256": "d30f636e14b18c6492c64894526c783fa518d5bd689b487e85354369336ec859"
+    },
+    {
+      "passage": "QA001",
+      "reason": "DEC07 standing organic-growth target; rest business examples. End includes next analyst introduction/question fragment.",
+      "text_sha256": "a92f4d1b9bac5356432fe3ebb9a26cfeb6888bff684e7af3dfed5051b05aaf97"
+    },
+    {
+      "passage": "QA002",
+      "reason": "DEC08; actual second-quarter contribution distinct from forecast.",
+      "text_sha256": "a46388d308b67227723bb40cbb69cfefde371365a4e0d7903e8b7e04ab67f02a"
+    },
+    {
+      "passage": "QA003",
+      "reason": "DEC09–11; actual incremental margins and comparison numbers must remain separate.",
+      "text_sha256": "cfa14502a7e7bd9ca5652a8302520ba148e4997b208d28ac5fec3f0076187626"
+    },
+    {
+      "passage": "QA004",
+      "reason": "Tariff assumption applies to guide; sourcing statistics actual.",
+      "text_sha256": "cf8df05e8fbc74a705bfff777a2d71e4cdc690f697738541d92761a00f732c2a"
+    },
+    {
+      "passage": "QA005",
+      "reason": "DEC12; margin mix discussion is context, not a new quantified target.",
+      "text_sha256": "6e6d06b5472614114f6ea0efc29b53554c7c40c2afc6d7bbabf31ccd24585446"
+    },
+    {
+      "passage": "QA006",
+      "reason": "Competition/current pricing and customer statistics.",
+      "text_sha256": "5ee2f676cb6e1f54c6f95adee9744a3da811d9c896171248c09c69e41aecc16b"
+    },
+    {
+      "passage": "QA007",
+      "reason": "Actual capital deployment and uncertain acquisition pipeline, not a promised amount.",
+      "text_sha256": "4bb28884c9a6e5e69fd95366375bf8c0e128e1304b0ab3123f80046c39a25056"
+    },
+    {
+      "passage": "QA008",
+      "reason": "Closing greeting.",
+      "text_sha256": "e89048f686708cb5fbe3b794ad9bb4c67e0d06a1a322bf8066dbfb89a37bda91"
+    },
+    {
+      "passage": "QA009",
+      "reason": "Current sales/customer conditions.",
+      "text_sha256": "d8ddb0eb5cf6bb47570d4e663855b983133ac41670a98ac6e817da190b4f49c4"
+    },
+    {
+      "passage": "QA010",
+      "reason": "DEC13 explicit midpoint/repeated annual range; generic expected leverage context.",
+      "text_sha256": "becb79d3e9d5c25550bb946617ad71e5eeaf2997b0e5fcdd82ff4fd87ab6d44b"
+    },
+    {
+      "passage": "QA011",
+      "reason": "Tariff response/current pricing; final words begin the question continued in QA012.",
+      "text_sha256": "4760a3c2b71b649cdd524f93054717858871e5da79460a1aec09b2b13c59784d"
+    },
+    {
+      "passage": "QA012",
+      "reason": "DEC14–15; rollout schedule itself is a planned act, financial cost/margin forecast distinct; actual acquisition contribution not future value.",
+      "text_sha256": "99be3b27fbc1c041881ce662e1e4ac2c6397f454823ed0fdab2b14238c243a3e"
+    },
+    {
+      "passage": "QA013",
+      "reason": "Technology investment plans/general optimism, not a specified financial level.",
+      "text_sha256": "c428e53ca31ce380aa415f3fc425b0ee281ad099e1363984fcab90f792187d3d"
+    },
+    {
+      "passage": "QA014",
+      "reason": "Pricing strategy/current level and intent to improve efficiency, no definite amount/period forecast.",
+      "text_sha256": "dbb75e27a8ca32e60abe5e54525865e31ab43def9d6c989bc7be2ebef9bf6aca"
+    },
+    {
+      "passage": "QA015",
+      "reason": "Current customer behavior.",
+      "text_sha256": "e06e2e1f91e542ec11d92039e30ba15ac6017e46c18031df4534e07d649d645f"
+    },
+    {
+      "passage": "QA016",
+      "reason": "DEC16 policy-continuity borderline; analyst forecast of buybacks is not management guidance.",
+      "text_sha256": "793ae349c86cb23ead2211f15729a2ed4dec4e10d380e75ff995f6021388fc00"
+    },
+    {
+      "passage": "QA017",
+      "reason": "Actual segment shares and business examples.",
+      "text_sha256": "a52b77ba3ec0a1f9ec1aa69b0919ec65b5db126370c87659f927d58e772e1dda"
+    },
+    {
+      "passage": "QA018",
+      "reason": "DEC07/17 standing and second-half growth outlook; generic geographic plans separate.",
+      "text_sha256": "beb54c1ce80553dc04781a540752ca090a7e97f3e531593bfa55c13f457c3282"
+    },
+    {
+      "passage": "QA019",
+      "reason": "Closing and next release schedule, not financial guidance.",
+      "text_sha256": "003d4dd3f9e2cefcdacd12d26eb565e4807275c07ef57e64534d3098b4c616c8"
+    }
+  ]
+}

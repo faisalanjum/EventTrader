@@ -1,0 +1,988 @@
+{
+  "seconds": 214.53147734189406,
+  "usage": {
+    "input_tokens": 18066,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "labeled": 88,
+  "correct": 86,
+  "unadjudicated": 20,
+  "known_positive": 12,
+  "positive_found": 12,
+  "false_positive": 2,
+  "rows": [
+    {
+      "target": "F0",
+      "sentence": "S13",
+      "expected": false,
+      "source_text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.16372011845886883,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S14",
+      "expected": false,
+      "source_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.1101246079029603,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S15",
+      "expected": false,
+      "source_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.017531834150884284,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S16",
+      "expected": false,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.008239927678629959,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S50",
+      "expected": false,
+      "source_text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.12051693619453019,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S65",
+      "expected": false,
+      "source_text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.007447399845958321,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S69",
+      "expected": null,
+      "source_text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.8739760052260162,
+      "correct": null
+    },
+    {
+      "target": "F0",
+      "sentence": "S70",
+      "expected": true,
+      "source_text": "Our guidance does not assume any future acquisitions. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9711514639917621,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S71",
+      "expected": true,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9400252313917554,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S73",
+      "expected": false,
+      "source_text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0691966663746784,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S74",
+      "expected": false,
+      "source_text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.010605961400448125,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S75",
+      "expected": false,
+      "source_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004054091558037985,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S88",
+      "expected": false,
+      "source_text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0028411379826085966,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S116",
+      "expected": null,
+      "source_text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.35170539165421155,
+      "correct": null
+    },
+    {
+      "target": "F0",
+      "sentence": "S123",
+      "expected": null,
+      "source_text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.12602399477398388,
+      "correct": null
+    },
+    {
+      "target": "F0",
+      "sentence": "S142",
+      "expected": false,
+      "source_text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.02365424935850592,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S146",
+      "expected": false,
+      "source_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.02365424935850592,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S147",
+      "expected": false,
+      "source_text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.05997471950919985,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S156",
+      "expected": false,
+      "source_text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.007079987541939675,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S172",
+      "expected": null,
+      "source_text": "We certainly do not anticipate that again. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.19357368974803285,
+      "correct": null
+    },
+    {
+      "target": "F0",
+      "sentence": "S175",
+      "expected": null,
+      "source_text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.03876699680538461,
+      "correct": null
+    },
+    {
+      "target": "F0",
+      "sentence": "S180",
+      "expected": false,
+      "source_text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.020369008490574828,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S182",
+      "expected": false,
+      "source_text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.026126072200031165,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S185",
+      "expected": false,
+      "source_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.03876703261410469,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S192",
+      "expected": false,
+      "source_text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.00385343750152766,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S211",
+      "expected": false,
+      "source_text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0018441560955675706,
+      "correct": true
+    },
+    {
+      "target": "F0",
+      "sentence": "S212",
+      "expected": false,
+      "source_text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0012274490306505628,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S13",
+      "expected": false,
+      "source_text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0691966663746784,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S14",
+      "expected": false,
+      "source_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.09167773885015042,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S15",
+      "expected": false,
+      "source_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.027454529673538012,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S16",
+      "expected": false,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.007447399845958321,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S50",
+      "expected": false,
+      "source_text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.05447963070006417,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S65",
+      "expected": false,
+      "source_text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.005224522997304148,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S69",
+      "expected": null,
+      "source_text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.8291822301216917,
+      "correct": null
+    },
+    {
+      "target": "F1",
+      "sentence": "S70",
+      "expected": true,
+      "source_text": "Our guidance does not assume any future acquisitions. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9274479772674427,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S71",
+      "expected": true,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.8847810095904842,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S73",
+      "expected": false,
+      "source_text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.05997471950919985,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S74",
+      "expected": false,
+      "source_text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.01060595587177791,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S75",
+      "expected": false,
+      "source_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.00385343750152766,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S88",
+      "expected": false,
+      "source_text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.002203465437327078,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S116",
+      "expected": null,
+      "source_text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.2099827527999878,
+      "correct": null
+    },
+    {
+      "target": "F1",
+      "sentence": "S123",
+      "expected": null,
+      "source_text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.1052287617004386,
+      "correct": null
+    },
+    {
+      "target": "F1",
+      "sentence": "S142",
+      "expected": false,
+      "source_text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.030311143759222933,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S146",
+      "expected": false,
+      "source_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.028848536008237943,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S147",
+      "expected": false,
+      "source_text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.07971636384091595,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S156",
+      "expected": false,
+      "source_text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.007079994477406011,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S172",
+      "expected": null,
+      "source_text": "We certainly do not anticipate that again. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.08752133501645919,
+      "correct": null
+    },
+    {
+      "target": "F1",
+      "sentence": "S175",
+      "expected": null,
+      "source_text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.033454701802949634,
+      "correct": null
+    },
+    {
+      "target": "F1",
+      "sentence": "S180",
+      "expected": false,
+      "source_text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.018431563316737818,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S182",
+      "expected": false,
+      "source_text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.03876699680538461,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S185",
+      "expected": false,
+      "source_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0494614839553833,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S192",
+      "expected": false,
+      "source_text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.005224525313446434,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S211",
+      "expected": false,
+      "source_text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.001940387847225423,
+      "correct": true
+    },
+    {
+      "target": "F1",
+      "sentence": "S212",
+      "expected": false,
+      "source_text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0015045761291514067,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S13",
+      "expected": false,
+      "source_text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.12602399477398388,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S14",
+      "expected": false,
+      "source_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.012973017893932626,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S15",
+      "expected": false,
+      "source_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.13174488747880198,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S16",
+      "expected": true,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9665452693917562,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S50",
+      "expected": false,
+      "source_text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.042748921955995896,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S65",
+      "expected": false,
+      "source_text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.011730634113052267,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S69",
+      "expected": null,
+      "source_text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.8064263102519672,
+      "correct": null
+    },
+    {
+      "target": "F2",
+      "sentence": "S70",
+      "expected": true,
+      "source_text": "Our guidance does not assume any future acquisitions. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.8794829648848705,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S71",
+      "expected": true,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9455203692999359,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S73",
+      "expected": false,
+      "source_text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.3994633913360005,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S74",
+      "expected": true,
+      "source_text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.9774945760655889,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S75",
+      "expected": false,
+      "source_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.8561522023723186,
+      "correct": false
+    },
+    {
+      "target": "F2",
+      "sentence": "S88",
+      "expected": false,
+      "source_text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.1857421519496716,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S116",
+      "expected": null,
+      "source_text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.3994633913360005,
+      "correct": null
+    },
+    {
+      "target": "F2",
+      "sentence": "S123",
+      "expected": null,
+      "source_text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.07971636384091595,
+      "correct": null
+    },
+    {
+      "target": "F2",
+      "sentence": "S142",
+      "expected": false,
+      "source_text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.006082337362652185,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S146",
+      "expected": false,
+      "source_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004720642347549027,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S147",
+      "expected": false,
+      "source_text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.008667004706354104,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S156",
+      "expected": false,
+      "source_text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004265149040549873,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S172",
+      "expected": null,
+      "source_text": "We certainly do not anticipate that again. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.004054091558037985,
+      "correct": null
+    },
+    {
+      "target": "F2",
+      "sentence": "S175",
+      "expected": null,
+      "source_text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.0017978409465906815,
+      "correct": null
+    },
+    {
+      "target": "F2",
+      "sentence": "S180",
+      "expected": false,
+      "source_text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.007833728493808503,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S182",
+      "expected": false,
+      "source_text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0031450374122452634,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S185",
+      "expected": false,
+      "source_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0020942118574751594,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S192",
+      "expected": false,
+      "source_text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004487144618997079,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S211",
+      "expected": false,
+      "source_text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.002841136821762924,
+      "correct": true
+    },
+    {
+      "target": "F2",
+      "sentence": "S212",
+      "expected": false,
+      "source_text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.001940387847225423,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S13",
+      "expected": false,
+      "source_text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.06291317939758301,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S14",
+      "expected": false,
+      "source_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.031845432368022064,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S15",
+      "expected": false,
+      "source_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.09601083683999886,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S16",
+      "expected": true,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.5,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S50",
+      "expected": false,
+      "source_text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.031845443187992595,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S65",
+      "expected": false,
+      "source_text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.011730639635437865,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S69",
+      "expected": null,
+      "source_text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.7039888501167297,
+      "correct": null
+    },
+    {
+      "target": "F3",
+      "sentence": "S70",
+      "expected": true,
+      "source_text": "Our guidance does not assume any future acquisitions. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.8142578480503284,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S71",
+      "expected": true,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.8847811090233757,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S73",
+      "expected": false,
+      "source_text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.2651727795600891,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S74",
+      "expected": true,
+      "source_text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "note": "Source explicitly states a shared annual-guidance assumption or an EPS-only exclusion.",
+      "p_yes": 0.8497612819146728,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S75",
+      "expected": false,
+      "source_text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.6598248481750488,
+      "correct": false
+    },
+    {
+      "target": "F3",
+      "sentence": "S88",
+      "expected": false,
+      "source_text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.1052287617004386,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S116",
+      "expected": null,
+      "source_text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.21856185142511572,
+      "correct": null
+    },
+    {
+      "target": "F3",
+      "sentence": "S123",
+      "expected": null,
+      "source_text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.0691966663746784,
+      "correct": null
+    },
+    {
+      "target": "F3",
+      "sentence": "S142",
+      "expected": false,
+      "source_text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.005781874609756336,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S146",
+      "expected": false,
+      "source_text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.005496179490485396,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S147",
+      "expected": false,
+      "source_text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.010084310152064053,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S156",
+      "expected": false,
+      "source_text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004487144618997079,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S172",
+      "expected": null,
+      "source_text": "We certainly do not anticipate that again. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.0034813243355517006,
+      "correct": null
+    },
+    {
+      "target": "F3",
+      "sentence": "S175",
+      "expected": null,
+      "source_text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "note": "Scope/qualification interpretation requires review; do not score as known truth.",
+      "p_yes": 0.0019903658198888933,
+      "correct": null
+    },
+    {
+      "target": "F3",
+      "sentence": "S180",
+      "expected": false,
+      "source_text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.00522452021793339,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S182",
+      "expected": false,
+      "source_text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.004487144618997079,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S185",
+      "expected": false,
+      "source_text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.003308924970552693,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S192",
+      "expected": false,
+      "source_text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0028411393756234008,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S211",
+      "expected": false,
+      "source_text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.002841136821762924,
+      "correct": true
+    },
+    {
+      "target": "F3",
+      "sentence": "S212",
+      "expected": false,
+      "source_text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "note": "No expressly applicable assumption/exclusion/dependency for this forecast; another amount, cause, result or forecast is not one by itself.",
+      "p_yes": 0.0024393211618785123,
+      "correct": true
+    }
+  ]
+}

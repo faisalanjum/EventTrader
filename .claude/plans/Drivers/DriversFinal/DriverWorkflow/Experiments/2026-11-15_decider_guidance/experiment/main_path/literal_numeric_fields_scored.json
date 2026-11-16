@@ -1,0 +1,509 @@
+{
+  "scope": "Six unambiguous categorical fields on ten selected occurrences representing six numeric forecasts. Unit/growth basis and optional support need separate evidence review; this is not a complete-record score.",
+  "rows": [
+    {
+      "tag": "V13",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.7984574124588043,
+      "correct": true
+    },
+    {
+      "tag": "V13",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9955084162943081,
+      "correct": true
+    },
+    {
+      "tag": "V13",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9882909522749398,
+      "correct": true
+    },
+    {
+      "tag": "V13",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9794154922550967,
+      "correct": true
+    },
+    {
+      "tag": "V13",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9730569229287829,
+      "correct": true
+    },
+    {
+      "tag": "V13",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.9179095029830933,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.5117859488872684,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9955633123627051,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9887821891683456,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9800122586625405,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9668319313802093,
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8890819946881683,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.9237304326672126,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9873157306895157,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9831207931940285,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9832051768937713,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9435021026243227,
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8487269250723462,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.6896115686323375,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9849658333452457,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9747495984923416,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9806788693777938,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9441496887891959,
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8482499592266983,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.8146376369866686,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.994921884648601,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9870686817361916,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9854999441597596,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9650543907553034,
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8390443796061817,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.49278897715337133,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9952617076112178,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.98550742132119,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9857166396962608,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9597881084276403,
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8055700719771539,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.8666409545216741,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9905859398430606,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9800508379365747,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9840036996257382,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9220360772746552,
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.7512079701187602,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.6412562620106148,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9912185932082864,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9794043825345146,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9868723539514088,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "movement",
+      "expected": "raised",
+      "observed": "raised",
+      "p": 0.9378470237083764,
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.8231514385658711,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "form",
+      "expected": "point",
+      "observed": "point",
+      "p": 0.9198694371123983,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9930006468845276,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.9869537316656257,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.6788799544597431,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "movement",
+      "expected": "not_stated",
+      "observed": "not_stated",
+      "p": 0.6402954359306502,
+      "correct": true
+    },
+    {
+      "tag": "V59",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.9554872895295778,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "form",
+      "expected": "point",
+      "observed": "point",
+      "p": 0.9482507424679102,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "subject_scope",
+      "expected": "source_company_total",
+      "observed": "source_company_total",
+      "p": 0.9895949398135379,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "period",
+      "expected": "FY2026",
+      "observed": "FY2026",
+      "p": 0.969129754320689,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "sign",
+      "expected": "positive",
+      "observed": "positive",
+      "p": 0.9373202933054235,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "movement",
+      "expected": "not_stated",
+      "observed": "not_stated",
+      "p": 0.5698046321714333,
+      "correct": true
+    },
+    {
+      "tag": "V61",
+      "field": "time_type",
+      "expected": "duration",
+      "observed": "duration",
+      "p": 0.9130386693973241,
+      "correct": true
+    }
+  ],
+  "correct": 60,
+  "total": 60,
+  "below_point5": [
+    {
+      "tag": "V18",
+      "field": "form",
+      "expected": "range",
+      "observed": "range",
+      "p": 0.49278897715337133,
+      "correct": true
+    }
+  ],
+  "seconds": 273.74784652283415,
+  "usage": {
+    "input_tokens": 23277,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "issues": [
+    "Source-based evidence for the chosen year-over-year growth basis still needs confirmation under 3.33.",
+    "Condition presence differs between two endpoints of the same EPS growth forecast: V19 .437, V20 .660; revenue growth V15/V16 .178/.171 misses shared guidance assumptions.",
+    "Whole expression targeting should be tested before duplicating field work per endpoint; grouping a span is not proof of one unique fact.",
+    "No complete measure/conditions/quote assembly passed."
+  ]
+}

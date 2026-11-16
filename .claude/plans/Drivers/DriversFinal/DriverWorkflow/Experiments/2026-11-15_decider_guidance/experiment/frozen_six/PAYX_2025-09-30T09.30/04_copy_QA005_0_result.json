@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-11-15T21:11:38.385025-05:00",
+  "request_sha256": "0156cbc93f9d4f97386c7d5189af61ac562798d9a52431cb2b4b4849c25e61b7",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V102_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2346,
+            "end": 2360,
+            "text": "organic growth",
+            "score": 0.9996488094329834
+          }
+        ]
+      },
+      "V102_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2374,
+            "end": 2394,
+            "text": "on a full year basis",
+            "score": 0.9999992251396179
+          }
+        ]
+      },
+      "V102_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2374,
+            "end": 2394,
+            "text": "on a full year basis",
+            "score": 0.6947277784347534
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 1114,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 14.036807799013332,
+  "finished_at": "2026-11-15T21:11:52.421933-05:00"
+}

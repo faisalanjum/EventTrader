@@ -1,0 +1,365 @@
+{
+  "checked_at": "2026-11-15T23:52:35.125669-05:00",
+  "method": "Read only archived inputs/results/references; no model calls, prompt edits or changed reference labels.",
+  "known_claim_sentence_coverage": {
+    "kept": 79,
+    "total": 79,
+    "limit": "One or more actual claim-carrier sentences retained; not all related sentences, complete quotes or full population recall."
+  },
+  "selected_sentence_text": {
+    "selected": 408,
+    "source_sentences": 3338,
+    "exact": 408,
+    "failures": [],
+    "limit": "Exact text/positions in the saved transcript, not verification against publisher originals."
+  },
+  "final_payx_march_against_existing_sentence_controls": {
+    "positive_retained": 20,
+    "positive_total": 22,
+    "negative_excluded": 8,
+    "negative_total": 8,
+    "misses": [
+      {
+        "id": "adjusted_margin_exclusion",
+        "expected": true,
+        "selected": false,
+        "score": 0.07971636384091595,
+        "sentences": [
+          "S483"
+        ]
+      },
+      {
+        "id": "eps_confirmation",
+        "expected": true,
+        "selected": false,
+        "score": 0.21856201859471175,
+        "sentences": [
+          "S652"
+        ]
+      }
+    ],
+    "false_positives": [],
+    "limit": "Post-run comparison to already exposed development controls, not new inference or independent validation.",
+    "rows": [
+      {
+        "id": "synergy_outlook",
+        "expected": true,
+        "selected": true,
+        "score": 0.9882693603645621,
+        "sentences": [
+          "S054"
+        ]
+      },
+      {
+        "id": "annual_leadin",
+        "expected": true,
+        "selected": true,
+        "score": 0.9966910766538688,
+        "sentences": [
+          "S099"
+        ]
+      },
+      {
+        "id": "interest_range",
+        "expected": true,
+        "selected": true,
+        "score": 0.9974334703633311,
+        "sentences": [
+          "S100"
+        ]
+      },
+      {
+        "id": "blanket_unchanged",
+        "expected": true,
+        "selected": true,
+        "score": 0.984140117371301,
+        "sentences": [
+          "S101"
+        ]
+      },
+      {
+        "id": "quarterly_two_forecasts",
+        "expected": true,
+        "selected": true,
+        "score": 0.9966910766538688,
+        "sentences": [
+          "S103"
+        ]
+      },
+      {
+        "id": "q4_organic_confirmation",
+        "expected": true,
+        "selected": true,
+        "score": 0.899474091078893,
+        "sentences": [
+          "S133"
+        ]
+      },
+      {
+        "id": "h2_organic_six",
+        "expected": true,
+        "selected": true,
+        "score": 0.9370868732252204,
+        "sentences": [
+          "S135"
+        ]
+      },
+      {
+        "id": "annual_organic_five",
+        "expected": true,
+        "selected": true,
+        "score": 0.8623154163360596,
+        "sentences": [
+          "S136"
+        ]
+      },
+      {
+        "id": "q4_acceleration",
+        "expected": true,
+        "selected": true,
+        "score": 0.8739761114120483,
+        "sentences": [
+          "S326"
+        ]
+      },
+      {
+        "id": "q4_acceleration_reference",
+        "expected": true,
+        "selected": true,
+        "score": 0.7247785709864327,
+        "sentences": [
+          "S327"
+        ]
+      },
+      {
+        "id": "peo_q4_lower",
+        "expected": true,
+        "selected": true,
+        "score": 0.8947712382995614,
+        "sentences": [
+          "S345"
+        ]
+      },
+      {
+        "id": "peo_h2_lift",
+        "expected": true,
+        "selected": true,
+        "score": 0.8497612819146728,
+        "sentences": [
+          "S347"
+        ]
+      },
+      {
+        "id": "peo_q4_repeated",
+        "expected": true,
+        "selected": true,
+        "score": 0.7446380257606506,
+        "sentences": [
+          "S348"
+        ]
+      },
+      {
+        "id": "peo_h2_repeated",
+        "expected": true,
+        "selected": true,
+        "score": 0.7348272204399109,
+        "sentences": [
+          "S349"
+        ]
+      },
+      {
+        "id": "synergy_range_reference",
+        "expected": true,
+        "selected": true,
+        "score": 0.9039892486930694,
+        "sentences": [
+          "S382"
+        ]
+      },
+      {
+        "id": "synergy_range_position",
+        "expected": true,
+        "selected": true,
+        "score": 0.9505385160446167,
+        "sentences": [
+          "S383"
+        ]
+      },
+      {
+        "id": "margin_conditional",
+        "expected": true,
+        "selected": true,
+        "score": 0.3067405430453854,
+        "sentences": [
+          "S199"
+        ]
+      },
+      {
+        "id": "adjusted_margin_exclusion",
+        "expected": true,
+        "selected": false,
+        "score": 0.07971636384091595,
+        "sentences": [
+          "S483"
+        ]
+      },
+      {
+        "id": "annual_low_end_confirmation",
+        "expected": true,
+        "selected": true,
+        "score": 0.8497613921690402,
+        "sentences": [
+          "S514"
+        ]
+      },
+      {
+        "id": "enterprise_relative_outlook",
+        "expected": true,
+        "selected": true,
+        "score": 0.8847811090233757,
+        "sentences": [
+          "S566"
+        ]
+      },
+      {
+        "id": "ms_q4_acceleration",
+        "expected": true,
+        "selected": true,
+        "score": 0.9124786649835408,
+        "sentences": [
+          "S647"
+        ]
+      },
+      {
+        "id": "eps_confirmation",
+        "expected": true,
+        "selected": false,
+        "score": 0.21856201859471175,
+        "sentences": [
+          "S652"
+        ]
+      },
+      {
+        "id": "meeting_schedule",
+        "expected": false,
+        "selected": false,
+        "score": 0.0028411393756234008,
+        "sentences": [
+          "S001"
+        ]
+      },
+      {
+        "id": "operator_instruction",
+        "expected": false,
+        "selected": false,
+        "score": 0.001623906948252398,
+        "sentences": [
+          "S002"
+        ]
+      },
+      {
+        "id": "filing_schedule",
+        "expected": false,
+        "selected": false,
+        "score": 0.02612604680428846,
+        "sentences": [
+          "S020"
+        ]
+      },
+      {
+        "id": "disclaimer",
+        "expected": false,
+        "selected": false,
+        "score": 0.015859889961113895,
+        "sentences": [
+          "S022"
+        ]
+      },
+      {
+        "id": "actual_revenue",
+        "expected": false,
+        "selected": false,
+        "score": 0.015859882628698987,
+        "sentences": [
+          "S083"
+        ]
+      },
+      {
+        "id": "actual_interest",
+        "expected": false,
+        "selected": false,
+        "score": 0.02036899024352674,
+        "sentences": [
+          "S088"
+        ]
+      },
+      {
+        "id": "actual_margin",
+        "expected": false,
+        "selected": false,
+        "score": 0.017531817680978303,
+        "sentences": [
+          "S091"
+        ]
+      },
+      {
+        "id": "actual_eps",
+        "expected": false,
+        "selected": false,
+        "score": 0.012973024328616108,
+        "sentences": [
+          "S092"
+        ]
+      }
+    ],
+    "source_text_identity_check": {
+      "matched": 30,
+      "total": 30,
+      "mismatches": []
+    }
+  },
+  "per_call": [
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "sentences": 540,
+      "selected_sentences": 52,
+      "confirmed_claims": 12,
+      "claims_with_a_selected_guidance_sentence": 12
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "sentences": 545,
+      "selected_sentences": 56,
+      "confirmed_claims": 14,
+      "claims_with_a_selected_guidance_sentence": 14
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "sentences": 482,
+      "selected_sentences": 54,
+      "confirmed_claims": 14,
+      "claims_with_a_selected_guidance_sentence": 14
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "sentences": 575,
+      "selected_sentences": 101,
+      "confirmed_claims": 12,
+      "claims_with_a_selected_guidance_sentence": 12
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "sentences": 673,
+      "selected_sentences": 86,
+      "confirmed_claims": 13,
+      "claims_with_a_selected_guidance_sentence": 13
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "sentences": 523,
+      "selected_sentences": 59,
+      "confirmed_claims": 14,
+      "claims_with_a_selected_guidance_sentence": 14
+    }
+  ]
+}

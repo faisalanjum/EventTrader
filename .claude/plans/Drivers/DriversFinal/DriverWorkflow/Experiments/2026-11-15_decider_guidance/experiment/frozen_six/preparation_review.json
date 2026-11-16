@@ -1,0 +1,38 @@
+[
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "speakers_present": false,
+    "numeric_tokens": 164,
+    "tokens_formatted_as_bracketed_timestamps": 67
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "speakers_present": false,
+    "numeric_tokens": 171,
+    "tokens_formatted_as_bracketed_timestamps": 59
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "speakers_present": false,
+    "numeric_tokens": 152,
+    "tokens_formatted_as_bracketed_timestamps": 50
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "speakers_present": false,
+    "numeric_tokens": 163,
+    "tokens_formatted_as_bracketed_timestamps": 55
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "speakers_present": false,
+    "numeric_tokens": 223,
+    "tokens_formatted_as_bracketed_timestamps": 73
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "speakers_present": true,
+    "numeric_tokens": 118,
+    "tokens_formatted_as_bracketed_timestamps": 0
+  }
+]

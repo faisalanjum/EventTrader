@@ -1,0 +1,122 @@
+{
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "F0": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.5282620713361952,
+          "usd_cents": 0.002774413170408179,
+          "m_usd_from_dollars": 0.006598248519383079,
+          "m_usd_from_thousands": 0.0009514421556509751,
+          "m_usd_from_millions": 0.002505564095621595,
+          "m_usd_from_billions": 0.38909241010168233,
+          "percent": 0.0015051424058915644,
+          "percent_yoy": 0.005114046784872055,
+          "percent_sequential": 0.0011966853467165776,
+          "percent_points": 0.0008376265059756813,
+          "basis_points": 0.0007759811014752232,
+          "count": 0.001027026082853158,
+          "count_thousand": 0.00040005958891622777,
+          "count_million": 0.0007759811014752232,
+          "count_billion": 0.004065997375761021,
+          "x": 0.0010535321050307246,
+          "other_stated": 0.04132466332638251,
+          "numberless": 0.001753783294492246,
+          "unknown": 0.00895829951836324,
+          "several": 0.001027026082853158
+        },
+        "choice": "usd",
+        "confidence": 0.5034337593012581
+      },
+      "F1": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.005786978164232431,
+          "usd_cents": 0.001747153580033485,
+          "m_usd_from_dollars": 0.0016603452358307544,
+          "m_usd_from_thousands": 0.001254491855135405,
+          "m_usd_from_millions": 0.0012868691679719367,
+          "m_usd_from_billions": 0.005499448152289027,
+          "percent": 0.025368997784348847,
+          "percent_yoy": 0.16719254823118776,
+          "percent_sequential": 0.0034763531235038397,
+          "percent_points": 0.0010231441102414869,
+          "basis_points": 0.0010231441102414869,
+          "count": 0.0006634495791955829,
+          "count_thousand": 0.0006146227814126724,
+          "count_million": 0.00188595067856993,
+          "count_billion": 0.0009239982448753464,
+          "x": 0.0012868691679719367,
+          "other_stated": 0.002560513322576014,
+          "numberless": 0.00426240963141842,
+          "unknown": 0.7712597833965827,
+          "several": 0.0012229296823809295
+        },
+        "choice": "unknown",
+        "confidence": 0.7592208246279818
+      },
+      "F2": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.9364789011492229,
+          "usd_cents": 0.022688383372108607,
+          "m_usd_from_dollars": 0.0016442370746371433,
+          "m_usd_from_thousands": 0.00048392393318636323,
+          "m_usd_from_millions": 0.0007853055706373789,
+          "m_usd_from_billions": 0.0040113294237633206,
+          "percent": 0.0012423212392811197,
+          "percent_yoy": 0.004673979820660484,
+          "percent_sequential": 0.0006086599433343485,
+          "percent_points": 0.0004260348472076543,
+          "basis_points": 0.00043703024441339646,
+          "count": 0.0006086599433343485,
+          "count_thousand": 0.00021411757741517725,
+          "count_million": 0.0004260348472076543,
+          "count_billion": 0.0005784182718241067,
+          "x": 0.0007275110721004542,
+          "other_stated": 0.009539944324883271,
+          "numberless": 0.0015232288283294473,
+          "unknown": 0.012308632018008879,
+          "several": 0.0005933464984439265
+        },
+        "choice": "usd",
+        "confidence": 0.9331356854202346
+      },
+      "F3": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.005204180103767766,
+          "usd_cents": 0.0016117508751638705,
+          "m_usd_from_dollars": 0.0014555672690482343,
+          "m_usd_from_thousands": 0.0010451270195417667,
+          "m_usd_from_millions": 0.001281446041422636,
+          "m_usd_from_billions": 0.0032897062105974872,
+          "percent": 0.032593651655513124,
+          "percent_yoy": 0.12903831522864082,
+          "percent_sequential": 0.002752277454193041,
+          "percent_points": 0.000920104301710831,
+          "basis_points": 0.000810037459838858,
+          "count": 0.0006777042674640055,
+          "count_thousand": 0.0006278286854188091,
+          "count_million": 0.0015712003929557164,
+          "count_billion": 0.0008309433809305405,
+          "x": 0.001128153842570896,
+          "other_stated": 0.002362075891380663,
+          "numberless": 0.003642694219889247,
+          "unknown": 0.8081640365481038,
+          "several": 0.0009931991518479322
+        },
+        "choice": "unknown",
+        "confidence": 0.7980674068927408
+      }
+    },
+    "usage": {
+      "input_tokens": 7083,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 74.56320020090789,
+  "finished_at": "2026-11-15T15:27:48.136051-05:00"
+}

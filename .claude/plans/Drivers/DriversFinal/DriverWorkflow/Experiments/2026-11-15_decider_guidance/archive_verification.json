@@ -1,0 +1,3803 @@
+{
+  "checked_at": "2026-11-16T00:05:04.696377-05:00",
+  "method": "Read-only verification of original files, archived copies and existing results. Parsed Python with ast only; no imports, model calls, database queries, production edits or experimental reruns.",
+  "passed": true,
+  "single_study_folder": "/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DriverWorkflow/Experiments/2026-11-15_decider_guidance",
+  "copies": {
+    "files": 644,
+    "bytes": 33735376,
+    "hashes_match": 644,
+    "originals_unchanged": 644,
+    "excluded_cache_files": 66,
+    "unaccounted_original_files": [],
+    "details": [
+      {
+        "path": "experiment/CTAS_2025-09-24T10.00.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/CTAS_2025-12-18T10.00.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/CTAS_2026-03-25T10.00.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/OWNER_REVIEW.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/PAYX_2025-09-30T09.30.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/PAYX_2025-12-19T09.30.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/PAYX_2026-03-25T09.30.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/QA016_measure_kind_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/QA022_measure_kind_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/all_66_dispositions.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assemble_saved_proposals.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/audit.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/final_review.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/normalized.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/number_spelling_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/assembled_proposals/reconciled.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/audit_metadata_candidates.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/boundary_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/calendar_support/annual_examples.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/calendar_support/cohort.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/calendar_support/native_precedence.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/candidate_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/candidate_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/capability_status.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/continuation_20261115_1752.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/continuation_20261115_1907.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/continuation_sentence_screen_complete.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/count_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/count_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/count_probe_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/count_probe_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/locate.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/locate_config.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/manifest.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/model.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/model.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/protocol.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/revision.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/typesafe_build.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/typesafe_confidence.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/docs/typesafe_values.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/draft_inventory_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/expression_fields_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/expression_fields_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/final_review_assessment.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/final_review_item8_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/final_review_item8_audit.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/finish_proposal_reconciliation.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/04_copy_QA026_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/04_copy_QA026_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/05_optional_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/05_optional_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-09-24T10.00_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA003_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA003_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA010_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA010_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA012_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_QA012_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/05_optional_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/05_optional_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2025-12-18T10.00_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_QA004_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_QA004_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_QA016_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_QA016_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/05_optional_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/05_optional_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/CTAS_2026-03-25T10.00_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/04_copy_QA005_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/04_copy_QA005_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/05_optional_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/05_optional_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-09-30T09.30_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA000_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA000_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA018_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA018_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA020_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_QA020_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/05_optional_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/05_optional_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2025-12-19T09.30_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/01_scan_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/01_scan_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/02_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/02_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/03_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/03_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/04_copy_QA000_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/04_copy_QA000_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/04_copy_prepared_0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/04_copy_prepared_0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/bound_holds.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/copies.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/ledger.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30/targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/PAYX_2026-03-25T09.30_input.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/configuration.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/integrity.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/manifest.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/other_reference_entries.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/preparation_review.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/proposal_reviews.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/review_carriers.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/review_counts.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/run_finished.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six/run_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six_review_carriers.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six_run.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/frozen_six_score.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/full_call_choices_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/literal_candidates_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/literal_copy_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/literal_copy_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/literal_numeric_fields.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/literal_numeric_fields.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/live_graph_check.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/locate_followup.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/locate_followup_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/locate_followup_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/A_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/A_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/B_eligible_probability_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/B_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/B_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/B_selection.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_choices_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_choices_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copied.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA000_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA000_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA000_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA000_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA001_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA001_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA001_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA001_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA003_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA003_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA003_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA003_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA006_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA006_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA006_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA006_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA016_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA016_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA016_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA016_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA020_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA020_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA020_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA020_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA022_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA022_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA022_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_QA022_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_prepared_literal_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_prepared_literal_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_prepared_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_prepared_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_copy_targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/C_targets.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/D_optional_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/D_optional_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/E_assembly_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/E_proposals.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_literal_tag_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_literal_tag_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_pair_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_tag_only_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/binding_tag_only_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/expression_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/expression_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/expression_fields_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/literal_numeric_fields_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/literal_numeric_fields_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/literal_numeric_fields_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F0_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F0_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F1_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F1_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F2_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F2_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F3_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F3_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F4_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F4_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F5_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_F5_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_S212_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_S212_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V103_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V103_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V108_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V108_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V109_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V109_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V53_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V53_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V65_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V65_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V66_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V66_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V90_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V90_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V91_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_V91_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_reviewed.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_local_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_pointer_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_pointer_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_pointer_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/measure_pointer_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_compact_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_compact_request_prepared.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_compact_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_compact_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_shared_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_shared_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_shared_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/numeric_bounds_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/reference_review.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/request_fingerprints.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_all_guidance_screen_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_all_guidance_screen_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_all_guidance_screen_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_categorical_routing.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_max_negative_gate_superseded.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/shared_role_population_uncertainty_gate.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/support_sentence_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/support_sentence_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/support_sentence_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/support_sentence_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_assembled_quote_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_assembled_quote_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_assembled_quote_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_boundary_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_boundary_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_boundary_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_choice_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_choice_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_choice_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_basis_choice_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_evidence_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_evidence_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_evidence_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_evidence_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_quote_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_quote_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_quote_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_rule_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_rule_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_rule_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_rule_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_selected_evidence_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_selected_evidence_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path/unit_selected_evidence_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_A.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_B.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_C.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_assemble.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_fields.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/main_path_trial.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_kind.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_kind_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_local_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_local_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_occurrences.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_occurrences_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_occurrences_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_pointer_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/measure_pointer_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/metadata_candidates.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/metadata_filter/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/metadata_filter/live_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/metadata_filter/verification.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/native_period_controls.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_compact.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_compact.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_shared.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/numeric_bounds_shared.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/ordinal_word_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/ordinal_word_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/ordinal_word_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/ordinal_word_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2025-09-24T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2025-09-24T10.00_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2025-12-18T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2025-12-18T10.00_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2026-03-25T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/CTAS_2026-03-25T10.00_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2025-09-30T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2025-09-30T09.30_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2025-12-19T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2025-12-19T09.30_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2026-03-25T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/PAYX_2026-03-25T09.30_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/manifest.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort/scores.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_cohort_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_fields.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_fields_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/passage_fields_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/pending_claude_review.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepare_review.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_copy_label_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/label_check_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/label_check_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/label_check_review.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/review.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/selected_copy_map.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/selected_copy_mapped.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/selected_copy_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/selected_copy_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record/source_map.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/prepared_record_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/procedure_reconciliation.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/progress.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/proposal_numbers.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/basis_check_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/basis_check_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/basis_check_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/basis_check_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_check_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_check_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_check_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_check_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_real_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_real_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_real_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/time_real_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/whole_call_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/whole_call_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields/whole_call_scored.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields_basis_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields_time_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/quote_fields_whole_call_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/record_policy.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/records54.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2025-09-24T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2025-09-24T10.00_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2025-12-18T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2025-12-18T10.00_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2026-03-25T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/CTAS_2026-03-25T10.00_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2025-09-30T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2025-09-30T09.30_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2025-12-19T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2025-12-19T09.30_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2026-03-25T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/PAYX_2026-03-25T09.30_comparison.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_ctas_dec.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_ctas_mar.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_ctas_sep.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_payx_dec.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_payx_mar.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/annotate_payx_sep.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/inventory_audit.tmp",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key/source_annotations.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/reference_key_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/review.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/review_0.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/review_1.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/review_2.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/review_prepared_record.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/rulebook_snapshot.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/run_checks.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/score_passage_cohort.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/score_sentence_screen.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/score_turn_screen.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/selected_copy_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_native_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/PAYX_2026-03-25T09.30_reference.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/PAYX_2026-03-25T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/PAYX_2026-03-25T09.30_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/PAYX_2026-03-25T09.30_scores.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/PAYX_2026-03-25T09.30_source_review.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_screen_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sentence_word_menu_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/shared_all_guidance_screen.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/shared_all_guidance_screen.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/shared_role_population.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/shared_role_population.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/source_names_QA016_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/source_names_QA022_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/source_names_and_choices.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/source_names_choices_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/sources.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/speaker_marker_audit.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_appended_note_before.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_before.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_minimal.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_next.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_pre_merge.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_revised.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/strategy_sentence_candidate.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/support_sentence_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/support_sentence_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/tagged_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/tagged_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/tagged_tests.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/target_binding_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/target_binding_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/targeted_word_field_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/targeted_word_field_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/targeted_word_fields.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/targeted_word_fields.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/test_frozen_six_mechanics.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/test_metadata_candidates.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/test_proposal_numbers.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/CTAS_2025-09-24T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/CTAS_2025-12-18T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/CTAS_2026-03-25T10.00_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/PAYX_2025-09-30T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/PAYX_2025-12-19T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/PAYX_2026-03-25T09.30_comparison.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/PAYX_2026-03-25T09.30_request.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/PAYX_2026-03-25T09.30_result.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/README.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen/manifest.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/turn_screen_check.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_assembled_quote_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_assembled_quote_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_basis_boundary_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_basis_boundary_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_basis_choice_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_basis_choice_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_evidence_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_evidence_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_quote_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_quote_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_rule_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_rule_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_selected_evidence_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unit_selected_evidence_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_components.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_passage_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_passage_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_passage_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_passage_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_negative_controls.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_prompt_fingerprint.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_sentence_summary.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_word_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_word_prompt_fingerprint.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_word_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/unseen_word_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/untouched_inventory.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/benchmark_sbd_tools.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/bigtext_speed_benchmark.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/english_golden_rules.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/genia.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/genia_benchmark.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/benchmarks/universal_dependency_sbd.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/examples/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/examples/pysbd_as_spacy_component.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/examples/test_timing_script.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/abbreviation_replacer.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/about.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/between_punctuation.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/clean/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/clean/rules.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/cleaner.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/exclamation_words.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/amharic.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/arabic.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/armenian.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/bulgarian.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/burmese.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/chinese.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/common/__init__.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/common/common.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/common/standard.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/danish.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/deutsch.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/dutch.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/english.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/french.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/greek.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/hindi.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/italian.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/japanese.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/kazakh.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/marathi.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/persian.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/polish.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/russian.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/slovak.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/spanish.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lang/urdu.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/languages.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/lists_item_replacer.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/processor.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/punctuation_replacer.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/segmenter.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd/utils.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/INSTALLER",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/LICENSE",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/METADATA",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/RECORD",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/REQUESTED",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/WHEEL",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/entry_points.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/vendor/pysbd-0.3.4.dist-info/top_level.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_choice_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_choice_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_choice_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_choice_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_start_probe.log",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_start_probe.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_start_requests.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "experiment/word_start_results.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/README.txt",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/USAGE.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/brief.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/draft_inventory_69.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/final_review_20261115.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/locate_after.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/locate_before.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/locate_boundaries.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "external_review/reviews.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/CTAS_2025-09-24T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/CTAS_2025-12-18T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/PAYX_2025-09-30T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/PAYX_2025-12-19T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/PAYX_2026-03-25T09.30.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/CTAS_2026-03-25T10.00.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "source_snapshots/snapshot_queries.json",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/config/local_llm.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/driver_reference/core/driver_period_resolver.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/driver_reference/core/driver_ids.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/driver_reference/core/outcome_codes.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/driver_reference/xml_names.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/driver_reference/relocation/exact_numbers.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/scripts/driver_seed/relocate_probe/phase2/m1_transcript_census.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/.claude/skills/earnings-orchestrator/scripts/fiscal_math.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/.claude/skills/earnings-orchestrator/scripts/guidance_ids.py",
+        "archive_matches": true,
+        "original_unchanged": true
+      },
+      {
+        "path": "project_snapshots/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md",
+        "archive_matches": true,
+        "original_unchanged": true
+      }
+    ]
+  },
+  "final_round": {
+    "archived_files_in_frozen_six": 132,
+    "frozen_fingerprints_passed": 18,
+    "frozen_fingerprints_total": 18,
+    "fingerprint_checks": [
+      {
+        "kind": "code",
+        "original": "/tmp/decider_claude_review_20261115/frozen_six_run.py",
+        "passed": true
+      },
+      {
+        "kind": "code",
+        "original": "/tmp/decider_claude_review_20261115/metadata_candidates.py",
+        "passed": true
+      },
+      {
+        "kind": "code",
+        "original": "/tmp/decider_claude_review_20261115/proposal_numbers.py",
+        "passed": true
+      },
+      {
+        "kind": "code",
+        "original": "/home/faisal/EventMarketDB/config/local_llm.py",
+        "passed": true
+      },
+      {
+        "kind": "code",
+        "original": "/home/faisal/EventMarketDB/driver_reference/core/driver_period_resolver.py",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/CTAS_2025-09-24T10.00_input.json",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/CTAS_2025-12-18T10.00_input.json",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/PAYX_2025-09-30T09.30_input.json",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/PAYX_2025-12-19T09.30_input.json",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/PAYX_2026-03-25T09.30_input.json",
+        "passed": true
+      },
+      {
+        "kind": "input",
+        "file": "experiment/frozen_six/CTAS_2026-03-25T10.00_input.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/CTAS_2025-09-24T10.00.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/CTAS_2025-12-18T10.00.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/CTAS_2026-03-25T10.00.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/PAYX_2025-09-30T09.30.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/PAYX_2025-12-19T09.30.json",
+        "passed": true
+      },
+      {
+        "kind": "reference",
+        "file": "experiment/reference_key/PAYX_2026-03-25T09.30.json",
+        "passed": true
+      },
+      {
+        "kind": "configuration",
+        "passed": true
+      }
+    ],
+    "sources": 6,
+    "requests": 40,
+    "responses": 40,
+    "question_total": 5183,
+    "stages": [
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "01_scan_result",
+        "questions": 704,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "02_bounds_result",
+        "questions": 18,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "03_fields_result",
+        "questions": 60,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "04_copy_QA026_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 12,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-09-24T10.00",
+        "stage": "05_optional_0_result",
+        "questions": 4,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "01_scan_result",
+        "questions": 716,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "02_bounds_result",
+        "questions": 32,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "03_fields_result",
+        "questions": 96,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "04_copy_QA003_0_result",
+        "questions": 6,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "04_copy_QA010_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "04_copy_QA012_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 12,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2025-12-18T10.00",
+        "stage": "05_optional_0_result",
+        "questions": 8,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "01_scan_result",
+        "questions": 634,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "02_bounds_result",
+        "questions": 38,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "03_fields_result",
+        "questions": 144,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "04_copy_QA005_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 33,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-09-30T09.30",
+        "stage": "05_optional_0_result",
+        "questions": 10,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "01_scan_result",
+        "questions": 738,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "02_bounds_result",
+        "questions": 20,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "03_fields_result",
+        "questions": 96,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "04_copy_QA000_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "04_copy_QA018_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "04_copy_QA020_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 15,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2025-12-19T09.30",
+        "stage": "05_optional_0_result",
+        "questions": 2,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2026-03-25T09.30",
+        "stage": "01_scan_result",
+        "questions": 896,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2026-03-25T09.30",
+        "stage": "02_bounds_result",
+        "questions": 16,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2026-03-25T09.30",
+        "stage": "03_fields_result",
+        "questions": 48,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2026-03-25T09.30",
+        "stage": "04_copy_QA000_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "PAYX_2026-03-25T09.30",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 9,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "01_scan_result",
+        "questions": 641,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "02_bounds_result",
+        "questions": 26,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "03_fields_result",
+        "questions": 96,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "04_copy_QA004_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "04_copy_QA016_0_result",
+        "questions": 3,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "04_copy_prepared_0_result",
+        "questions": 18,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      },
+      {
+        "source": "CTAS_2026-03-25T10.00",
+        "stage": "05_optional_0_result",
+        "questions": 5,
+        "checks": {
+          "request_hash": true,
+          "answer_ids": true,
+          "no_error": true,
+          "model": true
+        }
+      }
+    ]
+  },
+  "json_parse": {
+    "checked": 422,
+    "failures": []
+  },
+  "python_syntax": {
+    "checked": 135,
+    "failures": [],
+    "limit": "Parsing only; no code execution or runtime/dependency compatibility certification."
+  },
+  "documentation": {
+    "new_documents": 5,
+    "local_links": 219,
+    "broken_links": [],
+    "python_files_documented": 135,
+    "python_files_total": 135,
+    "undocumented": []
+  },
+  "known_limits": [
+    "External review did not supply three referenced fixtures; see archive_manifest.json.",
+    "Only two project dependencies had final-run fingerprints; other supporting snapshots are labelled archive-time copies.",
+    "Model weights, conversion and running-server fingerprint were not verified by the experiment.",
+    "Original absolute paths remain; this archive is not an installed portable runner.",
+    "These checks preserve evidence; they do not turn incomplete extraction into a passing model result."
+  ],
+  "errors": []
+}

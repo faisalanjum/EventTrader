@@ -1,6 +1,6 @@
 # Units plan (#3): final proposal for approval · v5 · 2026-10-02
 
-> **Archived 2026-10-02: applied design and review history.** The pending build checks in [section 7](#7-pending-build-checks) still apply and are required through [rough_design.md](../rough_design.md); the current [rules](../DRIVER_RULES_Categorized.md) govern behaviour. Line numbers and before/after text refer to the files before the 2026-10-02 edits. Earlier review positions (a stricter bare-dollar rule, no cents default) were superseded by rules 3.54 and 9.1.
+> **Archived 2026-10-02: applied design and review history.** The pending build checks in [section 7](#7-pending-build-checks) still apply and are required through [rough_design.md](rough_design.md); the current [rules](../DRIVER_RULES_Categorized.md) govern behaviour. Line numbers and before/after text refer to the files before the 2026-10-02 edits. Earlier review positions (a stricter bare-dollar rule, no cents default) were superseded by rules 3.54 and 9.1.
 
 **Status:** applied. v4 is in commit 65f8d7da9 and v5 (cents) in commit d7824830d. Codex approved both. This file stays as the record of why each rule reads as it does.
 - v1 (sha256 `eb31f321…`) was reviewed by Codex ([full-plan review](../../../../../../.claude/projects/-home-faisal-EventMarketDB/backups/codex_units_review_20261002/full_plan_review_REVIEW.txt), recovered copy).
@@ -282,7 +282,7 @@ An unrelated euro amount elsewhere isn't a reason to reject a clear dollar amoun
 
 ## 7. Pending build checks
 
-Required before switching on the new unit flow; [rough_design.md](../rough_design.md) points here.
+Required before switching on the new unit flow; [rough_design.md](rough_design.md) points here.
 
 1. **Saved copies:** ✅ done 2026-10-02 in [`driver/reference_data/`](../../../../../driver/reference_data/README.md): the full registry (`utr-2024-10-22.xml`, the exact reviewed version, sha256 `0236426f…`) and ISO 4217 lists one (published 2026-09-17, 178 codes) and three (published 2026-01-01, 137 codes), with checksums.
    - **Pending, at build time:** derive the 122-measure menu from the registry's structured fields and give each list entry one recorded disposition, reviewed once (P24).

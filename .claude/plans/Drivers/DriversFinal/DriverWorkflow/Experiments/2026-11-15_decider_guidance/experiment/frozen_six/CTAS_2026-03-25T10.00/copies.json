@@ -1,0 +1,141 @@
+{
+  "V015_measure": [
+    {
+      "start": 2669,
+      "end": 2676,
+      "text": "revenue",
+      "score": 0.9999970197677612
+    }
+  ],
+  "V015_context": [],
+  "V015_qualifiers": [
+    {
+      "start": 2669,
+      "end": 2676,
+      "text": "revenue",
+      "score": 0.6915311217308044
+    }
+  ],
+  "V017_measure": [
+    {
+      "start": 2669,
+      "end": 2676,
+      "text": "revenue",
+      "score": 0.9870842099189758
+    }
+  ],
+  "V017_context": [],
+  "V017_qualifiers": [],
+  "V019_measure": [
+    {
+      "start": 2780,
+      "end": 2800,
+      "text": "adjusted diluted EPS",
+      "score": 0.9634543061256409
+    }
+  ],
+  "V019_context": [],
+  "V019_qualifiers": [],
+  "V021_measure": [
+    {
+      "start": 2780,
+      "end": 2800,
+      "text": "adjusted diluted EPS",
+      "score": 0.6500656008720398
+    }
+  ],
+  "V021_context": [
+    {
+      "start": 2839,
+      "end": 2855,
+      "text": "a growth rate of",
+      "score": 0.9965669512748718
+    },
+    {
+      "start": 2841,
+      "end": 2855,
+      "text": "growth rate of",
+      "score": 0.9981003403663635
+    }
+  ],
+  "V021_qualifiers": [
+    {
+      "start": 2839,
+      "end": 2855,
+      "text": "a growth rate of",
+      "score": 0.9964091777801514
+    },
+    {
+      "start": 2841,
+      "end": 2855,
+      "text": "growth rate of",
+      "score": 0.9954969882965088
+    }
+  ],
+  "V053_measure": [],
+  "V053_context": [],
+  "V053_qualifiers": [
+    {
+      "start": 8839,
+      "end": 8844,
+      "text": "times",
+      "score": 0.8652620911598206
+    }
+  ],
+  "V066_measure": [],
+  "V066_context": [],
+  "V066_qualifiers": [],
+  "V082_measure": [
+    {
+      "start": 18904,
+      "end": 18918,
+      "text": "debt to EBITDA",
+      "score": 0.8832184672355652
+    }
+  ],
+  "V082_context": [
+    {
+      "start": 18877,
+      "end": 18887,
+      "text": "at closing",
+      "score": 0.9982595443725586
+    }
+  ],
+  "V082_qualifiers": [],
+  "V106_measure": [],
+  "V106_context": [],
+  "V106_qualifiers": [],
+  "V015_conditions": [
+    {
+      "start": 9334,
+      "end": 9387,
+      "text": "Our guidance does not assume any future acquisitions.",
+      "score": 0.9087724089622498
+    }
+  ],
+  "V017_conditions": [
+    {
+      "start": 9334,
+      "end": 9387,
+      "text": "Our guidance does not assume any future acquisitions.",
+      "score": 0.7720578908920288
+    }
+  ],
+  "V019_conditions": [
+    {
+      "start": 2872,
+      "end": 2981,
+      "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+      "score": 0.9110899567604065
+    }
+  ],
+  "V021_conditions": [
+    {
+      "start": 2872,
+      "end": 2981,
+      "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+      "score": 0.9031246900558472
+    }
+  ],
+  "V066_conditions": []
+}

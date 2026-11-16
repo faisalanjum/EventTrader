@@ -1,0 +1,35 @@
+{
+  "started_at": "2026-11-15T22:24:47.947026-05:00",
+  "request_sha256": "c6379d049960cbfa8670d6a6484815f80122fdf2508560a68ddfdbbd69a996fd",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V080_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1749,
+            "end": 1777,
+            "text": "total revenue organic growth",
+            "score": 0.9957513809204102
+          }
+        ]
+      },
+      "V080_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V080_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1058,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 13.535083141876385,
+  "finished_at": "2026-11-15T22:25:01.482222-05:00"
+}

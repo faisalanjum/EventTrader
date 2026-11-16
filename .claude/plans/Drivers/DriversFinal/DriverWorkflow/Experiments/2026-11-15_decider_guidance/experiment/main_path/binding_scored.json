@@ -1,0 +1,52 @@
+{
+  "expected_roles": {
+    "V0": "other",
+    "V1": "actual",
+    "V2": "actual",
+    "V3": "actual",
+    "V4": "actual",
+    "V5": "actual",
+    "V6": "actual",
+    "V7": "actual",
+    "V8": "actual",
+    "V9": "actual",
+    "V10": "actual",
+    "V11": "actual",
+    "V12": "other",
+    "V13": "current",
+    "V14": "current",
+    "V15": "current",
+    "V16": "current",
+    "V17": "current",
+    "V18": "current",
+    "V19": "current",
+    "V20": "current",
+    "V58": "other",
+    "V59": "current",
+    "V60": "other",
+    "V61": "current"
+  },
+  "results": {
+    "tag_only": {
+      "exact_roles": 16,
+      "controls": 25,
+      "positive_found": 8,
+      "positive_total": 10,
+      "negative_rejected": 12,
+      "negative_total": 15,
+      "seconds": 188.87609102507122,
+      "tokens": 17114
+    },
+    "literal_tag": {
+      "exact_roles": 25,
+      "controls": 25,
+      "positive_found": 10,
+      "positive_total": 10,
+      "negative_rejected": 15,
+      "negative_total": 15,
+      "seconds": 190.2633140149992,
+      "tokens": 17283
+    }
+  },
+  "limit": "One-source development diagnostic, not a complete-record benchmark."
+}

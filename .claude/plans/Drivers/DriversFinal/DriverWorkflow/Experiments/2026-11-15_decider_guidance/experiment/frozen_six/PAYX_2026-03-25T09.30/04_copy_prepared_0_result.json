@@ -1,0 +1,87 @@
+{
+  "started_at": "2026-11-15T22:23:49.021066-05:00",
+  "request_sha256": "b6f3048dab9c56c476d17222a5a31167c51dd5c9909d63c0f9f0d2ea4aa75c4d",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V055_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14079,
+            "end": 14113,
+            "text": "Interest on funds held for clients",
+            "score": 0.9998765587806702
+          }
+        ]
+      },
+      "V055_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V055_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V057_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V057_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14374,
+            "end": 14395,
+            "text": "fourth quarter growth",
+            "score": 0.7619546055793762
+          }
+        ]
+      },
+      "V057_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V058_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14436,
+            "end": 14461,
+            "text": "adjusted operating margin",
+            "score": 0.9999989867210388
+          }
+        ]
+      },
+      "V058_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14436,
+            "end": 14461,
+            "text": "adjusted operating margin",
+            "score": 0.9227104187011719
+          }
+        ]
+      },
+      "V058_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14436,
+            "end": 14461,
+            "text": "adjusted operating margin",
+            "score": 0.9997086524963379
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 4622,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 58.923784831073135,
+  "finished_at": "2026-11-15T22:24:47.944916-05:00"
+}

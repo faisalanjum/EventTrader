@@ -1,0 +1,66 @@
+{
+  "input_path": "/tmp/claude_decider_review_20261115/draft_inventory_69.json",
+  "sha256": "67f46b150e606f5aaa5f6406c8f4f3d913e8c64e70ac55bf066fd0065ec7a034",
+  "rows": 75,
+  "core": 69,
+  "borderline": 6,
+  "counts": {
+    "status": {
+      "core": 69,
+      "border": 6
+    },
+    "call": {
+      "CTAS_2025-09-24T10.00": 9,
+      "CTAS_2025-12-18T10.00": 13,
+      "PAYX_2025-09-30T09.30": 14,
+      "PAYX_2025-12-19T09.30": 12,
+      "PAYX_2026-03-25T09.30": 11,
+      "CTAS_2026-03-25T10.00": 10
+    },
+    "form": {
+      "range": 29,
+      "point": 20,
+      "worded": 8,
+      "reaffirm": 2,
+      "relative": 10
+    },
+    "digit_carrier": {
+      "1": 53,
+      "0": 16
+    },
+    "facts_in_sentence": {
+      "2": 25,
+      "1": 41,
+      "3": 3
+    },
+    "measure_named": {
+      "Y": 61,
+      "P": 8
+    },
+    "period": {
+      "X": 29,
+      "Y": 31,
+      "H": 9
+    },
+    "conditions": {
+      "far": 12,
+      "none": 32,
+      "near": 25
+    },
+    "movement": {
+      "O": 20,
+      "N": 38,
+      "S": 11
+    },
+    "earlier_in_sentence": {
+      "0": 66,
+      "1": 3
+    },
+    "in_legacy": {
+      "Y": 54,
+      "N": 14,
+      "P": 1
+    }
+  },
+  "qualification": "Arithmetic and source-ID membership verified, not fact interpretation, exhaustiveness, quote alignment or independent correctness. No sentence IDs in inventory, so unique multi-fact sentence counts cannot be proved from it."
+}

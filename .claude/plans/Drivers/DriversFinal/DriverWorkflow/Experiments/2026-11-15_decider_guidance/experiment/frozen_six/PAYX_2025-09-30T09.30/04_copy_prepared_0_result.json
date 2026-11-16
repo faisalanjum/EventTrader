@@ -1,0 +1,211 @@
+{
+  "started_at": "2026-11-15T21:10:26.686034-05:00",
+  "request_sha256": "3189ede87ff90daf1b9cbf221cad93a1a1ee0fc2721da2793bf64f4ab437396f",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V012_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V012_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V012_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V045_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V045_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V045_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V047_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V047_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V047_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13137,
+            "end": 13149,
+            "text": "basis points",
+            "score": 0.901314377784729
+          }
+        ]
+      },
+      "V050_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13190,
+            "end": 13246,
+            "text": "Management Solutions is expected to grow in the range of",
+            "score": 0.9720311760902405
+          }
+        ]
+      },
+      "V050_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V050_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13190,
+            "end": 13246,
+            "text": "Management Solutions is expected to grow in the range of",
+            "score": 0.8854149580001831
+          }
+        ]
+      },
+      "V052_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V052_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V052_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V054_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13554,
+            "end": 13588,
+            "text": "Interest on funds held for clients",
+            "score": 0.8560085296630859
+          }
+        ]
+      },
+      "V054_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V054_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V056_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13672,
+            "end": 13704,
+            "text": "Adjusted operating income margin",
+            "score": 0.9998228549957275
+          }
+        ]
+      },
+      "V056_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V056_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V057_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V057_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V057_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V059_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13923,
+            "end": 13958,
+            "text": "adjusted diluted earnings per share",
+            "score": 0.9740198254585266
+          }
+        ]
+      },
+      "V059_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V059_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V063_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14184,
+            "end": 14204,
+            "text": "total revenue growth",
+            "score": 0.6871242523193359
+          }
+        ]
+      },
+      "V063_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V063_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V065_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14257,
+            "end": 14282,
+            "text": "adjusted operating margin",
+            "score": 0.9969305396080017
+          }
+        ]
+      },
+      "V065_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V065_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 14286,
+            "end": 14299,
+            "text": "approximately",
+            "score": 0.8721554279327393
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 5512,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 71.69664943800308,
+  "finished_at": "2026-11-15T21:11:38.382847-05:00"
+}

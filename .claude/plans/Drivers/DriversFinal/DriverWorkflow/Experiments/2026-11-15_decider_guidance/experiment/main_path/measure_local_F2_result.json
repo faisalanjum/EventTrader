@@ -1,0 +1,85 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S15] We expect adjusted diluted EPS to be in the range of [TARGET] $4.86 to $4.90, a growth rate of 10.5% to 11.4%. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '$4.86 to $4.90,' at [TARGET] in [S15]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "F2",
+    "passage": "PR002",
+    "start": 1517,
+    "end": 1532,
+    "text": "$4.86 to $4.90,",
+    "aliases": [
+      "V17",
+      "V18"
+    ],
+    "insert_at": "V17"
+  },
+  "selected_sentence": {
+    "tag": "S15",
+    "passage": "PR002",
+    "start": 1464,
+    "end": 1566,
+    "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+  },
+  "target_sentence": {
+    "tag": "S15",
+    "passage": "PR002",
+    "start": 1464,
+    "end": 1566,
+    "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 181,
+      "source": {
+        "tag": "S15",
+        "passage": "PR002",
+        "start": 1464,
+        "end": 1517,
+        "text": "We expect adjusted diluted EPS to be in the range of "
+      }
+    },
+    {
+      "render_start": 190,
+      "render_end": 239,
+      "source": {
+        "tag": "S15",
+        "passage": "PR002",
+        "start": 1517,
+        "end": 1566,
+        "text": "$4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 138,
+            "end": 158,
+            "text": "adjusted diluted EPS",
+            "score": 1.0
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 187,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 2.1832726618740708,
+  "finished_at": "2026-11-15T14:59:37.652698-05:00"
+}

@@ -1,0 +1,242 @@
+{
+  "expected": {
+    "F0_form": "range",
+    "F0_subject_scope": "source_company_total",
+    "F0_period": "FY2026",
+    "F0_sign": "positive",
+    "F0_movement": "raised",
+    "F0_time_type": "duration",
+    "F1_form": "range",
+    "F1_subject_scope": "source_company_total",
+    "F1_period": "FY2026",
+    "F1_sign": "positive",
+    "F1_movement": "raised",
+    "F1_time_type": "duration",
+    "F2_form": "range",
+    "F2_subject_scope": "source_company_total",
+    "F2_period": "FY2026",
+    "F2_sign": "positive",
+    "F2_movement": "raised",
+    "F2_time_type": "duration",
+    "F3_form": "range",
+    "F3_subject_scope": "source_company_total",
+    "F3_period": "FY2026",
+    "F3_sign": "positive",
+    "F3_movement": "raised",
+    "F3_time_type": "duration",
+    "F4_form": "point",
+    "F4_subject_scope": "source_company_total",
+    "F4_period": "FY2026",
+    "F4_sign": "positive",
+    "F4_movement": "not_stated",
+    "F4_time_type": "duration",
+    "F5_form": "point",
+    "F5_subject_scope": "source_company_total",
+    "F5_period": "FY2026",
+    "F5_sign": "positive",
+    "F5_movement": "not_stated",
+    "F5_time_type": "duration",
+    "F0_unit_scale": "m_usd_from_billions",
+    "F1_unit_scale": "unknown",
+    "F2_unit_scale": "usd",
+    "F3_unit_scale": "unknown",
+    "F4_unit_scale": "m_usd_from_millions",
+    "F5_unit_scale": "percent"
+  },
+  "source_sha256": "eca43afcdf7ccc9c52f7b4700dd35f7a90bed00c6d0169d5fc6a27865b5db470",
+  "evidence": {
+    "F0": [
+      {
+        "passage": "PR002",
+        "start": 1277,
+        "end": 1348,
+        "global_start": 2583,
+        "global_end": 2654,
+        "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+        "role": "annual period and movement"
+      },
+      {
+        "passage": "PR002",
+        "start": 1349,
+        "end": 1463,
+        "global_start": 2655,
+        "global_end": 2769,
+        "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%.",
+        "role": "revenue level and growth"
+      },
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      },
+      {
+        "passage": "QA003",
+        "start": 385,
+        "end": 1055,
+        "global_start": 16401,
+        "global_end": 17071,
+        "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+        "role": "energy assumption, no stated 30% assumption here"
+      }
+    ],
+    "F1": [
+      {
+        "passage": "PR002",
+        "start": 1277,
+        "end": 1348,
+        "global_start": 2583,
+        "global_end": 2654,
+        "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+        "role": "annual period and movement"
+      },
+      {
+        "passage": "PR002",
+        "start": 1349,
+        "end": 1463,
+        "global_start": 2655,
+        "global_end": 2769,
+        "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%.",
+        "role": "revenue level and growth"
+      },
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      },
+      {
+        "passage": "QA003",
+        "start": 385,
+        "end": 1055,
+        "global_start": 16401,
+        "global_end": 17071,
+        "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+        "role": "energy assumption, no stated 30% assumption here"
+      }
+    ],
+    "F2": [
+      {
+        "passage": "PR002",
+        "start": 1277,
+        "end": 1348,
+        "global_start": 2583,
+        "global_end": 2654,
+        "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+        "role": "annual period and movement"
+      },
+      {
+        "passage": "PR002",
+        "start": 1464,
+        "end": 1565,
+        "global_start": 2770,
+        "global_end": 2871,
+        "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%.",
+        "role": "adjusted diluted EPS level and growth"
+      },
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      },
+      {
+        "passage": "QA003",
+        "start": 385,
+        "end": 1055,
+        "global_start": 16401,
+        "global_end": 17071,
+        "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+        "role": "energy assumption, no stated 30% assumption here"
+      },
+      {
+        "passage": "PR002",
+        "start": 1566,
+        "end": 1675,
+        "global_start": 2872,
+        "global_end": 2981,
+        "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+        "role": "EPS measurement exclusion, not a separate assumption"
+      }
+    ],
+    "F3": [
+      {
+        "passage": "PR002",
+        "start": 1277,
+        "end": 1348,
+        "global_start": 2583,
+        "global_end": 2654,
+        "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance.",
+        "role": "annual period and movement"
+      },
+      {
+        "passage": "PR002",
+        "start": 1464,
+        "end": 1565,
+        "global_start": 2770,
+        "global_end": 2871,
+        "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%.",
+        "role": "adjusted diluted EPS level and growth"
+      },
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      },
+      {
+        "passage": "QA003",
+        "start": 385,
+        "end": 1055,
+        "global_start": 16401,
+        "global_end": 17071,
+        "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+        "role": "energy assumption, no stated 30% assumption here"
+      },
+      {
+        "passage": "PR002",
+        "start": 1566,
+        "end": 1675,
+        "global_start": 2872,
+        "global_end": 2981,
+        "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+        "role": "EPS measurement exclusion, not a separate assumption"
+      }
+    ],
+    "F4": [
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      }
+    ],
+    "F5": [
+      {
+        "passage": "PR004",
+        "start": 1763,
+        "end": 2389,
+        "global_start": 9101,
+        "global_end": 9727,
+        "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns.",
+        "role": "annual guidance assumptions with separate interest/tax forecasts"
+      }
+    ]
+  },
+  "limits": "Reviewed evidence is supplied; selection, metric extraction, qualifier copying, conditions and complete records are NOT scored. Six already-used development targets."
+}

@@ -1,0 +1,2878 @@
+[
+  {
+    "tag": "V016",
+    "anchor": {
+      "tag": "V016",
+      "passage": "PR002",
+      "start": 2849,
+      "end": 2855,
+      "text": "$11.15"
+    },
+    "lower": "V016",
+    "upper": "V017",
+    "aliases": [
+      "V016",
+      "V017"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00018152118877470252,
+            "V006": 0.0002660258929227939,
+            "V007": 0.00030997165866273235,
+            "V008": 0.00038006095897314134,
+            "V009": 0.0005713675686768243,
+            "V010": 0.00020099865099182628,
+            "V011": 0.0002464474840688481,
+            "V012": 0.0002660258929227939,
+            "V013": 0.0005160002665087254,
+            "V014": 0.00033459626430838187,
+            "V015": 0.00037049872076997027,
+            "V016": 0.973428973128187,
+            "V017": 0.005379708530864516,
+            "V018": 0.005379708530864516,
+            "V019": 0.00043170317453701296,
+            "V020": 0.0029185368003387794,
+            "V021": 0.0020428458407368505,
+            "V022": 0.0019413447177321094,
+            "V023": 0.00043170317453701296,
+            "no_current_forecast": 0.0007186429637936005,
+            "no_stated_bound": 0.0012271782723478702,
+            "elsewhere": 0.0006657542020565347,
+            "several": 0.001053195921601884,
+            "unclear": 0.0007371901948216154
+          },
+          "choice": "V016",
+          "confidence": 0.972273711090282
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.0001255228657600145,
+            "V006": 0.0001985720220799361,
+            "V007": 0.00020895402737482698,
+            "V008": 0.00024347194016116516,
+            "V009": 0.0002985249037122811,
+            "V010": 0.00013549456526961156,
+            "V011": 0.00018395795620879045,
+            "V012": 0.00023734657362636222,
+            "V013": 0.0003222401299032936,
+            "V014": 0.00015003332498247603,
+            "V015": 0.00016195218708671763,
+            "V016": 0.0015248599780877936,
+            "V017": 0.9864964684861952,
+            "V018": 0.0009639061367292766,
+            "V019": 0.000916013864784119,
+            "V020": 0.0005939818563640597,
+            "V021": 0.0028107584256139816,
+            "V022": 0.0007861465249072272,
+            "V023": 0.0003568167596652191,
+            "no_current_forecast": 0.0003568167596652191,
+            "no_stated_bound": 0.0006093117163646144,
+            "elsewhere": 0.0008705007144678898,
+            "several": 0.0009639061367292766,
+            "unclear": 0.00048444214426061427
+          },
+          "choice": "V017",
+          "confidence": 0.9859093584203776
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 9.491345558757436e-05,
+            "V006": 0.00014637139649112881,
+            "V007": 0.0001355992094450515,
+            "V008": 0.0001888515689817227,
+            "V009": 0.00024365996493380668,
+            "V010": 0.0001321876290718896,
+            "V011": 0.00017946818772835246,
+            "V012": 0.00014637139649112881,
+            "V013": 0.00032248868533750306,
+            "V014": 0.00017055119539403186,
+            "V015": 0.00016207710518577039,
+            "V016": 0.9872583316457173,
+            "V017": 0.003448975072893392,
+            "V018": 0.0017781303238990646,
+            "V019": 0.00035709215288987685,
+            "V020": 0.0004973287379338334,
+            "V021": 0.0010150856888718667,
+            "V022": 0.0007105148363450194,
+            "V023": 0.00024365996493380668,
+            "no_current_forecast": 0.00033934981619041427,
+            "no_stated_bound": 0.0007105148363450194,
+            "elsewhere": 0.0006416637829065519,
+            "several": 0.0005794846084920232,
+            "unclear": 0.0004973287379338334
+          },
+          "choice": "V016",
+          "confidence": 0.9867043460650963
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00013166446645670408,
+            "V006": 0.00021917779520886816,
+            "V007": 0.00019295869207686074,
+            "V008": 0.00020828779639972767,
+            "V009": 0.0003648586958885837,
+            "V010": 0.00017426048459534768,
+            "V011": 0.00019295869207686074,
+            "V012": 0.0002030474187565604,
+            "V013": 0.00029757305370851765,
+            "V014": 0.00016143580860535688,
+            "V015": 0.0001881041584761925,
+            "V016": 0.001372705599326934,
+            "V017": 0.9833510778509511,
+            "V018": 0.000744704293252461,
+            "V019": 0.003614935654029001,
+            "V020": 0.0005212598618337208,
+            "V021": 0.003614935654029001,
+            "V022": 0.0008677251401133217,
+            "V023": 0.000534712816780336,
+            "no_current_forecast": 0.0004144352097394888,
+            "no_stated_bound": 0.0007836399225376176,
+            "elsewhere": 0.000383934714755177,
+            "several": 0.000913093181761063,
+            "unclear": 0.000548513038641158
+          },
+          "choice": "V017",
+          "confidence": 0.9826272116705577
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.010509318477592707,
+          "range": 0.2885403281685533,
+          "floor": 0.6862213484582963,
+          "ceiling": 0.003254768844052655,
+          "words": 0.0016357891424453731,
+          "revision": 0.0012359382588749072,
+          "qualification": 0.0018113106153907269,
+          "reaffirmation": 0.0008433364408451023,
+          "withdrawal": 0.0008221185846816685,
+          "centre_tolerance": 0.000865101798256954,
+          "several": 0.0013685554478317132,
+          "none": 0.0010340275284356464,
+          "unclear": 0.0018580582347429288
+        },
+        "choice": "floor",
+        "confidence": 0.6600731274964876
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9925855195009006,
+          "source_company_part": 0.004473948096989463,
+          "other_subject": 0.0009948859617883836,
+          "shared": 0.0006288949183449466,
+          "unclear": 0.0013167515219766085
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9907318993761257
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0017691926650143133,
+          "Q1_FY2025": 0.001518367118481305,
+          "Q2_FY2025": 0.0005207005399725337,
+          "Q3_FY2025": 0.0006891572389738458,
+          "Q4_FY2025": 0.000866794101173447,
+          "H1_FY2025": 0.0003376441078870335,
+          "H2_FY2025": 0.00027537730551689996,
+          "FY2026": 0.9822964248762013,
+          "Q1_FY2026": 0.00024243534861900342,
+          "Q2_FY2026": 0.0003644671880482489,
+          "Q3_FY2026": 0.0003291493690121493,
+          "Q4_FY2026": 0.00023633582592992383,
+          "H1_FY2026": 0.0004702430535799092,
+          "H2_FY2026": 0.004659062335179508,
+          "FY2027": 0.000606717261679235,
+          "Q1_FY2027": 0.00016126250846950566,
+          "Q2_FY2027": 0.00020806440817191534,
+          "Q3_FY2027": 0.0002134340649876841,
+          "Q4_FY2027": 0.0005479245545093265,
+          "H1_FY2027": 0.0001785661911785318,
+          "H2_FY2027": 0.00031279534430799324,
+          "short_term": 0.0001785661911785318,
+          "medium_term": 0.00026169498339285644,
+          "long_term": 0.00020282945843783646,
+          "undefined_horizon": 0.00020806440817191534,
+          "other_stated": 0.0006549159997495191,
+          "several": 9.206037959221531e-05,
+          "unclear": 0.0015977531725835457
+        },
+        "choice": "FY2026",
+        "confidence": 0.9816407369086532
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.006615720017721295,
+          "usd_cents": 0.0019471069112421057,
+          "m_usd_from_dollars": 0.0015091272459674262,
+          "m_usd_from_thousands": 0.0005308886548759538,
+          "m_usd_from_millions": 0.004400627548523539,
+          "m_usd_from_billions": 0.9763182371244945,
+          "percent": 0.00040111869693850924,
+          "percent_yoy": 0.00044415904987742783,
+          "percent_sequential": 0.0003910268254954118,
+          "percent_points": 0.0003715983853532121,
+          "basis_points": 0.00040111869693850924,
+          "count": 0.0002601023474997236,
+          "count_thousand": 0.0007780354008115534,
+          "count_million": 0.0004556222067470363,
+          "count_billion": 0.0005175318569367538,
+          "x": 0.00043298434112340716,
+          "other_stated": 0.0013628881550052357,
+          "numberless": 0.00032714620534465724,
+          "unknown": 0.0019471069112421057,
+          "several": 0.0005878534178616608
+        },
+        "choice": "m_usd_from_billions",
+        "confidence": 0.9750718285520995
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9707568923928319,
+          "negative": 0.004158156220124469,
+          "zero": 0.00198598171385203,
+          "not_numeric": 0.0016615382841000293,
+          "several": 0.0022558345098664776,
+          "unclear": 0.01918159687922503
+        },
+        "choice": "positive",
+        "confidence": 0.9649082708713983
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.008932869335880332,
+          "raised": 0.9709762158142607,
+          "lowered": 0.0018402383060576873,
+          "reaffirmed": 0.00249845056409542,
+          "withdrawn": 0.0011054674873743715,
+          "not_stated": 0.008067243149614335,
+          "unclear": 0.0065795153427170815
+        },
+        "choice": "raised",
+        "confidence": 0.9661389184499709
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.975749083509023,
+          "instant": 0.007704105297062402,
+          "unclear": 0.016546811193914556
+        },
+        "choice": "duration",
+        "confidence": 0.9636236252635345
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.033323783294510016,
+          "previous_period": 0.006523860856086848,
+          "two_bases": 0.0018717636975056008,
+          "other_stated": 0.0108600698942813,
+          "not_stated": 0.064636937791226,
+          "not_growth_percentage": 0.8694678886243218,
+          "unclear": 0.01331569584206845
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.8477125367283753
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.9790036572343173,
+          "measure_change": 0.010494583811689056,
+          "guidance_revision": 0.0037871209937685667,
+          "reference_only": 0.0021619632525420977,
+          "several": 0.0017632638055602363,
+          "unclear": 0.0027894109021228144
+        },
+        "choice": "level",
+        "confidence": 0.9748043886811807
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.0052525463935467415,
+          "prior_year": 0.23402561680391207,
+          "sequential_period": 0.006278191875207884,
+          "previous_guidance": 0.2591366352810275,
+          "none": 0.45393104290994296,
+          "unclear": 0.04137596673636289
+        },
+        "choice": "none",
+        "confidence": 0.3447172514919315
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.9480867491821209
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.20165351634185064
+      }
+    },
+    "fields": {
+      "form": "floor",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "m_usd_from_billions",
+      "sign": "positive",
+      "movement": "raised",
+      "time_type": "duration",
+      "basis_evidence": "not_growth_percentage",
+      "amount_meaning": "level",
+      "comparison_baseline": "none"
+    },
+    "unit_after_rule": "m_usd_from_billions",
+    "numeric": {
+      "lower": "11150",
+      "upper": "11220"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [
+        {
+          "start": 2819,
+          "end": 2826,
+          "text": "revenue",
+          "score": 0.9999874830245972
+        }
+      ],
+      "context": [],
+      "qualifiers": [],
+      "conditions": [
+        {
+          "start": 8417,
+          "end": 8470,
+          "text": "Our guidance does not assume any future acquisitions.",
+          "score": 0.987589955329895
+        }
+      ],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 2819,
+      "end": 8470,
+      "text": "revenue to be in the range of $11.15 billion to $11.22 billion, a total growth rate of 7.8% to 8.5%. We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%. With that, I'll turn it over to Jim to discuss the details of our second quarter results.\n\nJim Rosakis [208]: Thanks, Todd. This quarter marked another period of solid progress for our business. As we continue to advance the rollout of our technology initiatives and build on a strong foundation of organic growth we have established, our focus on innovation, operational excellence, and customer engagement is delivering measurable results. We are strengthening our relationships with existing customers through expanded offerings and superior service. which has led to all-time highs in retention rates, while also successfully attracting new customers who see the clear benefits of partnering with us. These achievements reflect the commitment and talent of our employee partners, whose efforts are positioning us for sustained success. Turning to our business segments, organic growth by business was 7.8% for uniform rental facility services, 14.1% for first aid and safety services, 11.5% for fire protection services, and 2% for uniform direct sale. Gross margin percentage by business was 49.8% for uniform rental facility services, 57.7% for first aid and safety services, 48.2% for fire protection services, and 41.9% for uniform direct sale. Gross margin for uniform rental facility services segment increased 70 basis points from last year. The 49.8% gross margin is the second highest gross margin ever for this segment. The strong revenue growth in this segment is helping to create leverage. In addition, our supply chain team and process improvement initiatives from our engineering and Six Sigma black belt teams continue to help expand our margins while navigating the current economic environment. Gross margin for the first aid and safety services segment was 57.7%. This equals their previous all-time high set last year. As we mentioned previously, the mix of revenue and time and good investments can impact this business from quarter to quarter. We are pleased our investments to grow this business are generating strong double-digit revenue growth while being able to expand our gross margin. We are growing in many ways. We're adding new business with over two-thirds being converted from no programmers. We are cross-selling to existing customers. Our retention rates are at all-time highs. And we continue to experience success in our focus verticals of healthcare, hospitality, education, and state and local governments. Our strong culture of execution combined with multiple growth levers has positioned us over the years to grow multiples of job growth and GDP. All businesses have a need for image, safety, cleanliness, and compliance. Our value proposition resonates in all economic cycles as evidenced by our growth in sales and profit in 54 out of the last 56 years. With that, I'll turn it over to Scott to discuss our operating income, capital allocation performance, and 2026 guidance assumptions.\n\nScott Garula [366]: Thanks, Jim, and good morning, everyone. As Todd mentioned, we continue to perform at a high level as evidenced by record-level revenue and operating margins for the second quarter. Selling and administrative expenses as a percentage of revenue was 27%, which was a 20 basis point increase from last year. Second quarter operating income was $655.7 million compared to $591.4 million last year. Operating income as a percentage of revenue was 23.4% in the second quarter of fiscal 2026 compared to 23.1% in last year's second quarter, an increase of 30 basis points and an all-time high. Our effective tax rate for the second quarter was 21.2% compared to 20.7% last year. The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensation. Net income for the second quarter was $495.3 million compared to $448.5 million last year. This year's second quarter diluted earnings per share was $1.21 compared to $1.09 last year, an increase of 11%. For the second quarter, our free cash flow was $425 million, an increase of 23.8% over the prior year. Our strong cash generation allows us to have a balanced approach to capital allocation in order to create value for our shareholders. In the second quarter, we continue to invest in our businesses through capital expenditures of $106.3 million. Also in the second quarter, we were able to make strategic acquisitions totaling $85.6 million in all three of our route-based businesses. During the second quarter, we paid dividends in the amount of $182.3 million. Also during the second quarter, and as of December 17th, we were active in the buyback program with repurchases of $622.5 million of Cintosh shares. That is the third largest share repurchase we've made in a quarter. During the first six months of fiscal 2026, we have returned $1.24 billion in capital to our shareholders in the form of dividends and share buybacks. Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions."
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_EVIDENCE"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V018",
+    "anchor": {
+      "tag": "V018",
+      "passage": "PR002",
+      "start": 2906,
+      "end": 2910,
+      "text": "7.8%"
+    },
+    "lower": "V018",
+    "upper": "V019",
+    "aliases": [
+      "V018",
+      "V019"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00036620357087364757,
+            "V006": 0.00038535010764068913,
+            "V007": 0.0007103118631130714,
+            "V008": 0.0007286440165037387,
+            "V009": 0.0010954129874864858,
+            "V010": 0.00038535010764068913,
+            "V011": 0.0007286440165037387,
+            "V012": 0.0005100183724234873,
+            "V013": 0.000766740348145738,
+            "V014": 0.0005366841165507359,
+            "V015": 0.0005793190158878718,
+            "V016": 0.021594673197183233,
+            "V017": 0.0016053651778001213,
+            "V018": 0.9379372510753388,
+            "V019": 0.006687937708725792,
+            "V020": 0.0021795695447780774,
+            "V021": 0.0022935247769794572,
+            "V022": 0.011715296548490925,
+            "V023": 0.00124425637792037,
+            "no_current_forecast": 0.0017776222503758324,
+            "no_stated_bound": 0.0014872178298981856,
+            "elsewhere": 0.0008934014394931305,
+            "several": 0.0024134393094505245,
+            "unclear": 0.0013777662407957144
+          },
+          "choice": "V018",
+          "confidence": 0.93523887068731
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.0002111212639122569,
+            "V006": 0.00018586609352672247,
+            "V007": 0.00039920143146060456,
+            "V008": 0.00039920143146060456,
+            "V009": 0.0004534443968970888,
+            "V010": 0.0002398080525804442,
+            "V011": 0.00036051757835378184,
+            "V012": 0.0003793666751675259,
+            "V013": 0.0005150579077949808,
+            "V014": 0.00027942335927944707,
+            "V015": 0.00030162082286432437,
+            "V016": 0.00038915758261198215,
+            "V017": 0.0037586791143399832,
+            "V018": 0.0069283334556516215,
+            "V019": 0.9716511893746919,
+            "V020": 0.000600142495071182,
+            "V021": 0.0013563731486823745,
+            "V022": 0.004608571312734061,
+            "V023": 0.00203911505481278,
+            "no_current_forecast": 0.0005703240475502853,
+            "no_stated_bound": 0.0009255144895932651,
+            "elsewhere": 0.0005283508502436846,
+            "several": 0.0016630696798526,
+            "unclear": 0.0012565503808665609
+          },
+          "choice": "V019",
+          "confidence": 0.9704186323909828
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00011320551089354424,
+            "V006": 0.0001253525030276306,
+            "V007": 0.0002906189568622274,
+            "V008": 0.00027617938339901906,
+            "V009": 0.0003563322874656133,
+            "V010": 0.0001498296958960994,
+            "V011": 0.00021958042600186387,
+            "V012": 0.00023106082404839164,
+            "V013": 0.00029811971195399967,
+            "V014": 0.00017458061027144424,
+            "V015": 0.00015766329692230952,
+            "V016": 0.0007850794986000892,
+            "V017": 0.0007460723357771461,
+            "V018": 0.9851575421517997,
+            "V019": 0.0018671153709220838,
+            "V020": 0.00036552895174687765,
+            "V021": 0.0006402983710712433,
+            "V022": 0.002953700055220548,
+            "V023": 0.0005782518027145139,
+            "no_current_forecast": 0.0009147701746455488,
+            "no_stated_bound": 0.0006084846851189562,
+            "elsewhere": 0.0005495206778597582,
+            "several": 0.0013752272583761153,
+            "unclear": 0.0010658854594052826
+          },
+          "choice": "V018",
+          "confidence": 0.9845122178975302
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.0002686228675633155,
+            "V006": 0.0002686228675633155,
+            "V007": 0.0006553409357942304,
+            "V008": 0.00041425911164380476,
+            "V009": 0.0006227795686947484,
+            "V010": 0.0003936761832512734,
+            "V011": 0.0004705480761696929,
+            "V012": 0.0004249505498015007,
+            "V013": 0.0005769461557692258,
+            "V014": 0.0003741161090299177,
+            "V015": 0.00045870945227106,
+            "V016": 0.0005769461557692258,
+            "V017": 0.01709882625696591,
+            "V018": 0.005295560021598833,
+            "V019": 0.9582027663160996,
+            "V020": 0.0006071108805216323,
+            "V021": 0.002730144553491895,
+            "V022": 0.002343080819049825,
+            "V023": 0.0021160292537533943,
+            "no_current_forecast": 0.001063478813103184,
+            "no_stated_bound": 0.0011479630460786345,
+            "elsewhere": 0.0007074020448715956,
+            "several": 0.0019109794868609664,
+            "unclear": 0.0012711404742832201
+          },
+          "choice": "V019",
+          "confidence": 0.9563854952863647
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.013740397404298948,
+          "range": 0.7317415760111277,
+          "floor": 0.22662266123296065,
+          "ceiling": 0.0030554969424484435,
+          "words": 0.0025563301826341954,
+          "revision": 0.0017893172736640412,
+          "qualification": 0.01120645505125139,
+          "reaffirmation": 0.0010214721115936068,
+          "withdrawal": 0.0008330964128354929,
+          "centre_tolerance": 0.0011602685059585757,
+          "several": 0.0025563301826341954,
+          "none": 0.0011602685059585757,
+          "unclear": 0.0025563301826341954
+        },
+        "choice": "range",
+        "confidence": 0.7093867073453883
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9888866925397817,
+          "source_company_part": 0.006367942564069871,
+          "other_subject": 0.0009419312482059711,
+          "shared": 0.0011258587908491247,
+          "unclear": 0.0026775748570934013
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9861083656747271
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0019431044839902279,
+          "Q1_FY2025": 0.001846559281876764,
+          "Q2_FY2025": 0.0007964748963069818,
+          "Q3_FY2025": 0.0007964748963069818,
+          "Q4_FY2025": 0.0012282901018855442,
+          "H1_FY2025": 0.0003804052990185593,
+          "H2_FY2025": 0.00040029418667692537,
+          "FY2026": 0.9743113776936103,
+          "Q1_FY2026": 0.0002948375375048783,
+          "Q2_FY2026": 0.0004784583705358514,
+          "Q3_FY2026": 0.0004432460547373539,
+          "Q4_FY2026": 0.0003024466172993829,
+          "H1_FY2026": 0.0007378580375639912,
+          "H2_FY2026": 0.007310531315017981,
+          "FY2027": 0.0007569015462883097,
+          "Q1_FY2027": 0.0002063730572940784,
+          "Q2_FY2027": 0.0002801880958471605,
+          "Q3_FY2027": 0.0002662667737946343,
+          "Q4_FY2027": 0.0007192940435336983,
+          "H1_FY2027": 0.00024046459917235352,
+          "H2_FY2027": 0.0004432460547373539,
+          "short_term": 0.0002344149025598045,
+          "medium_term": 0.0003615044572662069,
+          "long_term": 0.00027313877000447655,
+          "undefined_horizon": 0.0003615044572662069,
+          "other_stated": 0.0006835554722910775,
+          "several": 0.00013382096486808424,
+          "unclear": 0.0037689680327447706
+        },
+        "choice": "FY2026",
+        "confidence": 0.9733599472378182
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.009184900366498062,
+          "usd_cents": 0.012470134718404647,
+          "m_usd_from_dollars": 0.003314503022520163,
+          "m_usd_from_thousands": 0.007491059058850599,
+          "m_usd_from_millions": 0.031207702579430282,
+          "m_usd_from_billions": 0.004063961946179624,
+          "percent": 0.074219686235539,
+          "percent_yoy": 0.36027656117457607,
+          "percent_sequential": 0.001940992748855192,
+          "percent_points": 0.002042475580109543,
+          "basis_points": 0.002844592639204453,
+          "count": 0.001504388318970695,
+          "count_thousand": 0.004616168172064889,
+          "count_million": 0.004982883371387937,
+          "count_billion": 0.002703256075623908,
+          "x": 0.0027730233029445005,
+          "other_stated": 0.0029180076237282702,
+          "numberless": 0.0037648735623581056,
+          "unknown": 0.4648362368635496,
+          "several": 0.002844592639204453
+        },
+        "choice": "unknown",
+        "confidence": 0.43666972301426277
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9867098460222958,
+          "negative": 0.0036272812039608183,
+          "zero": 0.001123380347719998,
+          "not_numeric": 0.0006094432185123059,
+          "several": 0.0012439200404232304,
+          "unclear": 0.0066861291670877844
+        },
+        "choice": "positive",
+        "confidence": 0.984051815226755
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.013800667059022918,
+          "raised": 0.9482491837567969,
+          "lowered": 0.0024399719177942533,
+          "reaffirmed": 0.004732723162719632,
+          "withdrawn": 0.0013929129964650182,
+          "not_stated": 0.01692120664688695,
+          "unclear": 0.01246333446031432
+        },
+        "choice": "raised",
+        "confidence": 0.939624047716263
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9437195333488074,
+          "instant": 0.009613704536382977,
+          "unclear": 0.04666676211480964
+        },
+        "choice": "duration",
+        "confidence": 0.915579300023211
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.27409115925082456,
+          "previous_period": 0.0125562709213311,
+          "two_bases": 0.003888716758096402,
+          "other_stated": 0.05099325345980015,
+          "not_stated": 0.5052296013810391,
+          "not_growth_percentage": 0.011932404925766209,
+          "unclear": 0.14130859330314252
+        },
+        "choice": "not_stated",
+        "confidence": 0.42276786827787893
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.009494007262947026,
+          "measure_change": 0.9806961335175571,
+          "guidance_revision": 0.002523463590049026,
+          "reference_only": 0.0032558246011030563,
+          "several": 0.001236339171911297,
+          "unclear": 0.002794231856432423
+        },
+        "choice": "measure_change",
+        "confidence": 0.9768353602210685
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.006027795901520825,
+          "prior_year": 0.4586131861245731,
+          "sequential_period": 0.00861168501894798,
+          "previous_guidance": 0.029260074620390895,
+          "none": 0.3554533183643232,
+          "unclear": 0.14203393997024402
+        },
+        "choice": "prior_year",
+        "confidence": 0.35033582334948765
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.8064263102519672
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.17815773454543551
+      }
+    },
+    "fields": {
+      "form": "range",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "unknown",
+      "sign": "positive",
+      "movement": "raised",
+      "time_type": "duration",
+      "basis_evidence": "not_stated",
+      "amount_meaning": "measure_change",
+      "comparison_baseline": "prior_year"
+    },
+    "unit_after_rule": "unknown",
+    "numeric": {
+      "lower": "7.8",
+      "upper": "8.5"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [],
+      "context": [],
+      "qualifiers": [],
+      "conditions": [
+        {
+          "start": 8417,
+          "end": 8470,
+          "text": "Our guidance does not assume any future acquisitions.",
+          "score": 0.9651076197624207
+        }
+      ],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 2906,
+      "end": 8470,
+      "text": "7.8% to 8.5%. We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%. With that, I'll turn it over to Jim to discuss the details of our second quarter results.\n\nJim Rosakis [208]: Thanks, Todd. This quarter marked another period of solid progress for our business. As we continue to advance the rollout of our technology initiatives and build on a strong foundation of organic growth we have established, our focus on innovation, operational excellence, and customer engagement is delivering measurable results. We are strengthening our relationships with existing customers through expanded offerings and superior service. which has led to all-time highs in retention rates, while also successfully attracting new customers who see the clear benefits of partnering with us. These achievements reflect the commitment and talent of our employee partners, whose efforts are positioning us for sustained success. Turning to our business segments, organic growth by business was 7.8% for uniform rental facility services, 14.1% for first aid and safety services, 11.5% for fire protection services, and 2% for uniform direct sale. Gross margin percentage by business was 49.8% for uniform rental facility services, 57.7% for first aid and safety services, 48.2% for fire protection services, and 41.9% for uniform direct sale. Gross margin for uniform rental facility services segment increased 70 basis points from last year. The 49.8% gross margin is the second highest gross margin ever for this segment. The strong revenue growth in this segment is helping to create leverage. In addition, our supply chain team and process improvement initiatives from our engineering and Six Sigma black belt teams continue to help expand our margins while navigating the current economic environment. Gross margin for the first aid and safety services segment was 57.7%. This equals their previous all-time high set last year. As we mentioned previously, the mix of revenue and time and good investments can impact this business from quarter to quarter. We are pleased our investments to grow this business are generating strong double-digit revenue growth while being able to expand our gross margin. We are growing in many ways. We're adding new business with over two-thirds being converted from no programmers. We are cross-selling to existing customers. Our retention rates are at all-time highs. And we continue to experience success in our focus verticals of healthcare, hospitality, education, and state and local governments. Our strong culture of execution combined with multiple growth levers has positioned us over the years to grow multiples of job growth and GDP. All businesses have a need for image, safety, cleanliness, and compliance. Our value proposition resonates in all economic cycles as evidenced by our growth in sales and profit in 54 out of the last 56 years. With that, I'll turn it over to Scott to discuss our operating income, capital allocation performance, and 2026 guidance assumptions.\n\nScott Garula [366]: Thanks, Jim, and good morning, everyone. As Todd mentioned, we continue to perform at a high level as evidenced by record-level revenue and operating margins for the second quarter. Selling and administrative expenses as a percentage of revenue was 27%, which was a 20 basis point increase from last year. Second quarter operating income was $655.7 million compared to $591.4 million last year. Operating income as a percentage of revenue was 23.4% in the second quarter of fiscal 2026 compared to 23.1% in last year's second quarter, an increase of 30 basis points and an all-time high. Our effective tax rate for the second quarter was 21.2% compared to 20.7% last year. The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensation. Net income for the second quarter was $495.3 million compared to $448.5 million last year. This year's second quarter diluted earnings per share was $1.21 compared to $1.09 last year, an increase of 11%. For the second quarter, our free cash flow was $425 million, an increase of 23.8% over the prior year. Our strong cash generation allows us to have a balanced approach to capital allocation in order to create value for our shareholders. In the second quarter, we continue to invest in our businesses through capital expenditures of $106.3 million. Also in the second quarter, we were able to make strategic acquisitions totaling $85.6 million in all three of our route-based businesses. During the second quarter, we paid dividends in the amount of $182.3 million. Also during the second quarter, and as of December 17th, we were active in the buyback program with repurchases of $622.5 million of Cintosh shares. That is the third largest share repurchase we've made in a quarter. During the first six months of fiscal 2026, we have returned $1.24 billion in capital to our shareholders in the form of dividends and share buybacks. Earlier, Todd provided our updated guidance for the remainder of the fiscal year. As you contemplate the guidance, it is important to remember that during the third quarter of fiscal 2025, we recognized a $15 million gain on the sale of an asset. That will not repeat and will be a headwind when comparing the third quarter results year over year. In addition, please note the following in the guidance. Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions."
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_EVIDENCE",
+      "H_MEASURE"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V020",
+    "anchor": {
+      "tag": "V020",
+      "passage": "PR002",
+      "start": 2964,
+      "end": 2969,
+      "text": "$4.81"
+    },
+    "lower": "V020",
+    "upper": "V021",
+    "aliases": [
+      "V020",
+      "V021"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00013216073328889706,
+            "V006": 0.0001888131464342388,
+            "V007": 0.00033928077203721727,
+            "V008": 0.00043774700965610274,
+            "V009": 0.0004055308722290502,
+            "V010": 0.00017943184637759726,
+            "V011": 0.0002374815344903471,
+            "V012": 0.00016622641923040048,
+            "V013": 0.00023150643049880813,
+            "V014": 0.00016622641923040048,
+            "V015": 0.00016622641923040048,
+            "V016": 0.0007103702860631663,
+            "V017": 0.0004055308722290502,
+            "V018": 0.0011825319948123901,
+            "V019": 0.0002498978694444313,
+            "V020": 0.9870574352860824,
+            "V021": 0.0021797487163259903,
+            "V022": 0.002413636422347259,
+            "V023": 0.0003756858530871404,
+            "no_current_forecast": 0.00057936695395952,
+            "no_stated_bound": 0.0006415332044653145,
+            "elsewhere": 0.00030640325003123634,
+            "several": 0.000786593570940097,
+            "unclear": 0.0004606341175085272
+          },
+          "choice": "V020",
+          "confidence": 0.9864947150811294
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00015356948608602765,
+            "V006": 0.0002084980554489539,
+            "V007": 0.00047122337989486567,
+            "V008": 0.00047122337989486567,
+            "V009": 0.0005217860405221053,
+            "V010": 0.0002429406447524268,
+            "V011": 0.000305560875363643,
+            "V012": 0.000305560875363643,
+            "V013": 0.0002830734251252155,
+            "V014": 0.00019315348469795064,
+            "V015": 0.00024921083143700635,
+            "V016": 0.00040441615632410416,
+            "V017": 0.000914014940209368,
+            "V018": 0.000914014940209368,
+            "V019": 0.0005352526140799466,
+            "V020": 0.003267934384334078,
+            "V021": 0.9843437675857732,
+            "V022": 0.002532848084157607,
+            "V023": 0.000868601095814536,
+            "no_current_forecast": 0.0004148535744697337,
+            "no_stated_bound": 0.000577774120153033,
+            "elsewhere": 0.0005490667455391591,
+            "several": 0.0007084175904324063,
+            "unclear": 0.0005632376899167115
+          },
+          "choice": "V021",
+          "confidence": 0.983663061828633
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00012841806436282102,
+            "V006": 0.00017885024513366162,
+            "V007": 0.0003132926424572494,
+            "V008": 0.0004146490624708595,
+            "V009": 0.0003650469666179298,
+            "V010": 0.000203152104149585,
+            "V011": 0.00026211128541887716,
+            "V012": 0.0001656877901489304,
+            "V013": 0.00029772648751239265,
+            "V014": 0.0001743504872597537,
+            "V015": 0.00016996379776955923,
+            "V016": 0.0004956161242390898,
+            "V017": 0.0005349887764431144,
+            "V018": 0.0009135644261040658,
+            "V019": 0.0003469091971595794,
+            "V020": 0.9838590233785115,
+            "V021": 0.006020780314315533,
+            "V022": 0.0019621446677634095,
+            "V023": 0.0004831467042317529,
+            "no_current_forecast": 0.0005215288366490839,
+            "no_stated_bound": 0.0006728872682583796,
+            "elsewhere": 0.0004591412822872101,
+            "several": 0.0006728872682583796,
+            "unclear": 0.0003841328224772712
+          },
+          "choice": "V020",
+          "confidence": 0.9831572417862728
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.0001917302081968468,
+            "V006": 0.0002603078330067068,
+            "V007": 0.0005179406750364117,
+            "V008": 0.0005590869094075479,
+            "V009": 0.000819360981974559,
+            "V010": 0.0003274046405304089,
+            "V011": 0.00041179628102607836,
+            "V012": 0.0003191673551790747,
+            "V013": 0.0003274046405304089,
+            "V014": 0.0002882389216086696,
+            "V015": 0.0003358545293403447,
+            "V016": 0.000504909669182717,
+            "V017": 0.002270551386823811,
+            "V018": 0.0016723779791124993,
+            "V019": 0.0012961954112985774,
+            "V020": 0.00341345053676496,
+            "V021": 0.9770895979086089,
+            "V022": 0.002157736337383166,
+            "V023": 0.00341345053676496,
+            "no_current_forecast": 0.0007590598308195248,
+            "no_stated_bound": 0.0009072790459155934,
+            "elsewhere": 0.0005590869094075479,
+            "several": 0.000819360981974559,
+            "unclear": 0.0007786504901061172
+          },
+          "choice": "V021",
+          "confidence": 0.9760934934698529
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.017730736982996622,
+          "range": 0.3407448446813309,
+          "floor": 0.6280911457830066,
+          "ceiling": 0.0026226890597357963,
+          "words": 0.001497221360963497,
+          "revision": 0.0011027810326400256,
+          "qualification": 0.0017006627010196463,
+          "reaffirmation": 0.0008547228852035415,
+          "withdrawal": 0.000899410705922242,
+          "centre_tolerance": 0.000899410705922242,
+          "several": 0.001284954110686274,
+          "none": 0.0009959181820071148,
+          "unclear": 0.0015755018085654604
+        },
+        "choice": "floor",
+        "confidence": 0.5970987412649238
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9934511636895367,
+          "source_company_part": 0.003134295487020809,
+          "other_subject": 0.0009224708029867714,
+          "shared": 0.0007916884275095276,
+          "unclear": 0.0017003815929462671
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9918139546119209
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0019542325861782355,
+          "Q1_FY2025": 0.0013678758480788794,
+          "Q2_FY2025": 0.0006208525190002396,
+          "Q3_FY2025": 0.0007808831330728658,
+          "Q4_FY2025": 0.0009098805653885155,
+          "H1_FY2025": 0.00030417886032356136,
+          "H2_FY2025": 0.0003120296186326778,
+          "FY2026": 0.979891722852464,
+          "Q1_FY2026": 0.00025448613591586374,
+          "Q2_FY2026": 0.0006208525190002396,
+          "Q3_FY2026": 0.0004025868569876621,
+          "Q4_FY2026": 0.0002677915632631745,
+          "H1_FY2026": 0.0004690918748129467,
+          "H2_FY2026": 0.005698562165568781,
+          "FY2027": 0.0005465832103466036,
+          "Q1_FY2027": 0.00014527922110873774,
+          "Q2_FY2027": 0.0001922798702881315,
+          "Q3_FY2027": 0.00021291157581299774,
+          "Q4_FY2027": 0.0005606900116699719,
+          "H1_FY2027": 0.00017812906397286925,
+          "H2_FY2027": 0.00037295831340778616,
+          "short_term": 0.00019724255362164943,
+          "medium_term": 0.0002610543466173207,
+          "long_term": 0.0002075550594435615,
+          "undefined_horizon": 0.00023575726794061136,
+          "other_stated": 0.0005465832103466036,
+          "several": 9.183501293442249e-05,
+          "unclear": 0.002396114183801159
+        },
+        "choice": "FY2026",
+        "confidence": 0.9791469718469996
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.9864907590771615,
+          "usd_cents": 0.0020702553784758297,
+          "m_usd_from_dollars": 0.0028107409555000328,
+          "m_usd_from_thousands": 0.0006920998869080202,
+          "m_usd_from_millions": 0.0006920998869080202,
+          "m_usd_from_billions": 0.0008929615607137399,
+          "percent": 0.000564465705352707,
+          "percent_yoy": 0.00024347053126785604,
+          "percent_sequential": 0.0002836903139938945,
+          "percent_points": 0.00017481686509055152,
+          "basis_points": 0.0002695949825984533,
+          "count": 0.0002373449620381184,
+          "count_thousand": 0.0003390858057322738,
+          "count_million": 0.00026281239453322924,
+          "count_billion": 0.00024347053126785604,
+          "x": 0.00023137351211041033,
+          "other_stated": 0.0010948736497491552,
+          "numberless": 0.0001704184332151042,
+          "unknown": 0.0018696421349150582,
+          "several": 0.00036602343246809393
+        },
+        "choice": "usd",
+        "confidence": 0.9857797463970122
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9784068511932484,
+          "negative": 0.003248222886256075,
+          "zero": 0.001674631851336442,
+          "not_numeric": 0.0010319479091919334,
+          "several": 0.002106284034247236,
+          "unclear": 0.013532062125719915
+        },
+        "choice": "positive",
+        "confidence": 0.9740882214318981
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.00978274220125518,
+          "raised": 0.960312110050128,
+          "lowered": 0.0026002068732954744,
+          "reaffirmed": 0.0030297459018260096,
+          "withdrawn": 0.0012106420996551006,
+          "not_stated": 0.013281810672585104,
+          "unclear": 0.00978274220125518
+        },
+        "choice": "raised",
+        "confidence": 0.9536974617251492
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9194144349708845,
+          "instant": 0.03024223921143713,
+          "unclear": 0.050343325817678336
+        },
+        "choice": "duration",
+        "confidence": 0.8791216524563266
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.040845508199426284,
+          "previous_period": 0.00531902706480214,
+          "two_bases": 0.0019194469706774434,
+          "other_stated": 0.004803596801327594,
+          "not_stated": 0.0646159163837693,
+          "not_growth_percentage": 0.8691851391404393,
+          "unclear": 0.013311365439557963
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.8473826623305125
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.9848633118774074,
+          "measure_change": 0.008182622310673324,
+          "guidance_revision": 0.0024082711775914555,
+          "reference_only": 0.0017738158809944404,
+          "several": 0.0012103544958574916,
+          "unclear": 0.00156162425747587
+        },
+        "choice": "level",
+        "confidence": 0.9818359742528888
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.007104076471567439,
+          "prior_year": 0.3688074364096203,
+          "sequential_period": 0.006254255794935881,
+          "previous_guidance": 0.1901398755242671,
+          "none": 0.3688074364096203,
+          "unclear": 0.058886919389988926
+        },
+        "choice": "prior_year",
+        "confidence": 0.2425689236915444
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.9202837073718396
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.26517297417956437
+      }
+    },
+    "fields": {
+      "form": "floor",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "usd",
+      "sign": "positive",
+      "movement": "raised",
+      "time_type": "duration",
+      "basis_evidence": "not_growth_percentage",
+      "amount_meaning": "level",
+      "comparison_baseline": "prior_year"
+    },
+    "unit_after_rule": "usd",
+    "numeric": {
+      "lower": "4.81",
+      "upper": "4.88"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [
+        {
+          "start": 2930,
+          "end": 2941,
+          "text": "diluted EPS",
+          "score": 0.9889643788337708
+        }
+      ],
+      "context": [],
+      "qualifiers": [],
+      "conditions": [],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 2930,
+      "end": 2979,
+      "text": "diluted EPS to be in the range of $4.81 to $4.88,"
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V022",
+    "anchor": {
+      "tag": "V022",
+      "passage": "PR002",
+      "start": 2997,
+      "end": 3001,
+      "text": "9.3%"
+    },
+    "lower": "V022",
+    "upper": "V023",
+    "aliases": [
+      "V022",
+      "V023"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.0004510911684660744,
+            "V006": 0.0005820070914866691,
+            "V007": 0.0006956538206735206,
+            "V008": 0.0008314916378321137,
+            "V009": 0.001349333981923584,
+            "V010": 0.0005970279271745186,
+            "V011": 0.0006610895305977156,
+            "V012": 0.0007509175692478643,
+            "V013": 0.0007320249929044477,
+            "V014": 0.0006610895305977156,
+            "V015": 0.0006956538206735206,
+            "V016": 0.0009207113482365572,
+            "V017": 0.001349333981923584,
+            "V018": 0.010629130204108047,
+            "V019": 0.0016544388569632834,
+            "V020": 0.015979390105393756,
+            "V021": 0.00346398692287428,
+            "V022": 0.9422898005958169,
+            "V023": 0.0042472466466025,
+            "no_current_forecast": 0.00346398692287428,
+            "no_stated_bound": 0.0021896817986790124,
+            "elsewhere": 0.0011004957734252652,
+            "several": 0.0028251739290919282,
+            "unclear": 0.001879241842432887
+          },
+          "choice": "V022",
+          "confidence": 0.9397806614912873
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00030633559464177807,
+            "V006": 0.0003142414180192053,
+            "V007": 0.0003852963305758255,
+            "V008": 0.000509947406614901,
+            "V009": 0.0007473453343360837,
+            "V010": 0.0003952402953714474,
+            "V011": 0.0004054411014924379,
+            "V012": 0.0004376499059124887,
+            "V013": 0.0003852963305758255,
+            "V014": 0.0005231084508919508,
+            "V015": 0.0003756025423278375,
+            "V016": 0.000509947406614901,
+            "V017": 0.0007285426866737916,
+            "V018": 0.004562844440151668,
+            "V019": 0.002124436378227904,
+            "V020": 0.001413127176961608,
+            "V021": 0.004336136292048078,
+            "V022": 0.013305298239740698,
+            "V023": 0.9620102856507788,
+            "no_current_forecast": 0.001413127176961608,
+            "no_stated_bound": 0.001413127176961608,
+            "elsewhere": 0.0007102126852578435,
+            "several": 0.0016465684385996327,
+            "unclear": 0.0010408415402620556
+          },
+          "choice": "V023",
+          "confidence": 0.9603585589399432
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00026259660608689056,
+            "V006": 0.0006571730832467161,
+            "V007": 0.000640639023124964,
+            "V008": 0.0005224949961473924,
+            "V009": 0.0006915325986096565,
+            "V010": 0.00041541726375286407,
+            "V011": 0.00041541726375286407,
+            "V012": 0.0009631095696167348,
+            "V013": 0.0004965344967117898,
+            "V014": 0.0005934909358648436,
+            "V015": 0.00042613861974951154,
+            "V016": 0.0005498130146028943,
+            "V017": 0.0008922296377633887,
+            "V018": 0.008840009258043393,
+            "V019": 0.0017306246416629381,
+            "V020": 0.0026017491718544118,
+            "V021": 0.0026017491718544118,
+            "V022": 0.9608825702001761,
+            "V023": 0.006851548552777141,
+            "no_current_forecast": 0.00319004396822061,
+            "no_stated_bound": 0.001485267135965724,
+            "elsewhere": 0.0008265656360126998,
+            "several": 0.002121945069697704,
+            "unclear": 0.0013413400847044098
+          },
+          "choice": "V022",
+          "confidence": 0.9591818123827924
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V005": 0.00024203833612330012,
+            "V006": 0.00032861004557711924,
+            "V007": 0.0005332641503590361,
+            "V008": 0.0006538432321559197,
+            "V009": 0.0009829601500079615,
+            "V010": 0.0004029137201207887,
+            "V011": 0.0003547154520308807,
+            "V012": 0.0005470269433424452,
+            "V013": 0.00038289453535995856,
+            "V014": 0.00048158922624332246,
+            "V015": 0.00038289453535995856,
+            "V016": 0.0005067686070859512,
+            "V017": 0.0012052224784083918,
+            "V018": 0.005850378004813524,
+            "V019": 0.003514438848628452,
+            "V020": 0.0016363043097149621,
+            "V021": 0.008795214186846869,
+            "V022": 0.010783945369048697,
+            "V023": 0.9560134918071792,
+            "no_current_forecast": 0.0015550027651584444,
+            "no_stated_bound": 0.0012682355264620347,
+            "elsewhere": 0.0005611450358626169,
+            "several": 0.0018118802557017407,
+            "unclear": 0.0012052224784083918
+          },
+          "choice": "V023",
+          "confidence": 0.9541010349292305
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.03987296552054027,
+          "range": 0.509704622301323,
+          "floor": 0.4157069888189112,
+          "ceiling": 0.0049343950463358885,
+          "words": 0.003282248018704083,
+          "revision": 0.002417545686755037,
+          "qualification": 0.012994424336118403,
+          "reaffirmation": 0.0011546463509546074,
+          "withdrawal": 0.001345387978470794,
+          "centre_tolerance": 0.001415729380026922,
+          "several": 0.0028169105691893586,
+          "none": 0.001608096980446606,
+          "unclear": 0.002746039012223871
+        },
+        "choice": "range",
+        "confidence": 0.4688466741597665
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9878947237691547,
+          "source_company_part": 0.0060454765939981425,
+          "other_subject": 0.0012140805023269407,
+          "shared": 0.0012140805023269407,
+          "unclear": 0.003631638632193315
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9848684047114433
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0026105368599691875,
+          "Q1_FY2025": 0.0026105368599691875,
+          "Q2_FY2025": 0.0014162373817357887,
+          "Q3_FY2025": 0.0012154516773754457,
+          "Q4_FY2025": 0.0019227946929236662,
+          "H1_FY2025": 0.0004499333620976668,
+          "H2_FY2025": 0.0005954955355364945,
+          "FY2026": 0.9641280551379344,
+          "Q1_FY2026": 0.0004063334358539472,
+          "Q2_FY2026": 0.0012154516773754457,
+          "Q3_FY2026": 0.000768320606806749,
+          "Q4_FY2026": 0.0004063334358539472,
+          "H1_FY2026": 0.000768320606806749,
+          "H2_FY2026": 0.008429154152073407,
+          "FY2027": 0.0007489901911072322,
+          "Q1_FY2027": 0.00027028396618731935,
+          "Q2_FY2027": 0.0003764291906822715,
+          "Q3_FY2027": 0.0003149331728715387,
+          "Q4_FY2027": 0.000768320606806749,
+          "H1_FY2027": 0.0003149331728715387,
+          "H2_FY2027": 0.0006266300578773603,
+          "short_term": 0.00033139910215396645,
+          "medium_term": 0.0004615455289696457,
+          "long_term": 0.0003399520779754848,
+          "undefined_horizon": 0.0005242597749632881,
+          "other_stated": 0.0008727190775370237,
+          "several": 0.00023196461004439147,
+          "unclear": 0.00687468404764005
+        },
+        "choice": "FY2026",
+        "confidence": 0.9627994645874876
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.009833018843784931,
+          "usd_cents": 0.014782543187127238,
+          "m_usd_from_dollars": 0.00337208174346331,
+          "m_usd_from_thousands": 0.008019653596148603,
+          "m_usd_from_millions": 0.019072740470972224,
+          "m_usd_from_billions": 0.004578199958540241,
+          "percent": 0.06158395082442002,
+          "percent_yoy": 0.4976366737820169,
+          "percent_sequential": 0.0018765964660432315,
+          "percent_points": 0.0018765964660432315,
+          "basis_points": 0.00337208174346331,
+          "count": 0.001492015285728886,
+          "count_thousand": 0.004578199958540241,
+          "count_million": 0.004578199958540241,
+          "count_billion": 0.0026135688242385473,
+          "x": 0.0025478130230217285,
+          "other_stated": 0.0024837117164509736,
+          "numberless": 0.003830276177579338,
+          "unknown": 0.3483236924334253,
+          "several": 0.0035483855404514673
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.4711964987179126
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9878899894966652,
+          "negative": 0.002814728892016434,
+          "zero": 0.0010964271402199963,
+          "not_numeric": 0.0005948209119400707,
+          "several": 0.002415673449169273,
+          "unclear": 0.005188360109989036
+        },
+        "choice": "positive",
+        "confidence": 0.9854679873959982
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.011782427517315404,
+          "raised": 0.9433123182143726,
+          "lowered": 0.00313171355292806,
+          "reaffirmed": 0.004474161156302876,
+          "withdrawn": 0.0014581094963338954,
+          "not_stated": 0.020639332128550122,
+          "unclear": 0.01520193793419712
+        },
+        "choice": "raised",
+        "confidence": 0.9338643712501014
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9326857330482962,
+          "instant": 0.013574152384271029,
+          "unclear": 0.053740114567432835
+        },
+        "choice": "duration",
+        "confidence": 0.8990285995724441
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.26303005598202894,
+          "previous_period": 0.014040072651227122,
+          "two_bases": 0.0042388556205688625,
+          "other_stated": 0.02397528884151669,
+          "not_stated": 0.5368643480552336,
+          "not_growth_percentage": 0.015155443209139044,
+          "unclear": 0.14269593564028574
+        },
+        "choice": "not_stated",
+        "confidence": 0.4596750727311059
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.010500587810085879,
+          "measure_change": 0.9795646066509015,
+          "guidance_revision": 0.002936931379632694,
+          "reference_only": 0.002276300545827208,
+          "several": 0.0012994781503424765,
+          "unclear": 0.0034220954632102154
+        },
+        "choice": "measure_change",
+        "confidence": 0.9754775279810818
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.008012991755269127,
+          "prior_year": 0.38537851192602385,
+          "sequential_period": 0.009101786929333961,
+          "previous_guidance": 0.02220499915090861,
+          "none": 0.36623072978130894,
+          "unclear": 0.2090709804571555
+        },
+        "choice": "prior_year",
+        "confidence": 0.2624542143112286
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.7247785709864327
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.16372011845886883
+      }
+    },
+    "fields": {
+      "form": "range",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "percent_yoy",
+      "sign": "positive",
+      "movement": "raised",
+      "time_type": "duration",
+      "basis_evidence": "not_stated",
+      "amount_meaning": "measure_change",
+      "comparison_baseline": "prior_year"
+    },
+    "unit_after_rule": "unknown",
+    "numeric": {
+      "lower": "9.3",
+      "upper": "10.9"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [],
+      "context": [
+        {
+          "start": 2980,
+          "end": 2996,
+          "text": "a growth rate of",
+          "score": 0.6729812026023865
+        }
+      ],
+      "qualifiers": [
+        {
+          "start": 2980,
+          "end": 2996,
+          "text": "a growth rate of",
+          "score": 0.8263829946517944
+        }
+      ],
+      "conditions": [],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 2980,
+      "end": 3011,
+      "text": "a growth rate of 9.3% to 10.9%."
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_MEASURE",
+      "H_MODIFIERS"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V105",
+    "anchor": {
+      "tag": "V105",
+      "passage": "QA003",
+      "start": 21218,
+      "end": 21220,
+      "text": "29"
+    },
+    "lower": "V105",
+    "upper": "V106",
+    "aliases": [
+      "V105",
+      "V106"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.000664923389426697,
+            "V094": 0.0006996879144438699,
+            "V095": 0.0017962265753108143,
+            "V096": 0.0009744680007481265,
+            "V097": 0.0020929530449627057,
+            "V098": 0.0007177458514713333,
+            "V099": 0.0011068775636682425,
+            "V100": 0.0023773419353871547,
+            "V101": 0.0013921857858769046,
+            "V102": 0.000836313807433712,
+            "V103": 0.0011948100131929681,
+            "V104": 0.0010518815693864086,
+            "V105": 0.9006642579187106,
+            "V106": 0.013108123850440585,
+            "V107": 0.0011354446026952464,
+            "V108": 0.0061030713027806875,
+            "V109": 0.0034840758425501777,
+            "no_current_forecast": 0.042324803205417705,
+            "no_stated_bound": 0.005237812106529078,
+            "elsewhere": 0.002438698164276902,
+            "several": 0.0061030713027806875,
+            "unclear": 0.00449522625250935
+          },
+          "choice": "V105",
+          "confidence": 0.8959339844862683
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0003595251079598469,
+            "V094": 0.0004758386794644972,
+            "V095": 0.0007527572818591386,
+            "V096": 0.0005834327145101913,
+            "V097": 0.0013186076744020115,
+            "V098": 0.0003981024378522765,
+            "V099": 0.0005834327145101913,
+            "V100": 0.0008771084579908428,
+            "V101": 0.0018838450238777003,
+            "V102": 0.00048811941872381405,
+            "V103": 0.0006460355758987423,
+            "V104": 0.0005544445435058607,
+            "V105": 0.00708757972536322,
+            "V106": 0.9445975152343757,
+            "V107": 0.0007721849030398896,
+            "V108": 0.005780519752063805,
+            "V109": 0.006400774515398017,
+            "no_current_forecast": 0.01685604404814229,
+            "no_stated_bound": 0.0034724738385727904,
+            "elsewhere": 0.001536434821555977,
+            "several": 0.0026913785070554453,
+            "unclear": 0.0018838450238777003
+          },
+          "choice": "V106",
+          "confidence": 0.9419593016741079
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0006098243180529172,
+            "V094": 0.000964717018577653,
+            "V095": 0.001378254880043086,
+            "V096": 0.0008937183269766327,
+            "V097": 0.001919519757201057,
+            "V098": 0.0007105638122481621,
+            "V099": 0.000964717018577653,
+            "V100": 0.0016473816607684463,
+            "V101": 0.001565530497954634,
+            "V102": 0.0006926864899230413,
+            "V103": 0.0010958015692109574,
+            "V104": 0.000940444943190441,
+            "V105": 0.8916509669501065,
+            "V106": 0.03247602906826161,
+            "V107": 0.0011828535875248822,
+            "V108": 0.006690309734815416,
+            "V109": 0.005185399733361097,
+            "no_current_forecast": 0.03247602906826161,
+            "no_stated_bound": 0.005185399733361097,
+            "elsewhere": 0.0022943385154850205,
+            "several": 0.005456510580796886,
+            "unclear": 0.004019002735301271
+          },
+          "choice": "V105",
+          "confidence": 0.8864914891858259
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0006522649605025071,
+            "V094": 0.0008632854206942967,
+            "V095": 0.0016744834846084548,
+            "V096": 0.0011720638402897238,
+            "V097": 0.0024540127983504216,
+            "V098": 0.001031856490129789,
+            "V099": 0.00126517432554965,
+            "V100": 0.0013313224409323358,
+            "V101": 0.0035964396268167915,
+            "V102": 0.001031856490129789,
+            "V103": 0.001233343350630912,
+            "V104": 0.001031856490129789,
+            "V105": 0.009966182250985101,
+            "V106": 0.8835175392749831,
+            "V107": 0.0012978273090334155,
+            "V108": 0.013530863080380722,
+            "V109": 0.024941311469736174,
+            "no_current_forecast": 0.030580918402884284,
+            "no_stated_bound": 0.008553236489945867,
+            "elsewhere": 0.0022162114597631755,
+            "several": 0.004640202377246768,
+            "unclear": 0.0034177481662769488
+          },
+          "choice": "V106",
+          "confidence": 0.8779707554309347
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.07351385397586435,
+          "range": 0.3951404575800875,
+          "floor": 0.4375395679544597,
+          "ceiling": 0.008009259960111866,
+          "words": 0.005899234948201979,
+          "revision": 0.0028902572987510827,
+          "qualification": 0.04196704000966646,
+          "reaffirmation": 0.0021837652741394215,
+          "withdrawal": 0.002023051353773852,
+          "centre_tolerance": 0.004129201830763175,
+          "several": 0.005899234948201979,
+          "none": 0.0078077515479509155,
+          "unclear": 0.012997323318027738
+        },
+        "choice": "floor",
+        "confidence": 0.390667865283998
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9468867523039544,
+          "source_company_part": 0.03277429477269338,
+          "other_subject": 0.002987388207917793,
+          "shared": 0.003570726277724782,
+          "unclear": 0.013780838437709664
+        },
+        "choice": "source_company_total",
+        "confidence": 0.933608440379943
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.006148898653338029,
+          "Q1_FY2025": 0.0016343474148421485,
+          "Q2_FY2025": 0.0013329477674565797,
+          "Q3_FY2025": 0.0019043321516825033,
+          "Q4_FY2025": 0.0012037811133574334,
+          "H1_FY2025": 0.0008866471769649119,
+          "H2_FY2025": 0.0007049417008314364,
+          "FY2026": 0.9548701400058611,
+          "Q1_FY2026": 0.00045711382873334176,
+          "Q2_FY2026": 0.0006699159358905504,
+          "Q3_FY2026": 0.0009095302987645083,
+          "Q4_FY2026": 0.00043440183747382456,
+          "H1_FY2026": 0.0016343474148421485,
+          "H2_FY2026": 0.004765770871332213,
+          "FY2027": 0.0016343474148421485,
+          "Q1_FY2027": 0.0002816842450151058,
+          "Q2_FY2027": 0.00043440183747382456,
+          "Q3_FY2027": 0.0003542912369838945,
+          "Q4_FY2027": 0.001033116234611737,
+          "H1_FY2027": 0.0003453774895294335,
+          "H2_FY2027": 0.0009095302987645083,
+          "short_term": 0.00037281477917113886,
+          "medium_term": 0.0006366307548068038,
+          "long_term": 0.0008643393215352485,
+          "undefined_horizon": 0.0008643393215352485,
+          "other_stated": 0.0024570084754177634,
+          "several": 0.00032821705448082036,
+          "unclear": 0.011926785364461586
+        },
+        "choice": "FY2026",
+        "confidence": 0.9531986637097819
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.004652670299715295,
+          "usd_cents": 0.003606104536818924,
+          "m_usd_from_dollars": 0.001516284095406831,
+          "m_usd_from_thousands": 0.001555417336273296,
+          "m_usd_from_millions": 0.0017223149880373754,
+          "m_usd_from_billions": 0.0014781354952720844,
+          "percent": 0.9322088982046255,
+          "percent_yoy": 0.012893122762699778,
+          "percent_sequential": 0.0008879454728379707,
+          "percent_points": 0.015022999618423892,
+          "basis_points": 0.0011456455566676376,
+          "count": 0.0014046932641802522,
+          "count_thousand": 0.0009584851790960874,
+          "count_million": 0.0016789827631850571,
+          "count_billion": 0.0007059740168808106,
+          "x": 0.0008879454728379707,
+          "other_stated": 0.0014046932641802522,
+          "numberless": 0.0010346290021884656,
+          "unknown": 0.0142765734915764,
+          "several": 0.0009584851790960874
+        },
+        "choice": "percent",
+        "confidence": 0.9286409454785531
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9601690524668517,
+          "negative": 0.0061830151069877486,
+          "zero": 0.002470642344802264,
+          "not_numeric": 0.002231229366980902,
+          "several": 0.0031876735858234416,
+          "unclear": 0.02575838712855392
+        },
+        "choice": "positive",
+        "confidence": 0.952202862960222
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.07786786217298385,
+          "raised": 0.05179594354757372,
+          "lowered": 0.0074687762355911255,
+          "reaffirmed": 0.013767116489781555,
+          "withdrawn": 0.007280866995201029,
+          "not_stated": 0.7714971706306949,
+          "unclear": 0.07032226392817384
+        },
+        "choice": "not_stated",
+        "confidence": 0.7334133657358106
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8671517307523509,
+          "instant": 0.04074995189346409,
+          "unclear": 0.092098317354185
+        },
+        "choice": "duration",
+        "confidence": 0.8007275961285263
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.01837329102831171,
+          "previous_period": 0.009001766816392464,
+          "two_bases": 0.00251772172370117,
+          "other_stated": 0.03946197582283038,
+          "not_stated": 0.0987573142546909,
+          "not_growth_percentage": 0.7980206213010493,
+          "unclear": 0.03386730905302408
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.7643573915178907
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.7149236758203497,
+          "measure_change": 0.0884739154834039,
+          "guidance_revision": 0.005229313798851987,
+          "reference_only": 0.1399619837168843,
+          "several": 0.008064427108857467,
+          "unclear": 0.0433466840716527
+        },
+        "choice": "level",
+        "confidence": 0.6579084109844197
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.009072845734113114,
+          "prior_year": 0.09221168538770314,
+          "sequential_period": 0.01630312005949676,
+          "previous_guidance": 0.042933262564739116,
+          "none": 0.7840856851332956,
+          "unclear": 0.05539340112065225
+        },
+        "choice": "none",
+        "confidence": 0.7409028221599547
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.7542072793450678
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.23646819591522217
+      }
+    },
+    "fields": {
+      "form": "floor",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "percent",
+      "sign": "positive",
+      "movement": "not_stated",
+      "time_type": "duration",
+      "basis_evidence": "not_growth_percentage",
+      "amount_meaning": "level",
+      "comparison_baseline": "none"
+    },
+    "unit_after_rule": "percent",
+    "numeric": {
+      "lower": "29",
+      "upper": "30"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [],
+      "context": [],
+      "qualifiers": [],
+      "conditions": [],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 21218,
+      "end": 21227,
+      "text": "29 and 30"
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_EVIDENCE",
+      "H_MEASURE",
+      "H_MODIFIERS"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V108",
+    "anchor": {
+      "tag": "V108",
+      "passage": "QA003",
+      "start": 21495,
+      "end": 21498,
+      "text": "30%"
+    },
+    "lower": "V108",
+    "upper": "V109",
+    "aliases": [
+      "V108",
+      "V109"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0007211484975970366,
+            "V094": 0.0006853174888921574,
+            "V095": 0.001948113337786271,
+            "V096": 0.00126323857639343,
+            "V097": 0.0020499682530622544,
+            "V098": 0.0009544541317885669,
+            "V099": 0.0011121244933634824,
+            "V100": 0.0014719189922828466,
+            "V101": 0.0015099071770493446,
+            "V102": 0.0008619645387585133,
+            "V103": 0.0011408273914233038,
+            "V104": 0.0008619645387585133,
+            "V105": 0.009456515030393362,
+            "V106": 0.008986658102614838,
+            "V107": 0.0012958416208329793,
+            "V108": 0.8821657309864859,
+            "V109": 0.006290260203095795,
+            "no_current_forecast": 0.05628321333870942,
+            "no_stated_bound": 0.005977724623733378,
+            "elsewhere": 0.0021571474234476896,
+            "several": 0.009950934661441884,
+            "unclear": 0.0028550265920890597
+          },
+          "choice": "V108",
+          "confidence": 0.8765545753191757
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0005645990346497069,
+            "V094": 0.0006578679108443763,
+            "V095": 0.0016463764258268729,
+            "V096": 0.0009890107307096816,
+            "V097": 0.002124188822603911,
+            "V098": 0.0008066217877977227,
+            "V099": 0.0009890107307096816,
+            "V100": 0.0011523900982141864,
+            "V101": 0.002124188822603911,
+            "V102": 0.0007665438901058093,
+            "V103": 0.0010407199749111835,
+            "V104": 0.0009890107307096816,
+            "V105": 0.002740672015486204,
+            "V106": 0.007594743713760824,
+            "V107": 0.001212640967899002,
+            "V108": 0.009312025805798908,
+            "V109": 0.914105110179379,
+            "no_current_forecast": 0.03503457657900246,
+            "no_stated_bound": 0.005051852028183994,
+            "elsewhere": 0.0019678584032405857,
+            "several": 0.005593919981946535,
+            "unclear": 0.0035360713656157235
+          },
+          "choice": "V109",
+          "confidence": 0.910014877330778
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.00039741632125689857,
+            "V094": 0.0005259884569046316,
+            "V095": 0.0009451558457112704,
+            "V096": 0.0006961559320167285,
+            "V097": 0.0010735824331047912,
+            "V098": 0.0005127547125382446,
+            "V099": 0.0007141227740607828,
+            "V100": 0.001129712894697409,
+            "V101": 0.0012832169718992542,
+            "V102": 0.0005259884569046316,
+            "V103": 0.0007141227740607828,
+            "V104": 0.0005677736988602441,
+            "V105": 0.002553247813298126,
+            "V106": 0.004472535510775387,
+            "V107": 0.0007907487930774744,
+            "V108": 0.9429699655333094,
+            "V109": 0.009606067897020709,
+            "no_current_forecast": 0.02063182155649155,
+            "no_stated_bound": 0.0032942525146319713,
+            "elsewhere": 0.0011012900942447812,
+            "several": 0.0038384459411183423,
+            "unclear": 0.0016556330740166813
+          },
+          "choice": "V108",
+          "confidence": 0.9402542496063241
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V093": 0.0004901677215410388,
+            "V094": 0.0005427631182924639,
+            "V095": 0.0014293331754629747,
+            "V096": 0.0007754252017964601,
+            "V097": 0.0018917502189388993,
+            "V098": 0.0006324244564930838,
+            "V099": 0.0008586289818389904,
+            "V100": 0.0010004695902066456,
+            "V101": 0.002634674880935826,
+            "V102": 0.0007183575356565322,
+            "V103": 0.0008807890466820757,
+            "V104": 0.0008586289818389904,
+            "V105": 0.0018917502189388993,
+            "V106": 0.005658732020485636,
+            "V107": 0.0012583501438025151,
+            "V108": 0.010430681933283635,
+            "V109": 0.924696124545459,
+            "no_current_forecast": 0.0289047036618581,
+            "no_stated_bound": 0.004856468836783417,
+            "elsewhere": 0.0017084346132558075,
+            "several": 0.0053775717776445645,
+            "unclear": 0.0025037693388044535
+          },
+          "choice": "V109",
+          "confidence": 0.9211102257142904
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.05022096890572055,
+          "range": 0.3309776654116804,
+          "floor": 0.5509688539751022,
+          "ceiling": 0.006708721507472072,
+          "words": 0.004462490086331166,
+          "revision": 0.0026132621740948053,
+          "qualification": 0.03016874162062043,
+          "reaffirmation": 0.0026132621740948053,
+          "withdrawal": 0.0017831455663313278,
+          "centre_tolerance": 0.002025437179157385,
+          "several": 0.0035479673600706356,
+          "none": 0.005471525993430977,
+          "unclear": 0.0084379580458933
+        },
+        "choice": "floor",
+        "confidence": 0.5135495918063607
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9228494302694485,
+          "source_company_part": 0.04802067648277213,
+          "other_subject": 0.0033925229715483607,
+          "shared": 0.004490072439162657,
+          "unclear": 0.02124729783706827
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9035617878368107
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0032012788290042534,
+          "Q1_FY2025": 0.0018275221644862359,
+          "Q2_FY2025": 0.0013121988040284012,
+          "Q3_FY2025": 0.0016504297815370015,
+          "Q4_FY2025": 0.0020236170202458372,
+          "H1_FY2025": 0.0007684315136222352,
+          "H2_FY2025": 0.0016089060664304742,
+          "FY2026": 0.0388893481560605,
+          "Q1_FY2026": 0.0005659893453279308,
+          "Q2_FY2026": 0.0011552272958762343,
+          "Q3_FY2026": 0.002747420662440697,
+          "Q4_FY2026": 0.0009184803265167604,
+          "H1_FY2026": 0.0014904987631000515,
+          "H2_FY2026": 0.9163564956959304,
+          "FY2027": 0.0008728449969033842,
+          "Q1_FY2027": 0.0006267205406247124,
+          "Q2_FY2027": 0.0008953719435502628,
+          "Q3_FY2027": 0.0005955814795850817,
+          "Q4_FY2027": 0.0010170339282112976,
+          "H1_FY2027": 0.0008086076631831128,
+          "H2_FY2027": 0.0030422212747190907,
+          "short_term": 0.0006109526092944635,
+          "medium_term": 0.0007302514793590538,
+          "long_term": 0.0007684315136222352,
+          "undefined_horizon": 0.0014529981286489225,
+          "other_stated": 0.002747420662440697,
+          "several": 0.0004386764445810783,
+          "unclear": 0.010877042910669602
+        },
+        "choice": "H2_FY2026",
+        "confidence": 0.913258588129113
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.005647786452432987,
+          "usd_cents": 0.004606244726317939,
+          "m_usd_from_dollars": 0.00179427999512204,
+          "m_usd_from_thousands": 0.0011634871154631993,
+          "m_usd_from_millions": 0.00179427999512204,
+          "m_usd_from_billions": 0.0019368209995247808,
+          "percent": 0.922907936113384,
+          "percent_yoy": 0.020192891646963848,
+          "percent_sequential": 0.0013556884475621326,
+          "percent_points": 0.00849064652706343,
+          "basis_points": 0.0011342140194117798,
+          "count": 0.0009489214704631147,
+          "count_thousand": 0.0011342140194117798,
+          "count_million": 0.001840588725964254,
+          "count_billion": 0.000901773734461935,
+          "x": 0.0010778598112326494,
+          "other_stated": 0.00125591610075629,
+          "numberless": 0.0011634871154631993,
+          "unknown": 0.019189576052942317,
+          "several": 0.001463386930936337
+        },
+        "choice": "percent",
+        "confidence": 0.9188504590667199
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9617461246317431,
+          "negative": 0.005885458986668215,
+          "zero": 0.0026040872820157993,
+          "not_numeric": 0.0014127384472814224,
+          "several": 0.005051051108414797,
+          "unclear": 0.0233005395438766
+        },
+        "choice": "positive",
+        "confidence": 0.9540953495580917
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.08984554567359905,
+          "raised": 0.07710781700639782,
+          "lowered": 0.008189455613670365,
+          "reaffirmed": 0.017589233832051264,
+          "withdrawn": 0.007983414463683417,
+          "not_stated": 0.7260079390611573,
+          "unclear": 0.07327659434944074
+        },
+        "choice": "not_stated",
+        "confidence": 0.6803425955713502
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.918024729264926,
+          "instant": 0.023404158576522956,
+          "unclear": 0.05857111215855106
+        },
+        "choice": "duration",
+        "confidence": 0.8770370938973889
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.021573606552024272,
+          "previous_period": 0.015100562716476485,
+          "two_bases": 0.0028093822340923722,
+          "other_stated": 0.014350282742462965,
+          "not_stated": 0.14217927836774544,
+          "not_growth_percentage": 0.7642204645848064,
+          "unclear": 0.03976642280239205
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.7249238753489408
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.8314933168960499,
+          "measure_change": 0.07202513734440014,
+          "guidance_revision": 0.00404558254631401,
+          "reference_only": 0.06844652688777786,
+          "several": 0.003844574744068908,
+          "unclear": 0.0201448615813892
+        },
+        "choice": "level",
+        "confidence": 0.7977919802752599
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.0062576106286648895,
+          "prior_year": 0.044516535271575126,
+          "sequential_period": 0.020726657313356447,
+          "previous_guidance": 0.04020276815454543,
+          "none": 0.8555077037031839,
+          "unclear": 0.03278872492867429
+        },
+        "choice": "none",
+        "confidence": 0.8266092444438207
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.6247188858771656
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      }
+    },
+    "fields": {
+      "form": "floor",
+      "subject_scope": "source_company_total",
+      "period": "H2_FY2026",
+      "unit_scale": "percent",
+      "sign": "positive",
+      "movement": "not_stated",
+      "time_type": "duration",
+      "basis_evidence": "not_growth_percentage",
+      "amount_meaning": "level",
+      "comparison_baseline": "none"
+    },
+    "unit_after_rule": "percent",
+    "numeric": {
+      "lower": "30",
+      "upper": "33"
+    },
+    "period": {
+      "period_u_id": "gp_2025-12-01_2026-05-31",
+      "period_scope": "half",
+      "time_type": "duration",
+      "gp_start_date": "2025-12-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [
+        {
+          "start": 21479,
+          "end": 21491,
+          "text": "incrementals",
+          "score": 0.7403949499130249
+        }
+      ],
+      "context": [
+        {
+          "start": 21439,
+          "end": 21460,
+          "text": "back half of the year",
+          "score": 0.9998281002044678
+        }
+      ],
+      "qualifiers": [],
+      "conditions": [],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 21439,
+      "end": 21506,
+      "text": "back half of the year, that would imply incrementals of 30% to 33%,"
+    },
+    "holds": [
+      "H_MODIFIERS"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V131",
+    "anchor": {
+      "tag": "V131",
+      "passage": "QA010",
+      "start": 30871,
+      "end": 30875,
+      "text": "7.8%"
+    },
+    "lower": "V131",
+    "upper": "V132",
+    "aliases": [
+      "V131",
+      "V132"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V129": 0.0005581671086267312,
+            "V130": 0.0005304342434706177,
+            "V131": 0.9754821565582189,
+            "V132": 0.007319318526829073,
+            "V133": 0.0014698987221581925,
+            "V134": 0.0004913967521804344,
+            "no_current_forecast": 0.003238514500677244,
+            "no_stated_bound": 0.001712718380197586,
+            "elsewhere": 0.0026412810879684508,
+            "several": 0.005123197052448457,
+            "unclear": 0.0014329170672243063
+          },
+          "choice": "V131",
+          "confidence": 0.9730303722140408
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V129": 0.00020911309255538675,
+            "V130": 0.00015799774657922612,
+            "V131": 0.0020718443128160706,
+            "V132": 0.9872474188850414,
+            "V133": 0.002540319568431715,
+            "V134": 0.0004056089185236328,
+            "no_current_forecast": 0.0011239927877959588,
+            "no_stated_bound": 0.0008711633429609424,
+            "elsewhere": 0.0019689033710199276,
+            "several": 0.0024141020826635913,
+            "unclear": 0.0009895358916121142
+          },
+          "choice": "V132",
+          "confidence": 0.9859721607735455
+        }
+      },
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V129": 0.0002895381891155916,
+            "V130": 0.00033736841085661067,
+            "V131": 0.9814938932167167,
+            "V132": 0.005424279872043662,
+            "V133": 0.0015964478030989285,
+            "V134": 0.00032060603156911774,
+            "no_current_forecast": 0.0018601728460465405,
+            "no_stated_bound": 0.0015171272968296963,
+            "elsewhere": 0.002525515010038455,
+            "several": 0.0034288370864578527,
+            "unclear": 0.0012062142372268414
+          },
+          "choice": "V131",
+          "confidence": 0.9796432825383883
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V129": 0.00039277766973707523,
+            "V130": 0.0003547162943539945,
+            "V131": 0.003255801725129145,
+            "V132": 0.9806892718680512,
+            "V133": 0.0034260260583449153,
+            "V134": 0.0006057248802963933,
+            "no_current_forecast": 0.0020580825686202517,
+            "no_stated_bound": 0.0013689899469726192,
+            "elsewhere": 0.00227891636365805,
+            "several": 0.004200702677863751,
+            "unclear": 0.0013689899469726192
+          },
+          "choice": "V132",
+          "confidence": 0.9787581990548563
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.02428790930110254,
+          "range": 0.5168425843916521,
+          "floor": 0.42152858088074124,
+          "ceiling": 0.0035926106394092933,
+          "words": 0.0027144360144939423,
+          "revision": 0.001999322946596236,
+          "qualification": 0.014590231908421892,
+          "reaffirmation": 0.003780444680351989,
+          "withdrawal": 0.0012964451299768683,
+          "centre_tolerance": 0.0014726044594595426,
+          "several": 0.0027144360144939423,
+          "none": 0.0018521822338181196,
+          "unclear": 0.003328211399482288
+        },
+        "choice": "range",
+        "confidence": 0.4765794664242897
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.984731823438748,
+          "source_company_part": 0.008181529369154094,
+          "other_subject": 0.0012734664293993503,
+          "shared": 0.001374632278475172,
+          "unclear": 0.0044385484842233945
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9809147792984348
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0021290316268747092,
+          "Q1_FY2025": 0.001568141429304127,
+          "Q2_FY2025": 0.000942013888324027,
+          "Q3_FY2025": 0.0007881201052993008,
+          "Q4_FY2025": 0.0010168488603308936,
+          "H1_FY2025": 0.00044991615444622504,
+          "H2_FY2025": 0.0004856583366186806,
+          "FY2026": 0.964091144246683,
+          "Q1_FY2026": 0.0003669446243720854,
+          "Q2_FY2026": 0.0005658863358442756,
+          "Q3_FY2026": 0.0005658863358442756,
+          "Q4_FY2026": 0.0003669446243720854,
+          "H1_FY2026": 0.00115501743594581,
+          "H2_FY2026": 0.010875062334936566,
+          "FY2027": 0.0006593677832061695,
+          "Q1_FY2027": 0.0002148849647847793,
+          "Q2_FY2027": 0.00033993917947233726,
+          "Q3_FY2027": 0.0002917447776344201,
+          "Q4_FY2027": 0.0008952089324877899,
+          "H1_FY2027": 0.0002772490033627718,
+          "H2_FY2027": 0.0005516489744891752,
+          "short_term": 0.0002917447776344201,
+          "medium_term": 0.0004168046093613849,
+          "long_term": 0.00033138658213914996,
+          "undefined_horizon": 0.0005516489744891752,
+          "other_stated": 0.0023574785404056994,
+          "several": 0.00022043085987648526,
+          "unclear": 0.007233845701460188
+        },
+        "choice": "FY2026",
+        "confidence": 0.9627611866261897
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.008394938588698763,
+          "usd_cents": 0.017134708661349828,
+          "m_usd_from_dollars": 0.004671865904514892,
+          "m_usd_from_thousands": 0.007581443716142043,
+          "m_usd_from_millions": 0.02447971240178795,
+          "m_usd_from_billions": 0.0038102991892009336,
+          "percent": 0.10731425491603469,
+          "percent_yoy": 0.42485724336520536,
+          "percent_sequential": 0.0021204686884784335,
+          "percent_points": 0.002599938911015524,
+          "basis_points": 0.0031076193589743644,
+          "count": 0.0016434932461974801,
+          "count_thousand": 0.0058760803852536386,
+          "count_million": 0.005584123807232055,
+          "count_billion": 0.0031076193589743644,
+          "x": 0.002806481570515054,
+          "other_stated": 0.0031076193589743644,
+          "numberless": 0.003908637769113413,
+          "unknown": 0.364623354542711,
+          "several": 0.0032700962596258574
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.3945865719633741
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9886086900899304,
+          "negative": 0.0029640486875379757,
+          "zero": 0.0010427085016749974,
+          "not_numeric": 0.0005656778171132536,
+          "several": 0.0010696194192019546,
+          "unclear": 0.005749255484541512
+        },
+        "choice": "positive",
+        "confidence": 0.9863304281079164
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.023485216288488802,
+          "raised": 0.5823189245222465,
+          "lowered": 0.005932108728385076,
+          "reaffirmed": 0.13283417142240156,
+          "withdrawn": 0.004152211986777184,
+          "not_stated": 0.21013820983538004,
+          "unclear": 0.04113915721632077
+        },
+        "choice": "raised",
+        "confidence": 0.512705411942621
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9445995169399571,
+          "instant": 0.008690206787807681,
+          "unclear": 0.04671027627223516
+        },
+        "choice": "duration",
+        "confidence": 0.9168992754099355
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.2923906847004276,
+          "previous_period": 0.0144586754491829,
+          "two_bases": 0.004148346518759772,
+          "other_stated": 0.05169499848448666,
+          "not_stated": 0.5121823730533293,
+          "not_growth_percentage": 0.014094905495277055,
+          "unclear": 0.11103001629853679
+        },
+        "choice": "not_stated",
+        "confidence": 0.4308794352288841
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.015493518229177515,
+          "measure_change": 0.9614055477425264,
+          "guidance_revision": 0.0037190456740924583,
+          "reference_only": 0.013296934395208272,
+          "several": 0.001966851474269589,
+          "unclear": 0.004118102484725741
+        },
+        "choice": "measure_change",
+        "confidence": 0.9536866572910316
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.00637847719044836,
+          "prior_year": 0.36666939908958324,
+          "sequential_period": 0.008659920018247403,
+          "previous_guidance": 0.04774881316612631,
+          "none": 0.4730844360474329,
+          "unclear": 0.0974589544881618
+        },
+        "choice": "none",
+        "confidence": 0.3677013232569195
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.7542072793450678
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.16372011845886883
+      }
+    },
+    "fields": {
+      "form": "range",
+      "subject_scope": "source_company_total",
+      "period": "FY2026",
+      "unit_scale": "percent_yoy",
+      "sign": "positive",
+      "movement": "raised",
+      "time_type": "duration",
+      "basis_evidence": "not_stated",
+      "amount_meaning": "measure_change",
+      "comparison_baseline": "none"
+    },
+    "unit_after_rule": "unknown",
+    "numeric": {
+      "lower": "7.8",
+      "upper": "8.5"
+    },
+    "period": {
+      "period_u_id": "gp_2025-06-01_2026-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2025-06-01",
+      "gp_end_date": "2026-05-31"
+    },
+    "copied": {
+      "measure": [
+        {
+          "start": 30501,
+          "end": 30508,
+          "text": "revenue",
+          "score": 0.8079947233200073
+        }
+      ],
+      "context": [],
+      "qualifiers": [],
+      "conditions": [
+        {
+          "start": 8417,
+          "end": 8470,
+          "text": "Our guidance does not assume any future acquisitions.",
+          "score": 0.9830774664878845
+        }
+      ],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 8417,
+      "end": 30884,
+      "text": "Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns. With that, I'll turn it back to Todd for some closing remarks.\n\nTodd Schneider [595]: Thank you, Scott. Looking ahead to the second half of fiscal 2026, we are right where we want to be, and our focus remains on helping customers meet, and in many cases exceed, their image, safety, cleanliness, compliance needs. We remain committed to leveraging our investments to sustain our positive momentum and deliver exceptional customer service. I want to thank our employee partners for their incredible commitment to our customers and everything they do for Cintas. I'll now turn it back over to Jared.\n\nJared Mattingly [627]: That concludes our prepared remarks. Now we are happy to answer questions from the analysts. Please ask just one question and a single follow-up if needed. Thank you.\n\nRoss [636]: If you would like to ask a question, please press star 1 on your telephone keypad now. Please be prepared to ask your question when prompted. You will also be allowed to ask one follow-up question. Once again, if you would like to ask a question, please press star 1 on your phone now. And our first question comes from Tim Mulroney from William Blair. Please go ahead, Tim.\n\nTim Mulroney [664]: Scott, Jared, good morning. Good morning. Only 10 minutes on the prepared remarks. That's what I'm thankful for this holiday season. Thank you for that. So just one question from me. There continues to be a lot of noise in the labor market data, but I think most would agree that we've seen a softening trend in terms of hiring activity over the last several months, at least on balance. And I'd be curious to hear If you've seen any material change in employment levels across your customer base, if what we are seeing in the broader payroll numbers are playing out in your world, or, you know, if the reported job losses are more in the white collar world where you're providing some services, but, you know, those folks don't typically wear uniforms. I know you've emphasized your ability to grow. in all types of environments. But I'd be interested in your take on more of the underlying dynamics here, given the number of businesses that you service week to week. Thank you.\nTodd Schneider [732]: Well, thank you, Tim. We're reading the same things you are. We're watching jobs reports, as we always do. And as we spoke about in our preparer remarks, as a reminder, we've shown the ability to grow in multiples of GDP and jobs growth for a long time now. And we certainly love it when our customers are adding employees and their businesses are really healthy. And that's how we love that. But we don't need it in order to grow our business the way we like to. That being said, to your point, I think you have to dig past the headlines on the jobs report. You know, first off, we've picked our verticals really well, very strategically. And the employment picture for them, If you look at it, it's positive. Healthcare, education, hospitality, state, local government, those are good. The services providing sector continues to show growth. And the goods producing sector isn't performing as well, but the specialty trades within them are doing well. And those are obvious uniform wearers and users of our services. So there are certainly many jobs that are under pressure. hence what you see in the headlines and the markets reports. But they are certainly, more generally, white-collar jobs, IT, financial, back office, that are really not end markets for us, as you pointed out, Tim.\nJim Rosakis [826]: Really helpful. Thank you, Todd.\nTodd Schneider [828]: Thank you.\n\nManav Patnik [837]: Thank you. Good morning. I also just had one broader question, maybe just following up from that one. You know, I know you've obviously shown that you guys can outperform and execute in any kind of environment, but just maybe help us appreciate, like, what is your downturn playbook look like? Like, if unemployment does crack, how do you still, you know, keep up these kind of high single-visit growth levels? Like, which levels typically make up more? Is it all of them? Just any color there would be helpful.\nTodd Schneider [868]: Yeah, good question, Manav. You know, we certainly have a wide array of products and services that we provide, and we service a wide breadth of customers as well. So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility. Certainly new business is important to us. And when you think about a business that when they have less people, that can certainly impact us, but they also have still other needs that they need to address. And in many cases, they don't have enough people to address those, and they look to us to outsource for those items. So new business is important. We are still very early in the innings of cross-selling all of our various products and services into us. So trying to gain growth from our current customers is an important lever for us. So that's all valuable. M&A tends to get better during those periods of times as well. But we have many levers here. in addition to obviously the ones that I mentioned that I think give us real optionality. And certainly when we look at new programmers, that's a big opportunity for us.\nJim Rosakis [957]: Hey, Manav, this is Jim. Perhaps I can give just a little more color on how much opportunity really lies within our current customers. And as Todd mentioned, as prepared remarks, our objective is to first supply our customers with a great experience with us. And that starts at the foundational level. And then we are in the right now to be able to ask them for more opportunities and to steer more of their spend that they already have over to us. And just due to the nature of our service model, we're in their facilities so frequently that we get a really deep understanding of what their needs are and where the opportunities may come from. So I have an example here of a property management company that we service out on the West Coast. And we've been servicing that facility for a number of years for uniform rental for all the folks who work on the property. And during our routine visits, our team uncovered that they were doing bulk orders from an e-commerce solution for all their restroom supplies. And when inquiring with the company, they realized that they were tying up cash flow, they were tying up really precious uh real estate space and storage space that they did not want to tie up and they were taking a lot of their labor and manpower to go ahead and inventory all of those goods our folks went in and introduced the concept of outsourcing that to us and utilizing the syntax hygiene program they found out that now their spend is much steadier than it was in the past it makes it much easier to budget they're not tying up that space and maybe most importantly their team is not involved in taking their precious time away from what they focus on uh going ahead and managing hygiene inventories they let us handle that for them so just a small example of activities that happen across a million plus customers every day thank you so much appreciate it and our next question comes from andrew steinerman from jp morgan please go ahead andrew hi i i i definitely heard the pluses and minuses about the customer's employee base by just doing\n\nAndrew Steinerman [1076]: quite get a compilation if ad stops are changed year-over-year. I surely heard the separate point that you continue to grow with same customers. So just a comment on ad stops year-over-year. And then my second question is, with the acquisitions that were completed in this second quarter, how much will that add to second half of the year revenues?\nTodd Schneider [1104]: I'll take the first half. Andrew, so thank you for the question. You know, as we mentioned in Jim's example, we talked about all the various products and services we can provide for our customers. and it's broad and growing. So from that standpoint, growth from current customers, I would describe it as very stable, if anything, slightly positive. So, you know, we're in a good position. Our current customers see the value proposition that we can offer to them, and that actually helps with retention as well. Scott, if you want to address the second half.\nScott Garula [1144]: Yeah, thanks, Todd, and Hello, Andrew. We talked in the prepared remarks. The acquisition impact during the second quarter was about 70 bps. And if you think about the rest of the year and our guide, you know, we obviously assume no new acquisitions. You can assume that there's a normal tail when it comes to the acquisition volume. And generally for the second half of the year, you would assume about half of the second quarter impact. So call it, you know, 30 to 35 bids.\n\nJosh Chan [1190]: Hi, good morning. Congrats on a really strong quarter. I guess my two questions, one, I think both Todd and Jim mentioned that retention rates are at record levels. Usually you see those in stronger economic times, so maybe could you talk about how you're able to achieve strong retention rates even in these types of climate? And then I guess my second question is, On the incremental margins, I think both Q1 and Q2 were within your longer-term range, but maybe towards the lower end. So any way to think about how that kind of transpires in the second half would be great. And thanks for taking my questions.\nTodd Schneider [1227]: Thank you, Josh. I appreciate that. I'll take the first half regarding retention, and Jim will address the incrementals. You know, our retention rates are there at all-time levels. And we have been for several quarters now. And it speaks to a number of things. First off, the execution by our team is impressive. They're doing a great job making sure they're taking great care of our customers. That is easy to say, really hard to do. Starts with our supply chain team, our operations organization. They are doing a great job. And that all ties back into our culture. And we have spoken over and over again about the fact that our culture is our ultimate competitive advantage. And it's, you know, it shines even brighter in economic environments that are a little bit more uncertain than others. So, and it's showing up big time for our folks. We're also providing great value for our customers, and they're seeing it with not only the products but the services, the technology that we're utilizing, and the technology investments that we've made help accomplish two things at a 30,000-foot level. One is it makes it easier for our partners to our employee partners to service and take care of our customers to provide value for them. And the second one is it makes it easier for our customers to do business with us. So when you add those up, all that, you mix it in, it adds up to retention rates that we find very attractive. Jim? Yeah.\nJim Rosakis [1335]: Yeah, Josh, I'll get to the second question regarding margins. So first of all, we ran a 27% incremental margin for the second quarter, which we really like. And that's right in our stated range of that 25% to 35%. That range is really important for us because that allows us to continue to invest in the future growth of the business. while the NL expand margin along the way. So we really like that. That allows us to make the investments in technology, the necessary investments in capacity, bench strength, selling resources. All of those are really critically important to us. So that would be really right in the sweet spot of the range. Now, a couple things to keep in mind with regards to incrementals this year. and how it plays out for the remainder of the year. First off, we're coming off of a comparison to last fiscal year, which is a really tough comp. Last fiscal year, we ran in the second quarter incrementals of 49.7. That's an outperform. That's not what we normally expect. So we're really pleased with the 27 this quarter, given that comparison. In fact, if you look at the whole first half of last year, we ran an incremental of 44.3%. So really, really high in the beginning of last fiscal year, settling back into our range this fiscal year. A couple other things maybe to keep in mind is what the guide implies with regards to incrementals for this fiscal year. If you look at the whole year across the board, incrementals would imply somewhere between the 29 and 30 when you adjust for the $15 million asset sale from last fiscal year. So that's right in the heart of where we want to be, a perfect level of investments continuing to fuel future growth. And if you look at the back half of the year, that would imply incrementals of 30% to 33%, so moving back up towards the high side of that range. So we're really pleased with where we are. We like the outlook of the year, and we think that's a great spot for us to run the business.\n\nJasper Bibb [1463]: Hey, morning, everyone. Wanted to get an update on your experience with sourcing costs and tariffs so far this year. I guess how have things trended relative to your expectations when you initially set out into the security here?\nTodd Schneider [1480]: Good morning, Jasper. Thanks for the question. Yeah, with the tariffs, it is certainly a dynamic environment as it relates to that. But we continue to execute at a high level. You know, as I mentioned earlier, our culture, when times are challenging, you might have to run at higher RPMs, but we're executing at a high level. We're not immune from impacts of higher costs from tariffs. But our supply chain has always been a competitive advantage. And when you're in this type of environment, it's that much more of an advantage. Now, keeping in mind the ability to – they're flexible and adaptable. And part of how they have that optionality is because we source from all over the world. And we do have really good geographic diversity. And we've spoken in the past that 90-plus percent of our products, we have two or more options. So that optionality is incredibly important when it comes to an economic – excuse me, a sourcing environment and what we're dealing with. The guide does contemplate the current environment for tariffs. So it's coming in very similar to what we expected. You recognize that we do have the ability to – we amortize most of our goods. So as a result of that, it does give us time to pivot and adapt. But it's coming in about where we expected, but we're certainly staying on our toes because the sourcing environment is dynamic and the tariff environment is – there certainly could be changes coming as well.\n\nJasper Bibb [1590]: Thanks for that. And then, you know, really healthy margin in the first aid business this quarter. Can you provide a bit more detail on what the underlying mix has looked like in that business this year? I know you were a bit heavier on the training side for the end of last year, so curious if that's flipped back to more recurring revenue.\nTodd Schneider [1608]: Yeah, we're, you know, we love the first aid business. It is a great business for us. We're very pleased with that. And you've seen that they've had outsized performance for a period of time now. One of the things that the mantra that we have and the leadership of our organization there talks about there's nothing more important than the health and wellness of a business's employees and customers. We completely agree with that. You're seeing really good growth in that business. We see them as a low double-digit grower for the foreseeable future. So that's great. That being said, certainly the mix of business can have an impact on the margins in that. So we like the range we're in. But if we have a little bit of change and mix and there's a little change in margin within a range for us, we're okay with that. We're investing for the future, providing more value to our customers. And, you know, running a business isn't linear, so we're not focused on, You know, just a pure, hey, we've got to get another, you know, a certain amount of basis points, a lift in gross margin in that business. We think it's important that we are running a range that's really attractive so we can grow our operating margins. But mix of business really is impacted by that. So, Jim, anything else that you'd like to comment on that?\nJim Rosakis [1702]: No, Todd, I think you hit all the main points of what really drives this business. The only other thing I might just say is the team did a fantastic job in the quarter of execution, and, you know, we're really pleased with the results and the way they stand. Great. Any questions?\n\nAndrew Whitman [1728]: Great, thanks for taking my question. I just thought I would give you guys an opportunity, or I'd like to hear a little bit about the competitive environment. Obviously, over the last couple of years, you've had some competitors that have really gone on a volume-chasing spree. You guys have obviously executed very well amongst all this, but I was just wondering what you're seeing out there and how that's affecting your price realization.\nTodd Schneider [1751]: Good morning, Andrew. Thanks for the question. Yeah, I mean, as you know, we operate in a very competitive environment, always have, always will, my entire career. It's always been like that. And we certainly do win some business from competitors, but that's, as you know, that's not where our focus is. Our focus is on signing new customers that – that weren't programmers when we walked in, and when we walk out, they are. And as a result of that, still over two-thirds of our new customers are coming from that sector. And the white space is incredibly large there, with us servicing a little over a million customers, but there's still 16-plus million businesses in the U.S. and Canada. So that's really attractive for us. I mentioned our retention rates are at all-time high. That's helping us as well. But that's really about the value proposition that we're providing for our customers, which starts with our culture and is executed through our employee partners. But it is a – we're pleased with how our folks are performing, competing in the marketplace, and really attacking that large TAM out there of that – no program market, which we think we're really excited about.\n\nAndrew Whitman [1837]: Great. Thank you. Just for my follow-up, I thought I would just ask a little bit on the M&A side. Obviously, you know, last fiscal year was one of your bigger years that you had since for a while. A pretty big quarter here in terms of capital deployment towards M&A. Maybe, Todd, you could just talk about kind of the funnel here. Did you feel like You know, thinking about, you know, the amount of capital deployment last year is, again, doable this year with the progress that you made this year so far?\nTodd Schneider [1867]: Andrew, great question. First off, just capital allocation in general, we're very pleased with how we're going there. We just, you know, we invested over $100 million in CapEx for the quarter, $85 million in M&A. All three route-based businesses we were acquisitive in. And then on top of that, $182 million in dividends paid out and over $600 million in buybacks. So we really like that capital allocation strategy. We've shown to be good fiduciaries with that. And M&A is certainly a part of that. As I mentioned, we had a really good quarter. We had a great year last year. But as you know, it's hard to predict. M&A tends to be a little unpredictable and lumpy, whether it's because there's family-owned businesses that are waiting on the next generation, whether they want to move on or not. And we do love M&A of all shapes and sizes. We love tuck-ins. We like new geographies. And when we make M&A, we value so much of it, but the number one things that we get out of it are the people that are running the business and the customers. And we try to make sure that we can get synergies. If it's a tuck-in, and if it's not a tuck-in, then we get extra capacity, and we also then have more customers that we can cross out. So, all that's attractive. You know, the pipe, we are always working on that pipe. Jim and I and our corporate development team are all in that game together. We have relationships that are going back decades, and we're ready and willing for M&A to be an important component of our strategy moving forward.\n\nAndrew Whitman [1991]: Happy holiday, guys. Have a good day. Thanks a lot.\nTodd Schneider [1994]: Thank you, Andrew.\n\nGeorge Tong [2002]: Hi, thanks. Good morning. You touched on some of this, but can you provide a high-level overview on what you're seeing with sales cycles and broader customer purchasing behaviors, and if you've noticed any meaningful changes from prior quarters?\nTodd Schneider [2017]: Good morning, George. You know, nothing specific to call out. You know, we've certainly operated in easier environments. This economic environment is a little less certain than we like. But despite that uncertainty – The value proposition continues to resonate. As I mentioned earlier, especially in periods of uncertainty, it can do that. Outsourcing can save money, improving steady cash flow, and saving time that can be spent on running the business. That was referenced in Jim's example that we talked about earlier. I've already referred to retention rates being at very attractive levels. And our – And I also mentioned our growth from our current customers was steady. If anything, improved slightly. So, you know, we think we're in a good spot and we like where we are, where we're pointing.\n\nGeorge Tong [2072]: Got it. That's helpful. And then just to follow up, you took up your full year guide for revenue. Can you talk about how much of the increase reflects upside in the quarter versus what you were internally expecting compared to maybe a stronger outlook for the remainder of the year?\nTodd Schneider [2088]: Yeah. First off, our guide for the year is really good. It looks right where we want it to be. If you look at the guide for the years, showing growth of 7.8% to 8.5%."
+    },
+    "holds": [
+      "H_CONFIDENCE",
+      "H_EVIDENCE"
+    ],
+    "status": "held",
+    "accepted": false
+  },
+  {
+    "tag": "V143",
+    "anchor": {
+      "tag": "V143",
+      "passage": "QA012",
+      "start": 35648,
+      "end": 35651,
+      "text": "100"
+    },
+    "lower": "V143",
+    "upper": "V143",
+    "aliases": [
+      "V143"
+    ],
+    "bound_answers": [
+      {
+        "lower": {
+          "type": "choice",
+          "probabilities": {
+            "V137": 0.0006910565588173928,
+            "V138": 0.0005221353177570774,
+            "V139": 0.0018668227161341292,
+            "V140": 0.0013404167607627645,
+            "V141": 0.0012105262569047693,
+            "V142": 0.001819854840979178,
+            "V143": 0.936062636766971,
+            "no_current_forecast": 0.014335578368510571,
+            "no_stated_bound": 0.027806202124229816,
+            "elsewhere": 0.003107643963229339,
+            "several": 0.002175211075882826,
+            "unclear": 0.009061915249821171
+          },
+          "choice": "V143",
+          "confidence": 0.930250149200332
+        },
+        "upper": {
+          "type": "choice",
+          "probabilities": {
+            "V137": 0.0005905992187176819,
+            "V138": 0.0005068676122868652,
+            "V139": 0.0018590065301480653,
+            "V140": 0.001404593393420291,
+            "V141": 0.0012054578778646153,
+            "V142": 0.0013692547064658156,
+            "V143": 0.9321434193694242,
+            "no_current_forecast": 0.009023974000877817,
+            "no_stated_bound": 0.03759379802652771,
+            "elsewhere": 0.0029408720777247322,
+            "several": 0.0023381831856643873,
+            "unclear": 0.009023974000877817
+          },
+          "choice": "V143",
+          "confidence": 0.9259746393120992
+        }
+      }
+    ],
+    "answers": {
+      "form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.9101375111439859,
+          "range": 0.0179838023862573,
+          "floor": 0.006489712074654587,
+          "ceiling": 0.00502992488185864,
+          "words": 0.007186064320009344,
+          "revision": 0.0012385384677810409,
+          "qualification": 0.015434166105988481,
+          "reaffirmation": 0.0012385384677810409,
+          "withdrawal": 0.0009599431454739948,
+          "centre_tolerance": 0.014667302028689632,
+          "several": 0.0010362028095414943,
+          "none": 0.004659745563979039,
+          "unclear": 0.013938548603999491
+        },
+        "choice": "point",
+        "confidence": 0.9026489704059846
+      },
+      "subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.012881547998461156,
+          "source_company_part": 0.9800681361152547,
+          "other_subject": 0.0010337000596023973,
+          "shared": 0.0013681227419632595,
+          "unclear": 0.004648493084718493
+        },
+        "choice": "source_company_part",
+        "confidence": 0.9750851701440683
+      },
+      "period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0028834452587863024,
+          "Q1_FY2025": 0.0016885635860547086,
+          "Q2_FY2025": 0.0010673877065042316,
+          "Q3_FY2025": 0.0015249366378222162,
+          "Q4_FY2025": 0.0011819194107257904,
+          "H1_FY2025": 0.0005644975754781662,
+          "H2_FY2025": 0.0008486421282325935,
+          "FY2026": 0.005592914365244249,
+          "Q1_FY2026": 0.000522953435527706,
+          "Q2_FY2026": 0.0008272905137710337,
+          "Q3_FY2026": 0.0016885635860547086,
+          "Q4_FY2026": 0.0005097960614726708,
+          "H1_FY2026": 0.000536450160193428,
+          "H2_FY2026": 0.0033597738412581616,
+          "FY2027": 0.9617247883498854,
+          "Q1_FY2027": 0.0006093423803306834,
+          "Q2_FY2027": 0.0008486421282325935,
+          "Q3_FY2027": 0.0006412008252095029,
+          "Q4_FY2027": 0.0007861860162155164,
+          "H1_FY2027": 0.0006250686326878522,
+          "H2_FY2027": 0.0011521825183441082,
+          "short_term": 0.000536450160193428,
+          "medium_term": 0.000674725289501543,
+          "long_term": 0.0008486421282325935,
+          "undefined_horizon": 0.001243714050986462,
+          "other_stated": 0.0033597738412581616,
+          "several": 0.00023735839174320045,
+          "unclear": 0.003914791020053004
+        },
+        "choice": "FY2027",
+        "confidence": 0.9603071879183996
+      },
+      "unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.0015862844540274438,
+          "usd_cents": 0.0020466568330760383,
+          "m_usd_from_dollars": 0.000650215366498637,
+          "m_usd_from_thousands": 0.0005724335243535366,
+          "m_usd_from_millions": 0.0010286135552311174,
+          "m_usd_from_billions": 0.0004912772680108076,
+          "percent": 0.002509437029997039,
+          "percent_yoy": 0.001507468960338124,
+          "percent_sequential": 0.00041101909758292047,
+          "percent_points": 0.006953962883021545,
+          "basis_points": 0.9752455022498309,
+          "count": 0.0007199836443124058,
+          "count_thousand": 0.00033522065219103035,
+          "count_million": 0.0006023625037656661,
+          "count_billion": 0.0003527470936409444,
+          "x": 0.00041101909758292047,
+          "other_stated": 0.0010027343152343236,
+          "numberless": 0.0004325085781454829,
+          "unknown": 0.002778701685659517,
+          "several": 0.0003618512074996282
+        },
+        "choice": "basis_points",
+        "confidence": 0.9739426339471904
+      },
+      "sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.5536123271847336,
+          "negative": 0.27123554353781926,
+          "zero": 0.009151990124822096,
+          "not_numeric": 0.00522462022904572,
+          "several": 0.005934534800310493,
+          "unclear": 0.15484098412326885
+        },
+        "choice": "positive",
+        "confidence": 0.46433479262168037
+      },
+      "movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.15951342363667603,
+          "raised": 0.026800881843508928,
+          "lowered": 0.007689455993156291,
+          "reaffirmed": 0.01694157822958508,
+          "withdrawn": 0.006271398543172148,
+          "not_stated": 0.7358360143352849,
+          "unclear": 0.046947247418616625
+        },
+        "choice": "not_stated",
+        "confidence": 0.6918086833911657
+      },
+      "time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8077023089505904,
+          "instant": 0.04202897132954725,
+          "unclear": 0.15026871971986233
+        },
+        "choice": "duration",
+        "confidence": 0.7115534634258855
+      },
+      "basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.018385827352996823,
+          "previous_period": 0.009007908311591492,
+          "two_bases": 0.002935636758532371,
+          "other_stated": 0.012229836420595459,
+          "not_stated": 0.11514997364333858,
+          "not_growth_percentage": 0.7985647238938026,
+          "unclear": 0.043726093619142634
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.764992177876103
+      },
+      "amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.3783431569927176,
+          "measure_change": 0.540524888632996,
+          "guidance_revision": 0.00579423910903709,
+          "reference_only": 0.02413875186525107,
+          "several": 0.004377902859353633,
+          "unclear": 0.04682106054064458
+        },
+        "choice": "measure_change",
+        "confidence": 0.4486298663595952
+      },
+      "comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.0027165617686984406,
+          "prior_year": 0.017013758758479467,
+          "sequential_period": 0.005007409507443043,
+          "previous_guidance": 0.006460662817732621,
+          "none": 0.9534365276170282,
+          "unclear": 0.015365079530618242
+        },
+        "choice": "none",
+        "confidence": 0.9441238331404339
+      },
+      "conditions": {
+        "type": "noul",
+        "noul": 0.7247785709864327
+      },
+      "comparison_revision": {
+        "type": "noul",
+        "noul": 0.21856201859471175
+      }
+    },
+    "fields": {
+      "form": "point",
+      "subject_scope": "source_company_part",
+      "period": "FY2027",
+      "unit_scale": "basis_points",
+      "sign": "positive",
+      "movement": "not_stated",
+      "time_type": "duration",
+      "basis_evidence": "not_growth_percentage",
+      "amount_meaning": "measure_change",
+      "comparison_baseline": "none"
+    },
+    "unit_after_rule": "basis_points",
+    "numeric": {
+      "lower": "100",
+      "upper": "100"
+    },
+    "period": {
+      "period_u_id": "gp_2026-06-01_2027-05-31",
+      "period_scope": "annual",
+      "time_type": "duration",
+      "gp_start_date": "2026-06-01",
+      "gp_end_date": "2027-05-31"
+    },
+    "copied": {
+      "measure": [],
+      "context": [
+        {
+          "start": 35652,
+          "end": 35664,
+          "text": "basis points",
+          "score": 0.6102645397186279
+        }
+      ],
+      "qualifiers": [],
+      "conditions": [],
+      "comparison_revision": []
+    },
+    "quote": {
+      "start": 35648,
+      "end": 35664,
+      "text": "100 basis points"
+    },
+    "holds": [
+      "H_MEASURE",
+      "H_MODIFIERS"
+    ],
+    "status": "held",
+    "accepted": false
+  }
+]

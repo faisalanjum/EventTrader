@@ -1,0 +1,1307 @@
+{
+  "method": "Root source-review-derived development labels; prior exposure exists. Not blind or independently adjudicated. Repeated confirmed guidance counts as passage presence. All uncertainty shown, not forced.",
+  "rows": [
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction; no forecast.",
+      "text_sha256": "745e88332a64515d7eb61d95a0c1ce5f0ccfe4bb6543d3cd7c9325c292fc6552"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Participants and forward-looking disclaimer; no specific forecast.",
+      "text_sha256": "5cf578768f34a2ed4a4669b31f3241eac341346f06db3b552c3d2fa7c8e0c587"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "SEP01–04, period and movement; reported results are negative controls.",
+      "text_sha256": "e0f2d48f040a8d0e1a30179a5c6014c85c71328335b5efa788037494a212a5ff"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Actual segment results and business example; no separate specific forecast.",
+      "text_sha256": "1f49b600a04edbb83fea1c1dd69098668a0d46477d0d63a5605561fc108f1dea"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "SEP05–06 and shared assumptions for annual guidance; actual results/capital allocation are not new guidance.",
+      "text_sha256": "1b8d1ff1bfff53700f2082457a5d867c60ff7219a33495e275cb6bb86a964e77"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "General confidence and investment intent; no separate specific financial target.",
+      "text_sha256": "3eca557ad97fca258390beed6fe4878413568eed98852cd8a5134bcae9f73f67"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Call procedure only.",
+      "text_sha256": "89e49c962a19e121b932074db20d27b324f7295fbc5027b5ae0b45384a6f8e55"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Call procedure only.",
+      "text_sha256": "0e4504cfce45882b6dcf2b5fc557fb84a3b682a30f69af364cd3f7b1587b8638"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Future investment plans and generic ability to grow; not a specific forecast level. Mixed speaker text must not be inferred from stored label alone.",
+      "text_sha256": "7c15aa98287e762f26889f8dc813ca8949063cac7b1c44a885c0e37035f2aa34"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA001",
+      "label": "negative",
+      "reason": "Current selling environment/results, not a specific future forecast.",
+      "text_sha256": "1b30d0a06c856ea3d7096c1e5a62b11bb2dbfe035b9cb3d472fadfb5fe32910b"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "SEP10, remaining-quarter growth guide; metric association unresolved.",
+      "text_sha256": "084d6bff64d99e3dafbf7c0e2bc9d615dc8785707c3bdfc7c6d65b0245c78d77"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA003",
+      "label": "negative",
+      "reason": "Current business drivers and generic growth confidence; employment context, no exact separate forecast.",
+      "text_sha256": "55f0fc963e8febf8eb66f83d07e23fc9deda335025f492c02c962d58d10ecf6c"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA004",
+      "label": "negative",
+      "reason": "Observed early-quarter demand, not a new full-period forecast.",
+      "text_sha256": "dda86a473c1e5cb49e316b5baac73ef915cc578c5e72231a5b74b590751a9fe3"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Customer example and strategy; no separate guidance target.",
+      "text_sha256": "bf157457ebbccf99f481e58126dc5c11cdae50ec9b06769855ad2901c3285dd6"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "Employment assumption supporting guidance; inventory/use-of-capital discussion is current explanation, not a stated amount forecast.",
+      "text_sha256": "b1465305b377676ba6c4581f3ff5e3be685f0860bdbe16b22e2e4fc09b0492a3"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Current vertical/customer behavior.",
+      "text_sha256": "2696df1b51f150d67391bcba76594407ce43dd186a8ecc31d9d0226a637537fa"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "SEP07–09; current range and remaining-quarter guidance, with possible scope/meaning ambiguities.",
+      "text_sha256": "092ceec723fc3881fdb502e3893c6342b38bc98b30cc445fdc63db79f3c83627"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA009",
+      "label": "positive",
+      "reason": "Tariff environment included in guide; supplier statistics are actuals, not forecasts.",
+      "text_sha256": "6a653b9cf67f2ff6e3dfbcbe44511d6d5999eca7fc2027b79fc65cd764580803"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA010",
+      "label": "negative",
+      "reason": "Current sales-cycle observation and general investment intent.",
+      "text_sha256": "47820ca11ad403088cfa1ed6bfb311d3b23c2a87acae6dd218e0d05501a1235d"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Actual first-aid margins and investment timing; general positive outlook.",
+      "text_sha256": "c75e0db6bae498f44af196a17c9275a45462485155f4275c8a7b8de3ab6e89a5"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Analyst proposes higher investment; management describes timing/ongoing investment, not a clear quantified or specific level forecast.",
+      "text_sha256": "bddbde4fb1de0990c2da29df82426d3937dd3dbfcafd04be91f4067ce8362f22"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Competitive strategy/TAM and current customer counts, not company financial forecasts.",
+      "text_sha256": "4c33f7a723d7a824e5efef897f2a6eb456af3798509e40da71bda7411ac1e7cd"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Actual all-other margins and planned investment activity.",
+      "text_sha256": "eeead4d6d75fe626be18f41a4b07a59e6b2307bf162ced4f1aeed7afe740b99c"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Uniform-direct strategic context, current revenue share and general lumpiness; no specific future level.",
+      "text_sha256": "f3e1c76854611f53f7700f0f5e77efe553b9298b222ec97a81142909cfe5f2aa"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "M&A opportunity/strategy, explicitly difficult to predict; no specific forecast.",
+      "text_sha256": "e8e7365ac25e30e9e1fc288ba400b1f2a3655485b45dcc0d2eaa8a287dd22bfe"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA017",
+      "label": "positive",
+      "reason": "SEP11, first-aid worded growth target and horizon.",
+      "text_sha256": "1b65afdeb7d11472faa71554179409185e47cb30a860022074e4e44fe3889880"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA018",
+      "label": "unadjudicated",
+      "reason": "SEP12, potential margin/leverage outlook; actual 56.8% is not a future point.",
+      "text_sha256": "1d08d7fb1e04332b2c81a9ca43a6fa5965adc891579166800a8b0561698426f8"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Acquisition strategy and historical cadence, no specific financial/operating target.",
+      "text_sha256": "71a39e07fe8e29f026aeb2d7a403f724209ce55b5128407f9871f5459677d0b1"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA020",
+      "label": "negative",
+      "reason": "Technology investment plans, not specific forecast amounts/levels.",
+      "text_sha256": "16374f1d8ef808e1f2db8e1d928422bc77751713f3ba2ecae1f8a6ee3f427ae8"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA021",
+      "label": "negative",
+      "reason": "Strategy, current counts and possible acquisitions; no specific company forecast.",
+      "text_sha256": "7360e9a101ae97cd834b5da64f0fc4140df85c668e772fd3fae6ee5027e5a166"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Current visa-policy impact observations; no future impact forecast.",
+      "text_sha256": "80a57c50b038f322a2b4ee152e18fbf499a37921582361b88c87250ef76c1719"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA023",
+      "label": "positive",
+      "reason": "SEP13–14; stable SG&A investment and possible leverage outlook, with actual ratio controls.",
+      "text_sha256": "566ae13e1c1fee250f0292aa7749a66f4dd1099bf30ac31dec03ae61b63a3f1c"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA024",
+      "label": "negative",
+      "reason": "Actual growth and counterfactual Q1 9% calculation; not future guidance.",
+      "text_sha256": "fa2574726fcebed9a167e13e7ec793257466c66becd0ef584ce3b155150b1de6"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA025",
+      "label": "negative",
+      "reason": "Current M&A prices/strategy and uncertainty; no specific financial forecast.",
+      "text_sha256": "05979fdcac6a1c40f99cb69843a72b6b00d9c29716c1e96dccf8a7e088654cb0"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA026",
+      "label": "positive",
+      "reason": "SEP15, standing CapEx target.",
+      "text_sha256": "f89b44380f335ef75bc9dfe46f76a2233e85d9b39997a78ddc34eaccdd0f9958"
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA027",
+      "label": "negative",
+      "reason": "Next reporting date; an event schedule, not financial guidance.",
+      "text_sha256": "ad30088ec28e63f948260c3223f40cdc34a4c4e11d090104e234e7dc548a93be"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction; no guidance.",
+      "text_sha256": "309fb29fd06eaca177df5a3846cadb27ccdb96497cc30cf18f277033726f1dde"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Participants and cautionary disclaimer; no specific forecast.",
+      "text_sha256": "c64204c4402c0d5e732a2e6d24f577af35a1d6ea15a23d6fdc5d8553cebdd9a9"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "DEC01–04; earlier numbers are actual results.",
+      "text_sha256": "f39094e26b18e3c5435a1fd61a5af815328cc63ae974138946853dc5fdaab811"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Reported segment performance, strategy and transition to guidance assumptions.",
+      "text_sha256": "0b2666328016222e7b579d89e43df5a9136a62ecd3542b69b031d8bef07548fc"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "DEC05–06, shared assumptions and prior asset gain that will not recur; actual capital allocation not guidance.",
+      "text_sha256": "c64bf854de77eb8870a9422395ffe298e28250e76313d7b880c5a17ef2a04db1"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "General future commitment, no separate specific metric forecast.",
+      "text_sha256": "d1aaf10be7e2b3a93892be365fd651df42f41e4fef5c2afe4e08e8a066c85df2"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Question procedure.",
+      "text_sha256": "dd5c1b049054ad1906f359b0e330d9648d0ddeeaaa64666f32807cbebc1004a9"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Operator procedure.",
+      "text_sha256": "73b0f6728a3be6c060703c334508bd17fb73190402269ce10d0b29610bad0444"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Observed employment/customer environment; no new specific forecast.",
+      "text_sha256": "d30f636e14b18c6492c64894526c783fa518d5bd689b487e85354369336ec859"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA001",
+      "label": "positive",
+      "reason": "DEC07 standing organic-growth target; rest business examples. End includes next analyst introduction/question fragment.",
+      "text_sha256": "a92f4d1b9bac5356432fe3ebb9a26cfeb6888bff684e7af3dfed5051b05aaf97"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "DEC08; actual second-quarter contribution distinct from forecast.",
+      "text_sha256": "a46388d308b67227723bb40cbb69cfefde371365a4e0d7903e8b7e04ab67f02a"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "DEC09–11; actual incremental margins and comparison numbers must remain separate.",
+      "text_sha256": "cfa14502a7e7bd9ca5652a8302520ba148e4997b208d28ac5fec3f0076187626"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "Tariff assumption applies to guide; sourcing statistics actual.",
+      "text_sha256": "cf8df05e8fbc74a705bfff777a2d71e4cdc690f697738541d92761a00f732c2a"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA005",
+      "label": "positive",
+      "reason": "DEC12; margin mix discussion is context, not a new quantified target.",
+      "text_sha256": "6e6d06b5472614114f6ea0efc29b53554c7c40c2afc6d7bbabf31ccd24585446"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Competition/current pricing and customer statistics.",
+      "text_sha256": "5ee2f676cb6e1f54c6f95adee9744a3da811d9c896171248c09c69e41aecc16b"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual capital deployment and uncertain acquisition pipeline, not a promised amount.",
+      "text_sha256": "4bb28884c9a6e5e69fd95366375bf8c0e128e1304b0ab3123f80046c39a25056"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Closing greeting.",
+      "text_sha256": "e89048f686708cb5fbe3b794ad9bb4c67e0d06a1a322bf8066dbfb89a37bda91"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Current sales/customer conditions.",
+      "text_sha256": "d8ddb0eb5cf6bb47570d4e663855b983133ac41670a98ac6e817da190b4f49c4"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "DEC13 explicit midpoint/repeated annual range; generic expected leverage context.",
+      "text_sha256": "becb79d3e9d5c25550bb946617ad71e5eeaf2997b0e5fcdd82ff4fd87ab6d44b"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA011",
+      "label": "unadjudicated",
+      "reason": "Generic future margin comments plus the beginning of a question continued in QA012. Regardless of detector label, that context must remain accessible.",
+      "text_sha256": "4760a3c2b71b649cdd524f93054717858871e5da79460a1aec09b2b13c59784d"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA012",
+      "label": "positive",
+      "reason": "DEC14–15; rollout schedule itself is a planned act, financial cost/margin forecast distinct; actual acquisition contribution not future value.",
+      "text_sha256": "99be3b27fbc1c041881ce662e1e4ac2c6397f454823ed0fdab2b14238c243a3e"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Technology investment plans/general optimism, not a specified financial level.",
+      "text_sha256": "c428e53ca31ce380aa415f3fc425b0ee281ad099e1363984fcab90f792187d3d"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Pricing strategy/current level and intent to improve efficiency, no definite amount/period forecast.",
+      "text_sha256": "dbb75e27a8ca32e60abe5e54525865e31ab43def9d6c989bc7be2ebef9bf6aca"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current customer behavior.",
+      "text_sha256": "e06e2e1f91e542ec11d92039e30ba15ac6017e46c18031df4534e07d649d645f"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA016",
+      "label": "unadjudicated",
+      "reason": "DEC16 policy-continuity borderline; analyst forecast of buybacks is not management guidance.",
+      "text_sha256": "793ae349c86cb23ead2211f15729a2ed4dec4e10d380e75ff995f6021388fc00"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Actual segment shares and business examples.",
+      "text_sha256": "a52b77ba3ec0a1f9ec1aa69b0919ec65b5db126370c87659f927d58e772e1dda"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "DEC07/17 standing and second-half growth outlook; generic geographic plans separate.",
+      "text_sha256": "beb54c1ce80553dc04781a540752ca090a7e97f3e531593bfa55c13f457c3282"
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Closing and next release schedule, not financial guidance.",
+      "text_sha256": "003d4dd3f9e2cefcdacd12d26eb565e4807275c07ef57e64534d3098b4c616c8"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction.",
+      "text_sha256": "349d7abd08b6c4244487aeea7f2ebec22156b976a5770707952eed72c3ea0bba"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclaimer, report/filing schedule, no specific financial forecast.",
+      "text_sha256": "2d90fb544076b8f6efc735f199d245695d5c5b3b7e051b0e5a81a56af1602046"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "P1-01 cost-synergy target; actual performance, product plans and general opportunity statements separate.",
+      "text_sha256": "dcaa2abe7549f9110cc7229660960dff15a7ddc41b42940e2e75f4a16280eda9"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR003",
+      "label": "positive",
+      "reason": "P1-02–12, annual and Q2 guidance plus earlier EPS comparison; preceding results are actuals.",
+      "text_sha256": "b0d927c77dc78abee900f958e4c6c8eaf89398f5759d8372ab952fe21279d522"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Question transition.",
+      "text_sha256": "2f0a54b53251fef4681f0cb594f1140676d334bfc0671defc7098750a9f562b9"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Current demand/bookings, not future amounts.",
+      "text_sha256": "f20d6216cf6a322a3dbc7b5f616e36a0ce17b5838f22ba3a08f7caf2410c068e"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA001",
+      "label": "positive",
+      "reason": "P1-13; analyst low-double-digit wording not fully adopted.",
+      "text_sha256": "745a5dc846347ca8c46f70a5f78f8fe03c8ccb8ab18ec6fe2599f393b0881b32"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "P1-12 supporting PEO outlook, actual performance and cause explanation.",
+      "text_sha256": "9aae5267d8d0c1b31e4e2e0c9f11d12497ef21059a14eb0ee51404751724f272"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "P1-14 current-to-future expense reference; literal four-year wording cannot be silently corrected.",
+      "text_sha256": "504625641eee566e88c1cab4376bcbf63846fcb3ba3efb7e6a9f7cc81fbdf7d0"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA004",
+      "label": "negative",
+      "reason": "Current recurring growth reconciliation, integration and realized sale example, no new forecast amount.",
+      "text_sha256": "a176fac6a9c3da62c7ca408310d97a8c6fd527c541b1544a3a75df28cc757fef"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA005",
+      "label": "positive",
+      "reason": "P1-15; source explicitly says total company organic growth. Prior/current Q1 figures are not future guide.",
+      "text_sha256": "e04ddff05fecc1543eefb4a149e23e882d20247d02de4d9d97732f52107e9ce6"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "Management expressly confirms raising EPS guidance. A repeated claim still counts as guidance presence; the analyst revision size is not confirmed.",
+      "text_sha256": "6fa8a312b84bcca9081c3baa396b005cd4ae1d49acf3689b3c474bf7c88f76fd"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Question-only fragment continued in QA008.",
+      "text_sha256": "af7c36ad88531cbe80c2f04ca1deaa6e28434f44399834133d73a5b9776c24c3"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "P1-16 plus repeated PEO H2 outlook; actual enrollment and operating plans separate.",
+      "text_sha256": "8d544d88ffe01c68630052e6929ecdf956f4e1cfe9d847c7c8f77e32f98dca36"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Pricing/value strategy; no specific forecast.",
+      "text_sha256": "9f98ddaeaa472d0e261a0a14a3e8691d1464e92bdbde56a14c5590ec659cfbbf"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "Management forecasts no big ARPU increase. Missing record period does not make this a passage without a forecast.",
+      "text_sha256": "4651e8a7dd3708f5eebdbd65c98128c20c31e1ac4b160e11427ad1740280963b"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Current mix/results.",
+      "text_sha256": "e19b5d9079e165282c3b3ad6e9f666c9d016674a533497770bdcd2943c47902f"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "AI/productivity plans and general benefits, no specified financial forecast.",
+      "text_sha256": "4e34e5ec2be8d5aec6cf00284e3efddb824c1fc0c65b7ca673d209540e24facd"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Question-only exchange answered in QA014.",
+      "text_sha256": "7888f6e2c4890610d24b835db4ef554bc56344854dba53b2fda1cd3fa29da4be"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Current synergies/pipeline and potential opportunities; not a new supported level.",
+      "text_sha256": "67a3be5569957e72235490ff7354c58698069442cbcfa6c6841003332f23bf4a"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA015",
+      "label": "unadjudicated",
+      "reason": "P1-18 borderline direct exposure forecast; macro expectations not automatically company financial guidance.",
+      "text_sha256": "6ac7f5926d0ff6d7e9847c02b3e9eef34d6589d6553adfc6849e0b71ac849886"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "Actions already taken and opportunities for more savings; no new target beyond P1-01.",
+      "text_sha256": "92e9137b3bd2c8b25b77fcdfc60b3718af3ee003dc044cc2a5ad4c2651b0d5e9"
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Retirement Q1 result and closing optimism, no new specific forecast.",
+      "text_sha256": "f361971eb49cef3560b473469a1701cd1783adcacfee40603c01b12efd6b6599"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "66f85d35876533e7ec9438714f5fea37dba5bbad1b365076da165207a3eead9f"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "5bb5b560db8bf970fa3016fe01fcb223e865304861467cf90596de51b45e06d0"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "P2-01 and P2-15; PEO outlook is general reassurance; actual AI accuracy and employment exposure not company forecasts.",
+      "text_sha256": "0263ba821b5d480901845f7779ab057ebffcef35ce005a9a41e1bd984a02ea40"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR003",
+      "label": "positive",
+      "reason": "P2-02–10 plus current results; repeated actual 18% must not be confused with future 18%.",
+      "text_sha256": "f63276e66aa704e76f5b0c28b9b620c8640489918871ca7feed86e03859bba5e"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Transition.",
+      "text_sha256": "895f50ed0e2df2de93a04995282c1ea2a826f205d9ade66ee6e3b5f339ac33dc"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "6a41375ff8ce0d5b205d64292388a57f6dffc2de4098310bd5990ab43fa9e340"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "P2-01 original-target comparison; 8–9% Paycor is an actual estimate.",
+      "text_sha256": "eb8557022fb61f87ce7043aa59d3f48da1e746d0e97a7f092260916a48bb6ed4"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA001",
+      "label": "negative",
+      "reason": "Strategy, current demand and AI capability; no new quantified or specific period forecast.",
+      "text_sha256": "8e5a0a05335a8bdf0d8ee32d694da24974fe69daccbc89e544ed05e176222175"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "Continuation assumption for revenue-per-client trends and scope explanation behind low-end outlook.",
+      "text_sha256": "c645bb2b214ab700340c280cefc0664b9c6b1da9c490db9b9e22860365fe8fd4"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA003",
+      "label": "negative",
+      "reason": "Actual pro-forma comparison only.",
+      "text_sha256": "926d382b81cac6c142693feef787903a0d1b0634211aa5132a432b8d4552c1bf"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "P2-11; analyst 8–9 is not adopted as a forecast.",
+      "text_sha256": "f45d5550b2900934b0826b691dbc85141dd3701c5e6214fd899b73df50074c2d"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Current mix/pricing causes and commercial strategy.",
+      "text_sha256": "1306b177ff500e97fd54248f013d189a3b46a4646bd4362a42820e419d60e2dd"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Pricing/packaging strategy, no specific level forecast.",
+      "text_sha256": "ea582f62cdc5fc4ecfe75ea4e92360602605f887029cb5ba2194bf12275f8680"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual PEO, healthcare inflation and possible opportunity; no specific company forecast amount.",
+      "text_sha256": "cac9774b42d86f701f81674c16ff2fb6011d4b5e8693d29836e605fc691ff0d6"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Actual customer-origin mix, not a future 50–50 forecast.",
+      "text_sha256": "20be93d3bfe241b4be2cdf4ed0892f748196e3394a3b1f87dd173199cea110c6"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Potential productivity/strategy; historical headcount examples not forecasts.",
+      "text_sha256": "0a0dd79155835418914b1f576f6e121f5c20c97c6b8c58b0af8b588ac0444ab4"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "Inclusion in P2-05; duration target discussed as historical portfolio management, not a new period or financial forecast.",
+      "text_sha256": "b1a0cb8c970cb2b487b28d04168257eb1155563a18253a841e061a72bb7820e8"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Current bookings/integration progress.",
+      "text_sha256": "e694500a80733a736ea7b80c29b4e7a1cc428750471616f72f90a6cc83d6c2a2"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA012",
+      "label": "positive",
+      "reason": "Management expressly restates the low-end outlook. The surrounding explanations and actuals are not additional forecast amounts.",
+      "text_sha256": "8af2544b71da9dfe1e285214bc21e83ab6c2f4635ce8617e4a0fa77beabf149d"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Current pricing realization.",
+      "text_sha256": "bb02b41dbd77e185343a877001f3c9cb4822411caabe2f56cdf3728fdc738c40"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "AI opportunities and productization plans; no specified financial target.",
+      "text_sha256": "054fdf4275407f1fdad082ff239500c90d950be719433f918ec4e26096ecb876"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current client bundle selection.",
+      "text_sha256": "bc2d56ce45dcb5d1ad0602bf30b3f616668dffb6e4942f69aa4d10cd04a26256"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "Buyback-policy explanation and general future confidence; no promised buyback amount.",
+      "text_sha256": "26bfbbdf7b83a885b340ffe80a5733409af73c9af79acdc7b2e32adb755ed46d"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "7143440939b0771afe834371ac87d17213baa37e1cdb6768554f7b7913e46c19"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "P2-12 and repeated Q3 outlook; causes and current progress separate.",
+      "text_sha256": "e39fbc3ff7a999e4689d43acc3df10bd70daba09f602f55340be0c74983e462e"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "AI rollout/current use; no specific financial forecast.",
+      "text_sha256": "8a8af4c1b98af4ad6eb6e7904d58115409fe9e1300fbaf52984fd42f4550370a"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA020",
+      "label": "positive",
+      "reason": "P2-13.",
+      "text_sha256": "0b2f1ec8106e0016e6d9fb07f9b37c1fbc1a8eeb679611e003f880d700d77a56"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA021",
+      "label": "unadjudicated",
+      "reason": "Current numeric interpolation is analyst-only; whether the qualitative answer qualifies/affirms the future outlook remains unadjudicated.",
+      "text_sha256": "19c15d5b46f289c91b6450752c0fc7668e507af5ff4f255338cfd23bca60cd38"
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Closing, historical addressable-market expansion and broad optimism.",
+      "text_sha256": "d8913e39bb9dd20e1a1c773f146fe3b388cc5e426df3f4dc7f99455703a91aa1"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "979f0a1b6a0eb0c93edb524a1d7dd115f432035a6c94304b025ea2f533a45add"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "cb65cb007aaca0ef5abf7702526af0d7197e88e34073d50d2279d8e3932f9b3d"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR002",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "7d0dcaab7c9be77edbbd484e2745981b3d0b31ccb08907a279e05047368318de"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "6a77a0a6567b210959ddbd41183749476574ba9f0380267a9b8ddaa5c93f9ac9"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "dc1ccb5551a4ff1173f34d0f5a62bb59b6bb5df0089ef6d121a21d63cff85f02"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "b01c8e55553465d4be1136c893a44d2befebff2c85890ade0fc7b2982ee5a2a2"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "b8abd924011d95090841dff5c7d82236c34504894b624a9ec8d15e4fdbba6b64"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR007",
+      "label": "positive",
+      "reason": "P3-10/11 synergy outlook; broad business runway and product plans are not quantified guidance.",
+      "text_sha256": "cc2b9df412b17d7ed1b1da58cc17b3ccd1363d372a66c801ad1364663c298f49"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR008",
+      "label": "positive",
+      "reason": "P3-01–04 and blanket unchanged guidance; preceding metrics actual.",
+      "text_sha256": "d352f7d2b49704c86ff66171315cc208459fa7d114adc900786feac7bcbef1b8"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR009",
+      "label": "negative",
+      "reason": "Question procedure.",
+      "text_sha256": "b05e0a7247219189881822561753402bc028c41fb355909c3561b9dd0aa1744d"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "P3-05–07; source-stated H2 and FY amounts distinct from actual H1.",
+      "text_sha256": "e42d6889e1b10dec39c4852f628418df906eae802a3ef254b3b68c4a74c37efc"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA001",
+      "label": "unadjudicated",
+      "reason": "P3-12; no published metric-specific FY27 quantities to import.",
+      "text_sha256": "44dbb65a4b772b5a39307493484392221376d5052864637f651a8fc0b6c40e63"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA002",
+      "label": "negative",
+      "reason": "Current bookings and positioning; no new financial forecast amount.",
+      "text_sha256": "f2ef09d5a0b9ee31537de3eaacb72d043ea915ea173f5e606874028a3e0370ee"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "P3-13 conditional margin outlook; future planning not quantified savings.",
+      "text_sha256": "1b31cf4dbe5776d6ac2ca9b8de35a904f349619fa9cad80f2b2f0093835cf406"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA004",
+      "label": "unadjudicated",
+      "reason": "P3-14 qualitative risk outlook, boundary for source-based scope review.",
+      "text_sha256": "267140dd4803e01ab56617fa43c90c094fa45c7b9dce338243e1638662d340d1"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "AI/product value strategy and current operating method, no specific forecast.",
+      "text_sha256": "7518863c23dd410ab2bf858713b2ad532117c695699e0b14c8e020416d77bc99"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Current PEO results, timing explanations and growth strategy; historical CAGR not new forward value.",
+      "text_sha256": "efc68b0d62d1abfa880405435495884604c85ed47f7f62a4fc99a3b88f4d5f7f"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA007",
+      "label": "positive",
+      "reason": "P3-07 source-stated Q4 organic acceleration.",
+      "text_sha256": "ca4e478fda3b8548433f32fcc9ee2bda100187e3da6230ce7e16f4bfad679bac"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "P3-08/09 different periods/directions.",
+      "text_sha256": "81517aab04bce3cc905f0bbc5c0e24b5ed57b72ab451a2017efd426020394f07"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Completed cost synergy actions and future opportunity, supports P3-10 context without new amount.",
+      "text_sha256": "5630f2522dc95c0347736933bf5d12f1e079ab7b67be96e86f3e15fa59de6bac"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "P3-10/11; prior cost ranges and current high-end revenue outlook differ.",
+      "text_sha256": "d5f7f0e05770a90c8d9ec9c80db7185bc61361128e9de98bd58ae01457880a27"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Customer examples and business model; sizes are not forecast amounts.",
+      "text_sha256": "b097fd72379cf413b8022da631fa023df9cf0d83aae5027116077b1d255a11ae"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Current deal-size trends unchanged.",
+      "text_sha256": "5a2fc2d2c86640a5cf7ae30777ad87b185abb992d2ef4c45a223d068657da3e5"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Current employee/client mix and growth causes.",
+      "text_sha256": "3033077a779f0a920137392a124d83ae2f29fd26d3a1dfcdede75090c0a8043b"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Observed booking conversion lag; current operating metric, not a new specified future guidance value.",
+      "text_sha256": "8ce0ef54e251f036697307873cd8efc0b02f51ad87d4c47a70a2a642b7b4178f"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current cross-sell implementation speed.",
+      "text_sha256": "324f317827662375358bd208586be99b3ab97e5e342c6297c9c492a58925716b"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA016",
+      "label": "positive",
+      "reason": "P3-04 measurement exclusion and P3-13 future margin context; GAAP 40% is current.",
+      "text_sha256": "6e6adec09516a5c1780c787d4a2d022716d6ca539d356ea9f0f620416aab1ba8"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Actual form-filing performance and pricing.",
+      "text_sha256": "9fb4c623929b52c41ba0b164c09d029b4ba43549084c4bccfc827e1be7e0217b"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "P3-15 low-end reaffirmation.",
+      "text_sha256": "fa4b81fdd3d30a626a28f986899e147bcba7e63e1f56d25a560df281c6c74fc6"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA019",
+      "label": "unadjudicated",
+      "reason": "Management describes next-year macro assumptions without providing detailed next-year financial guidance; scope remains unadjudicated.",
+      "text_sha256": "84ffaca80ea3437066d498390eb9079bb7038fecda090d029510a28d04d87093"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA020",
+      "label": "negative",
+      "reason": "Hiring action/strategy, no staffing level or explicit financial target.",
+      "text_sha256": "56607b5f4811a0fd874aeaa207e57f773d9feebe91d28946ac93a2de5028896f"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA021",
+      "label": "positive",
+      "reason": "P3-17; upper-single-digit and 10% values are actuals.",
+      "text_sha256": "6b6947715cd3e312be6cf99f388ec97dc37d5376660508062b410847dc0c9073"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Explicitly declines next-year pricing details; no metric-specific forecast value.",
+      "text_sha256": "7f83103a4fce6ab15cd35a9d7c314e50d62bab26edb89f013c73136df549e9e2"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA023",
+      "label": "negative",
+      "reason": "Current enrollment choices and examples.",
+      "text_sha256": "86a67e80e5d5db49e3bd259789f93a7c610c1d1672854077e313784f4ebac6de"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA024",
+      "label": "negative",
+      "reason": "Sales segmentation/lead-routing strategy, no financial forecast.",
+      "text_sha256": "44aeaa43f36a44825196ce3c3f77df9f04a402763a4a280933640f48a578e2b9"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA025",
+      "label": "negative",
+      "reason": "Buyback philosophy and possible borrowing, no promised amount; analyst proposal not confirmed.",
+      "text_sha256": "73603bb26f71bfa9cc5703aae22a772933de3478be9c6192c0e311e128d3b673"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA026",
+      "label": "positive",
+      "reason": "P3-18; continuation text spills into next exchange.",
+      "text_sha256": "e0c98d9eb875a0bcf56d431436c4866072bdd410bae209ae53543f5a2a533d43"
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA027",
+      "label": "positive",
+      "reason": "P3-19 and closing; no analyst-derived EPS increase accepted.",
+      "text_sha256": "64c42e9a0698df9500d0d9a0ec34c6fff0bdb6fc40938cc52364465fa8e6a78e"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "bc08e4b60a70d7cd77061746a0d9b951413b68551aa8a4ded63d76f7a37888e8"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclosure.",
+      "text_sha256": "1c51e8b8dde11d728ba189fccfd804ab9097a9c2ff1e09607b6dafeab96fa7e5"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "MAR01–04, EPS exclusion and acquisition closing conditions; deal itself not automatic guidance.",
+      "text_sha256": "638819f2daa5c12559e90a80eb03edf68375f72cda280664364e1a48b4f1717e"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Reported segment figures; closing-timing context for MAR07.",
+      "text_sha256": "d9ae2c2cba12b09049360e520038078ab9b177321b05ae4bf2f98d558fda1650"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "MAR05–09 and shared assumptions; preceding results actual.",
+      "text_sha256": "da719f213bd208287a0740249a87ac46b5e4d2de62017333aeb3459b62b4fcc6"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Broad future strategy.",
+      "text_sha256": "20c751f15706c0f5269126efd907297e1ae671f98c79dee3c2b575f50c0d185e"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Question protocol and no deal-process detail.",
+      "text_sha256": "ca60464f14d25d3dac44bcf55538ecc00ee168718f8d5787afba96ded1aa18f5"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "1849c92dc39cdab14f9b43259cfa465db0cda7b0184e2cdcdfb1c8576dacf39f"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "MAR08/09 period confirmation; past SG&A comparisons not future forecasts.",
+      "text_sha256": "7082f0bc18ba6821f768d666ef6f03c139df24df80c07a50c976971493af8140"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA001",
+      "label": "unadjudicated",
+      "reason": "MAR10 uncertain sensitivity versus adopted assumption.",
+      "text_sha256": "2406b28052785371f0c23b47697b7fc25dd94be1b528d88bed7817318da3b131"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA002",
+      "label": "negative",
+      "reason": "Current customer behavior.",
+      "text_sha256": "ce42554209d98c55563083d63ddb480b91e38928e35f806c3913865b01e05b2d"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "Energy assumption; no-fuel-surcharge is current policy, not independent guidance.",
+      "text_sha256": "c716fb447b3794bd24705b510cf2739d79cae11b3906f3f356acbd887bd03e52"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "MAR07 repeated leverage; no specific CapEx ratio guidance confirmed.",
+      "text_sha256": "47156e8d4bfcd7db112aeb447b3458b91e0856a135354cceace5fc351dff0faa"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "169d030a8388fa00de11a883316be64a7f4c2b413b458f2ece27c210f65801ac"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "MAR11 standing target; actual 95% retention and 2–3% pricing, illustrative arithmetic not independent forecasts.",
+      "text_sha256": "8c5291de3016e51b33c8e5b536fdc5e9038dbe4ec306f2e4f8b544c9b854a8da"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual margin drivers and caution on variability; no specific future margin amount.",
+      "text_sha256": "8b29ccc320c1fc04128e70abfa9b62d3fa91f6b3bd470f3d21b9764b4f10f818"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Tariff timing/current supply-chain context; nothing material said, no stated forecast level.",
+      "text_sha256": "a8dd4058cc81c962a051d5b08f80d125f4d79e674bcd5b83ccf21f308a50b541"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA009",
+      "label": "unadjudicated",
+      "reason": "MAR17 borderline investment outlook.",
+      "text_sha256": "2875393ca882910ec37825f0ea0faa53f3230975ec50c0048c51b7d4cb35da06"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA010",
+      "label": "negative",
+      "reason": "Buyback restriction/current policy and future opportunism, no fixed level.",
+      "text_sha256": "238b74f55d215493494933fd793d7ffda93278f4a831cf9daba231ad16c54560"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "d7791fd52c4d5d0c9401bb2dca9f3bffd7a4b0905db54f1ca28e6dc67ec4dd6e"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Current wearer/customer levels.",
+      "text_sha256": "416898b4fded1ac1d385d861676c83a597dfdda83d3fa74407544e8a2b35d319"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Acquisition strategy, no promised amount.",
+      "text_sha256": "e8f4a4301b6013bf64a93c5e0630907ad7daf97979c1b7febdd4e20c81aa0871"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Products/customer example and market opportunity.",
+      "text_sha256": "decc87fe8ceed1a24ae95cfab7c658fc49f4d94f3340b81a165220a07a900679"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "ERP implementation plans and general benefits, no numeric financial impact.",
+      "text_sha256": "68fdded6300e032e5372402096e1eeae64d86b72b06617f4ecd87b2821f0ef44"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA016",
+      "label": "positive",
+      "reason": "MAR12–15, separate target periods and old/actual/current values.",
+      "text_sha256": "f98e6d988adc98d2a153341c636f56f88827793b81e7839694410488738d97fa"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Competition/current customer statistics.",
+      "text_sha256": "c8bd33ccaeb6f52d263c83d747878750b33133e7fdd8c0ced0cedc1a0f7a4008"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA018",
+      "label": "negative",
+      "reason": "Routing integration strategy, not quantified forecast.",
+      "text_sha256": "80540e9883dae57090dd8c8ddee835764ab96f426a2c3b3cf419704df2f79b35"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Deal opportunities and one-time costs discussed generally; no additional amount or target period.",
+      "text_sha256": "ff7695a33c953b75d9fe62f9cabbef34ffb60eaab06b666e13e760a2998558e4"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA020",
+      "label": "unadjudicated",
+      "reason": "MAR18 evaluative Q4 margin comment.",
+      "text_sha256": "50e986eea4d794c7026a90b07088f2fde2f62b81440047349854a4e46819119a"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA021",
+      "label": "negative",
+      "reason": "Current conversion and employment conditions; broad optimism.",
+      "text_sha256": "204628998c2c6620b84f846b274d3fb26afc325e80154b8beb673d42bf64d11b"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA022",
+      "label": "positive",
+      "reason": "MAR16, full question is necessary to identify the headwind and FY27.",
+      "text_sha256": "cdb3a3e8f7536e92733d3060574e1bc60892dbc0866921087e77bb15c676c8e7"
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA023",
+      "label": "negative",
+      "reason": "Closing and next results schedule.",
+      "text_sha256": "fcbfae0e6554df349f60cc9d4808b381eb0790b03f465a794205bab8cbd4ebfb"
+    }
+  ]
+}

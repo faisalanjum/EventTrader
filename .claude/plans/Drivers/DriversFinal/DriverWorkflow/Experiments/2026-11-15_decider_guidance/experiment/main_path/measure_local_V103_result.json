@@ -1,0 +1,73 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S182] And if you look at the guide for this quarter, this quarter is also at [TARGET] 8%. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '8%.' at [TARGET] in [S182]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "V103",
+    "passage": "QA016",
+    "start": 1805,
+    "end": 1808,
+    "text": "8%."
+  },
+  "selected_sentence": {
+    "tag": "S182",
+    "passage": "QA016",
+    "start": 1734,
+    "end": 1809,
+    "text": "And if you look at the guide for this quarter, this quarter is also at 8%. "
+  },
+  "target_sentence": {
+    "tag": "S182",
+    "passage": "QA016",
+    "start": 1734,
+    "end": 1809,
+    "text": "And if you look at the guide for this quarter, this quarter is also at 8%. "
+  },
+  "mapping": [
+    {
+      "render_start": 129,
+      "render_end": 200,
+      "source": {
+        "tag": "S182",
+        "passage": "QA016",
+        "start": 1734,
+        "end": 1805,
+        "text": "And if you look at the guide for this quarter, this quarter is also at "
+      }
+    },
+    {
+      "render_start": 209,
+      "render_end": 213,
+      "source": {
+        "tag": "S182",
+        "passage": "QA016",
+        "start": 1805,
+        "end": 1809,
+        "text": "8%. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "measure": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 160,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 1.824607532005757,
+  "finished_at": "2026-11-15T14:59:57.930947-05:00"
+}

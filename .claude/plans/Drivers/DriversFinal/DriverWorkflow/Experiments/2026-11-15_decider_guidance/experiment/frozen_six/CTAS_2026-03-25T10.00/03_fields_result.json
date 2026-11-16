@@ -1,0 +1,1448 @@
+{
+  "started_at": "2026-11-15T22:39:31.287227-05:00",
+  "request_sha256": "9256e03e49f203f91c2306dd783bba10ffe682eeee694372f5d2769b237b8060",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V015_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.01046979216013324,
+          "range": 0.39027154002881786,
+          "floor": 0.5867174053194084,
+          "ceiling": 0.003081418774203908,
+          "words": 0.0012630683725494527,
+          "revision": 0.000954325081895869,
+          "qualification": 0.0015097030954399587,
+          "reaffirmation": 0.0006679850482695794,
+          "withdrawal": 0.0007587500060631286,
+          "centre_tolerance": 0.0006852248197768421,
+          "several": 0.0011701123618413408,
+          "none": 0.0009789548985131913,
+          "unclear": 0.0014717200330872599
+        },
+        "choice": "floor",
+        "confidence": 0.5522771890960259
+      },
+      "V015_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9940015449309586,
+          "source_company_part": 0.0034725324345614983,
+          "other_subject": 0.0009712398532800361,
+          "shared": 0.0005834429279198201,
+          "unclear": 0.0009712398532800361
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9925019311636981
+      },
+      "V015_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.002072152847914878,
+          "Q1_FY2025": 0.0011829356282930471,
+          "Q2_FY2025": 0.0003481559285347727,
+          "Q3_FY2025": 0.0004607913867629106,
+          "Q4_FY2025": 0.0004268792844619599,
+          "H1_FY2025": 0.0001749770106651449,
+          "H2_FY2025": 0.0002091442371356839,
+          "FY2026": 0.9873944203766124,
+          "Q1_FY2026": 0.00020388230841388293,
+          "Q2_FY2026": 0.00024369355323210012,
+          "Q3_FY2026": 0.00029127883836920903,
+          "Q4_FY2026": 0.0008280023200813576,
+          "H1_FY2026": 0.0002091442371356839,
+          "H2_FY2026": 0.0016900156081725516,
+          "FY2027": 0.0003663589187091957,
+          "Q1_FY2027": 0.0001749770106651449,
+          "Q2_FY2027": 0.0002315854724842221,
+          "Q3_FY2027": 0.0001501698959109483,
+          "Q4_FY2027": 0.0004268792844619599,
+          "H1_FY2027": 0.0001501698959109483,
+          "H2_FY2027": 0.00026984220900810505,
+          "short_term": 0.0001580212796567943,
+          "medium_term": 0.00019375209481647837,
+          "long_term": 0.00018412540657363082,
+          "undefined_horizon": 0.00019375209481647837,
+          "other_stated": 0.0005102344275460564,
+          "several": 7.172281536145434e-05,
+          "unclear": 0.0011829356282930471
+        },
+        "choice": "FY2026",
+        "confidence": 0.9869275470572276
+      },
+      "V015_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.008097749805241012,
+          "usd_cents": 0.0017554172222286543,
+          "m_usd_from_dollars": 0.002264875388452763,
+          "m_usd_from_thousands": 0.0004548424960067587,
+          "m_usd_from_millions": 0.002383290734308914,
+          "m_usd_from_billions": 0.9746470579633391,
+          "percent": 0.0002949391128823343,
+          "percent_yoy": 0.00037096251463671157,
+          "percent_sequential": 0.0003805365405190985,
+          "percent_points": 0.00033501509039956823,
+          "basis_points": 0.00036162917745008905,
+          "count": 0.0002663587709000311,
+          "count_thousand": 0.0011096477634705826,
+          "count_million": 0.00024054767314340232,
+          "count_billion": 0.0005720825126863986,
+          "x": 0.0006175298353442467,
+          "other_stated": 0.002639019825109779,
+          "numberless": 0.0002531243268852404,
+          "unknown": 0.002383290734308914,
+          "several": 0.0005720825126863986
+        },
+        "choice": "m_usd_from_billions",
+        "confidence": 0.9733126925929885
+      },
+      "V015_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.971420524249898,
+          "negative": 0.007288842929178257,
+          "zero": 0.0013910497351428254,
+          "not_numeric": 0.0010245796804729517,
+          "several": 0.0015403104663652106,
+          "unclear": 0.017334692938942808
+        },
+        "choice": "positive",
+        "confidence": 0.9657046290998776
+      },
+      "V015_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.009386742793522774,
+          "raised": 0.9696160870944737,
+          "lowered": 0.0019337405149647202,
+          "reaffirmed": 0.0024949517914311147,
+          "withdrawn": 0.0007343022392136774,
+          "not_stated": 0.008920355990726929,
+          "unclear": 0.006913819575667088
+        },
+        "choice": "raised",
+        "confidence": 0.9645521016102193
+      },
+      "V015_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.968736149049148,
+          "instant": 0.014835965435438138,
+          "unclear": 0.016427885515413947
+        },
+        "choice": "duration",
+        "confidence": 0.9531042235737219
+      },
+      "V015_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.06975170064125714,
+          "previous_period": 0.009558183852056926,
+          "two_bases": 0.002813120074919684,
+          "other_stated": 0.012976938559506806,
+          "not_stated": 0.14981202435880192,
+          "not_growth_percentage": 0.7272162865860359,
+          "unclear": 0.027871745927421646
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.6817523343503752
+      },
+      "V015_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.9778779577568828,
+          "measure_change": 0.012852761378451861,
+          "guidance_revision": 0.0029318745525888047,
+          "reference_only": 0.0023911900529720643,
+          "several": 0.0013650654848384365,
+          "unclear": 0.00258115077426607
+        },
+        "choice": "level",
+        "confidence": 0.9734535493082593
+      },
+      "V015_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.006217207291062359,
+          "prior_year": 0.2501630781916142,
+          "sequential_period": 0.00507065746697101,
+          "previous_guidance": 0.3067287503244687,
+          "none": 0.3957477508132589,
+          "unclear": 0.03607255591262479
+        },
+        "choice": "none",
+        "confidence": 0.2748973009759107
+      },
+      "V015_conditions": {
+        "type": "noul",
+        "noul": 0.8623153181829162
+      },
+      "V015_comparison_revision": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "V017_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.01901557550388988,
+          "range": 0.7088241730898436,
+          "floor": 0.2430801686957746,
+          "ceiling": 0.0028127397518106145,
+          "words": 0.002180045567394185,
+          "revision": 0.0013780671010441186,
+          "qualification": 0.014738236565644061,
+          "reaffirmation": 0.0008711143202477513,
+          "withdrawal": 0.0008491976238822185,
+          "centre_tolerance": 0.0009645856315016399,
+          "several": 0.001870971754793909,
+          "none": 0.001343395826399773,
+          "unclear": 0.0020717285677736494
+        },
+        "choice": "range",
+        "confidence": 0.6845595208473304
+      },
+      "V017_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9911581571005499,
+          "source_company_part": 0.004946882685348775,
+          "other_subject": 0.0010723772829516049,
+          "shared": 0.0009440948781761218,
+          "unclear": 0.001878488052973627
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9889476963756874
+      },
+      "V017_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0029411085410067693,
+          "Q1_FY2025": 0.001236668554832043,
+          "Q2_FY2025": 0.00040302486733359805,
+          "Q3_FY2025": 0.000910870556081626,
+          "Q4_FY2025": 0.000670903071168552,
+          "H1_FY2025": 0.00026133836940574987,
+          "H2_FY2025": 0.0003204306412347709,
+          "FY2026": 0.9809578655294543,
+          "Q1_FY2026": 0.0002968485641197326,
+          "Q2_FY2026": 0.0002893800555646603,
+          "Q3_FY2026": 0.00044626975423596004,
+          "Q4_FY2026": 0.0007428914539973253,
+          "H1_FY2026": 0.0002680829201783479,
+          "H2_FY2026": 0.002398721174814515,
+          "FY2027": 0.00038300012231078285,
+          "Q1_FY2027": 0.00023007582053846294,
+          "Q2_FY2027": 0.00034588639385042883,
+          "Q3_FY2027": 0.00021314322653385372,
+          "Q4_FY2027": 0.0006215280153544174,
+          "H1_FY2027": 0.0001974571495874706,
+          "H2_FY2027": 0.00033718399929954623,
+          "short_term": 0.00018292514138188524,
+          "medium_term": 0.0002820994413389811,
+          "long_term": 0.00025476302830339525,
+          "undefined_horizon": 0.0003548132662455817,
+          "other_stated": 0.0005613000247496981,
+          "several": 9.674159808116906e-05,
+          "unclear": 0.003794678718996426
+        },
+        "choice": "FY2026",
+        "confidence": 0.9802526012898044
+      },
+      "V017_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.016606399946044945,
+          "usd_cents": 0.015781298428574248,
+          "m_usd_from_dollars": 0.003169271892019434,
+          "m_usd_from_thousands": 0.006635676666336345,
+          "m_usd_from_millions": 0.022546146277598787,
+          "m_usd_from_billions": 0.0035093373484276612,
+          "percent": 0.09392705648300373,
+          "percent_yoy": 0.4332862537233376,
+          "percent_sequential": 0.0023343330469309557,
+          "percent_points": 0.0020550899401379614,
+          "basis_points": 0.0030895350792273344,
+          "count": 0.0015928199432113225,
+          "count_thousand": 0.00359990846966307,
+          "count_million": 0.005143053412505812,
+          "count_billion": 0.0027901495604312648,
+          "x": 0.002936029601588193,
+          "other_stated": 0.003169271892019434,
+          "numberless": 0.003251068091874071,
+          "unknown": 0.37185734861069886,
+          "several": 0.0027199515863689685
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.40345921444561855
+      },
+      "V017_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.983679847518203,
+          "negative": 0.006019683655681373,
+          "zero": 0.0007449528909373582,
+          "not_numeric": 0.000548696212821204,
+          "several": 0.001240100150296281,
+          "unclear": 0.0077667195720606975
+        },
+        "choice": "positive",
+        "confidence": 0.9804158170218437
+      },
+      "V017_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.01376264996261175,
+          "raised": 0.9456369840055224,
+          "lowered": 0.002433249172299469,
+          "reaffirmed": 0.004050557275498646,
+          "withdrawn": 0.0009973848362769347,
+          "not_stated": 0.020690174134286175,
+          "unclear": 0.012429000613504592
+        },
+        "choice": "raised",
+        "confidence": 0.936576481339776
+      },
+      "V017_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9281792562473733,
+          "instant": 0.018340286397801397,
+          "unclear": 0.053480457354825296
+        },
+        "choice": "duration",
+        "confidence": 0.8922688843710598
+      },
+      "V017_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.31314719729458756,
+          "previous_period": 0.009068155021268268,
+          "two_bases": 0.003356830790462589,
+          "other_stated": 0.038752870016707124,
+          "not_stated": 0.49538602036500134,
+          "not_growth_percentage": 0.008617597908998959,
+          "unclear": 0.13167132860297415
+        },
+        "choice": "not_stated",
+        "confidence": 0.4112836904258349
+      },
+      "V017_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.016574647265687838,
+          "measure_change": 0.9773905959987357,
+          "guidance_revision": 0.0015897744399884404,
+          "reference_only": 0.001852395967626632,
+          "several": 0.0007401903603348258,
+          "unclear": 0.001852395967626632
+        },
+        "choice": "measure_change",
+        "confidence": 0.9728687151984828
+      },
+      "V017_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.007608317159143741,
+          "prior_year": 0.48429693847141486,
+          "sequential_period": 0.007230292867663313,
+          "previous_guidance": 0.027904547218193097,
+          "none": 0.35670980130084706,
+          "unclear": 0.11625010298273795
+        },
+        "choice": "prior_year",
+        "confidence": 0.38115632616569783
+      },
+      "V017_conditions": {
+        "type": "noul",
+        "noul": 0.6932596564292908
+      },
+      "V017_comparison_revision": {
+        "type": "noul",
+        "noul": 0.09167773885015042
+      },
+      "V019_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.019417506693499297,
+          "range": 0.4348048370615016,
+          "floor": 0.533120846416502,
+          "ceiling": 0.002872192636281365,
+          "words": 0.0013036322188837513,
+          "revision": 0.00096019271598255,
+          "qualification": 0.001407195284485053,
+          "reaffirmation": 0.0007072314299332627,
+          "withdrawal": 0.0008671471339471395,
+          "centre_tolerance": 0.0007831179181783892,
+          "several": 0.0012388604829860668,
+          "none": 0.001036471756675077,
+          "unclear": 0.0014807682511444164
+        },
+        "choice": "floor",
+        "confidence": 0.49421425028454385
+      },
+      "V019_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.992927485480716,
+          "source_company_part": 0.0036501397617065257,
+          "other_subject": 0.001074292108244888,
+          "shared": 0.0007330375328639629,
+          "unclear": 0.001615045116468692
+        },
+        "choice": "source_company_total",
+        "confidence": 0.991159356850895
+      },
+      "V019_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0026614866253474273,
+          "Q1_FY2025": 0.001372138625729124,
+          "Q2_FY2025": 0.0004249556600118674,
+          "Q3_FY2025": 0.0004705537411812481,
+          "Q4_FY2025": 0.0005769531056157643,
+          "H1_FY2025": 0.00019785724299188956,
+          "H2_FY2025": 0.00027555922396675284,
+          "FY2026": 0.9829454698407192,
+          "Q1_FY2026": 0.0002190873832488941,
+          "Q2_FY2026": 0.0002826710366084006,
+          "Q3_FY2026": 0.0003837761518784484,
+          "Q4_FY2026": 0.0017703616001864513,
+          "H1_FY2026": 0.00026862610885997057,
+          "H2_FY2026": 0.002800640665846116,
+          "FY2027": 0.0003936809138577771,
+          "Q1_FY2027": 0.00017418859442788135,
+          "Q2_FY2027": 0.0002488566026717431,
+          "Q3_FY2027": 0.00015730927348352145,
+          "Q4_FY2027": 0.0006071181226160405,
+          "H1_FY2027": 0.00016980597917764056,
+          "H2_FY2027": 0.00030512679748238446,
+          "short_term": 0.0001533513268130834,
+          "medium_term": 0.00022474173413956607,
+          "long_term": 0.00019785724299188956,
+          "undefined_horizon": 0.00023054199709718394,
+          "other_stated": 0.0004249556600118674,
+          "several": 0.00010200584252284368,
+          "unclear": 0.0019603229005150137
+        },
+        "choice": "FY2026",
+        "confidence": 0.9823138205755606
+      },
+      "V019_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.9636869727186904,
+          "usd_cents": 0.019041899000084166,
+          "m_usd_from_dollars": 0.004809773377654111,
+          "m_usd_from_thousands": 0.0006263436904228906,
+          "m_usd_from_millions": 0.0007298119954335764,
+          "m_usd_from_billions": 0.0011254854849116016,
+          "percent": 0.0005108359460335523,
+          "percent_yoy": 0.0002701603141498014,
+          "percent_sequential": 0.00041662967284349214,
+          "percent_points": 0.00027713274769952965,
+          "basis_points": 0.00040614752117653616,
+          "count": 0.00039592913751681466,
+          "count_thousand": 0.0006263436904228906,
+          "count_million": 0.0004384126669027167,
+          "count_billion": 0.00038596782798353067,
+          "x": 0.0005375444139985873,
+          "other_stated": 0.002239405340789666,
+          "numberless": 0.0002439810556694348,
+          "unknown": 0.002745768668505245,
+          "several": 0.00048545472911143086
+        },
+        "choice": "usd",
+        "confidence": 0.9617757607565163
+      },
+      "V019_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9797342286955907,
+          "negative": 0.006309005044411244,
+          "zero": 0.0010333478916164515,
+          "not_numeric": 0.0006367735052932488,
+          "several": 0.001235126583534348,
+          "unclear": 0.011051518279554034
+        },
+        "choice": "positive",
+        "confidence": 0.9756810744347089
+      },
+      "V019_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.010852440233819507,
+          "raised": 0.9620857215249212,
+          "lowered": 0.0023525746016059925,
+          "reaffirmed": 0.0027412064306478324,
+          "withdrawn": 0.0007474039430153227,
+          "not_stated": 0.011419842923081399,
+          "unclear": 0.009800810342908719
+        },
+        "choice": "raised",
+        "confidence": 0.9557666751124081
+      },
+      "V019_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9235574568675553,
+          "instant": 0.0391949860781618,
+          "unclear": 0.037247557054282884
+        },
+        "choice": "duration",
+        "confidence": 0.885336185301333
+      },
+      "V019_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.08608669968037935,
+          "previous_period": 0.010124148081795622,
+          "two_bases": 0.0030565937690188736,
+          "other_stated": 0.0076494144016055615,
+          "not_stated": 0.1229888822578358,
+          "not_growth_percentage": 0.7320042405930305,
+          "unclear": 0.038090021216334286
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.687338280691869
+      },
+      "V019_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.9773170053892472,
+          "measure_change": 0.0149673796350307,
+          "guidance_revision": 0.002514767150991946,
+          "reference_only": 0.0018522565386617541,
+          "several": 0.0013994925694229253,
+          "unclear": 0.0019490987166455175
+        },
+        "choice": "level",
+        "confidence": 0.9727804064670966
+      },
+      "V019_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.006517919264318196,
+          "prior_year": 0.32986381742133897,
+          "sequential_period": 0.004679998861663041,
+          "previous_guidance": 0.2978988596179491,
+          "none": 0.3134743282016581,
+          "unclear": 0.047565076633072675
+        },
+        "choice": "prior_year",
+        "confidence": 0.19583658090560677
+      },
+      "V019_conditions": {
+        "type": "noul",
+        "noul": 0.9308033336253216
+      },
+      "V019_comparison_revision": {
+        "type": "noul",
+        "noul": 0.16372011845886883
+      },
+      "V021_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.024091919517019295,
+          "range": 0.6960433077353019,
+          "floor": 0.23869716402093816,
+          "ceiling": 0.004047840924696818,
+          "words": 0.0029814433806753383,
+          "revision": 0.0018846527093207808,
+          "qualification": 0.02175733804503878,
+          "reaffirmation": 0.0010224398210598555,
+          "withdrawal": 0.0013532190262562215,
+          "centre_tolerance": 0.0012859834797730593,
+          "several": 0.0023108013163917877,
+          "none": 0.001617457917207032,
+          "unclear": 0.0029064321063210345
+        },
+        "choice": "range",
+        "confidence": 0.6707135833799104
+      },
+      "V021_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9874066228765637,
+          "source_company_part": 0.006042492545007308,
+          "other_subject": 0.0013783669392381293,
+          "shared": 0.001153188025656878,
+          "unclear": 0.004019329613534
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9842582785957046
+      },
+      "V021_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.00459270294334583,
+          "Q1_FY2025": 0.0015749956967502788,
+          "Q2_FY2025": 0.0005540601804177683,
+          "Q3_FY2025": 0.0014223737900888806,
+          "Q4_FY2025": 0.0009955984162499686,
+          "H1_FY2025": 0.0003328350345142283,
+          "H2_FY2025": 0.00044051363532815956,
+          "FY2026": 0.968304659300403,
+          "Q1_FY2026": 0.0003414250604585023,
+          "Q2_FY2026": 0.0004186264456148265,
+          "Q3_FY2026": 0.0006793416536321835,
+          "Q4_FY2026": 0.0014223737900888806,
+          "H1_FY2026": 0.0003780602401055425,
+          "H2_FY2026": 0.002903173179287433,
+          "FY2027": 0.0005132839616365865,
+          "Q1_FY2027": 0.0002856474155501981,
+          "Q2_FY2027": 0.0003978265169618531,
+          "Q3_FY2027": 0.00027846098024669606,
+          "Q4_FY2027": 0.0006622498445707411,
+          "H1_FY2027": 0.00025796742766263437,
+          "H2_FY2027": 0.0005132839616365865,
+          "short_term": 0.0002514771560874851,
+          "medium_term": 0.0003780602401055425,
+          "long_term": 0.0003414250604585023,
+          "undefined_horizon": 0.0005830286241756457,
+          "other_stated": 0.0006455877827339163,
+          "several": 0.00015106733987761497,
+          "unclear": 0.01037989432201047
+        },
+        "choice": "FY2026",
+        "confidence": 0.9671307577930105
+      },
+      "V021_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.017421940864862494,
+          "usd_cents": 0.014209057631196556,
+          "m_usd_from_dollars": 0.0028535270523524356,
+          "m_usd_from_thousands": 0.0073255293408858784,
+          "m_usd_from_millions": 0.01573370071818293,
+          "m_usd_from_billions": 0.0036816809966547528,
+          "percent": 0.06554649967129772,
+          "percent_yoy": 0.43197940097314835,
+          "percent_sequential": 0.0021560146189587856,
+          "percent_points": 0.0020488915649026196,
+          "basis_points": 0.0027817341868867423,
+          "count": 0.0016290010442354564,
+          "count_thousand": 0.003589050719278758,
+          "count_million": 0.004400589635520257,
+          "count_billion": 0.002577012947861727,
+          "x": 0.003080216794588595,
+          "other_stated": 0.003080216794588595,
+          "numberless": 0.0030027205095046537,
+          "unknown": 0.4105158571518365,
+          "several": 0.0023873567832561732
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.40208357997173516
+      },
+      "V021_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9868772744037041,
+          "negative": 0.005454025432831308,
+          "zero": 0.0006095466374452923,
+          "not_numeric": 0.0004266554981599693,
+          "several": 0.000893311415377824,
+          "unclear": 0.005739186612481528
+        },
+        "choice": "positive",
+        "confidence": 0.984252729284445
+      },
+      "V021_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.01658701123534906,
+          "raised": 0.9295211425320632,
+          "lowered": 0.0030859269405041235,
+          "reaffirmed": 0.004408747319398736,
+          "withdrawn": 0.0013310502425923746,
+          "not_stated": 0.02761188537706705,
+          "unclear": 0.0174542363530255
+        },
+        "choice": "raised",
+        "confidence": 0.9177746662874069
+      },
+      "V021_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9228832538224722,
+          "instant": 0.018235650728746538,
+          "unclear": 0.05888109544878135
+        },
+        "choice": "duration",
+        "confidence": 0.8843248807337081
+      },
+      "V021_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.22270332562008008,
+          "previous_period": 0.010465464688744526,
+          "two_bases": 0.0032411872358679068,
+          "other_stated": 0.024889502993068347,
+          "not_stated": 0.5573360395276644,
+          "not_growth_percentage": 0.008755759448177827,
+          "unclear": 0.17260872048639683
+        },
+        "choice": "not_stated",
+        "confidence": 0.48355871278227514
+      },
+      "V021_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.014243680445954567,
+          "measure_change": 0.9786887947565094,
+          "guidance_revision": 0.0022742666752310152,
+          "reference_only": 0.001366197339905095,
+          "several": 0.000908763636233683,
+          "unclear": 0.002518297146166294
+        },
+        "choice": "measure_change",
+        "confidence": 0.9744265537078113
+      },
+      "V021_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.00903117331279973,
+          "prior_year": 0.3727679745061384,
+          "sequential_period": 0.007555783189017194,
+          "previous_guidance": 0.03575442545325293,
+          "none": 0.3922575618759016,
+          "unclear": 0.1826330816628901
+        },
+        "choice": "none",
+        "confidence": 0.2707090742510819
+      },
+      "V021_conditions": {
+        "type": "noul",
+        "noul": 0.6932596564292908
+      },
+      "V021_comparison_revision": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "V053_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.9174191643094949,
+          "range": 0.01555764250269175,
+          "floor": 0.002613941119584606,
+          "ceiling": 0.005335253018200383,
+          "words": 0.005614200418057861,
+          "revision": 0.0008304390660490735,
+          "qualification": 0.028677237186613313,
+          "reaffirmation": 0.0028944193808726035,
+          "withdrawal": 0.0007310983246090571,
+          "centre_tolerance": 0.005070167423077115,
+          "several": 0.0007693230032065944,
+          "none": 0.007243557123771402,
+          "unclear": 0.007243557123771402
+        },
+        "choice": "point",
+        "confidence": 0.9105374280019528
+      },
+      "V053_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9379476055498416,
+          "source_company_part": 0.01761246611293264,
+          "other_subject": 0.01673737123107187,
+          "shared": 0.008200268039658877,
+          "unclear": 0.019502289066495017
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9224345069373019
+      },
+      "V053_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.006719132247589401,
+          "Q1_FY2025": 0.002617317417658652,
+          "Q2_FY2025": 0.009122419868720186,
+          "Q3_FY2025": 0.0027541596668405545,
+          "Q4_FY2025": 0.004356967173687557,
+          "H1_FY2025": 0.0020809363972155836,
+          "H2_FY2025": 0.0038357681078057524,
+          "FY2026": 0.029455355545485135,
+          "Q1_FY2026": 0.0016128531011254897,
+          "Q2_FY2026": 0.0028981577328412444,
+          "Q3_FY2026": 0.004356967173687557,
+          "Q4_FY2026": 0.04428195467427955,
+          "H1_FY2026": 0.0027541596668405545,
+          "H2_FY2026": 0.2149530892155972,
+          "FY2027": 0.0038357681078057524,
+          "Q1_FY2027": 0.005621451740535048,
+          "Q2_FY2027": 0.010101263152635901,
+          "Q3_FY2027": 0.0027541596668405545,
+          "Q4_FY2027": 0.0033769168957460535,
+          "H1_FY2027": 0.012385306562673365,
+          "H2_FY2027": 0.09510835761625334,
+          "short_term": 0.0026848667079267703,
+          "medium_term": 0.0032091323861376006,
+          "long_term": 0.0023636915115625443,
+          "undefined_horizon": 0.049033465470727254,
+          "other_stated": 0.22619155960132564,
+          "several": 0.0010728334034765896,
+          "unclear": 0.25046198918697915
+        },
+        "choice": "unclear",
+        "confidence": 0.22270132211983024
+      },
+      "V053_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.0030344474917343945,
+          "usd_cents": 0.0024748470101231606,
+          "m_usd_from_dollars": 0.0005940595881593708,
+          "m_usd_from_thousands": 0.0007100597617199305,
+          "m_usd_from_millions": 0.0005645433592822166,
+          "m_usd_from_billions": 0.0005098374183371415,
+          "percent": 0.0005503395854486892,
+          "percent_yoy": 0.000262848221631919,
+          "percent_sequential": 0.00048450556317502916,
+          "percent_points": 0.00034788486207063977,
+          "basis_points": 0.000339132322465474,
+          "count": 0.0011232849287321537,
+          "count_thousand": 0.00048450556317502916,
+          "count_million": 0.0005645433592822166,
+          "count_billion": 0.00048450556317502916,
+          "x": 0.9618032239680899,
+          "other_stated": 0.01806041796025383,
+          "numberless": 0.0004723157160065,
+          "unknown": 0.0068581069700284925,
+          "several": 0.0002765907871088433
+        },
+        "choice": "x",
+        "confidence": 0.9597928673348315
+      },
+      "V053_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9305533449109887,
+          "negative": 0.00997520919931456,
+          "zero": 0.002584655846498971,
+          "not_numeric": 0.002003266536029929,
+          "several": 0.0012663201574986196,
+          "unclear": 0.05361720334966914
+        },
+        "choice": "positive",
+        "confidence": 0.9166640138931865
+      },
+      "V053_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.10501676639635674,
+          "raised": 0.046465820435387294,
+          "lowered": 0.00636728655736632,
+          "reaffirmed": 0.11628509217603647,
+          "withdrawn": 0.005062403905898551,
+          "not_stated": 0.6577170262700147,
+          "unclear": 0.06308560425893986
+        },
+        "choice": "not_stated",
+        "confidence": 0.6006698639816839
+      },
+      "V053_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.015409412750761735,
+          "instant": 0.9561865899073335,
+          "unclear": 0.028403997341904796
+        },
+        "choice": "instant",
+        "confidence": 0.9342798848610001
+      },
+      "V053_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.002355646025560731,
+          "previous_period": 0.0022386032177368355,
+          "two_bases": 0.0005950101562409574,
+          "other_stated": 0.004569159644379146,
+          "not_stated": 0.020030306058061133,
+          "not_growth_percentage": 0.963342191192572,
+          "unclear": 0.00686908370544919
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.9572325563913339
+      },
+      "V053_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.9596894907422462,
+          "measure_change": 0.011391400497865689,
+          "guidance_revision": 0.0010651284087278428,
+          "reference_only": 0.013967167545067357,
+          "several": 0.0012731120501038378,
+          "unclear": 0.012613700755989056
+        },
+        "choice": "level",
+        "confidence": 0.9516273888906954
+      },
+      "V053_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.003681442425180455,
+          "prior_year": 0.013162489928035237,
+          "sequential_period": 0.003588819840920351,
+          "previous_guidance": 0.052110291848098005,
+          "none": 0.9044001618604055,
+          "unclear": 0.02305679409736048
+        },
+        "choice": "none",
+        "confidence": 0.8852801942324866
+      },
+      "V053_conditions": {
+        "type": "noul",
+        "noul": 0.2651727795600891
+      },
+      "V053_comparison_revision": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "V066_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.03812427118259524,
+          "range": 0.15093404246258346,
+          "floor": 0.008264518563230613,
+          "ceiling": 0.770968847704821,
+          "words": 0.0024951496343226663,
+          "revision": 0.0019838058545681965,
+          "qualification": 0.015233900018752074,
+          "reaffirmation": 0.0010491535329115041,
+          "withdrawal": 0.0009004108531629177,
+          "centre_tolerance": 0.0011325003769111612,
+          "several": 0.0019838058545681965,
+          "none": 0.002982369833163532,
+          "unclear": 0.003947224128409448
+        },
+        "choice": "ceiling",
+        "confidence": 0.7518829183468893
+      },
+      "V066_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9689406262571479,
+          "source_company_part": 0.014839097088537543,
+          "other_subject": 0.004367373465855269,
+          "shared": 0.0019822668035436746,
+          "unclear": 0.009870636384915539
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9611757828214348
+      },
+      "V066_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.004927900875263312,
+          "Q1_FY2025": 0.0017783034401162789,
+          "Q2_FY2025": 0.0020720700971540193,
+          "Q3_FY2025": 0.00098964330320964,
+          "Q4_FY2025": 0.0014877883799083059,
+          "H1_FY2025": 0.0005368897312868378,
+          "H2_FY2025": 0.000747736128967292,
+          "FY2026": 0.8916767948351022,
+          "Q1_FY2026": 0.0006098416944233479,
+          "Q2_FY2026": 0.0008279688238115994,
+          "Q3_FY2026": 0.0013436171795389144,
+          "Q4_FY2026": 0.04639865019394822,
+          "H1_FY2026": 0.0007868302624027291,
+          "H2_FY2026": 0.010058220085127122,
+          "FY2027": 0.0006255808736145448,
+          "Q1_FY2027": 0.0005795412846472341,
+          "Q2_FY2027": 0.001015184595725387,
+          "Q3_FY2027": 0.000564960205247041,
+          "Q4_FY2027": 0.0016059804496724886,
+          "H1_FY2027": 0.0005368897312868378,
+          "H2_FY2027": 0.0010413856139664674,
+          "short_term": 0.0004848634835185249,
+          "medium_term": 0.0006417265751690493,
+          "long_term": 0.000564960205247041,
+          "undefined_horizon": 0.0008937438395149082,
+          "other_stated": 0.0014877883799083059,
+          "several": 0.020529591688618152,
+          "unclear": 0.005185548043604229
+        },
+        "choice": "FY2026",
+        "confidence": 0.8876648242734393
+      },
+      "V066_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.7637020368472629,
+          "usd_cents": 0.1929026992834276,
+          "m_usd_from_dollars": 0.010037744738533605,
+          "m_usd_from_thousands": 0.002175966176298986,
+          "m_usd_from_millions": 0.002175966176298986,
+          "m_usd_from_billions": 0.0020158252841930998,
+          "percent": 0.0012109464036948305,
+          "percent_yoy": 0.0011507792493266496,
+          "percent_sequential": 0.0015623879081603552,
+          "percent_points": 0.0010660872321224186,
+          "basis_points": 0.0008919244076946918,
+          "count": 0.001375488376366334,
+          "count_thousand": 0.001820485642863111,
+          "count_million": 0.001375488376366334,
+          "count_billion": 0.0014474034647167576,
+          "x": 0.0019156667953680344,
+          "other_stated": 0.003355682079235266,
+          "numberless": 0.0010131180359971188,
+          "unknown": 0.007393315695752383,
+          "several": 0.0014109878263205246
+        },
+        "choice": "usd",
+        "confidence": 0.7512653019444873
+      },
+      "V066_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.28053957124192985,
+          "negative": 0.6340436394357227,
+          "zero": 0.004521029999892747,
+          "not_numeric": 0.003594510859153068,
+          "several": 0.009960837753659451,
+          "unclear": 0.06734041070964214
+        },
+        "choice": "negative",
+        "confidence": 0.5608523673228673
+      },
+      "V066_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.21836177679357266,
+          "raised": 0.07488375790590408,
+          "lowered": 0.0064865442888953646,
+          "reaffirmed": 0.009506252452637963,
+          "withdrawn": 0.004206147913543166,
+          "not_stated": 0.6367444897183107,
+          "unclear": 0.04981103092713608
+        },
+        "choice": "not_stated",
+        "confidence": 0.5762019046713625
+      },
+      "V066_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8280361171359403,
+          "instant": 0.07942193628218865,
+          "unclear": 0.0925419465818711
+        },
+        "choice": "duration",
+        "confidence": 0.7420541757039104
+      },
+      "V066_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.002718694810424172,
+          "previous_period": 0.0022173243174167176,
+          "two_bases": 0.000820804454440356,
+          "other_stated": 0.0015129803469523485,
+          "not_stated": 0.0313859078805977,
+          "not_growth_percentage": 0.9541847728705799,
+          "unclear": 0.007159515319588838
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.9465489016823432
+      },
+      "V066_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.33844905445519313,
+          "measure_change": 0.6238593340021406,
+          "guidance_revision": 0.00336104857837642,
+          "reference_only": 0.015904687041373846,
+          "several": 0.005454266339715142,
+          "unclear": 0.01297160958320089
+        },
+        "choice": "measure_change",
+        "confidence": 0.5486312008025687
+      },
+      "V066_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.0023193921323090318,
+          "prior_year": 0.00991194916808238,
+          "sequential_period": 0.003069761784205575,
+          "previous_guidance": 0.005110137812292922,
+          "none": 0.9729955542991683,
+          "unclear": 0.00659320480394185
+        },
+        "choice": "none",
+        "confidence": 0.9675946651590019
+      },
+      "V066_conditions": {
+        "type": "noul",
+        "noul": 0.612697184085846
+      },
+      "V066_comparison_revision": {
+        "type": "noul",
+        "noul": 0.05997471950919985
+      },
+      "V082_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.8649394167757808,
+          "range": 0.01798426536874568,
+          "floor": 0.003261699917909256,
+          "ceiling": 0.010803507397594407,
+          "words": 0.005293045083095307,
+          "revision": 0.0012705366608359338,
+          "qualification": 0.03150313377567486,
+          "reaffirmation": 0.03150313377567486,
+          "withdrawal": 0.001207408596794164,
+          "centre_tolerance": 0.0033458800607998884,
+          "several": 0.001010158687889551,
+          "none": 0.013938906949602639,
+          "unclear": 0.013938906949602639
+        },
+        "choice": "point",
+        "confidence": 0.8536843681737624
+      },
+      "V082_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9323629670535596,
+          "source_company_part": 0.016637722975482327,
+          "other_subject": 0.016637722975482327,
+          "shared": 0.012895254219519446,
+          "unclear": 0.021466332775956297
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9154537088169495
+      },
+      "V082_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.006557602005585157,
+          "Q1_FY2025": 0.003053183900884099,
+          "Q2_FY2025": 0.00936859917770718,
+          "Q3_FY2025": 0.002490128348117499,
+          "Q4_FY2025": 0.004252224554507008,
+          "H1_FY2025": 0.00224882823851427,
+          "H2_FY2025": 0.003649369626962096,
+          "FY2026": 0.03524742545065918,
+          "Q1_FY2026": 0.0017429789464381952,
+          "Q2_FY2026": 0.0031319824114572773,
+          "Q3_FY2026": 0.00459002971365693,
+          "Q4_FY2026": 0.052989513009566586,
+          "H1_FY2026": 0.003557552389953276,
+          "H2_FY2026": 0.20978555197700716,
+          "FY2027": 0.005348275824661508,
+          "Q1_FY2027": 0.008460753313116139,
+          "Q2_FY2027": 0.012719538104340497,
+          "Q3_FY2027": 0.002976367943393269,
+          "Q4_FY2027": 0.003468046928582111,
+          "H1_FY2027": 0.010373857665763294,
+          "H2_FY2027": 0.07966215027706147,
+          "short_term": 0.0027573208570899213,
+          "medium_term": 0.003743555217459306,
+          "long_term": 0.0027573208570899213,
+          "undefined_horizon": 0.06174304436021253,
+          "other_stated": 0.14684047928012384,
+          "several": 0.0011017850744389922,
+          "unclear": 0.3153825345456513
+        },
+        "choice": "unclear",
+        "confidence": 0.29002633212141615
+      },
+      "V082_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.0030139770415695006,
+          "usd_cents": 0.002219949353180814,
+          "m_usd_from_dollars": 0.0006369269017360657,
+          "m_usd_from_thousands": 0.0007809456913987904,
+          "m_usd_from_millions": 0.0006369269017360657,
+          "m_usd_from_billions": 0.0005328741900064234,
+          "percent": 0.0007421435920452083,
+          "percent_yoy": 0.0003201081956163276,
+          "percent_sequential": 0.0005752067003618482,
+          "percent_points": 0.00037298822502452786,
+          "basis_points": 0.00034553816189812544,
+          "count": 0.001553865594204359,
+          "count_thousand": 0.0005607349372788308,
+          "count_million": 0.0006533650942010534,
+          "count_billion": 0.0005466269138639286,
+          "x": 0.9553143848555482,
+          "other_stated": 0.016200277734625578,
+          "numberless": 0.0007612972882703023,
+          "unknown": 0.013903492873097197,
+          "several": 0.00032836975433688187
+        },
+        "choice": "x",
+        "confidence": 0.9529625103742613
+      },
+      "V082_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.906369713982754,
+          "negative": 0.011320996446155834,
+          "zero": 0.0028595599293387286,
+          "not_numeric": 0.0032481135401760666,
+          "several": 0.0015913730510653096,
+          "unclear": 0.07461024305051009
+        },
+        "choice": "positive",
+        "confidence": 0.8876436567793048
+      },
+      "V082_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.08162274329471636,
+          "raised": 0.038003106218807536,
+          "lowered": 0.006892395770952231,
+          "reaffirmed": 0.3400396753760194,
+          "withdrawn": 0.005207627155555618,
+          "not_stated": 0.46166423629577796,
+          "unclear": 0.06657021588817084
+        },
+        "choice": "not_stated",
+        "confidence": 0.37194160901174095
+      },
+      "V082_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.011966935815889732,
+          "instant": 0.958084679470837,
+          "unclear": 0.029948384713273286
+        },
+        "choice": "instant",
+        "confidence": 0.9371270192062553
+      },
+      "V082_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0025814989274127132,
+          "previous_period": 0.003007947361373915,
+          "two_bases": 0.0007994982634924958,
+          "other_stated": 0.004522022982038712,
+          "not_stated": 0.026914139482702076,
+          "not_growth_percentage": 0.9534036919484891,
+          "unclear": 0.008771201034490994
+        },
+        "choice": "not_growth_percentage",
+        "confidence": 0.9456376406065704
+      },
+      "V082_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.8611575832240556,
+          "measure_change": 0.017015985205006915,
+          "guidance_revision": 0.002716916295010945,
+          "reference_only": 0.08259881735907972,
+          "several": 0.003505421294077104,
+          "unclear": 0.03300527662276976
+        },
+        "choice": "level",
+        "confidence": 0.8333890998688667
+      },
+      "V082_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.008685073245039523,
+          "prior_year": 0.021735214132505846,
+          "sequential_period": 0.007266224350529893,
+          "previous_guidance": 0.1432444210176061,
+          "none": 0.7699456305418472,
+          "unclear": 0.0491234367124715
+        },
+        "choice": "none",
+        "confidence": 0.7239347566502167
+      },
+      "V082_conditions": {
+        "type": "noul",
+        "noul": 0.35170539165421155
+      },
+      "V082_comparison_revision": {
+        "type": "noul",
+        "noul": 0.09167773885015042
+      },
+      "V106_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.8014863626082427,
+          "range": 0.021501426975330504,
+          "floor": 0.009040861014925714,
+          "ceiling": 0.020433114234903398,
+          "words": 0.009040861014925714,
+          "revision": 0.002872246726945307,
+          "qualification": 0.05958313488633083,
+          "reaffirmation": 0.002465036849204853,
+          "withdrawal": 0.002010444768415163,
+          "centre_tolerance": 0.002342559774042056,
+          "several": 0.002465036849204853,
+          "none": 0.02505335179485494,
+          "unclear": 0.041705562502673946
+        },
+        "choice": "point",
+        "confidence": 0.7849435594922629
+      },
+      "V106_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9435092749699855,
+          "source_company_part": 0.031034761851908683,
+          "other_subject": 0.003132366090677325,
+          "shared": 0.0054869800473885885,
+          "unclear": 0.016836617040039963
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9293865937124818
+      },
+      "V106_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0014144525659833267,
+          "Q1_FY2025": 0.0012773877269161523,
+          "Q2_FY2025": 0.0007673519446650073,
+          "Q3_FY2025": 0.0019203705054622402,
+          "Q4_FY2025": 0.00686602016477032,
+          "H1_FY2025": 0.0003664958356589909,
+          "H2_FY2025": 0.0007673519446650073,
+          "FY2026": 0.00288700499241301,
+          "Q1_FY2026": 0.00044936611177777164,
+          "Q2_FY2026": 0.0009900532916301398,
+          "Q3_FY2026": 0.0013441739166187017,
+          "Q4_FY2026": 0.9629120846758659,
+          "H1_FY2026": 0.0005797814240636761,
+          "H2_FY2026": 0.002126427837415819,
+          "FY2027": 0.0004380603795673616,
+          "Q1_FY2027": 0.0006585613605300645,
+          "Q2_FY2027": 0.0014144525659833267,
+          "Q3_FY2027": 0.00041629487618818775,
+          "Q4_FY2027": 0.0014884048172511667,
+          "H1_FY2027": 0.0003956109875663587,
+          "H2_FY2027": 0.0005651945260007461,
+          "short_term": 0.0004609636389929481,
+          "medium_term": 0.00034828626739625087,
+          "long_term": 0.00031453624316751203,
+          "undefined_horizon": 0.0006585613605300645,
+          "other_stated": 0.0008283118385362991,
+          "several": 0.00011943928281950964,
+          "unclear": 0.007224998917564151
+        },
+        "choice": "Q4_FY2026",
+        "confidence": 0.9615384581823794
+      },
+      "V106_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.011444405776528886,
+          "usd_cents": 0.009821886435143746,
+          "m_usd_from_dollars": 0.00412987748827951,
+          "m_usd_from_thousands": 0.004345803680648442,
+          "m_usd_from_millions": 0.01087578309342212,
+          "m_usd_from_billions": 0.0034551941680433618,
+          "percent": 0.3479291253205098,
+          "percent_yoy": 0.38526240253483224,
+          "percent_sequential": 0.006368923483001112,
+          "percent_points": 0.003924681993858273,
+          "basis_points": 0.00235763478224088,
+          "count": 0.0024808997400774103,
+          "count_thousand": 0.004236465952440821,
+          "count_million": 0.005063705254741317,
+          "count_billion": 0.0032835192990241695,
+          "x": 0.003924681993858273,
+          "other_stated": 0.0062086852543913685,
+          "numberless": 0.003635843493589065,
+          "unknown": 0.17937600837300285,
+          "several": 0.001874471882366347
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.3529077921419287
+      },
+      "V106_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.971364887337225,
+          "negative": 0.008492428043201597,
+          "zero": 0.0017946573916287768,
+          "not_numeric": 0.0009736161731937279,
+          "several": 0.000901963014735219,
+          "unclear": 0.01647244804001562
+        },
+        "choice": "positive",
+        "confidence": 0.9656378648046701
+      },
+      "V106_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.12321710145590192,
+          "raised": 0.07401897195866589,
+          "lowered": 0.016045706742639866,
+          "reaffirmed": 0.20511569588963496,
+          "withdrawn": 0.006746854333944283,
+          "not_stated": 0.4635787422627552,
+          "unclear": 0.11127692735645787
+        },
+        "choice": "not_stated",
+        "confidence": 0.3741751993065477
+      },
+      "V106_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9391747379444932,
+          "instant": 0.014383240073451029,
+          "unclear": 0.04644202198205577
+        },
+        "choice": "duration",
+        "confidence": 0.9087621069167399
+      },
+      "V106_basis_evidence": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.1639463436162508,
+          "previous_period": 0.03739819633888234,
+          "two_bases": 0.005392674296431158,
+          "other_stated": 0.06225562398595038,
+          "not_stated": 0.4780691510654708,
+          "not_growth_percentage": 0.04141105292650626,
+          "unclear": 0.21152695777050826
+        },
+        "choice": "not_stated",
+        "confidence": 0.39108067624304926
+      },
+      "V106_amount_meaning": {
+        "type": "choice",
+        "probabilities": {
+          "level": 0.046857442248609715,
+          "measure_change": 0.8557529961826219,
+          "guidance_revision": 0.004058862996643352,
+          "reference_only": 0.07044352522151823,
+          "several": 0.004163616761827864,
+          "unclear": 0.018723556588778882
+        },
+        "choice": "measure_change",
+        "confidence": 0.8269035954191463
+      },
+      "V106_comparison_baseline": {
+        "type": "choice",
+        "probabilities": {
+          "consensus": 0.016713198710204626,
+          "prior_year": 0.11590604041271763,
+          "sequential_period": 0.039748185419430204,
+          "previous_guidance": 0.2756536972879465,
+          "none": 0.4360728377569834,
+          "unclear": 0.11590604041271763
+        },
+        "choice": "none",
+        "confidence": 0.32328740530838007
+      },
+      "V106_conditions": {
+        "type": "noul",
+        "noul": 0.4117491841316223
+      },
+      "V106_comparison_revision": {
+        "type": "noul",
+        "noul": 0.3752811141228344
+      }
+    },
+    "usage": {
+      "input_tokens": 25891,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 304.5596815859899,
+  "finished_at": "2026-11-15T22:44:35.847150-05:00"
+}

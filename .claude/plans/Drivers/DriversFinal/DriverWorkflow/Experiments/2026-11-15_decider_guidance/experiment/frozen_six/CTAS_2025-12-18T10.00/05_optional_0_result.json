@@ -1,0 +1,69 @@
+{
+  "started_at": "2026-11-15T20:44:44.944495-05:00",
+  "request_sha256": "26120b535a181a6c58dca66f470492497abdc9f752ab49a459071697d6053556",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V016_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 10339,
+            "end": 10392,
+            "text": "Our guidance does not assume any future acquisitions.",
+            "score": 0.987589955329895
+          }
+        ]
+      },
+      "V018_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 10339,
+            "end": 10392,
+            "text": "Our guidance does not assume any future acquisitions.",
+            "score": 0.9651076197624207
+          }
+        ]
+      },
+      "V020_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V022_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V105_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V108_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V131_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 10339,
+            "end": 10392,
+            "text": "Our guidance does not assume any future acquisitions.",
+            "score": 0.9830774664878845
+          }
+        ]
+      },
+      "V143_conditions": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 15485,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 170.8719469460193,
+  "finished_at": "2026-11-15T20:47:35.816634-05:00"
+}

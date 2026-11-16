@@ -11,7 +11,7 @@ filing -> original files -> HTML/XML extraction -> saved output
 
 ## Start here
 
-1. Read [PrepareTools](../../.claude/plans/Drivers/DriversFinal/PrepareTools.md)
+1. Read [PrepareTools](../../.claude/plans/Drivers/DriversFinal/Prepare/PrepareTools.md)
    for requirements and preserved planning history, not current release status.
 2. Read the [operating guide](../../k8s/prepared-extraction/README.md)
    for the exact image, configuration, rollout and rollback.

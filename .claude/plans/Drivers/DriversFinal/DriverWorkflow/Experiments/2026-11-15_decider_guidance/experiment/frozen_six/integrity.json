@@ -1,0 +1,1296 @@
+{
+  "checked_at": "2026-11-15T22:51:19.071867-05:00",
+  "checks": 322,
+  "passed": 322,
+  "failures": [],
+  "details": [
+    {
+      "check": "run_finished_has_six_sources",
+      "passed": true
+    },
+    {
+      "check": "configuration_unchanged",
+      "passed": true
+    },
+    {
+      "check": "unchanged:/tmp/decider_claude_review_20261115/frozen_six_run.py",
+      "passed": true
+    },
+    {
+      "check": "unchanged:/tmp/decider_claude_review_20261115/metadata_candidates.py",
+      "passed": true
+    },
+    {
+      "check": "unchanged:/tmp/decider_claude_review_20261115/proposal_numbers.py",
+      "passed": true
+    },
+    {
+      "check": "unchanged:/home/faisal/EventMarketDB/config/local_llm.py",
+      "passed": true
+    },
+    {
+      "check": "unchanged:/home/faisal/EventMarketDB/driver_reference/core/driver_period_resolver.py",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:CTAS_2025-09-24T10.00.json",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:CTAS_2025-12-18T10.00.json",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:CTAS_2026-03-25T10.00.json",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:PAYX_2025-09-30T09.30.json",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:PAYX_2025-12-19T09.30.json",
+      "passed": true
+    },
+    {
+      "check": "reference_unchanged:PAYX_2026-03-25T09.30.json",
+      "passed": true
+    },
+    {
+      "check": "plan_unchanged:/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md",
+      "passed": true
+    },
+    {
+      "check": "plan_unchanged:/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DriverWorkflow/5.Strategy.md",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:CTAS_2025-09-24T10.00",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:CTAS_2025-09-24T10.00",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:CTAS_2025-09-24T10.00",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/04_copy_QA026_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/04_copy_QA026_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/04_copy_QA026_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-09-24T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-09-24T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-09-24T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-09-24T10.00/V017",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-09-24T10.00/V017",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V017/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V017/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V017/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-09-24T10.00/V019",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-09-24T10.00/V019",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V019/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V019/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-09-24T10.00/V021",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-09-24T10.00/V021",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V021/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V021/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V021/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-09-24T10.00/V023",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-09-24T10.00/V023",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V023/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V023/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V023/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V023/qualifiers/1",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V023/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-09-24T10.00/V160",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-09-24T10.00/V160",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V160/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V160/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-09-24T10.00/V160/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:CTAS_2025-12-18T10.00",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:CTAS_2025-12-18T10.00",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:CTAS_2025-12-18T10.00",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/04_copy_QA003_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/04_copy_QA003_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/04_copy_QA003_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/04_copy_QA010_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/04_copy_QA010_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/04_copy_QA010_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/04_copy_QA012_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/04_copy_QA012_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/04_copy_QA012_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2025-12-18T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2025-12-18T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2025-12-18T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V016",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V016",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V016/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V016/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V018",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V018",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V018/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V020",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V020",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V020/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V022",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V022",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V022/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V022/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V105",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V105",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V108",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V108",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V108/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V108/context/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V131",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V131",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V131/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V131/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2025-12-18T10.00/V143",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2025-12-18T10.00/V143",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2025-12-18T10.00/V143/context/0",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:PAYX_2025-09-30T09.30",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:PAYX_2025-09-30T09.30",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:PAYX_2025-09-30T09.30",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/04_copy_QA005_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/04_copy_QA005_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/04_copy_QA005_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-09-30T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-09-30T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-09-30T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V012",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V012",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V045",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V045",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V047",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V047",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V047/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V050",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V050",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V050/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V050/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V052",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V052",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V054",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V054",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V054/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V056",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V056",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V056/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V056/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V057",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V057",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V059",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V059",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V059/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V063",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V063",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V063/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V065",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V065",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V065/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V065/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-09-30T09.30/V102",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-09-30T09.30/V102",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V102/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V102/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-09-30T09.30/V102/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:PAYX_2025-12-19T09.30",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:PAYX_2025-12-19T09.30",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:PAYX_2025-12-19T09.30",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/04_copy_QA018_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/04_copy_QA018_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/04_copy_QA018_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/04_copy_QA020_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/04_copy_QA020_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/04_copy_QA020_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2025-12-19T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2025-12-19T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2025-12-19T09.30/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V009",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V009",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V009/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V046",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V046",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V046/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V050",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V050",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V050/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V050/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V051",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V051",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V051/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V051/context/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V052",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V052",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V052/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V070",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V070",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V070/comparison_revision/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V143",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V143",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V143/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V143/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V143/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2025-12-19T09.30/V152",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2025-12-19T09.30/V152",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V152/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V152/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V152/context/1",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2025-12-19T09.30/V152/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:PAYX_2026-03-25T09.30",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:PAYX_2026-03-25T09.30",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:PAYX_2026-03-25T09.30",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2026-03-25T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2026-03-25T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2026-03-25T09.30/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2026-03-25T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2026-03-25T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2026-03-25T09.30/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2026-03-25T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2026-03-25T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2026-03-25T09.30/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2026-03-25T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2026-03-25T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2026-03-25T09.30/04_copy_QA000_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:PAYX_2026-03-25T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:PAYX_2026-03-25T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:PAYX_2026-03-25T09.30/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2026-03-25T09.30/V055",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2026-03-25T09.30/V055",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V055/measure/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2026-03-25T09.30/V057",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2026-03-25T09.30/V057",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V057/context/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2026-03-25T09.30/V058",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2026-03-25T09.30/V058",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V058/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V058/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V058/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:PAYX_2026-03-25T09.30/V080",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:PAYX_2026-03-25T09.30/V080",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:PAYX_2026-03-25T09.30/V080/measure/0",
+      "passed": true
+    },
+    {
+      "check": "input_unchanged:CTAS_2026-03-25T10.00",
+      "passed": true
+    },
+    {
+      "check": "no_technical_hold:CTAS_2026-03-25T10.00",
+      "passed": true
+    },
+    {
+      "check": "all_targets_accounted:CTAS_2026-03-25T10.00",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/01_scan_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/02_bounds_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/03_fields_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/04_copy_QA004_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/04_copy_QA004_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/04_copy_QA004_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/04_copy_QA016_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/04_copy_QA016_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/04_copy_QA016_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/04_copy_prepared_0_result",
+      "passed": true
+    },
+    {
+      "check": "request_hash:CTAS_2026-03-25T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "response_complete:CTAS_2026-03-25T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "model:CTAS_2026-03-25T10.00/05_optional_0_result",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V015",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V015",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V015/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V015/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V015/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V017",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V017",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V017/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V017/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V019",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V019",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V019/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V019/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V021",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V021",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/context/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/context/1",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/qualifiers/1",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V021/conditions/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V053",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V053",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V053/qualifiers/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V066",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V066",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V082",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V082",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V082/measure/0",
+      "passed": true
+    },
+    {
+      "check": "copy_exact:CTAS_2026-03-25T10.00/V082/context/0",
+      "passed": true
+    },
+    {
+      "check": "proposal_reviewed:CTAS_2026-03-25T10.00/V106",
+      "passed": true
+    },
+    {
+      "check": "quote_exact:CTAS_2026-03-25T10.00/V106",
+      "passed": true
+    },
+    {
+      "check": "all_proposals_linked_to_reviewed_claims",
+      "passed": true
+    },
+    {
+      "check": "all_reference_claims_have_final_outcome",
+      "passed": true
+    }
+  ]
+}

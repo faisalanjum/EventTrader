@@ -1,0 +1,132 @@
+{
+  "V017_measure": [
+    {
+      "start": 2634,
+      "end": 2641,
+      "text": "revenue",
+      "score": 0.9997488260269165
+    }
+  ],
+  "V017_context": [
+    {
+      "start": 2671,
+      "end": 2678,
+      "text": "billion",
+      "score": 0.9053027033805847
+    }
+  ],
+  "V017_qualifiers": [],
+  "V019_measure": [
+    {
+      "start": 2634,
+      "end": 2641,
+      "text": "revenue",
+      "score": 0.9716994166374207
+    }
+  ],
+  "V019_context": [],
+  "V019_qualifiers": [],
+  "V021_measure": [
+    {
+      "start": 2744,
+      "end": 2755,
+      "text": "diluted EPS",
+      "score": 0.9977124929428101
+    }
+  ],
+  "V021_context": [
+    {
+      "start": 2744,
+      "end": 2755,
+      "text": "diluted EPS",
+      "score": 0.5015056133270264
+    }
+  ],
+  "V021_qualifiers": [],
+  "V023_measure": [
+    {
+      "start": 2744,
+      "end": 2755,
+      "text": "diluted EPS",
+      "score": 0.5614726543426514
+    }
+  ],
+  "V023_context": [
+    {
+      "start": 2796,
+      "end": 2810,
+      "text": "growth rate of",
+      "score": 0.7506693601608276
+    }
+  ],
+  "V023_qualifiers": [
+    {
+      "start": 2794,
+      "end": 2810,
+      "text": "a growth rate of",
+      "score": 0.5659890174865723
+    },
+    {
+      "start": 2796,
+      "end": 2810,
+      "text": "growth rate of",
+      "score": 0.7038052082061768
+    }
+  ],
+  "V160_measure": [
+    {
+      "start": 48643,
+      "end": 48657,
+      "text": "targeted CapEx",
+      "score": 0.9999992847442627
+    }
+  ],
+  "V160_context": [
+    {
+      "start": 48643,
+      "end": 48657,
+      "text": "targeted CapEx",
+      "score": 0.9999504089355469
+    }
+  ],
+  "V160_qualifiers": [
+    {
+      "start": 48643,
+      "end": 48657,
+      "text": "targeted CapEx",
+      "score": 0.9978110194206238
+    }
+  ],
+  "V017_conditions": [
+    {
+      "start": 7695,
+      "end": 7757,
+      "text": "Our guidance assumes a constant foreign currency exchange rate",
+      "score": 0.8650303483009338
+    }
+  ],
+  "V019_conditions": [
+    {
+      "start": 7695,
+      "end": 7757,
+      "text": "Our guidance assumes a constant foreign currency exchange rate",
+      "score": 0.8549211025238037
+    }
+  ],
+  "V021_conditions": [
+    {
+      "start": 7695,
+      "end": 7757,
+      "text": "Our guidance assumes a constant foreign currency exchange rate",
+      "score": 0.6407177448272705
+    }
+  ],
+  "V023_conditions": [
+    {
+      "start": 7695,
+      "end": 7757,
+      "text": "Our guidance assumes a constant foreign currency exchange rate",
+      "score": 0.8153157234191895
+    }
+  ]
+}

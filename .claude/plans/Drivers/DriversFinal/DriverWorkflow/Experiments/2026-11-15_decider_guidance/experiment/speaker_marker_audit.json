@@ -1,0 +1,56 @@
+{
+  "method": "Audit only: match the bracketed digit in existing line-start speaker headers and intersect exact whitespace-token spans; not a production rewriting rule. Source structure must be verified separately.",
+  "sources": [
+    {
+      "source": "CTAS_2025-09-24T10.00",
+      "digit_tokens": 164,
+      "header_marker_tokens": 67
+    },
+    {
+      "source": "CTAS_2025-12-18T10.00",
+      "digit_tokens": 171,
+      "header_marker_tokens": 59
+    },
+    {
+      "source": "PAYX_2025-09-30T09.30",
+      "digit_tokens": 152,
+      "header_marker_tokens": 50
+    },
+    {
+      "source": "PAYX_2025-12-19T09.30",
+      "digit_tokens": 163,
+      "header_marker_tokens": 55
+    },
+    {
+      "source": "PAYX_2026-03-25T09.30",
+      "digit_tokens": 223,
+      "header_marker_tokens": 73
+    },
+    {
+      "source": "CTAS_2026-03-25T10.00",
+      "digit_tokens": 177,
+      "header_marker_tokens": 59
+    }
+  ],
+  "B_markers": [
+    "V0",
+    "V21",
+    "V36",
+    "V67",
+    "V68",
+    "V75",
+    "V76",
+    "V83",
+    "V84",
+    "V85",
+    "V87",
+    "V88",
+    "V92",
+    "V95",
+    "V100",
+    "V110",
+    "V112",
+    "V114",
+    "V117"
+  ]
+}

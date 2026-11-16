@@ -1,0 +1,31 @@
+{
+  "started_at": "2026-11-15T21:42:24.087510-05:00",
+  "request_sha256": "05c61162a4eeaf22c2ddf482c1ecc77b9e451a140093d1e41014301648bb5065",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V046_comparison_revision": {
+        "type": "locate",
+        "spans": []
+      },
+      "V070_comparison_revision": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 17318,
+            "end": 17329,
+            "text": "$80 million",
+            "score": 0.9937155246734619
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 17350,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 192.76397783099674,
+  "finished_at": "2026-11-15T21:45:36.851675-05:00"
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Source/rulebook expected unit choices, frozen before the unit_rule request; not complete records.",
+  "expected": {
+    "F0": "m_usd_from_billions",
+    "F1": "unknown",
+    "F2": "usd",
+    "F3": "unknown",
+    "F4": "m_usd_from_millions",
+    "F5": "percent",
+    "V7": "percent_yoy",
+    "V10": "percent_yoy",
+    "V4": "percent",
+    "V5": "basis_points",
+    "V77": "percent",
+    "V78": "basis_points"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "kind": "Native API counterexample and positive control; synthetic conflicting lookups, dates from the rulebook example. Not proof of live Redis values.",
+  "legacy": {
+    "period_u_id": "gp_2025-12-01_2026-02-28",
+    "period_scope": "quarter",
+    "time_type": "duration",
+    "gp_start_date": "2025-12-01",
+    "gp_end_date": "2026-02-28"
+  },
+  "legacy_lookups": [
+    "existing"
+  ],
+  "explicit_dates": {
+    "period_u_id": "gp_2025-11-24_2026-02-22",
+    "period_scope": "quarter",
+    "time_type": "duration",
+    "gp_start_date": "2025-11-24",
+    "gp_end_date": "2026-02-22"
+  },
+  "explicit_date_lookups": [],
+  "decision": "Reuse native exact-date API when source dates are verified. Do not assume its cached-window-first default enforces current rule 3.43. Do not add a new calendar engine."
+}

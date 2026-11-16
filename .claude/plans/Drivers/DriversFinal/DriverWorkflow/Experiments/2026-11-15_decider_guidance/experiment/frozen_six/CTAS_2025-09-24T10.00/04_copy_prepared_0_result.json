@@ -1,0 +1,126 @@
+{
+  "started_at": "2026-11-15T20:15:33.176621-05:00",
+  "request_sha256": "47108fff7d390224092c359ae8737a8cdde39a0ff6a9ab887b4523c92a2d3a0e",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V017_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3863,
+            "end": 3870,
+            "text": "revenue",
+            "score": 0.9997488260269165
+          }
+        ]
+      },
+      "V017_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3907,
+            "end": 3914,
+            "text": "billion",
+            "score": 0.9053027033805847
+          }
+        ]
+      },
+      "V017_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V019_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3863,
+            "end": 3870,
+            "text": "revenue",
+            "score": 0.9716994166374207
+          }
+        ]
+      },
+      "V019_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V019_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V021_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4008,
+            "end": 4019,
+            "text": "diluted EPS",
+            "score": 0.9977124929428101
+          }
+        ]
+      },
+      "V021_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4008,
+            "end": 4019,
+            "text": "diluted EPS",
+            "score": 0.5015056133270264
+          }
+        ]
+      },
+      "V021_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V023_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4008,
+            "end": 4019,
+            "text": "diluted EPS",
+            "score": 0.5614726543426514
+          }
+        ]
+      },
+      "V023_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4074,
+            "end": 4088,
+            "text": "growth rate of",
+            "score": 0.7506693601608276
+          }
+        ]
+      },
+      "V023_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4072,
+            "end": 4088,
+            "text": "a growth rate of",
+            "score": 0.5659890174865723
+          },
+          {
+            "start": 4074,
+            "end": 4088,
+            "text": "growth rate of",
+            "score": 0.7038052082061768
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 3887,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 49.55691138491966,
+  "finished_at": "2026-11-15T20:16:22.733617-05:00"
+}

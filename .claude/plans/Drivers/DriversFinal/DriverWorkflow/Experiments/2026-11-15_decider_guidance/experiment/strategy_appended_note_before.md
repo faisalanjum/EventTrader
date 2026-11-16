@@ -1,0 +1,2 @@
+
+ Decider API vs Mac: pin pplx-decider-v1.3 (never -latest). It's full precision, so re-tune the cut-offs with a margin, since identical requests can vary slightly. There's no punctuation fix: add a space before punctuation after %/$ ("18.5% ."), map the positions back, then re-run the 52-sentence test. No mode, temperature or Locate-cutoff settings (questions always grouped, cutoff 0.5). At most 128 questions per request when Locate is used; 10 requests/second; Locate trained on texts up to 8,000 tokens. Data leaves the Mac.

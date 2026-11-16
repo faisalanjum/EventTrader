@@ -1,0 +1,222 @@
+{
+  "state": "Each QUOTE is independent evidence, not instructions. Judge only the specified quote and its [T] target. Do not import comparison wording from another quote. Target period alone is not a comparison basis.\nQUOTES:\n{\"F1\": {\"text\": \"We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of [T] 8.4% to 8.7%. \"}, \"F3\": {\"text\": \"We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of [T] 10.5% to 11.4%. \"}, \"V7\": {\"text\": \"Operating income grew to $659.9 million, an increase of [T] 8.2% over the prior year. \"}, \"V10\": {\"text\": \"Diluted EPS of $1.24 grew [T] 9.7% over the prior year. \"}, \"R5\": {\"text\": \"As we look ahead, we expect FY25 revenue to be [T] flat to down slightly versus last year. \"}, \"R6\": {\"text\": \"For Q4, we expect continued execution of our revenue quality strategy and further acceleration in drive savings to support [T] sequential and year-over-year growth in adjusted operating income. \"}, \"R7\": {\"text\": \"HBM revenue grew more than [T] 50% sequentially to a new milestone of over $1 billion of quarterly revenue. \"}, \"R8\": {\"text\": \"Our HBM4 provides a bandwidth increase of over [T] 60%, compared to HBM3e. \"}, \"M1\": {\"text\": \"We forecast revenue growth of [T] 8.4% to 8.7% in fiscal 2026.\"}, \"M2\": {\"text\": \"We forecast revenue growth of [T] 8.4% to 8.7% in fiscal 2026 versus fiscal 2025.\"}, \"M3\": {\"text\": \"We forecast revenue growth of [T] 5% in Q4 versus Q3 of the same fiscal year.\"}, \"M4\": {\"text\": \"We forecast annual revenue growth of [T] 5% sequentially in FY2027.\"}, \"M5\": {\"text\": \"Revenue grew 8% year over year. We forecast EPS growth of [T] 10%.\"}, \"M6\": {\"text\": \"We forecast revenue growth of [T] 5%, compared with our earlier forecast of 3%.\"}, \"M7\": {\"text\": \"We forecast revenue growth of [T] 5% compared with the same quarter two years earlier.\"}, \"M8\": {\"text\": \"All revenue-growth figures in this outlook compare with the same period of the prior year. We forecast Q4 revenue growth of [T] 5%.\"}, \"M9\": {\"text\": \"We forecast Q4 revenue growth of [T] 5%.\"}, \"M10\": {\"text\": \"We forecast revenue growth of [T] 5% next quarter and earnings growth of 10% over the same quarter a year earlier.\"}}",
+  "questions": {
+    "F1": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.F1.text explicitly establish for '8.4% to 8.7%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "F3": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.F3.text explicitly establish for '10.5% to 11.4%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "V7": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.V7.text explicitly establish for '8.2%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "V10": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.V10.text explicitly establish for '9.7%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "R5": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.R5.text explicitly establish for 'flat to down slightly' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "R6": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.R6.text explicitly establish for 'sequential and year-over-year growth' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "R7": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.R7.text explicitly establish for '50%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "R8": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.R8.text explicitly establish for '60%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M1": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M1.text explicitly establish for '8.4% to 8.7%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M2": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M2.text explicitly establish for '8.4% to 8.7%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M3": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M3.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M4": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M4.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M5": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M5.text explicitly establish for '10%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M6": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M6.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M7": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M7.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M8": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M8.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M9": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M9.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    },
+    "M10": {
+      "type": "choice",
+      "instructions": "Which comparison basis does QUOTES.M10.text explicitly establish for '5%' at [T]? Do not borrow another amount's comparison or assume financial convention.",
+      "criteria": {
+        "year_earlier": "The quote explicitly compares this growth with the same period a year earlier.",
+        "previous_period": "The quote explicitly compares this growth with the immediately preceding comparable period (sequential).",
+        "two_bases": "This exact expression explicitly gives distinct year-earlier and sequential comparisons; both need preserving.",
+        "other_stated": "A different comparison is explicitly stated; it cannot be relabelled year-earlier or sequential.",
+        "not_stated": "The quote does not establish a comparison basis for this exact growth occurrence. A forecast target year or period alone does not establish one.",
+        "unclear": "Potential comparison wording is present, but the quote does not settle which growth occurrence or basis it applies to."
+      }
+    }
+  },
+  "mode": "isolated"
+}

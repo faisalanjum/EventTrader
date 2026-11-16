@@ -1,0 +1,54 @@
+[
+  {
+    "name": "QA016",
+    "state": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of [V001] 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+    "questions": {
+      "V001_measure": {
+        "type": "locate",
+        "instructions": "For the exact occurrence '7.6' immediately following [V001], locate the financial or operating measure being forecast. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V001_value": {
+        "type": "locate",
+        "instructions": "For the exact occurrence '7.6' immediately following [V001], locate the numeric value or bounds that apply, including numbers referred back to. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V001_period": {
+        "type": "locate",
+        "instructions": "For the exact occurrence '7.6' immediately following [V001], locate the target period wording. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V001_unit": {
+        "type": "locate",
+        "instructions": "For the exact occurrence '7.6' immediately following [V001], locate the unit or scale wording that applies. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V001_conditions": {
+        "type": "locate",
+        "instructions": "For the exact occurrence '7.6' immediately following [V001], locate all conditions and qualifications that change this forecast's meaning. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      }
+    }
+  },
+  {
+    "name": "QA022",
+    "state": "Unknown [3270]: Hi. Good morning, guys. Just a quick one for me. Just on the FHIR ERP implementation, I think we had previously talked about like 100 basis points margin headwind next year for 27. I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. Thank you. Just hard bits for this segment. Thank you.\nScott Garula [3296]: Yeah, this is Scott. Thanks for the question. You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. We're satisfied with our progress today. Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. If you looked at an entire year, it would be the 100 basis points that you referenced. And then depending on when we actually go live with the entire business, It will be [V002] something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+    "questions": {
+      "V002_measure": {
+        "type": "locate",
+        "instructions": "For the exact occurrence 'something less than that' immediately following [V002], locate the financial or operating measure being forecast. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V002_value": {
+        "type": "locate",
+        "instructions": "For the exact occurrence 'something less than that' immediately following [V002], locate the numeric value or bounds that apply, including numbers referred back to. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V002_period": {
+        "type": "locate",
+        "instructions": "For the exact occurrence 'something less than that' immediately following [V002], locate the target period wording. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V002_unit": {
+        "type": "locate",
+        "instructions": "For the exact occurrence 'something less than that' immediately following [V002], locate the unit or scale wording that applies. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      },
+      "V002_conditions": {
+        "type": "locate",
+        "instructions": "For the exact occurrence 'something less than that' immediately following [V002], locate all conditions and qualifications that change this forecast's meaning. Follow references in this transcript. Exclude unrelated actuals and replaced forecasts. Return exact source text only."
+      }
+    }
+  }
+]

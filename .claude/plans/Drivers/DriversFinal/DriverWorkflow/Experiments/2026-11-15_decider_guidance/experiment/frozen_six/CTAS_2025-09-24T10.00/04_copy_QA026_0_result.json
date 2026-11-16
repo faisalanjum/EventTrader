@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-11-15T20:16:22.735283-05:00",
+  "request_sha256": "67802e9fe00ec0a55fa5ccd979d91683fe7ff18f0b562acaa2ce793859d913b7",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V160_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2240,
+            "end": 2254,
+            "text": "targeted CapEx",
+            "score": 0.9999992847442627
+          }
+        ]
+      },
+      "V160_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2240,
+            "end": 2254,
+            "text": "targeted CapEx",
+            "score": 0.9999504089355469
+          }
+        ]
+      },
+      "V160_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2240,
+            "end": 2254,
+            "text": "targeted CapEx",
+            "score": 0.9978110194206238
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 826,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 10.427593355067074,
+  "finished_at": "2026-11-15T20:16:33.162972-05:00"
+}

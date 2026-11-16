@@ -1,0 +1,109 @@
+{
+  "rows": [
+    {
+      "tag": "F0",
+      "text": "$11.21 billion to $11.24",
+      "expected": "m_usd_from_billions",
+      "choice": "m_usd_from_billions",
+      "p": 0.9692076975653654,
+      "correct": true
+    },
+    {
+      "tag": "F1",
+      "text": "8.4% to 8.7%.",
+      "expected": "unknown",
+      "choice": "percent_yoy",
+      "p": 0.511441355520399,
+      "correct": false
+    },
+    {
+      "tag": "F2",
+      "text": "$4.86 to $4.90,",
+      "expected": "usd",
+      "choice": "usd",
+      "p": 0.9806408889418917,
+      "correct": true
+    },
+    {
+      "tag": "F3",
+      "text": "10.5% to 11.4%.",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.5023787465623494,
+      "correct": true
+    },
+    {
+      "tag": "F4",
+      "text": "$101",
+      "expected": "m_usd_from_millions",
+      "choice": "m_usd_from_millions",
+      "p": 0.949538459554852,
+      "correct": true
+    },
+    {
+      "tag": "F5",
+      "text": "20%,",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.9574647645012104,
+      "correct": true
+    },
+    {
+      "tag": "V4",
+      "text": "51%,",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.9872547655867366,
+      "correct": true
+    },
+    {
+      "tag": "V5",
+      "text": "40",
+      "expected": "basis_points",
+      "choice": "basis_points",
+      "p": 0.9884051236764473,
+      "correct": true
+    },
+    {
+      "tag": "V7",
+      "text": "8.2%",
+      "expected": "percent_yoy",
+      "choice": "percent_yoy",
+      "p": 0.9779352063538415,
+      "correct": true
+    },
+    {
+      "tag": "V10",
+      "text": "9.7%",
+      "expected": "percent_yoy",
+      "choice": "percent_yoy",
+      "p": 0.9801816339463683,
+      "correct": true
+    },
+    {
+      "tag": "V77",
+      "text": "1.7",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.9761688789233225,
+      "correct": true
+    },
+    {
+      "tag": "V78",
+      "text": "10",
+      "expected": "basis_points",
+      "choice": "basis_points",
+      "p": 0.9774129164375848,
+      "correct": true
+    }
+  ],
+  "correct": 11,
+  "total": 12,
+  "seconds": 196.46600340912119,
+  "usage": {
+    "input_tokens": 16998,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "scope": "Unit choices only with a clarified source-evidence rule, on one call. Different grouping from full metadata run; no complete-record/generalization claim."
+}

@@ -1,0 +1,68 @@
+{
+  "package": "pysbd==0.3.4",
+  "settings": {
+    "language": "en",
+    "clean": false,
+    "char_span": true
+  },
+  "sources": [
+    {
+      "source": "MU_2025-03-20T14.30",
+      "blocks": 6,
+      "sentences": 194,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "FDX_2025-03-20T17.30",
+      "blocks": 6,
+      "sentences": 199,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "OLLI_2025-03-19T08.30",
+      "blocks": 5,
+      "sentences": 120,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "CTAS_2025-09-24T10.00",
+      "sentences": 540,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "CTAS_2025-12-18T10.00",
+      "sentences": 545,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "PAYX_2025-09-30T09.30",
+      "sentences": 482,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "PAYX_2025-12-19T09.30",
+      "sentences": 575,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "PAYX_2026-03-25T09.30",
+      "sentences": 673,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    },
+    {
+      "source": "CTAS_2026-03-25T10.00",
+      "sentences": 523,
+      "exact_offsets": true,
+      "full_nonwhitespace_coverage": true
+    }
+  ],
+  "source_sha256": "af92b2b6ea3b6855c80196782ca9741313c9d5640e376c4853449afed39e0c92"
+}

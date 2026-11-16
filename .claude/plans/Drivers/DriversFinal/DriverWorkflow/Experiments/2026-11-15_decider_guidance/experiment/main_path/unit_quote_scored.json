@@ -1,0 +1,97 @@
+{
+  "rows": [
+    {
+      "tag": "F0",
+      "expected": "m_usd_from_billions",
+      "choice": "m_usd_from_billions",
+      "p": 0.6438791802697503,
+      "correct": true
+    },
+    {
+      "tag": "F1",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.776488952467264,
+      "correct": true
+    },
+    {
+      "tag": "F2",
+      "expected": "usd",
+      "choice": "usd",
+      "p": 0.9215029576353994,
+      "correct": true
+    },
+    {
+      "tag": "F3",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.8235845618528722,
+      "correct": true
+    },
+    {
+      "tag": "F4",
+      "expected": "m_usd_from_millions",
+      "choice": "m_usd_from_millions",
+      "p": 0.720989472186072,
+      "correct": true
+    },
+    {
+      "tag": "F5",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.9835442244852342,
+      "correct": true
+    },
+    {
+      "tag": "V4",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.9931116566553718,
+      "correct": true
+    },
+    {
+      "tag": "V5",
+      "expected": "basis_points",
+      "choice": "basis_points",
+      "p": 0.9878111517531053,
+      "correct": true
+    },
+    {
+      "tag": "V7",
+      "expected": "percent_yoy",
+      "choice": "percent_yoy",
+      "p": 0.9881522213445136,
+      "correct": true
+    },
+    {
+      "tag": "V10",
+      "expected": "percent_yoy",
+      "choice": "percent_yoy",
+      "p": 0.9855630567747299,
+      "correct": true
+    },
+    {
+      "tag": "V77",
+      "expected": "percent",
+      "choice": "percent",
+      "p": 0.989681693243619,
+      "correct": true
+    },
+    {
+      "tag": "V78",
+      "expected": "basis_points",
+      "choice": "basis_points",
+      "p": 0.9859403469444428,
+      "correct": true
+    }
+  ],
+  "correct": 12,
+  "total": 12,
+  "seconds": 32.81151387095451,
+  "usage": {
+    "input_tokens": 2867,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "scope": "Same independent 12-unit key, now explicit quote-backed unit selection. One question per target, no new boolean/basis round. Does not prove automatic complete evidence or generalization."
+}

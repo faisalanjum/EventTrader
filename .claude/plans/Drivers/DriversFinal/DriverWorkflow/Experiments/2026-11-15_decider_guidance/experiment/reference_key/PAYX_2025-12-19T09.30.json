@@ -1,0 +1,800 @@
+{
+  "source_id": "PAYX_2025-12-19T09.30",
+  "source_text_sha256": "b80e3abf0dfd686ab0299bff178c131a8ee5867544b08052c4b5d4c426d6be41",
+  "snapshot_sha256": "d970b8e8eadd9d42be021c9cff95926ddff0811efcc325bb9558f3d0dd624db5",
+  "rulebook_sha256": "f9376dcb51f648d58fc1527ca3472fcce6f0ca1bb517969ccc250077cad78ff0",
+  "annotated_at": "2026-11-15T16:02:06.610058-05:00",
+  "method": "Root agent read every source passage before consulting draft labels or legacy rows for this pass. Prior conversation exposure exists; NOT blinded or double-reviewed. Annotations never enter extraction prompts.",
+  "status": "Source claim inventory with exact evidence; not an adjudicated complete-record key.",
+  "record_policy": "../record_policy.md",
+  "claims": [
+    {
+      "id": "P2-01",
+      "meaning": "Paycor cost synergies",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 722,
+          "end": 776,
+          "global_start": 2285,
+          "global_end": 2339,
+          "text": "We continue to make progress on the PACOR integration.",
+          "role": "acquisition scope"
+        },
+        {
+          "passage": "PR002",
+          "start": 777,
+          "end": 934,
+          "global_start": 2340,
+          "global_end": 2497,
+          "text": "As best operators, we continue to identify additional expense opportunities and now expect approximately $100 million in cost synergies for fiscal year 2026.",
+          "role": "cost-synergy amount and approximation"
+        },
+        {
+          "passage": "QA000",
+          "start": 2308,
+          "end": 2450,
+          "global_start": 15002,
+          "global_end": 15144,
+          "text": "As you recall, our original target was at $80 million, and we've now committed to $100 million, and we have more opportunities we're pursuing.",
+          "role": "company-stated original versus current target; not a calculated revision amount"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "level_low": "100",
+        "level_high": "100",
+        "level_unit": "m_usd",
+        "qualifier": "approximately",
+        "previous_forecast_values": [
+          "80"
+        ],
+        "driver_state": "raised"
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar; source only states original 80, not the intermediate previous-call 90."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2285,
+        "end": 15144
+      }
+    },
+    {
+      "id": "P2-02",
+      "meaning": "Management Solutions revenue outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2287,
+          "end": 2479,
+          "global_start": 11194,
+          "global_end": 11386,
+          "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue.",
+          "role": "one sentence, three distinct forecast quantities; no endpoints stated here"
+        },
+        {
+          "passage": "QA002",
+          "start": 805,
+          "end": 1718,
+          "global_start": 20743,
+          "global_end": 21656,
+          "text": "We are seeing a little bit smaller deal sizes, and John can comment on that. We've seen a little bit less attachment up front at the point of sale. Obviously, those things impact revenue per client. And then I would tell you on our HR outsourcing solution, which is one of our highest value solutions, volumes have increased. you know, been in line or better than our expectations, but it has been at a little bit softer rate than we assumed when we put together our plan. And so, you know, as we sit here halfway through the year, I would say the year has largely played out in line with our expectations, both from an execution standpoint, certainly the macro is held up, You know, PEO has been strong, actually probably has performed a little bit better through the first half of the year. But we've seen some of these trends in revenue per client. We're assuming that will continue in the balance of the year.",
+          "role": "source explanation of softer revenue-per-client trends explicitly assumed to continue"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "business_scope": "management solutions",
+        "value_text": "towards the low end of the ranges",
+        "new_range_endpoints_stated": false
+      },
+      "unresolved_fields_or_policy": [
+        "No prior-call range may silently fill this source quote.",
+        "Movement and exact amount representation must preserve reaffirmed range versus lower position within it; do not compute a low-end point.",
+        "Scope-specific continuation assumptions need applicability review."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 21656
+      }
+    },
+    {
+      "id": "P2-03",
+      "meaning": "PEO and insurance revenue outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2287,
+          "end": 2479,
+          "global_start": 11194,
+          "global_end": 11386,
+          "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue.",
+          "role": "one sentence, three distinct forecast quantities; no endpoints stated here"
+        },
+        {
+          "passage": "QA002",
+          "start": 805,
+          "end": 1718,
+          "global_start": 20743,
+          "global_end": 21656,
+          "text": "We are seeing a little bit smaller deal sizes, and John can comment on that. We've seen a little bit less attachment up front at the point of sale. Obviously, those things impact revenue per client. And then I would tell you on our HR outsourcing solution, which is one of our highest value solutions, volumes have increased. you know, been in line or better than our expectations, but it has been at a little bit softer rate than we assumed when we put together our plan. And so, you know, as we sit here halfway through the year, I would say the year has largely played out in line with our expectations, both from an execution standpoint, certainly the macro is held up, You know, PEO has been strong, actually probably has performed a little bit better through the first half of the year. But we've seen some of these trends in revenue per client. We're assuming that will continue in the balance of the year.",
+          "role": "source explanation of softer revenue-per-client trends explicitly assumed to continue"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "business_scope": "P-owned insurance",
+        "value_text": "towards the low end of the ranges",
+        "new_range_endpoints_stated": false
+      },
+      "unresolved_fields_or_policy": [
+        "No prior-call range may silently fill this source quote.",
+        "Movement and exact amount representation must preserve reaffirmed range versus lower position within it; do not compute a low-end point.",
+        "Scope-specific continuation assumptions need applicability review."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 21656
+      }
+    },
+    {
+      "id": "P2-04",
+      "meaning": "Total revenue outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2287,
+          "end": 2479,
+          "global_start": 11194,
+          "global_end": 11386,
+          "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue.",
+          "role": "one sentence, three distinct forecast quantities; no endpoints stated here"
+        },
+        {
+          "passage": "QA002",
+          "start": 805,
+          "end": 1718,
+          "global_start": 20743,
+          "global_end": 21656,
+          "text": "We are seeing a little bit smaller deal sizes, and John can comment on that. We've seen a little bit less attachment up front at the point of sale. Obviously, those things impact revenue per client. And then I would tell you on our HR outsourcing solution, which is one of our highest value solutions, volumes have increased. you know, been in line or better than our expectations, but it has been at a little bit softer rate than we assumed when we put together our plan. And so, you know, as we sit here halfway through the year, I would say the year has largely played out in line with our expectations, both from an execution standpoint, certainly the macro is held up, You know, PEO has been strong, actually probably has performed a little bit better through the first half of the year. But we've seen some of these trends in revenue per client. We're assuming that will continue in the balance of the year.",
+          "role": "source explanation of softer revenue-per-client trends explicitly assumed to continue"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "business_scope": "total revenue",
+        "value_text": "towards the low end of the ranges",
+        "new_range_endpoints_stated": false
+      },
+      "unresolved_fields_or_policy": [
+        "No prior-call range may silently fill this source quote.",
+        "Movement and exact amount representation must preserve reaffirmed range versus lower position within it; do not compute a low-end point.",
+        "Scope-specific continuation assumptions need applicability review."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 21656
+      }
+    },
+    {
+      "id": "P2-05",
+      "meaning": "Interest on funds held for clients",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2480,
+          "end": 2629,
+          "global_start": 11387,
+          "global_end": 11536,
+          "text": "Interest on funds held for clients is now expected to be at the high end of the range, of the $190 to $200 million range that we previously provided.",
+          "role": "explicit range plus high-end qualification"
+        },
+        {
+          "passage": "QA010",
+          "start": 0,
+          "end": 439,
+          "global_start": 35896,
+          "global_end": 36335,
+          "text": "James Fossett [2351]: Thank you so much. A couple of follow-up questions for me. First, on the incremental realized gains on the investment portfolio from PayCorps, are those gains included in the guide moving forward, and were they contemplated when you put together your forecast for the second quarter?\nBob Schrader [2374]: Yeah, I mean, it's definitely in the full year guide because it already happened in Q2, and it was contemplated.",
+          "role": "annual guide includes already realized gains; source identifies inclusion, not a future gain forecast"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "printed_values": [
+          "190",
+          "200"
+        ],
+        "level_unit": "m_usd",
+        "qualifier": "at the high end of the range"
+      },
+      "unresolved_fields_or_policy": [
+        "Preserve range-position wording; neither unqualified range nor exact 200 alone proves this statement.",
+        "Resolve current approved representation; do not automatically put measurement inclusion in conditions."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 36335
+      }
+    },
+    {
+      "id": "P2-06",
+      "meaning": "Adjusted diluted EPS growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2630,
+          "end": 2820,
+          "global_start": 11537,
+          "global_end": 11727,
+          "text": "And we are also raising our earnings expectations with adjusted diluted earnings per share now expected to grow between 10% and 11%. And that is up from the 9% to 11% we shared last quarter.",
+          "role": "current and prior EPS-growth forecasts"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "level_low": "10",
+        "level_high": "11",
+        "level_unit": "unknown",
+        "driver_state": "raised",
+        "previous_forecast_values": [
+          "9",
+          "11"
+        ],
+        "measurement_words": [
+          "adjusted",
+          "diluted"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar; source-stated growth comparison basis is absent, distinct from prior-forecast comparison."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 11727
+      }
+    },
+    {
+      "id": "P2-07",
+      "meaning": "Effective income tax rate",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2821,
+          "end": 2904,
+          "global_start": 11728,
+          "global_end": 11811,
+          "text": "And our effective income tax rate for the year is expected to be approximately 24%.",
+          "role": "tax rate level"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "level_low": "24",
+        "level_high": "24",
+        "level_unit": "percent",
+        "qualifier": "approximately"
+      },
+      "unresolved_fields_or_policy": [
+        "Determine explicitly stated movement without borrowing prior-call 24–25 range; calendar."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 11811
+      }
+    },
+    {
+      "id": "P2-08",
+      "meaning": "Other guidance unchanged",
+      "status": "claim_requires_prior_scope",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2905,
+          "end": 2949,
+          "global_start": 11812,
+          "global_end": 11856,
+          "text": "All other guidance metrics remain unchanged.",
+          "role": "blanket reaffirmation, no named quantities here"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "driver_state": "reaffirmed"
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve exact prior scope under permitted guidance history; do not invent metric names, copy old values or silently drop this claim.",
+        "Owner blanket-hold leaning is not approved rule replacement."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 11856
+      }
+    },
+    {
+      "id": "P2-09",
+      "meaning": "Q3 total revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2950,
+          "end": 3384,
+          "global_start": 11857,
+          "global_end": 12291,
+          "text": "Let me turn to the third quarter just to provide you some color with where we would expect to come out in the third quarter. We anticipate total revenue growth of approximately 18% with an adjusted operating margin between 47 and 48%. And just as a reminder, Q3 is one of our larger quarters. We have both from a revenue and operating margin standpoint driven by the higher margin year-end fees that get recognized during the quarter.",
+          "role": "two Q3 forecasts; following year-end fee wording is a cause"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "third quarter",
+        "level_low": "18",
+        "level_high": "18",
+        "level_unit": "unknown",
+        "qualifier": "approximately",
+        "company_confirmed": true,
+        "driver_state": "unknown"
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar; do not confuse identical 18% actual elsewhere with this forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 12291
+      }
+    },
+    {
+      "id": "P2-10",
+      "meaning": "Q3 adjusted operating margin",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR003",
+          "start": 2063,
+          "end": 2286,
+          "global_start": 10970,
+          "global_end": 11193,
+          "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+          "role": "period, movement and macro assumption"
+        },
+        {
+          "passage": "PR003",
+          "start": 2950,
+          "end": 3384,
+          "global_start": 11857,
+          "global_end": 12291,
+          "text": "Let me turn to the third quarter just to provide you some color with where we would expect to come out in the third quarter. We anticipate total revenue growth of approximately 18% with an adjusted operating margin between 47 and 48%. And just as a reminder, Q3 is one of our larger quarters. We have both from a revenue and operating margin standpoint driven by the higher margin year-end fees that get recognized during the quarter.",
+          "role": "two Q3 forecasts; following year-end fee wording is a cause"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "third quarter",
+        "level_low": "47",
+        "level_high": "48",
+        "level_unit": "percent",
+        "measurement_words": [
+          "adjusted"
+        ],
+        "company_confirmed": true,
+        "driver_state": "unknown"
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar; year-end fee explanation is not automatically a condition."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 10970,
+        "end": 12291
+      }
+    },
+    {
+      "id": "P2-11",
+      "meaning": "Paycor growth outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA004",
+          "start": 0,
+          "end": 879,
+          "global_start": 24301,
+          "global_end": 25180,
+          "text": "Brian Keene [1586]: Hi, guys. Just to follow up on Paycor, is it still a low double-digit grower, or should we be modeling more in this 8% to 9% growth territory for this fiscal year?\nBob Schrader [1599]: Yeah, I think we generally said, Brian, we expect it to be double digits. I would tell you the revenue per client comments, you know, that we made related to maybe being a bit softer than our expectations. It was interesting. It was really across the board. Every line of business, we saw that. And same thing with PayCore. I do think we saw some similar trends with, you know, maybe not as much attachment up front than what we assumed. as well as maybe a little bit lower average deal size. So, hey, we'll see where it plays out as we get to the balance of the year, but I would still expect it to be, if not low double digits, high single digit grower as we move forward.",
+          "role": "conditional worded Paycor outlook; earlier 8–9 actual not a confirmed forecast range"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "if not low double digits, high single digit grower",
+        "company_confirmed": true,
+        "period_text": [
+          "this fiscal year",
+          "as we move forward"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Retain the full alternative/hedge; no invented numeric endpoints.",
+        "Determine recurring-revenue definition and annual versus forward horizon from confirmed source context."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 24301,
+        "end": 25180
+      }
+    },
+    {
+      "id": "P2-12",
+      "meaning": "PEO and insurance growth acceleration",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA018",
+          "start": 0,
+          "end": 1490,
+          "global_start": 50496,
+          "global_end": 51986,
+          "text": "Scott Wurzel [3279]: Hey, good morning, guys, and thanks for taking my questions here. Bob, just had a question on the sort of 3Q guide and calling for total revenue growth of 18%. I kind of do some back-of-the-envelope math and assume some degree of acceleration on the PEO side of the business as you lap the So MPP headwinds, you know, it implies not really too much change on the MS side. And I'm just trying to kind of square that with some of the timing around, you know, pay core form filing revenue that they show up in fiscal 3Q. So any, you know, color you can give on the different moving parts there would be super helpful.\nBob Schrader [3313]: Yeah, I mean, again, I don't want to get into the habit of giving quarterly guidance. We try to give you color, and obviously I try to set myself up so I can at least be in line with the numbers. So we expect the business, as you mentioned, you're going to see acceleration like we did this quarter with the PO in insurance. We're going to anniversary the annual enrollment in January and some of the headwinds from last year. And we're going to continue to make progress on pay core, the integration, the synergy realization where we've had success. You know, that revenue is going to start flowing into the back half of the year. So, you know, I'm sitting here in the middle of the year. We still have selling season. There's probably an element of conservatism in there, but we would expect the business to continue to accelerate.",
+          "role": "revenue/PEO growth acceleration and contribution from synergies"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "acceleration",
+        "business_scope": "PO in insurance",
+        "period_text": "back half of the year",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Separate the specific PEO forecast from general company growth; anniversary explanation not automatically condition."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 50496,
+        "end": 51986
+      }
+    },
+    {
+      "id": "P2-13",
+      "meaning": "Management Solutions organic revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA020",
+          "start": 0,
+          "end": 845,
+          "global_start": 52901,
+          "global_end": 53746,
+          "text": "Jason Kupferberg [3435]: Good morning, guys. Thanks. So I'm wondering, just in the management solution segment, if you expect the organic growth rate to improve off the current 4% levels, just as we move into the second half. And then just, you know, any thoughts on a realistic organic growth rate for the MS business once you lap Paycor?\nBob Schrader [3458]: Yeah, I mean, we definitely expect it to get better in the back half of the year, Jason. I mean, I don't want to give a longer-term growth until we get through this year with the integration. And obviously, synergy realization plays into that. But we expect some modest acceleration to the organic growth rate in management solutions, probably moving closer towards the, you know, 5% range over time, but that definitely, there is some acceleration there in the back half of the year.",
+          "role": "company confirmed organic MS growth; limited commitment toward five, not an exact point"
+        }
+      ],
+      "expected_source_fields": {
+        "printed_target_value": "5%",
+        "qualifier": "probably moving closer towards",
+        "period_text": "back half of the year",
+        "business_scope": "management solutions",
+        "measurement_words": [
+          "organic"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not convert movement toward 5 into an exact 5% promise or a two-ended range; resolve allowed shape plus qualifiers.",
+        "Current analyst 4% is not the new forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 52901,
+        "end": 53746
+      }
+    },
+    {
+      "id": "P2-14",
+      "meaning": "Analyst-supplied PEO numeric interpolation",
+      "status": "unconfirmed_numeric_claim",
+      "evidence": [
+        {
+          "passage": "QA021",
+          "start": 0,
+          "end": 1818,
+          "global_start": 53748,
+          "global_end": 55566,
+          "text": "Jason Kupferberg [3491]: Understood, understood. And then I want to just ask a follow-up on PEO. I know we've talked about it already a lot on the call, but you're at 4.5% year-to-date, and you'll need to do, I guess, 7.5% in the second half to get to the lower end of the six to eight range that you're pointing us to. And obviously we know the lapping of the comps, et cetera. But, you know, maybe if you can just talk through any other factors driving the acceleration and just some commentary on your visibility to kind of get three points of acceleration from first half to second half.\nBob Schrader [3530]: Thank you. It's a good question. I would start with pointing to the three points of acceleration that happened this quarter relative to last quarter. Again, some of that is I know there's been some confusion around it and concern. A lot of it, there's strong execution there for sure. As I mentioned, we had double-digit demand and really strong retention again this quarter. Um, but, but some of it is just the easier compare Jason, as you move into the back half of the year. So we just anniversary in October, the annual enrollment. Last year, there were some headwinds from that. You know, that's probably only 25% of the MPP enrollment is in October. The rest of it is in January. So you're going to have another lapping or anniversary of the enrollment and the headwind from last year. So the comps are just going to get better. So it's a combination of the comps getting better and we continue to see strong execution in the business. As I mentioned, I mean, that 6% number was was weighted down from some of the challenges that we see in the agency. The PO grew high single digits in the quarter. So we feel really good about where we are with the PO and as we move into the back half of the year.",
+          "role": "analyst proposed 7.5% H2 calculation and annual six-to-eight range; management discusses drivers without expressly confirming the calculated 7.5"
+        }
+      ],
+      "expected_source_fields": {
+        "unconfirmed_analyst_amount": "7.5%",
+        "company_confirmed_numeric_value": false
+      },
+      "unresolved_fields_or_policy": [
+        "Do not treat a polite response or explanation of drivers as confirmation of the analyst calculation.",
+        "Whether the annual six-to-eight range is sufficiently confirmed must be adjudicated separately from 7.5; no numeric import into P2-03 without evidence."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 53748,
+        "end": 55566
+      }
+    },
+    {
+      "id": "P2-15",
+      "meaning": "Revenue synergies on track",
+      "status": "claim_requires_prior_scope",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 935,
+          "end": 1028,
+          "global_start": 2498,
+          "global_end": 2591,
+          "text": "We also remain on track to achieve the revenue synergies targets we set for this fiscal year.",
+          "role": "numberless reaffirmation of a named class of target"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Paychex, Inc.",
+        "period_text": "fiscal 26",
+        "company_confirmed": true,
+        "driver_state": "reaffirmed",
+        "value_text": "on track to achieve the revenue synergies targets"
+      },
+      "unresolved_fields_or_policy": [
+        "No amount restated here. Resolve target scope and series using only permitted earlier history; no invented current value."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 2498,
+        "end": 2591
+      }
+    }
+  ],
+  "passage_coverage": [
+    {
+      "passage": "PR000",
+      "reason": "Operator.",
+      "text_sha256": "66f85d35876533e7ec9438714f5fea37dba5bbad1b365076da165207a3eead9f"
+    },
+    {
+      "passage": "PR001",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "5bb5b560db8bf970fa3016fe01fcb223e865304861467cf90596de51b45e06d0"
+    },
+    {
+      "passage": "PR002",
+      "reason": "P2-01 and P2-15; PEO outlook is general reassurance; actual AI accuracy and employment exposure not company forecasts.",
+      "text_sha256": "0263ba821b5d480901845f7779ab057ebffcef35ce005a9a41e1bd984a02ea40"
+    },
+    {
+      "passage": "PR003",
+      "reason": "P2-02–10 plus current results; repeated actual 18% must not be confused with future 18%.",
+      "text_sha256": "f63276e66aa704e76f5b0c28b9b620c8640489918871ca7feed86e03859bba5e"
+    },
+    {
+      "passage": "PR004",
+      "reason": "Transition.",
+      "text_sha256": "895f50ed0e2df2de93a04995282c1ea2a826f205d9ade66ee6e3b5f339ac33dc"
+    },
+    {
+      "passage": "PR005",
+      "reason": "Operator.",
+      "text_sha256": "6a41375ff8ce0d5b205d64292388a57f6dffc2de4098310bd5990ab43fa9e340"
+    },
+    {
+      "passage": "QA000",
+      "reason": "P2-01 original-target comparison; 8–9% Paycor is an actual estimate.",
+      "text_sha256": "eb8557022fb61f87ce7043aa59d3f48da1e746d0e97a7f092260916a48bb6ed4"
+    },
+    {
+      "passage": "QA001",
+      "reason": "Strategy, current demand and AI capability; no new quantified or specific period forecast.",
+      "text_sha256": "8e5a0a05335a8bdf0d8ee32d694da24974fe69daccbc89e544ed05e176222175"
+    },
+    {
+      "passage": "QA002",
+      "reason": "Continuation assumption for revenue-per-client trends and scope explanation behind low-end outlook.",
+      "text_sha256": "c645bb2b214ab700340c280cefc0664b9c6b1da9c490db9b9e22860365fe8fd4"
+    },
+    {
+      "passage": "QA003",
+      "reason": "Actual pro-forma comparison only.",
+      "text_sha256": "926d382b81cac6c142693feef787903a0d1b0634211aa5132a432b8d4552c1bf"
+    },
+    {
+      "passage": "QA004",
+      "reason": "P2-11; analyst 8–9 is not adopted as a forecast.",
+      "text_sha256": "f45d5550b2900934b0826b691dbc85141dd3701c5e6214fd899b73df50074c2d"
+    },
+    {
+      "passage": "QA005",
+      "reason": "Current mix/pricing causes and commercial strategy.",
+      "text_sha256": "1306b177ff500e97fd54248f013d189a3b46a4646bd4362a42820e419d60e2dd"
+    },
+    {
+      "passage": "QA006",
+      "reason": "Pricing/packaging strategy, no specific level forecast.",
+      "text_sha256": "ea582f62cdc5fc4ecfe75ea4e92360602605f887029cb5ba2194bf12275f8680"
+    },
+    {
+      "passage": "QA007",
+      "reason": "Actual PEO, healthcare inflation and possible opportunity; no specific company forecast amount.",
+      "text_sha256": "cac9774b42d86f701f81674c16ff2fb6011d4b5e8693d29836e605fc691ff0d6"
+    },
+    {
+      "passage": "QA008",
+      "reason": "Actual customer-origin mix, not a future 50–50 forecast.",
+      "text_sha256": "20be93d3bfe241b4be2cdf4ed0892f748196e3394a3b1f87dd173199cea110c6"
+    },
+    {
+      "passage": "QA009",
+      "reason": "Potential productivity/strategy; historical headcount examples not forecasts.",
+      "text_sha256": "0a0dd79155835418914b1f576f6e121f5c20c97c6b8c58b0af8b588ac0444ab4"
+    },
+    {
+      "passage": "QA010",
+      "reason": "Inclusion in P2-05; duration target discussed as historical portfolio management, not a new period or financial forecast.",
+      "text_sha256": "b1a0cb8c970cb2b487b28d04168257eb1155563a18253a841e061a72bb7820e8"
+    },
+    {
+      "passage": "QA011",
+      "reason": "Current bookings/integration progress.",
+      "text_sha256": "e694500a80733a736ea7b80c29b4e7a1cc428750471616f72f90a6cc83d6c2a2"
+    },
+    {
+      "passage": "QA012",
+      "reason": "Reasons for low-end outlook; actual quarterly growth and comp history are not new future values.",
+      "text_sha256": "8af2544b71da9dfe1e285214bc21e83ab6c2f4635ce8617e4a0fa77beabf149d"
+    },
+    {
+      "passage": "QA013",
+      "reason": "Current pricing realization.",
+      "text_sha256": "bb02b41dbd77e185343a877001f3c9cb4822411caabe2f56cdf3728fdc738c40"
+    },
+    {
+      "passage": "QA014",
+      "reason": "AI opportunities and productization plans; no specified financial target.",
+      "text_sha256": "054fdf4275407f1fdad082ff239500c90d950be719433f918ec4e26096ecb876"
+    },
+    {
+      "passage": "QA015",
+      "reason": "Current client bundle selection.",
+      "text_sha256": "bc2d56ce45dcb5d1ad0602bf30b3f616668dffb6e4942f69aa4d10cd04a26256"
+    },
+    {
+      "passage": "QA016",
+      "reason": "Buyback-policy explanation and general future confidence; no promised buyback amount.",
+      "text_sha256": "26bfbbdf7b83a885b340ffe80a5733409af73c9af79acdc7b2e32adb755ed46d"
+    },
+    {
+      "passage": "QA017",
+      "reason": "Greeting.",
+      "text_sha256": "7143440939b0771afe834371ac87d17213baa37e1cdb6768554f7b7913e46c19"
+    },
+    {
+      "passage": "QA018",
+      "reason": "P2-12 and repeated Q3 outlook; causes and current progress separate.",
+      "text_sha256": "e39fbc3ff7a999e4689d43acc3df10bd70daba09f602f55340be0c74983e462e"
+    },
+    {
+      "passage": "QA019",
+      "reason": "AI rollout/current use; no specific financial forecast.",
+      "text_sha256": "8a8af4c1b98af4ad6eb6e7904d58115409fe9e1300fbaf52984fd42f4550370a"
+    },
+    {
+      "passage": "QA020",
+      "reason": "P2-13.",
+      "text_sha256": "0b2f1ec8106e0016e6d9fb07f9b37c1fbc1a8eeb679611e003f880d700d77a56"
+    },
+    {
+      "passage": "QA021",
+      "reason": "P2-14 unconfirmed calculated amount and repeated acceleration explanation; October enrollment percentage describes cycle/comparison.",
+      "text_sha256": "19c15d5b46f289c91b6450752c0fc7668e507af5ff4f255338cfd23bca60cd38"
+    },
+    {
+      "passage": "QA022",
+      "reason": "Closing, historical addressable-market expansion and broad optimism.",
+      "text_sha256": "d8913e39bb9dd20e1a1c773f146fe3b388cc5e426df3f4dc7f99455703a91aa1"
+    }
+  ]
+}

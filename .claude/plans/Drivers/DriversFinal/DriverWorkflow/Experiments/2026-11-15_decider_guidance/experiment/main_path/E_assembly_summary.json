@@ -1,0 +1,24 @@
+{
+  "targets": 53,
+  "statuses": {
+    "unresolved": 49,
+    "rejected": 4
+  },
+  "reasons": {
+    "missing_value": 37,
+    "missing_context": 32,
+    "positive_presence_missing_conditions": 16,
+    "missing_measure": 19,
+    "requires_supported_association_or_encoding_qualification": 17,
+    "form_none": 4,
+    "period_unclear": 4,
+    "requires_supported_association_or_encoding_revision": 1,
+    "form_several": 4,
+    "period_several": 2,
+    "time_type_unclear": 2,
+    "positive_presence_missing_comparison_revision": 2,
+    "requires_supported_association_or_encoding_reaffirmation": 2,
+    "subject_scope_unclear": 1,
+    "sign_unclear": 1
+  }
+}

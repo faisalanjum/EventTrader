@@ -1,0 +1,6195 @@
+{
+  "summary": {
+    "targets": 333,
+    "outcomes": {
+      "not_selected_by_B": 260,
+      "unresolved": 49,
+      "not_advanced_to_C": 20,
+      "rejected": 4
+    },
+    "not_advanced_reasons": {
+      "selected_numeric_role_probability_below_0.5": 2,
+      "sentence_probability_0.25_to_below_0.5": 18
+    },
+    "no_copy_but_recorded": [
+      {
+        "tag": "V58",
+        "form": "none",
+        "outcome": "rejected"
+      },
+      {
+        "tag": "S14",
+        "form": "several",
+        "outcome": "unresolved"
+      },
+      {
+        "tag": "S15",
+        "form": "several",
+        "outcome": "unresolved"
+      },
+      {
+        "tag": "S68",
+        "form": "none",
+        "outcome": "rejected"
+      },
+      {
+        "tag": "S71",
+        "form": "several",
+        "outcome": "unresolved"
+      },
+      {
+        "tag": "S76",
+        "form": "none",
+        "outcome": "rejected"
+      },
+      {
+        "tag": "S183",
+        "form": "several",
+        "outcome": "unresolved"
+      },
+      {
+        "tag": "S191",
+        "form": "none",
+        "outcome": "rejected"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "tag": "V0",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "[78]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007253967336534257,
+          "qualification": 0.005916220312377842,
+          "earlier": 0.0015329402354738095,
+          "actual": 0.014805898277731929,
+          "analyst_only": 0.0005821060337493505,
+          "hypothetical": 0.0011582297172331622,
+          "other": 0.9667728070583452,
+          "unclear": 0.0019778310285544685
+        },
+        "choice": "other",
+        "confidence": 0.9620260652095374
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V1",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "8.9%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.014944175692038349,
+          "qualification": 0.014944175692038349,
+          "earlier": 0.002925649886399523,
+          "actual": 0.8374585230470242,
+          "analyst_only": 0.001757496210904336,
+          "hypothetical": 0.0032395745014634093,
+          "other": 0.12075831339032417,
+          "unclear": 0.003972091579807667
+        },
+        "choice": "actual",
+        "confidence": 0.8142383120537419
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V2",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$2.84",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007026364033928122,
+          "qualification": 0.024489746906088544,
+          "earlier": 0.005878492596556356,
+          "actual": 0.44725349137364245,
+          "analyst_only": 0.0024095828633678537,
+          "hypothetical": 0.008398380613513294,
+          "other": 0.4952444122930453,
+          "unclear": 0.009299529319858118
+        },
+        "choice": "other",
+        "confidence": 0.4231364711920517
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V3",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "8.2%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004821326689705106,
+          "qualification": 0.013705307919334527,
+          "earlier": 0.0035511556397155412,
+          "actual": 0.6263961333768523,
+          "analyst_only": 0.0013832889103146274,
+          "hypothetical": 0.004700023318676325,
+          "other": 0.3398249820138935,
+          "unclear": 0.005617782131508088
+        },
+        "choice": "actual",
+        "confidence": 0.5730241524306884
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V4",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "51%,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.025731911100909485,
+          "qualification": 0.13831018981303095,
+          "earlier": 0.004910840969331389,
+          "actual": 0.6713841353506712,
+          "analyst_only": 0.00160042156724841,
+          "hypothetical": 0.006499596208288031,
+          "other": 0.1455416486148757,
+          "unclear": 0.006021256375644832
+        },
+        "choice": "actual",
+        "confidence": 0.6244390118293385
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V5",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "40",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.003964603329819092,
+          "qualification": 0.03547400534323871,
+          "earlier": 0.0034903401243196307,
+          "actual": 0.7548804721005162,
+          "analyst_only": 0.0013946888210433549,
+          "hypothetical": 0.0053826532130039325,
+          "other": 0.19067447978055496,
+          "unclear": 0.004738757287504115
+        },
+        "choice": "actual",
+        "confidence": 0.7198633966863043
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V6",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$659.9",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.008270662803161721,
+          "qualification": 0.01966971470157492,
+          "earlier": 0.0021983032579503984,
+          "actual": 0.6967775668124858,
+          "analyst_only": 0.0007538740652657932,
+          "hypothetical": 0.004263969409046149,
+          "other": 0.26458828341366125,
+          "unclear": 0.003477625536853998
+        },
+        "choice": "actual",
+        "confidence": 0.6534600763571267
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V7",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "8.2%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0038054148802888796,
+          "qualification": 0.022649048531709785,
+          "earlier": 0.0039036275051504174,
+          "actual": 0.5615860381329241,
+          "analyst_only": 0.0014450367712711288,
+          "hypothetical": 0.02639054208529655,
+          "other": 0.3735543296237701,
+          "unclear": 0.006665962469589076
+        },
+        "choice": "actual",
+        "confidence": 0.4989554721519132
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V8",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "11%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.015651422715175386,
+          "qualification": 0.023529684877776656,
+          "earlier": 0.005232370201491259,
+          "actual": 0.5834217977006921,
+          "analyst_only": 0.0033075274671687986,
+          "hypothetical": 0.14736590555538281,
+          "other": 0.21053599276973528,
+          "unclear": 0.010955298712577664
+        },
+        "choice": "actual",
+        "confidence": 0.5239106259436481
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V9",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$1.24",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010308385813446687,
+          "qualification": 0.031630944420124825,
+          "earlier": 0.001917821469123471,
+          "actual": 0.9138540613869677,
+          "analyst_only": 0.0009159728640136657,
+          "hypothetical": 0.002739919113211903,
+          "other": 0.03685621539999051,
+          "unclear": 0.0017766795331212372
+        },
+        "choice": "actual",
+        "confidence": 0.901547498727963
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V10",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "9.7%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.002286159706975151,
+          "qualification": 0.03154609781067737,
+          "earlier": 0.002467776459824503,
+          "actual": 0.8230853823400176,
+          "analyst_only": 0.0013387893797870232,
+          "hypothetical": 0.01197905301032531,
+          "other": 0.12489105238443368,
+          "unclear": 0.0024056889079593123
+        },
+        "choice": "actual",
+        "confidence": 0.7978118655314487
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V11",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "12.7%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.008909643696159646,
+          "qualification": 0.027338963212022973,
+          "earlier": 0.004043913943099128,
+          "actual": 0.6441924621486923,
+          "analyst_only": 0.002368141216726196,
+          "hypothetical": 0.0719954376984037,
+          "other": 0.23246595442094292,
+          "unclear": 0.008685483663953133
+        },
+        "choice": "actual",
+        "confidence": 0.5933628138842197
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V12",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.2228929447150708,
+          "qualification": 0.1912926028520647,
+          "earlier": 0.008763218482185543,
+          "actual": 0.009703519026124085,
+          "analyst_only": 0.0019989980337931364,
+          "hypothetical": 0.002784040582031862,
+          "other": 0.5578105566564365,
+          "unclear": 0.004754119652293336
+        },
+        "choice": "other",
+        "confidence": 0.4946406361787846
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V13",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$11.21",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.6651216769379996,
+          "qualification": 0.13702020098544032,
+          "earlier": 0.0075026545944370205,
+          "actual": 0.00552609192339108,
+          "analyst_only": 0.0018009281549403412,
+          "hypothetical": 0.002922524475795014,
+          "other": 0.17678628925704107,
+          "unclear": 0.003319633670955506
+        },
+        "choice": "current",
+        "confidence": 0.617281916500571
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V14",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$11.24",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.4773663102185421,
+          "qualification": 0.2222592736500043,
+          "earlier": 0.005384748468823577,
+          "actual": 0.009675927698995996,
+          "analyst_only": 0.0024440335713018565,
+          "hypothetical": 0.0043917173672285955,
+          "other": 0.2725154526733416,
+          "unclear": 0.005962536351761979
+        },
+        "choice": "current",
+        "confidence": 0.40270435453547665
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "selected_numeric_role_probability_below_0.5"
+      ]
+    },
+    {
+      "tag": "V15",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "8.4%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.7413153963083379,
+          "qualification": 0.1607012389706676,
+          "earlier": 0.004653604524550601,
+          "actual": 0.006318098160007503,
+          "analyst_only": 0.0020072352310690697,
+          "hypothetical": 0.003175363988246692,
+          "other": 0.07873359023742955,
+          "unclear": 0.0030954725796910865
+        },
+        "choice": "current",
+        "confidence": 0.7043604529238147
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V16",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "8.7%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.15104987064860473,
+          "qualification": 0.04678061709062644,
+          "earlier": 0.00522823922846256,
+          "actual": 0.011229162355419152,
+          "analyst_only": 0.001886684955358914,
+          "hypothetical": 0.004602814661774367,
+          "other": 0.7715604477724533,
+          "unclear": 0.007662163287300541
+        },
+        "choice": "other",
+        "confidence": 0.7389262260256608
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V17",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$4.86",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.7303929285553704,
+          "qualification": 0.1291342668018947,
+          "earlier": 0.005915711598738412,
+          "actual": 0.004469682435976131,
+          "analyst_only": 0.00178601952606265,
+          "hypothetical": 0.00268502601690866,
+          "other": 0.12271803544617493,
+          "unclear": 0.0028983296188741445
+        },
+        "choice": "current",
+        "confidence": 0.691877632634709
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V18",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "$4.90,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.8068886921107529,
+          "qualification": 0.15796615038074951,
+          "earlier": 0.0025456989881221413,
+          "actual": 0.003827098023339554,
+          "analyst_only": 0.0010980343112320743,
+          "hypothetical": 0.0019234316246640986,
+          "other": 0.023969018611410577,
+          "unclear": 0.0017818759497292107
+        },
+        "choice": "current",
+        "confidence": 0.779301362412289
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V19",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "10.5%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.942890640395086,
+          "qualification": 0.044309141879843986,
+          "earlier": 0.0018331295500951244,
+          "actual": 0.0026865151441632148,
+          "analyst_only": 0.000714062697232578,
+          "hypothetical": 0.0014574570514464713,
+          "other": 0.0052109340502613805,
+          "unclear": 0.0008981192318713
+        },
+        "choice": "current",
+        "confidence": 0.9347321604515269
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V20",
+      "kind": "numeric",
+      "passage": "PR002",
+      "text": "11.4%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.13752528941825556,
+          "qualification": 0.106590523670578,
+          "earlier": 0.007340856783356919,
+          "actual": 0.02558587289759128,
+          "analyst_only": 0.00285949789119257,
+          "hypothetical": 0.0063001112631049724,
+          "other": 0.7024770932587785,
+          "unclear": 0.011320754817142238
+        },
+        "choice": "other",
+        "confidence": 0.6599738208671754
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V21",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "[253]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007137346885631085,
+          "qualification": 0.007510512002149092,
+          "earlier": 0.0018493432687887083,
+          "actual": 0.028256752956276388,
+          "analyst_only": 0.0007580426619410832,
+          "hypothetical": 0.0012618901448942265,
+          "other": 0.9512298533764938,
+          "unclear": 0.0019962587038255784
+        },
+        "choice": "other",
+        "confidence": 0.9442626895731357
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V22",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "7.3%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.00597404827143223,
+          "qualification": 0.010734849494166756,
+          "earlier": 0.0026432845888269174,
+          "actual": 0.4001517898052836,
+          "analyst_only": 0.0015479233128477263,
+          "hypothetical": 0.002268534326152051,
+          "other": 0.5716814833353283,
+          "unclear": 0.0049980868659623345
+        },
+        "choice": "other",
+        "confidence": 0.5104931238118038
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V23",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "14.6%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.02839122381067273,
+          "qualification": 0.012562014343879394,
+          "earlier": 0.0030153722471913972,
+          "actual": 0.7039643031651589,
+          "analyst_only": 0.0022782984052911637,
+          "hypothetical": 0.0030931947268028914,
+          "other": 0.24141355207367807,
+          "unclear": 0.005282041227325461
+        },
+        "choice": "actual",
+        "confidence": 0.6616734893316102
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V24",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "10%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.09841702046005169,
+          "qualification": 0.023623902066624698,
+          "earlier": 0.004624896526184237,
+          "actual": 0.7952707941277692,
+          "analyst_only": 0.0029989783327809493,
+          "hypothetical": 0.0040716461764095475,
+          "other": 0.06546477665854405,
+          "unclear": 0.005527985651635537
+        },
+        "choice": "actual",
+        "confidence": 0.7660237647174506
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V25",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "3.1%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010087057918867402,
+          "qualification": 0.026563643742229255,
+          "earlier": 0.004817691172837352,
+          "actual": 0.767453895442038,
+          "analyst_only": 0.00296877412725505,
+          "hypothetical": 0.005613546283929509,
+          "other": 0.17506575407416247,
+          "unclear": 0.007429637238680936
+        },
+        "choice": "actual",
+        "confidence": 0.7342330233623292
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V26",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "50.3%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.015474965887817162,
+          "qualification": 0.017135442436315505,
+          "earlier": 0.003029563664550912,
+          "actual": 0.6070035501357652,
+          "analyst_only": 0.0019150710534025402,
+          "hypothetical": 0.0027359895820312763,
+          "other": 0.34652184751168935,
+          "unclear": 0.006183569728427986
+        },
+        "choice": "actual",
+        "confidence": 0.5508612001551603
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V27",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "58.1%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.01874508672490665,
+          "qualification": 0.0169286296225441,
+          "earlier": 0.002844290054385533,
+          "actual": 0.8567370010751367,
+          "analyst_only": 0.002261394125480272,
+          "hypothetical": 0.002772728393288223,
+          "other": 0.09574957751966665,
+          "unclear": 0.003961292484591884
+        },
+        "choice": "actual",
+        "confidence": 0.8362708583715849
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V28",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "50.5%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.011624710573196516,
+          "qualification": 0.018389814978541228,
+          "earlier": 0.002790382806469703,
+          "actual": 0.9306853514200404,
+          "analyst_only": 0.001676237918182856,
+          "hypothetical": 0.0019531426085008653,
+          "other": 0.02909191915603634,
+          "unclear": 0.0037884405390321355
+        },
+        "choice": "actual",
+        "confidence": 0.9207832587657604
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V29",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "41.4%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.00608273780873082,
+          "qualification": 0.027353739554040166,
+          "earlier": 0.0049609838978938794,
+          "actual": 0.6445406562513885,
+          "analyst_only": 0.0031359752197247046,
+          "hypothetical": 0.005780510106432311,
+          "other": 0.30009477600234513,
+          "unclear": 0.008050621159444566
+        },
+        "choice": "actual",
+        "confidence": 0.5937607500015868
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V30",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "30",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004462600521489306,
+          "qualification": 0.026560497424435198,
+          "earlier": 0.007241854643399587,
+          "actual": 0.4850713432204741,
+          "analyst_only": 0.0019745276514498123,
+          "hypothetical": 0.004134176146891007,
+          "other": 0.4609702655968019,
+          "unclear": 0.009584734795059054
+        },
+        "choice": "actual",
+        "confidence": 0.4115101065376847
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V31",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "50.3%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.011363412211226626,
+          "qualification": 0.017083279724853934,
+          "earlier": 0.0025921352111096113,
+          "actual": 0.8645632234790801,
+          "analyst_only": 0.001176519780693502,
+          "hypothetical": 0.002282052758030397,
+          "other": 0.09662432932621118,
+          "unclear": 0.004315047508794637
+        },
+        "choice": "actual",
+        "confidence": 0.8452151125475201
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V32",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "58.1%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007641588652637133,
+          "qualification": 0.013385804921688388,
+          "earlier": 0.0032960401343645304,
+          "actual": 0.6117928280232778,
+          "analyst_only": 0.0019799972303350248,
+          "hypothetical": 0.003743902003083065,
+          "other": 0.34925590404735296,
+          "unclear": 0.008903934987261075
+        },
+        "choice": "actual",
+        "confidence": 0.5563346605980318
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V33",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "28%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.01608158908588925,
+          "qualification": 0.05192579712583373,
+          "earlier": 0.017807156470525127,
+          "actual": 0.4195927387433525,
+          "analyst_only": 0.002771707291542441,
+          "hypothetical": 0.007487500030835506,
+          "other": 0.4646156404819161,
+          "unclear": 0.01971787077010531
+        },
+        "choice": "other",
+        "confidence": 0.3881321605507613
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V34",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "2026.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.057731252914412695,
+          "qualification": 0.044745255005585474,
+          "earlier": 0.0075179432759702,
+          "actual": 0.018814360318980643,
+          "analyst_only": 0.00204980552256695,
+          "hypothetical": 0.003975933725942376,
+          "other": 0.8599032234278912,
+          "unclear": 0.005262225808650533
+        },
+        "choice": "other",
+        "confidence": 0.8398893982033042
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V35",
+      "kind": "numeric",
+      "passage": "PR003",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.1009344967891559,
+          "qualification": 0.4204922279879545,
+          "earlier": 0.008968745911660992,
+          "actual": 0.01531532594434949,
+          "analyst_only": 0.0023838504291419788,
+          "hypothetical": 0.004175799225127975,
+          "other": 0.44247740256984525,
+          "unclear": 0.005252151142763918
+        },
+        "choice": "other",
+        "confidence": 0.3628313172226803
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V36",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "[438]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.021119471944264896,
+          "qualification": 0.03515693223563251,
+          "earlier": 0.005758331706052778,
+          "actual": 0.139186339599442,
+          "analyst_only": 0.002821223618210262,
+          "hypothetical": 0.003640000528115787,
+          "other": 0.7872482055820033,
+          "unclear": 0.005069494786278502
+        },
+        "choice": "other",
+        "confidence": 0.756855092093718
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V37",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "27.8%,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.013608970619139625,
+          "qualification": 0.09931258813316488,
+          "earlier": 0.006336262887253194,
+          "actual": 0.6887331574489526,
+          "analyst_only": 0.0028759075667145096,
+          "hypothetical": 0.007969494873792771,
+          "other": 0.17396639210512826,
+          "unclear": 0.007197226365854195
+        },
+        "choice": "actual",
+        "confidence": 0.6442664656559458
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V38",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "60",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0070617596775000985,
+          "qualification": 0.026568417154899184,
+          "earlier": 0.009346380781994805,
+          "actual": 0.46110795326759785,
+          "analyst_only": 0.0028946034552550415,
+          "hypothetical": 0.02280170499754423,
+          "other": 0.46110795326759785,
+          "unclear": 0.009111227397610975
+        },
+        "choice": "actual",
+        "confidence": 0.38412337516296896
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V39",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$659.9",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.016880479912292065,
+          "qualification": 0.09547728671688024,
+          "earlier": 0.011815584733845145,
+          "actual": 0.5682614819454195,
+          "analyst_only": 0.0029844859378892843,
+          "hypothetical": 0.0053628634426367795,
+          "other": 0.2929690365635794,
+          "unclear": 0.006248780747457602
+        },
+        "choice": "actual",
+        "confidence": 0.5065845507947652
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V40",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$609.9",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004374080811392666,
+          "qualification": 0.02069841701667461,
+          "earlier": 0.0056435288966512846,
+          "actual": 0.22707998794890938,
+          "analyst_only": 0.0015000232988968925,
+          "hypothetical": 0.003221735597069814,
+          "other": 0.7332181944199245,
+          "unclear": 0.004264032010480821
+        },
+        "choice": "other",
+        "confidence": 0.6951065079084852
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V41",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "23.2%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.005960700973449201,
+          "qualification": 0.02242591023214147,
+          "earlier": 0.0033171882053212288,
+          "actual": 0.12684272101941804,
+          "analyst_only": 0.0008378851259503207,
+          "hypothetical": 0.002096886492639235,
+          "other": 0.8359476839763258,
+          "unclear": 0.0025710239747546645
+        },
+        "choice": "other",
+        "confidence": 0.8125116388300866
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V42",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007805892242312388,
+          "qualification": 0.08348297800085593,
+          "earlier": 0.013329597944182413,
+          "actual": 0.674594440480333,
+          "analyst_only": 0.0022395931985744154,
+          "hypothetical": 0.004934320505484912,
+          "other": 0.20892402221647496,
+          "unclear": 0.0046891554117819215
+        },
+        "choice": "actual",
+        "confidence": 0.6281079319775235
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V43",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "23.4%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.005222083294912835,
+          "qualification": 0.016437350947787796,
+          "earlier": 0.006402875002341388,
+          "actual": 0.3158887777505364,
+          "analyst_only": 0.0016172954767439847,
+          "hypothetical": 0.004962620562846409,
+          "other": 0.6447529496302112,
+          "unclear": 0.004716047334619949
+        },
+        "choice": "other",
+        "confidence": 0.5940033710059557
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V44",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "40",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004432243883478694,
+          "qualification": 0.028475454866089656,
+          "earlier": 0.004002745839843237,
+          "actual": 0.16105935423776116,
+          "analyst_only": 0.001481727505178557,
+          "hypothetical": 0.013951197653122367,
+          "other": 0.7818129279268297,
+          "unclear": 0.00478434808769669
+        },
+        "choice": "other",
+        "confidence": 0.750643346202091
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V45",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "20.6%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010556259757825114,
+          "qualification": 0.12501174880953092,
+          "earlier": 0.01470189434043963,
+          "actual": 0.6719441177666065,
+          "analyst_only": 0.002599309803415382,
+          "hypothetical": 0.00650501751717041,
+          "other": 0.16129274039932767,
+          "unclear": 0.007388911605684475
+        },
+        "choice": "actual",
+        "confidence": 0.6250789917332645
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V46",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "21%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.005500360737314003,
+          "qualification": 0.022337933513390425,
+          "earlier": 0.006918127497121695,
+          "actual": 0.3684233942460737,
+          "analyst_only": 0.0017925425971627692,
+          "hypothetical": 0.005787938240900125,
+          "other": 0.5828307143444924,
+          "unclear": 0.006408988823544944
+        },
+        "choice": "other",
+        "confidence": 0.5232351021079913
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V47",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$502.5",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.009040116423972311,
+          "qualification": 0.06597102565634082,
+          "earlier": 0.007372975595803638,
+          "actual": 0.8014207333869132,
+          "analyst_only": 0.002010279381158419,
+          "hypothetical": 0.0051607540670919995,
+          "other": 0.10436345412372187,
+          "unclear": 0.004660661364997764
+        },
+        "choice": "actual",
+        "confidence": 0.7730522667279008
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V48",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$463.5",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.019369068354918584,
+          "qualification": 0.04160070176194977,
+          "earlier": 0.006153479324531902,
+          "actual": 0.41217032646416873,
+          "analyst_only": 0.0022205720754890725,
+          "hypothetical": 0.006475206551776071,
+          "other": 0.5053683224023672,
+          "unclear": 0.0066423230647987015
+        },
+        "choice": "other",
+        "confidence": 0.4347066541741339
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V49",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$1.24",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.00770583275702585,
+          "qualification": 0.0763476157197217,
+          "earlier": 0.007322963698861675,
+          "actual": 0.8376005717080377,
+          "analyst_only": 0.0017577953131867987,
+          "hypothetical": 0.003409531839023796,
+          "other": 0.062267895223200594,
+          "unclear": 0.003587793740941918
+        },
+        "choice": "actual",
+        "confidence": 0.8144006533806145
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V50",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$1.13",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.06254236294331432,
+          "qualification": 0.07287397235438085,
+          "earlier": 0.005281208622839904,
+          "actual": 0.79949244087962,
+          "analyst_only": 0.002164758497460042,
+          "hypothetical": 0.005281208622839904,
+          "other": 0.04847416404638393,
+          "unclear": 0.0038898840331610036
+        },
+        "choice": "actual",
+        "confidence": 0.7708485038624229
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V51",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "9.7%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.014377503049238072,
+          "qualification": 0.020540597381172223,
+          "earlier": 0.005188327865504614,
+          "actual": 0.5093066807377031,
+          "analyst_only": 0.0024156582621668583,
+          "hypothetical": 0.025185136693287237,
+          "other": 0.4153824244374631,
+          "unclear": 0.0076036715734647915
+        },
+        "choice": "actual",
+        "confidence": 0.43920763512880356
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V52",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "12.7%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.009943173720702074,
+          "qualification": 0.0355504469405598,
+          "earlier": 0.005533473353032204,
+          "actual": 0.47820933855348974,
+          "analyst_only": 0.0025763564056171698,
+          "hypothetical": 0.02899437902562746,
+          "other": 0.43186916891633464,
+          "unclear": 0.0073236630846369
+        },
+        "choice": "actual",
+        "confidence": 0.40366781548970254
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V53",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "1.5",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.08188526688901356,
+          "qualification": 0.1947437311562425,
+          "earlier": 0.00415371842140922,
+          "actual": 0.009630042547550509,
+          "analyst_only": 0.0021967313743170274,
+          "hypothetical": 0.004370888885426387,
+          "other": 0.6962790196305553,
+          "unclear": 0.006740601095485595
+        },
+        "choice": "other",
+        "confidence": 0.652890308149206
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V54",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0462156358776589,
+          "qualification": 0.025072383509798773,
+          "earlier": 0.0024048423103439883,
+          "actual": 0.8881606191880528,
+          "analyst_only": 0.0010111813787366441,
+          "hypothetical": 0.0019120048626014435,
+          "other": 0.03234890440012334,
+          "unclear": 0.0028744284726841206
+        },
+        "choice": "actual",
+        "confidence": 0.8721835647863461
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V55",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$1.45",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.005001239780063087,
+          "qualification": 0.015346141028263167,
+          "earlier": 0.00221285472809977,
+          "actual": 0.1119898222874466,
+          "analyst_only": 0.0010043716426900585,
+          "hypothetical": 0.0019481431751772324,
+          "other": 0.8599838928185103,
+          "unclear": 0.0025135345397497596
+        },
+        "choice": "other",
+        "confidence": 0.8399815917925831
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V56",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2025",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.023555730125043337,
+          "qualification": 0.5840672996116805,
+          "earlier": 0.009175712471315925,
+          "actual": 0.02021613953707901,
+          "analyst_only": 0.001707094065532802,
+          "hypothetical": 0.003484308806439173,
+          "other": 0.35086090246730406,
+          "unclear": 0.006932812915605256
+        },
+        "choice": "qualification",
+        "confidence": 0.5246483424133491
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V57",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.045351701049432334,
+          "qualification": 0.28403672176814526,
+          "earlier": 0.011167130035719963,
+          "actual": 0.03340386574403956,
+          "analyst_only": 0.002483270068431505,
+          "hypothetical": 0.005068543229711803,
+          "other": 0.6100513209271652,
+          "unclear": 0.008437447177354361
+        },
+        "choice": "other",
+        "confidence": 0.5543443667739031
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V58",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.6673008579497244,
+          "qualification": 0.1773655067483086,
+          "earlier": 0.005404706417568715,
+          "actual": 0.016166926341223572,
+          "analyst_only": 0.001950366532427422,
+          "hypothetical": 0.0038806910019198483,
+          "other": 0.12414789154282532,
+          "unclear": 0.0037830534660022097
+        },
+        "choice": "current",
+        "confidence": 0.6197724090853993
+      },
+      "outcome": "rejected",
+      "reasons": [
+        "form_none"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "V59",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$101",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.3379636258571075,
+          "qualification": 0.2365596190580427,
+          "earlier": 0.006030854504365457,
+          "actual": 0.015092781082496691,
+          "analyst_only": 0.0017303149620619671,
+          "hypothetical": 0.003910659175096253,
+          "other": 0.39379347622625754,
+          "unclear": 0.0049186691345718845
+        },
+        "choice": "other",
+        "confidence": 0.30719254425858006
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V60",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.6994978077091861,
+          "qualification": 0.1441018111205136,
+          "earlier": 0.005811699572716078,
+          "actual": 0.011563677154971816,
+          "analyst_only": 0.002322270031963328,
+          "hypothetical": 0.003491202080414411,
+          "other": 0.13013796299241495,
+          "unclear": 0.003073569337819637
+        },
+        "choice": "current",
+        "confidence": 0.6565689230962127
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V61",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "20%,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.01129738576874803,
+          "qualification": 0.6661963244123194,
+          "earlier": 0.025533056911043583,
+          "actual": 0.08244368908355008,
+          "analyst_only": 0.0016710832166432557,
+          "hypothetical": 0.0028535964893277024,
+          "other": 0.20632309534317897,
+          "unclear": 0.00368176877518897
+        },
+        "choice": "qualification",
+        "confidence": 0.6185100850426507
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V62",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2025,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.03209309063559769,
+          "qualification": 0.5030172712008025,
+          "earlier": 0.020286931712173096,
+          "actual": 0.08031598869386167,
+          "analyst_only": 0.0021546323435190505,
+          "hypothetical": 0.0045112685633020315,
+          "other": 0.35208948179769833,
+          "unclear": 0.005531335053045541
+        },
+        "choice": "qualification",
+        "confidence": 0.43201973851520287
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V63",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.15993398365274278,
+          "qualification": 0.15198740377585698,
+          "earlier": 0.009696979996831934,
+          "actual": 0.02553640989384546,
+          "analyst_only": 0.002577411459111474,
+          "hypothetical": 0.00714232842941979,
+          "other": 0.6331782322294724,
+          "unclear": 0.00994725056271919
+        },
+        "choice": "other",
+        "confidence": 0.5807751225479685
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V64",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "2026",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.8149282903820453,
+          "qualification": 0.1008496951514982,
+          "earlier": 0.0027054888101801433,
+          "actual": 0.006600390631005666,
+          "analyst_only": 0.0013597307213591503,
+          "hypothetical": 0.0037679816464614765,
+          "other": 0.06708293384726997,
+          "unclear": 0.0027054888101801433
+        },
+        "choice": "current",
+        "confidence": 0.7884894747223374
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V65",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$0.03",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.8436906201074362,
+          "qualification": 0.08515440678163577,
+          "earlier": 0.002947421488494562,
+          "actual": 0.00380282396952311,
+          "analyst_only": 0.002529552685207885,
+          "hypothetical": 0.004783038100210668,
+          "other": 0.05382845455826876,
+          "unclear": 0.0032636823092229896
+        },
+        "choice": "current",
+        "confidence": 0.8213607086942128
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V66",
+      "kind": "numeric",
+      "passage": "PR004",
+      "text": "$0.04.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.055306744895435196,
+          "qualification": 0.08314584915765,
+          "earlier": 0.005041230440916895,
+          "actual": 0.014700269668479524,
+          "analyst_only": 0.0027349086053171196,
+          "hypothetical": 0.006672166865795403,
+          "other": 0.8237902639550106,
+          "unclear": 0.008608566411395256
+        },
+        "choice": "other",
+        "confidence": 0.7986174445200122
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V67",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "[783]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.00612931389052299,
+          "qualification": 0.010736742460761997,
+          "earlier": 0.0034110232443255594,
+          "actual": 0.015339178210923773,
+          "analyst_only": 0.004750591469375696,
+          "hypothetical": 0.002268935675093572,
+          "other": 0.9518288502386102,
+          "unclear": 0.005535364810386213
+        },
+        "choice": "other",
+        "confidence": 0.9449472574155545
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V68",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "[818]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.03595853626264665,
+          "qualification": 0.05405856155513542,
+          "earlier": 0.011718728957928227,
+          "actual": 0.09964562576028993,
+          "analyst_only": 0.008202588171056081,
+          "hypothetical": 0.010856285041900542,
+          "other": 0.7651911637028117,
+          "unclear": 0.014368510548231439
+        },
+        "choice": "other",
+        "confidence": 0.7316470442317848
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V69",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "Q3",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.014639924448136455,
+          "qualification": 0.07478054222864065,
+          "earlier": 0.007547664062428114,
+          "actual": 0.29605628496114916,
+          "analyst_only": 0.005283028543135526,
+          "hypothetical": 0.009493145596593476,
+          "other": 0.5742491780240517,
+          "unclear": 0.017950232135864906
+        },
+        "choice": "other",
+        "confidence": 0.5134276320274876
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V70",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "60",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.006961870210286469,
+          "qualification": 0.06072535136772624,
+          "earlier": 0.007907840125013586,
+          "actual": 0.7376951893077649,
+          "analyst_only": 0.004872998970228751,
+          "hypothetical": 0.01316393769053791,
+          "other": 0.15991645448224953,
+          "unclear": 0.008756357846192556
+        },
+        "choice": "actual",
+        "confidence": 0.7002230734945885
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V71",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "Q3",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.007834054263361747,
+          "qualification": 0.03434296953164191,
+          "earlier": 0.012393151919962797,
+          "actual": 0.2263348621677398,
+          "analyst_only": 0.0043597280428464774,
+          "hypothetical": 0.008456406827402441,
+          "other": 0.6945014359901637,
+          "unclear": 0.01177739125688115
+        },
+        "choice": "other",
+        "confidence": 0.6508587839887585
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V72",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "100",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004169731376636008,
+          "qualification": 0.025457888693444612,
+          "earlier": 0.01017260452399144,
+          "actual": 0.342448590192661,
+          "analyst_only": 0.003231797115692187,
+          "hypothetical": 0.006766586990755825,
+          "other": 0.5998684132945001,
+          "unclear": 0.007884387812318818
+        },
+        "choice": "other",
+        "confidence": 0.5427067580508573
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V73",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "70",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.002528341200355622,
+          "qualification": 0.01892697770804668,
+          "earlier": 0.008812302535789627,
+          "actual": 0.21850224863901832,
+          "analyst_only": 0.001558023820966673,
+          "hypothetical": 0.0029460100295115453,
+          "other": 0.7424086174158406,
+          "unclear": 0.004317478650470894
+        },
+        "choice": "other",
+        "confidence": 0.7056098484752464
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V74",
+      "kind": "numeric",
+      "passage": "QA000",
+      "text": "24.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.005843944490455225,
+          "qualification": 0.03754510354344586,
+          "earlier": 0.011627836364076227,
+          "actual": 0.7592566163293766,
+          "analyst_only": 0.003422250376127115,
+          "hypothetical": 0.00997931142600007,
+          "other": 0.16459036000471838,
+          "unclear": 0.0077345774658004966
+        },
+        "choice": "actual",
+        "confidence": 0.7248647043764304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V75",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "[901]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.00500785358459932,
+          "qualification": 0.011610282244417918,
+          "earlier": 0.005688314624892631,
+          "actual": 0.027612167531826274,
+          "analyst_only": 0.009964246010525386,
+          "hypothetical": 0.0032473023959528418,
+          "other": 0.9295306529102701,
+          "unclear": 0.007339180697515428
+        },
+        "choice": "other",
+        "confidence": 0.9194636033260231
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V76",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "[928]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.09561925568432023,
+          "qualification": 0.1951661446117694,
+          "earlier": 0.022952329816295698,
+          "actual": 0.17625388847788018,
+          "analyst_only": 0.01041761526723385,
+          "hypothetical": 0.09561925568432023,
+          "other": 0.3785563781388886,
+          "unclear": 0.025415132319291846
+        },
+        "choice": "other",
+        "confidence": 0.2897787178730155
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V77",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "1.7",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.006599939657284248,
+          "qualification": 0.05470801321206753,
+          "earlier": 0.004986656185252347,
+          "actual": 0.7743848880624229,
+          "analyst_only": 0.0025062052565730155,
+          "hypothetical": 0.005247378068022378,
+          "other": 0.14407018800573215,
+          "unclear": 0.007496731552645411
+        },
+        "choice": "actual",
+        "confidence": 0.7421541577856262
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V78",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "10",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.02280055241754088,
+          "qualification": 0.14279929235668573,
+          "earlier": 0.013352147707664222,
+          "actual": 0.395714831408795,
+          "analyst_only": 0.005907807212326428,
+          "hypothetical": 0.08152023204547124,
+          "other": 0.3227387168342325,
+          "unclear": 0.015166420017284016
+        },
+        "choice": "actual",
+        "confidence": 0.30938837875290853
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V79",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "60%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.026290229057387395,
+          "qualification": 0.37213460615680316,
+          "earlier": 0.0085678701397324,
+          "actual": 0.12127697569058499,
+          "analyst_only": 0.004531195146703978,
+          "hypothetical": 0.07666252891555042,
+          "other": 0.37213460615680316,
+          "unclear": 0.018401988736434505
+        },
+        "choice": "qualification",
+        "confidence": 0.28243954989348935
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "selected_numeric_role_probability_below_0.5"
+      ]
+    },
+    {
+      "tag": "V80",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "100",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010399217840833615,
+          "qualification": 0.06513004082293065,
+          "earlier": 0.00826804908497038,
+          "actual": 0.05589631638739075,
+          "analyst_only": 0.00384956067342488,
+          "hypothetical": 0.09304887911898382,
+          "other": 0.7518928736323809,
+          "unclear": 0.011515062439085027
+        },
+        "choice": "other",
+        "confidence": 0.7164489984370067
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V81",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "30%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.04655877280007773,
+          "qualification": 0.10522684797918394,
+          "earlier": 0.009839005157691596,
+          "actual": 0.020600459278576146,
+          "analyst_only": 0.005761782826541363,
+          "hypothetical": 0.537497120734676,
+          "other": 0.2633400943287679,
+          "unclear": 0.011175916894485327
+        },
+        "choice": "hypothetical",
+        "confidence": 0.47142528083962976
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V82",
+      "kind": "numeric",
+      "passage": "QA001",
+      "text": "30",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.011049096909950812,
+          "qualification": 0.07860305553959061,
+          "earlier": 0.00834826994620547,
+          "actual": 0.023134083384241905,
+          "analyst_only": 0.0041956918301124056,
+          "hypothetical": 0.12434680949091273,
+          "other": 0.7400870588382903,
+          "unclear": 0.010235934060695735
+        },
+        "choice": "other",
+        "confidence": 0.7029566386723317
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V83",
+      "kind": "numeric",
+      "passage": "QA003",
+      "text": "[1084]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010090015804103134,
+          "qualification": 0.027960692251293735,
+          "earlier": 0.009588686679777005,
+          "actual": 0.06649751813803846,
+          "analyst_only": 0.009588686679777005,
+          "hypothetical": 0.007623625207394205,
+          "other": 0.8500519562792161,
+          "unclear": 0.018598818960400325
+        },
+        "choice": "other",
+        "confidence": 0.828630807176247
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V84",
+      "kind": "numeric",
+      "passage": "QA003",
+      "text": "[1108]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.05327773297614143,
+          "qualification": 0.1810227254609873,
+          "earlier": 0.017362980835030056,
+          "actual": 0.10874396232748633,
+          "analyst_only": 0.007880718748187151,
+          "hypothetical": 0.024805835464074513,
+          "other": 0.5845039710073385,
+          "unclear": 0.02240207318075467
+        },
+        "choice": "other",
+        "confidence": 0.5251473954369583
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V85",
+      "kind": "numeric",
+      "passage": "QA003",
+      "text": "[1132]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.019068677588978997,
+          "qualification": 0.05851163703476041,
+          "earlier": 0.009342463073652567,
+          "actual": 0.050216187219842154,
+          "analyst_only": 0.004462064416543076,
+          "hypothetical": 0.018121237608094466,
+          "other": 0.828223889330603,
+          "unclear": 0.01205384372752534
+        },
+        "choice": "other",
+        "confidence": 0.8036844449492605
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V86",
+      "kind": "numeric",
+      "passage": "QA003",
+      "text": "100",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010463085227747465,
+          "qualification": 0.24034053551691223,
+          "earlier": 0.007706604581244332,
+          "actual": 0.0707359029611293,
+          "analyst_only": 0.0038732027917811255,
+          "hypothetical": 0.016979361281098563,
+          "other": 0.6329219463589885,
+          "unclear": 0.016979361281098563
+        },
+        "choice": "other",
+        "confidence": 0.5804822244102725
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V87",
+      "kind": "numeric",
+      "passage": "QA006",
+      "text": "[1443]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0033851864988209686,
+          "qualification": 0.008471743031782346,
+          "earlier": 0.0033851864988209686,
+          "actual": 0.00938076889412385,
+          "analyst_only": 0.0022517495944452456,
+          "hypothetical": 0.0012215928803927403,
+          "other": 0.9689985190202551,
+          "unclear": 0.002905253581358732
+        },
+        "choice": "other",
+        "confidence": 0.9645697360231488
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V88",
+      "kind": "numeric",
+      "passage": "QA006",
+      "text": "[1471]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.05919109019844444,
+          "qualification": 0.05345531650109093,
+          "earlier": 0.007325068714878373,
+          "actual": 0.1407712872559578,
+          "analyst_only": 0.006615247231905648,
+          "hypothetical": 0.005677374648590391,
+          "other": 0.7190576326303406,
+          "unclear": 0.007906982818791796
+        },
+        "choice": "other",
+        "confidence": 0.6789230087203892
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V89",
+      "kind": "numeric",
+      "passage": "QA006",
+      "text": "95%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.054854971749537,
+          "qualification": 0.11196317033630888,
+          "earlier": 0.006617665466824288,
+          "actual": 0.4003090683235543,
+          "analyst_only": 0.00397536373991324,
+          "hypothetical": 0.005826031534165626,
+          "other": 0.4003090683235543,
+          "unclear": 0.016144660526142413
+        },
+        "choice": "actual",
+        "confidence": 0.31463893522691916
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V90",
+      "kind": "numeric",
+      "passage": "QA006",
+      "text": "2%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.7320298932592073,
+          "qualification": 0.143310897042586,
+          "earlier": 0.010928801828325448,
+          "actual": 0.07388439413072073,
+          "analyst_only": 0.0025573362527149695,
+          "hypothetical": 0.009143403274700727,
+          "other": 0.02174529918683733,
+          "unclear": 0.0063999750249074845
+        },
+        "choice": "current",
+        "confidence": 0.6937484494390941
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "period_unclear"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V91",
+      "kind": "numeric",
+      "passage": "QA006",
+      "text": "3%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.565162185275512,
+          "qualification": 0.15807123577917276,
+          "earlier": 0.021660767626757723,
+          "actual": 0.04895515769553233,
+          "analyst_only": 0.00392848395326654,
+          "hypothetical": 0.11064288832170775,
+          "other": 0.08149414558868105,
+          "unclear": 0.010085135759369826
+        },
+        "choice": "current",
+        "confidence": 0.503042497457728
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_context",
+        "period_unclear"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V92",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "[2548]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.004803711036929825,
+          "qualification": 0.009804738591892114,
+          "earlier": 0.004338216460806579,
+          "actual": 0.010317363677776439,
+          "analyst_only": 0.0030365583662644744,
+          "hypothetical": 0.0016898745509598273,
+          "other": 0.962471356740844,
+          "unclear": 0.0035381805745266833
+        },
+        "choice": "other",
+        "confidence": 0.957110121989536
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V93",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "4Q",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.028584097538274417,
+          "qualification": 0.10754183339288241,
+          "earlier": 0.012647353643542133,
+          "actual": 0.03330602391398995,
+          "analyst_only": 0.011421786259542469,
+          "hypothetical": 0.006196414855608619,
+          "other": 0.7847953786300096,
+          "unclear": 0.015507111766150408
+        },
+        "choice": "other",
+        "confidence": 0.7540518612914395
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V94",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "4Q",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0138634815278619,
+          "qualification": 0.0868266801389067,
+          "earlier": 0.029775867261699375,
+          "actual": 0.20649564083824268,
+          "analyst_only": 0.032970825435608746,
+          "hypothetical": 0.008118541494068524,
+          "other": 0.6021427297459037,
+          "unclear": 0.019806233557708452
+        },
+        "choice": "other",
+        "confidence": 0.5453059768524613
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V95",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "[2571]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.014774654888724991,
+          "qualification": 0.04308303788013497,
+          "earlier": 0.013342944811962465,
+          "actual": 0.07171900520297463,
+          "analyst_only": 0.006056102881747511,
+          "hypothetical": 0.006705928081372324,
+          "other": 0.8279583396299858,
+          "unclear": 0.016359986623097303
+        },
+        "choice": "other",
+        "confidence": 0.8033809595771266
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V96",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "Q4",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.010573890893031929,
+          "qualification": 0.17439693050089358,
+          "earlier": 0.013642658352454581,
+          "actual": 0.12207014745036003,
+          "analyst_only": 0.004334220156686192,
+          "hypothetical": 0.005884473622921169,
+          "other": 0.6561328707623029,
+          "unclear": 0.012964808261349721
+        },
+        "choice": "other",
+        "confidence": 0.6070089951569175
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V97",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "9%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.015521516612520998,
+          "qualification": 0.1537836096586752,
+          "earlier": 0.033336964622261676,
+          "actual": 0.4718801835437181,
+          "analyst_only": 0.00800216876722693,
+          "hypothetical": 0.01592210733629378,
+          "other": 0.2834678685337708,
+          "unclear": 0.018085580925532536
+        },
+        "choice": "actual",
+        "confidence": 0.39643449547853493
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V98",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "18.5%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.04194248614166233,
+          "qualification": 0.10496501991170296,
+          "earlier": 0.027899206659030402,
+          "actual": 0.2908710342903284,
+          "analyst_only": 0.006364152523368336,
+          "hypothetical": 0.018557923562752206,
+          "other": 0.484204488021944,
+          "unclear": 0.025195688889211355
+        },
+        "choice": "other",
+        "confidence": 0.4105194148822217
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V99",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "Q4.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.022235264371147593,
+          "qualification": 0.09263196355812423,
+          "earlier": 0.030188321877462,
+          "actual": 0.0477566857277628,
+          "analyst_only": 0.004820124978942271,
+          "hypothetical": 0.007822037176612031,
+          "other": 0.7876592714951622,
+          "unclear": 0.006886330814786892
+        },
+        "choice": "other",
+        "confidence": 0.7573248817087569
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V100",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "[2638]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.1750673882870349,
+          "qualification": 0.11645087155095699,
+          "earlier": 0.06003662714594816,
+          "actual": 0.06995433301839264,
+          "analyst_only": 0.008657050919775769,
+          "hypothetical": 0.012056826153462872,
+          "other": 0.5371882710375645,
+          "unclear": 0.02058863188686417
+        },
+        "choice": "other",
+        "confidence": 0.4710723097572166
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V101",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "Q4",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.24519205373002603,
+          "qualification": 0.12012881907632898,
+          "earlier": 0.04335022285547319,
+          "actual": 0.020183639195032452,
+          "analyst_only": 0.004157981669757124,
+          "hypothetical": 0.004969898038699383,
+          "other": 0.5541552109150485,
+          "unclear": 0.007862174519634363
+        },
+        "choice": "other",
+        "confidence": 0.4904630981886268
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V102",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "8%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.15336920696981424,
+          "qualification": 0.1020177379647423,
+          "earlier": 0.28270373674957877,
+          "actual": 0.0751413201344917,
+          "analyst_only": 0.007393270193901774,
+          "hypothetical": 0.018036839173293247,
+          "other": 0.3466273294417824,
+          "unclear": 0.014710559372395621
+        },
+        "choice": "other",
+        "confidence": 0.25328837650489416
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V103",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "8%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.12785276550308228,
+          "qualification": 0.1567622098139479,
+          "earlier": 0.5061693104318042,
+          "actual": 0.0322941945889568,
+          "analyst_only": 0.007366706955913381,
+          "hypothetical": 0.01939976740731327,
+          "other": 0.1415714001105438,
+          "unclear": 0.0085836451884383
+        },
+        "choice": "earlier",
+        "confidence": 0.4356220690649191
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V104",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "7.8%.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.0280687835589963,
+          "qualification": 0.07778205943512992,
+          "earlier": 0.21554390208245164,
+          "actual": 0.057290522146374846,
+          "analyst_only": 0.0044816994449979,
+          "hypothetical": 0.013751954230884652,
+          "other": 0.5972986987024642,
+          "unclear": 0.0057823803987005745
+        },
+        "choice": "other",
+        "confidence": 0.5397699413742448
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V105",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "Q3,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.012516972486269628,
+          "qualification": 0.012516972486269628,
+          "earlier": 0.004753090748326546,
+          "actual": 0.9523291607087809,
+          "analyst_only": 0.0012315635899451786,
+          "hypothetical": 0.002450471669436872,
+          "other": 0.013171400794541398,
+          "unclear": 0.0010303675164298586
+        },
+        "choice": "actual",
+        "confidence": 0.9455190408100353
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V106",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "8.2%",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.06349688747689211,
+          "qualification": 0.14350831461858088,
+          "earlier": 0.025372426874187316,
+          "actual": 0.10044947233835873,
+          "analyst_only": 0.00609036952134567,
+          "hypothetical": 0.024111771877490727,
+          "other": 0.6291128376481171,
+          "unclear": 0.007857919645027519
+        },
+        "choice": "other",
+        "confidence": 0.5761289573121339
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V107",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "Q4",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.6615196226171541,
+          "qualification": 0.18502179606272834,
+          "earlier": 0.044412428762684836,
+          "actual": 0.029542145177588183,
+          "analyst_only": 0.007852162880604759,
+          "hypothetical": 0.04673446172602101,
+          "other": 0.018674406476037714,
+          "unclear": 0.006242976297181029
+        },
+        "choice": "current",
+        "confidence": 0.6131652829910333
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "positive_presence_missing_conditions",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V108",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "7.6,",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.6230957557412925,
+          "qualification": 0.2366092223778166,
+          "earlier": 0.039754260646096634,
+          "actual": 0.027826214429477997,
+          "analyst_only": 0.005588186017702875,
+          "hypothetical": 0.04632143712950145,
+          "other": 0.015885220966324564,
+          "unclear": 0.004919702691787363
+        },
+        "choice": "current",
+        "confidence": 0.5692522922757629
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "V109",
+      "kind": "numeric",
+      "passage": "QA016",
+      "text": "7.9.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.013946765521973012,
+          "qualification": 0.12801189470406346,
+          "earlier": 0.27494269292246554,
+          "actual": 0.022632642047288615,
+          "analyst_only": 0.004662494626733885,
+          "hypothetical": 0.010537635624328726,
+          "other": 0.5332963983182101,
+          "unclear": 0.011969476234936648
+        },
+        "choice": "other",
+        "confidence": 0.46662445522081153
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V110",
+      "kind": "numeric",
+      "passage": "QA020",
+      "text": "[3112]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.01574159088036871,
+          "qualification": 0.04590261321445158,
+          "earlier": 0.02248941907985619,
+          "actual": 0.02620454086975066,
+          "analyst_only": 0.02620454086975066,
+          "hypothetical": 0.007712397973353223,
+          "other": 0.8383142206446724,
+          "unclear": 0.01743067646779654
+        },
+        "choice": "other",
+        "confidence": 0.8152162521653399
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V111",
+      "kind": "numeric",
+      "passage": "QA020",
+      "text": "4Q",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.22285323405362417,
+          "qualification": 0.14087167736472123,
+          "earlier": 0.043628403151377,
+          "actual": 0.013171904120260302,
+          "analyst_only": 0.024906268969615234,
+          "hypothetical": 0.00921974633720997,
+          "other": 0.5300009383913366,
+          "unclear": 0.015347827611855554
+        },
+        "choice": "other",
+        "confidence": 0.46285821530438465
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V112",
+      "kind": "numeric",
+      "passage": "QA020",
+      "text": "[3142]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.1272130523255656,
+          "qualification": 0.1272130523255656,
+          "earlier": 0.014960775079973223,
+          "actual": 0.02249140514118488,
+          "analyst_only": 0.006290665405869569,
+          "hypothetical": 0.005538148434137286,
+          "other": 0.6837762135715342,
+          "unclear": 0.012516687716169733
+        },
+        "choice": "other",
+        "confidence": 0.6386013869388962
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V113",
+      "kind": "numeric",
+      "passage": "QA020",
+      "text": "Q4",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.13196629421005884,
+          "qualification": 0.11917829635642586,
+          "earlier": 0.011726136439468246,
+          "actual": 0.01202877250715764,
+          "analyst_only": 0.004340756729010795,
+          "hypothetical": 0.004567706072930961,
+          "other": 0.7093251420208966,
+          "unclear": 0.006866895664051038
+        },
+        "choice": "other",
+        "confidence": 0.667800162309596
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V114",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "[3270]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.009379989170544192,
+          "qualification": 0.014838759317511864,
+          "earlier": 0.045532243747174475,
+          "actual": 0.013400837354708026,
+          "analyst_only": 0.027352127311777018,
+          "hypothetical": 0.0050887231035003574,
+          "other": 0.8750273308242399,
+          "unclear": 0.009379989170544192
+        },
+        "choice": "other",
+        "confidence": 0.8571740923705599
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V115",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "100",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.14894107719313082,
+          "qualification": 0.20221398278823224,
+          "earlier": 0.27454165979354456,
+          "actual": 0.02633294779401853,
+          "analyst_only": 0.025024566171972087,
+          "hypothetical": 0.014654543042826262,
+          "other": 0.2888956510568685,
+          "unclear": 0.019395572159407033
+        },
+        "choice": "other",
+        "confidence": 0.18730931549356397
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V116",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "27.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.02347825029460014,
+          "qualification": 0.047920896264140596,
+          "earlier": 0.47478939756408156,
+          "actual": 0.028787040278677633,
+          "analyst_only": 0.09781019116350848,
+          "hypothetical": 0.017292949819203006,
+          "other": 0.28521548904807803,
+          "unclear": 0.02470578556771058
+        },
+        "choice": "earlier",
+        "confidence": 0.3997593115018075
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V117",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "[3296]:",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.02116336002358094,
+          "qualification": 0.05033176497657727,
+          "earlier": 0.014813410263169199,
+          "actual": 0.039010202303918516,
+          "analyst_only": 0.008036398833547967,
+          "hypothetical": 0.02011184660124103,
+          "other": 0.8301301157871107,
+          "unclear": 0.016402901210854418
+        },
+        "choice": "other",
+        "confidence": 0.8058629894709837
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V118",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "100",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.09601808887683046,
+          "qualification": 0.16819539321558677,
+          "earlier": 0.3262425296219665,
+          "actual": 0.024253120148956177,
+          "analyst_only": 0.038367442000579344,
+          "hypothetical": 0.06386909503012887,
+          "other": 0.26607822826716954,
+          "unclear": 0.01697610283878235
+        },
+        "choice": "earlier",
+        "confidence": 0.22999146242510454
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "V119",
+      "kind": "numeric",
+      "passage": "QA022",
+      "text": "1st.",
+      "raw_answer": {
+        "type": "choice",
+        "probabilities": {
+          "current": 0.013003372466160242,
+          "qualification": 0.11342272801862352,
+          "earlier": 0.010078409592822106,
+          "actual": 0.009101780978014869,
+          "analyst_only": 0.005330059627722394,
+          "hypothetical": 0.013338969896184561,
+          "other": 0.8277116936844616,
+          "unclear": 0.008012985736010728
+        },
+        "choice": "other",
+        "confidence": 0.8030990784965276
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "numeric_role_not_current_qualification_unclear"
+      ]
+    },
+    {
+      "tag": "S0",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Todd Schneider [78]: Thank you, Jared. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.06598544816683644
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S1",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We are pleased to have delivered another successful quarter, showcasing the resilience and strength of our value proposition. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845417941394304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S2",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "CentOS achieved record revenues and strong operating margins while continuing to invest for future growth. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04488366130652771
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S3",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Third quarter total revenue grew a strong 8.9% to $2.84 billion. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.020369008490574828
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S4",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "The organic growth rate, which adjusts for the impacts of acquisitions and foreign currency exchange rate fluctuations, was 8.2%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05997471950919985
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S5",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Each of our three route-based businesses continues to grow at attractive rates. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S6",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Turning to profitability, We achieved all-time high gross margins in each of our three route-based businesses. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05716518099735748
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S7",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Strong top-line growth along with benefits from our strategic investments and cost-saving initiatives continue to help drive margin expansion. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07255208492279053
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S8",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Gross margin as a percent of revenue was 51%, a 40 basis point increase over the prior year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.012973024328616108
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S9",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.014345064608426548
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S10",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, operating income would have grown 11%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.028848536008237943
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S11",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Diluted EPS of $1.24 grew 9.7% over the prior year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0166752631463032
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S12",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, diluted EPS would have grown 12.7%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.028848536008237943
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S13",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9612329673858953
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "requires_supported_association_or_encoding_revision"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S14",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8847811090233757
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "form_several"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S15",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7900172472000122
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "form_several"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S16",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9665452693917562
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S17",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "Before I turn the call over to Jim, I'd like to provide some comments on the recently announced merger agreement to acquire Unifirst. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04711980263440698
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S18",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We remain excited about this opportunity and the long-term value creation for Cintas and its shareholders, our employee partners, and the team partners of Unifirst that benefits to our collective customers. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845443187992595
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S19",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "When we announced the transaction two weeks ago, we indicated that the merger was subject to approval by Unifirst shareholders, regulatory clearance in both the US and Canada, and other customary closing conditions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S20",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We in Unifirst have begun the process for satisfying these closing conditions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.16372011845886883
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S21",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "In order to avoid creating speculation, we will not be providing any additional commentary on the process. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02486025345453924
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S22",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "We will, however, update the market as appropriate. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.033454730608243784
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S23",
+      "kind": "sentence",
+      "passage": "PR002",
+      "text": "With that, I'll turn it over to Jim to discuss the details of our third quarter results.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.015859882628698987
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S24",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Jim Rosakis [253]: Thank you, Todd. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S25",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Our business continues to perform exceptionally well. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.035142389373039845
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S26",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We're adding new customers who rely on us for image, safety, cleanliness, and compliance needs. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07971636384091595
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S27",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "while successfully cross-selling additional solutions for our existing customer base. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.028848536008237943
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S28",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Retention remains at record levels, while pricing is consistent with historical levels. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S29",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Turning to our business segments, as Todd mentioned, we delivered attractive growth rates across all of our business segments. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04711975796998088
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S30",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Organic growth by business was 7.3% for uniform rental facility services, 14.6% for first aid and safety services, 10% for fire protection services, and 3.1% for uniform direct sale. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.017531817680978303
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S31",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Gross margin percentage by business was 50.3% for uniform rental facility services, 58.1% for first aid and safety services, 50.5% for fire protection services, and 41.4% for uniform direct sale. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.007447403081311437
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S32",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Gross margin for the uniform rental facility services segment increased 30 basis points from last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.009588064608000098
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S33",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "The 50.3% gross margin is the highest gross margin ever for this segment. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.007447403081311437
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S34",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We actually hit a high level in the third quarter, and our continued strong top-line growth helped drive results. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02141116773686963
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S35",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We've been laser-focused on managing the many inputs we control effectively. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.014345064608426548
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S36",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We've invested in technologies like SAP to improve our capabilities, and the strong performance of our supply chain continues to be a significant strategic advantage for us. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.017531817680978303
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S37",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Source margin for the first aid and safety services segment was 58.1%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.008667004706354104
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S38",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "This is also an all-time high. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.007447399845958321
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S39",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We are investing in route capacity to serve more customers, leadership and management trainees to build their talent pipeline, advanced technologies to drive efficiency, and we're adding selling resources, all of which are fueling the attractive double-digit growth we are seeing. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S40",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "It's important to remember that margins of all our businesses can fluctuate from quarter to quarter based on several factors, including things like revenue mix and the timing of our investments. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13768458366394043
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S41",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Incremental margins were effectively 28% for the quarter after adjusting for the one-time gain on the asset sale last year, right in line with what we like to bait. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05191330026445425
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S42",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "The current macro environment is certainly complex, We help businesses navigate this environment by letting them focus on running their business. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02612604680428846
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S43",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Delivering consistent excellence in a complex environment is never easy, but customers want reliable partners with proven solutions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.015859882628698987
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S44",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Our diversified customer base and strong value proposition continues to resonate, particularly in our core verticals, healthcare, hospitality, education, and state and local government. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.015859882628698987
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S45",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "In addition to being aligned with resilient sectors of the economy, our trustable market is very large. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.016675279786831126
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S46",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "and our solutions remain essential for businesses of all sizes, regardless of how complex the economic environment. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.015859882628698987
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S47",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "We have consistently shown ability to convert businesses over to a managed rental solution, typically around two-thirds of all of our new customers. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05997476860824455
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S48",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "In addition, we've shown ability to grow multiples of job creation and GDP. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S49",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "Lastly, we're very enthusiastic about integrating university and team partners into our organization, which we believe will strengthen our ability to better serve our customers. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845417941394304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S50",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7446378469467163
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S51",
+      "kind": "sentence",
+      "passage": "PR003",
+      "text": "With that, I'll turn the call over to Scott to discuss operating income, capital allocation performance, and 2026 guidance assumptions.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.15686156878287885
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S52",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Scott Garula [438]: Thanks, Jim, and good morning, everyone. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0725520227325574
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S53",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "The exceptional results we delivered in terms of revenue growth and gross margin expansion translated into continued strength in operating margins and cash flow. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S54",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Selling and administrative expenses as a percentage of revenue was 27.8%, which was a 60 basis point increase from last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.008667008399357455
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S55",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "When you adjust for the one-time gain on the asset sale last year, SG&A would have been flat year over year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.027454529673538012
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S56",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Third quarter operating income was $659.9 million compared to $609.9 million last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.00823993137322411
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S57",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Operating income as a percentage of revenue was 23.2% in the third quarter of fiscal 2026 compared to 23.4% in last year's third quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.006398310863109454
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S58",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Adjusting for the one-time gain last year, operating income as a percentage of revenue would have increased 40 basis points year over year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S59",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Our effective tax rate for the third quarter was 20.6% compared to 21% last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02036899024352674
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S60",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensations. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S61",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Net income for the third quarter was $502.5 million compared to $463.5 million last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.006730584640838092
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S62",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "This year's third quarter diluted earnings per share was $1.24 compared to $1.13 last year, an increase of 9.7%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0067305814031481765
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S63",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Earnings per share increased 12.7% after you adjust for the one-time gain last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.011730639635437865
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S64",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.15686156878287885
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S65",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.6711690225848846
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions",
+        "period_unclear"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S66",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "During the first nine months of fiscal 2026, we have returned $1.45 billion in capital to our shareholders in the form of dividends and share buybacks. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.012973011459249062
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S67",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.3994633913360005
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S68",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "In addition, please note the following in the guidance. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5882508158683777
+      },
+      "outcome": "rejected",
+      "reasons": [
+        "form_none"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S69",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7446380257606506
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "period_several",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S70",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Our guidance does not assume any future acquisitions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9711514639917621
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S71",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9370868732252204
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "form_several"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S72",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05447963070006417
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S73",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8623154163360596
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S74",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9738739277999688
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S75",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8561522023723186
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S76",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5758538074536977
+      },
+      "outcome": "rejected",
+      "reasons": [
+        "form_none"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S77",
+      "kind": "sentence",
+      "passage": "PR004",
+      "text": "With that, I'll turn it back to Todd for some closing remarks.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.011730634113052267
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S78",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "Unknown [783]: Just two procedural ones. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0494614839553833
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S79",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S80",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07605677843093872
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S81",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "in the fourth quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S82",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.035142389373039845
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S83",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04071138259833601
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S84",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "So I thought maybe there was a little bit of deal related expense there in the third quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.033454730608243784
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S85",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "I'm not sure.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S86",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "Scott Garula [818]: Yeah, Tim, good morning. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07971629262816034
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S87",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "Good question. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.013642043281854489
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S88",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8739760052260162
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "period_several",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S89",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "Any costs that were incurred in Q3 were immaterial. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.44921304436883197
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S90",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "You know, as far as the comment on SG&A being a little higher, just to remind everyone of that one-time gain last year, that represented about 60 BIPs. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.09601083683999886
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S91",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "So when you take that into consideration, you know, SG&A was effectively flat year over year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.08353596242916556
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S92",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "And if you go back really over the last three fiscal years, Q3 is typically elevated due to the timing of certain expenses like the reset of payroll taxes. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.030311143759222933
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S93",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "In fact, when you go back to last fiscal year and you back out the adjustment for the one-time gain, we were up 100 basis points sequentially last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.016675279786831126
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S94",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "and actually 70 basis points sequentially if you go back to fiscal year 24. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.019376555854719344
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S95",
+      "kind": "sentence",
+      "passage": "QA000",
+      "text": "So we feel really good where we are with SG&A expenses, and when you back out the one-time gain, it's flat year over year.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S96",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "Unknown [901]: Yeah, good point, Scott. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04071135043567903
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S97",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "I think maybe consensus didn't fully factor in everything because of the one-time gain last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.033454716205596924
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S98",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "So that's a good reminder. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05716518099735748
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S99",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "Thank you. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0303111293097333
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S100",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S101",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "I think this is an important question for investors.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S102",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "Scott Garula [928]: Yeah, Tim, good question. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.12602399477398388
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S103",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "Energy for the quarter was 1.7 percent, which was flat year over year, and up 10 basis points over the previous quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.021411149509231637
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S104",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "You know, certainly the increase in gas prices will have an impact. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5633608530950293
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "time_type_unclear"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S105",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "But just, you know, I want to remind everyone that, you know, only 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about 100 basis points. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S106",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "So if you just look at, you know, fuel's been, you know, continuing to increase. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0629131267747795
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S107",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "But if you assume a 30% increase in fuel costs, that would be sustained over an entire quarter, that would add 30 basis points of cost to our results. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.10522867542952842
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S108",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "You know, so yes, it has an impact, but not something that we feel that we can't overcome. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S109",
+      "kind": "sentence",
+      "passage": "QA001",
+      "text": "And we have contemplated this in our guide.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9370868732252204
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "positive_presence_missing_conditions",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S110",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "Unknown [1084]: Got it. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.028848536008237943
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S111",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "That's helpful. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.06598544816683644
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S112",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "And then going back to an earlier point on fuel, you mentioned that \u2013 fuel expectations are contemplated in your full year guide. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.46185219287872314
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S113",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "Can you elaborate on what exactly you're assuming for the remaining quarters of the year in terms of how fuel will trend and how you plan to pass along any changes in fuel costs to customers in the form of pricing?\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.08752133501645919
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S114",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "Scott Garula [1108]: Yeah, thank you, George. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1101246079029603
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S115",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "As Todd mentioned, clearly this is a dynamic environment. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.22739075463102393
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S116",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9551163386934722
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S117",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S118",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "I'll let Todd answer that.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05447963070006417
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S119",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "Todd Schneider [1132]: Yeah. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.18574229436344786
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S120",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "So, you know, Georgia, it is certainly a dynamic environment. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.10052590892110697
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S121",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "Hence the, you look at what oil prices were doing last night and then what they're doing this morning. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05191330026445425
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S122",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "So they're, they're, they're They're changing by the minute. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0629131267747795
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S123",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9340146153708433
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S124",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "And as far as how we handle that, we do not have a fuel surcharge. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.3288309774151153
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S125",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "That historically is not how we handle it. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07971636384091595
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S126",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "As Scott correctly pointed out, if you think about the fuel at the pump, It accounts for about 100 basis points of our total as a percent of sales. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.24579272065493224
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S127",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "So it's not our largest cost. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845417941394304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S128",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "And we also take the approach that we think long-term about this, and we find other ways to extract out inefficiencies. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07605677843093872
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S129",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "We don't just look at it and say, well, this happened, so we've just got to pass it on. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07971629262816034
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S130",
+      "kind": "sentence",
+      "passage": "QA003",
+      "text": "We want to be better than that, and we want to focus on being consistent for our customers and extracting out inefficiencies and other ways that we have in our business and still hitting our goals as a financial goals as a company while we're doing that.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13768458366394043
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S131",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Unknown [1443]: Hi, this is Ronan Kennedy. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.017531825000936585
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S132",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "I'm from Manav. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845432368022064
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S133",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Good morning, and thank you for taking our questions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.035142389373039845
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S134",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "You commented on retention at record levels, pricing at historic levels. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.17815759247071766
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S135",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Could you please provide some further color as to how we should think about what those levels are as a reminder? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.06598544816683644
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S136",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And then the trends and drivers versus your expectations for new business and cross-sell, and then anything to call out from specifically strong organic drivers at a respective segment level, please?\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.06291317939758301
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S137",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Jim Rosakis [1471]: Hey, Ronan, this is Jim. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0725520227325574
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S138",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Good morning. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S139",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "I'll take that question. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0494614839553833
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S140",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "I'll start with it. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.026126072200031165
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S141",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And if we start to think about our growth formula and what we're attempting to achieve every quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.2960113286972046
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S142",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7900172472000122
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S143",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "As an organization, the major contributors to that growth, as you correctly pointed out, is our new business acquisition. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.4117491841316223
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S144",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And a reminder, you know, two-thirds of that new business acquisition comes with that no-programmer or do-it-yourself or space, and that continues to perform very well for us, and we really like the trend line there. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.34017495334669806
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S145",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Retention levels for us has stayed around that steady, that 95% rate, and we are really comfortable with where that is at this point. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.3288309774151153
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S146",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.4117491841316223
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S147",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5381475526646509
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S148",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "The majority of that's new business. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.2752214290135673
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S149",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "But then the remainder is that that cross selling opportunity selling into the current customer base, which has been highly effective for us this year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.14384779762768143
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S150",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And we think that there's a long runway of opportunity within our current customer base. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.17081776987830832
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S151",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "As we continue to provide great value, we think about it long term. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04488366130652771
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S152",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "We've made nice investments in the product line and the technology and try to make it easier to do business with us. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845417941394304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S153",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And the customers in this type of an environment is complex, are looking for steady answers. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02141116773686963
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S154",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "And they know they can rely on us. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.026126072200031165
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S155",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "So we've had a lot of success this past year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.031845417941394304
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S156",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5127378549355908
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "period_unclear"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S157",
+      "kind": "sentence",
+      "passage": "QA006",
+      "text": "and the others right where we're expecting them to be.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.26517297417956437
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S158",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Unknown [2548]: Good morning. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S159",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "This is Jun-Yi Ahn for Jason Haas. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.023654262088605917
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S160",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Thanks for taking our questions. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691196221637951
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S161",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02365424935850592
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S162",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05997471950919985
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S163",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Could you remind us how big those impacts were and any other factors to consider across the board? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0494614839553833
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S164",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Thank you.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04071138259833601
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S165",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Todd Schneider [2571]: Thank you for the question. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.0691966663746784
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S166",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "I'll start. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04071135043567903
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S167",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.3752811141228344
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S168",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "It was our highest revenue growth quarter last year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03876699680538461
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S169",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "The organic was at 9%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S170",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And we did have some one-time benefits, specifically in our first aid business. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.29601114988327026
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S171",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "that ran 18.5% organic growth. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.18574229436344786
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S172",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "We certainly do not anticipate that again. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8142577056365522
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S173",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And then in our uniform direct sale business as well. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.23646819591522217
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S174",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "In first aid, we had an increase in the training business that helped us as it relates to AED training. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.29601114988327026
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S175",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.6247191019272537
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S176",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And the uniform direct sale business can be a little lumpy, but it had a really good quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.12602399477398388
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S177",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.35170539165421155
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S178",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "Scott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.3994636118571874
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S179",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "You know, Jim mentioned that we continue to execute at a high level. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.23646819591522217
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S180",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.9274479150772095
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_comparison_revision",
+        "requires_supported_association_or_encoding_reaffirmation"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S181",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.23646819591522217
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S182",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5381478071212769
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_context"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S183",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.6365890096601549
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "form_several"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S184",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "In Q3, we just delivered a growth rate of 8.2% organically. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07255208492279053
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S185",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.4241459541277303
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S186",
+      "kind": "sentence",
+      "passage": "QA016",
+      "text": "So really effectively right in line with the guide that we gave last quarter.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8561523173979378
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_comparison_revision",
+        "requires_supported_association_or_encoding_reaffirmation"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S187",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "Unknown [3112]: Great, thank you. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S188",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.06291317939758301
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S189",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05191330026445425
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S190",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "I see the implied kind of 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1052287617004386
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S191",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "Todd Schneider [3142]: Yeah, thank you for the question, Faiza. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7039886713027954
+      },
+      "outcome": "rejected",
+      "reasons": [
+        "form_none"
+      ],
+      "copied": false
+    },
+    {
+      "tag": "S192",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8064263102519672
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S193",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "But that is not because of a change in approach. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.5882505774497986
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S194",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "That's simply what we've been predicting and timing around for the year. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.6365887739307419
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_value",
+        "missing_context",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S195",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "And I wouldn't see a change in our approach in general as you speak to that. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.38730281591415405
+      },
+      "outcome": "not_advanced_to_C",
+      "reasons": [
+        "sentence_probability_0.25_to_below_0.5"
+      ]
+    },
+    {
+      "tag": "S196",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "You know, we're investing for the long term. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.15686156878287885
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S197",
+      "kind": "sentence",
+      "passage": "QA020",
+      "text": "and we'll take our normal prudent approach as we think about investing for our business.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.15686156878287885
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S198",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Unknown [3270]: Hi. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.07605677843093872
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S199",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Good morning, guys. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.02612604680428846
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S200",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Just a quick one for me. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.09601075130693054
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S201",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Just on the FHIR ERP implementation, I think we had previously talked about like 100 basis points margin headwind next year for 27. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.17081776987830832
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S202",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.1101246079029603
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S203",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Thank you. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.030311114860243238
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S204",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Just hard bits for this segment. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04946153234403822
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S205",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Thank you.\n",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.022505423934411076
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S206",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Scott Garula [3296]: Yeah, this is Scott. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.05447963070006417
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S207",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Thanks for the question. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.04274888272957678
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S208",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7144973278045654
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S209",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "We're satisfied with our progress today. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.13174488747880198
+      },
+      "outcome": "not_selected_by_B",
+      "reasons": [
+        "sentence_probability_below_0.25"
+      ]
+    },
+    {
+      "tag": "S210",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.6711690225848846
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "subject_scope_unclear",
+        "time_type_unclear",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S211",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.7983464836581493
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions"
+      ],
+      "copied": true
+    },
+    {
+      "tag": "S212",
+      "kind": "sentence",
+      "passage": "QA022",
+      "text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "raw_answer": {
+        "type": "noul",
+        "noul": 0.8291822301216917
+      },
+      "outcome": "unresolved",
+      "reasons": [
+        "missing_measure",
+        "missing_value",
+        "missing_context",
+        "positive_presence_missing_conditions",
+        "sign_unclear",
+        "requires_supported_association_or_encoding_qualification"
+      ],
+      "copied": true
+    }
+  ],
+  "inputs_sha256": {
+    "A_result.json": "0db3901d66ac9f5f5e2397b580d03426373a2a2b3b326902a9643ad5c65517d7",
+    "B_result.json": "d5dfa2146a0d6407c6b7c0edbd3495902244b1d6548b06f207130540fefa8dde",
+    "B_selection.json": "199e70bad8b824f8a7980b9793a666f15e86c91ecff874990263cb442775a980",
+    "C_targets.json": "860513f8b3795d2870dddab2cf38168ccc73c224548abaaadd7f53924c538af5",
+    "C_copy_targets.json": "319cde155618f7e9c4469e9e2b05249d467a7a7217865623f6decd176aef0895",
+    "C_choices_result.json": "6b9f11e65b8b72af2c46d573c459f140b791c42e05ac9286bdece6620208a921",
+    "E_proposals.json": "6e182e03e62214cf7f8b6a728e69bee7a7f84ce0d152ddcff75ce0c25b207b08"
+  },
+  "note": "Reconstructed diagnostic routing, not a production outcome writer or semantic correctness judgment. C form skips were retained by E; earlier threshold removals lacked a consolidated outcome/reason. Raw responses were preserved."
+}

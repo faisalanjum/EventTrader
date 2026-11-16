@@ -1,0 +1,63 @@
+{
+  "started_at": "2026-11-15T21:11:52.448819-05:00",
+  "request_sha256": "6691f27dd1366edc4a9b7c4450ff343411bded532308fdff77c6a8bf5cc6779d",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V012_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V045_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V047_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V050_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V052_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V054_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V056_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 12779,
+            "end": 12816,
+            "text": "assumes the current macro environment",
+            "score": 0.5247839689254761
+          }
+        ]
+      },
+      "V059_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "V059_comparison_revision": {
+        "type": "locate",
+        "spans": []
+      },
+      "V102_conditions": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 15082,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 166.15764844208024,
+  "finished_at": "2026-11-15T21:14:38.606655-05:00"
+}

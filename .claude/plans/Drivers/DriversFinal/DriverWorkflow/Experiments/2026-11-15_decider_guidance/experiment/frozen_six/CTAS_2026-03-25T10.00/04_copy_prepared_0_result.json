@@ -1,0 +1,156 @@
+{
+  "started_at": "2026-11-15T22:44:35.853948-05:00",
+  "request_sha256": "ad8876b0505b013b84c7f5de158d23374ac09d60f8da87db5147e633f028e4a0",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V015_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3870,
+            "end": 3877,
+            "text": "revenue",
+            "score": 0.9999970197677612
+          }
+        ]
+      },
+      "V015_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V015_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3870,
+            "end": 3877,
+            "text": "revenue",
+            "score": 0.6915311217308044
+          }
+        ]
+      },
+      "V017_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3870,
+            "end": 3877,
+            "text": "revenue",
+            "score": 0.9870842099189758
+          }
+        ]
+      },
+      "V017_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V017_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V019_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4016,
+            "end": 4036,
+            "text": "adjusted diluted EPS",
+            "score": 0.9634543061256409
+          }
+        ]
+      },
+      "V019_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V019_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V021_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4016,
+            "end": 4036,
+            "text": "adjusted diluted EPS",
+            "score": 0.6500656008720398
+          }
+        ]
+      },
+      "V021_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4089,
+            "end": 4105,
+            "text": "a growth rate of",
+            "score": 0.9965669512748718
+          },
+          {
+            "start": 4091,
+            "end": 4105,
+            "text": "growth rate of",
+            "score": 0.9981003403663635
+          }
+        ]
+      },
+      "V021_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4089,
+            "end": 4105,
+            "text": "a growth rate of",
+            "score": 0.9964091777801514
+          },
+          {
+            "start": 4091,
+            "end": 4105,
+            "text": "growth rate of",
+            "score": 0.9954969882965088
+          }
+        ]
+      },
+      "V053_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V053_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V053_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 10670,
+            "end": 10675,
+            "text": "times",
+            "score": 0.8652620911598206
+          }
+        ]
+      },
+      "V066_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V066_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V066_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 4822,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 61.937432480975986,
+  "finished_at": "2026-11-15T22:45:37.791499-05:00"
+}

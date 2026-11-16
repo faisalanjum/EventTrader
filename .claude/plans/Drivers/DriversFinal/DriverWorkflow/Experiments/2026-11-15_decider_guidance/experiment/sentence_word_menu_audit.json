@@ -1,0 +1,56 @@
+[
+  {
+    "source": "MU",
+    "sentences": 399,
+    "max_words": 99,
+    "over_252": 0
+  },
+  {
+    "source": "FDX",
+    "sentences": 560,
+    "max_words": 106,
+    "over_252": 0
+  },
+  {
+    "source": "OLLI",
+    "sentences": 473,
+    "max_words": 118,
+    "over_252": 0
+  },
+  {
+    "source": "CTAS_2025-09-24T10.00",
+    "sentences": 540,
+    "max_words": 153,
+    "over_252": 0
+  },
+  {
+    "source": "CTAS_2025-12-18T10.00",
+    "sentences": 545,
+    "max_words": 193,
+    "over_252": 0
+  },
+  {
+    "source": "PAYX_2025-09-30T09.30",
+    "sentences": 482,
+    "max_words": 83,
+    "over_252": 0
+  },
+  {
+    "source": "PAYX_2025-12-19T09.30",
+    "sentences": 575,
+    "max_words": 91,
+    "over_252": 0
+  },
+  {
+    "source": "PAYX_2026-03-25T09.30",
+    "sentences": 673,
+    "max_words": 120,
+    "over_252": 0
+  },
+  {
+    "source": "CTAS_2026-03-25T10.00",
+    "sentences": 523,
+    "max_words": 76,
+    "over_252": 0
+  }
+]

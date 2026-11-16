@@ -1,0 +1,92 @@
+{
+  "started_at": "2026-11-15T20:43:04.806345-05:00",
+  "request_sha256": "faa333314a178d012ffcf3cc0d96648f4d7ab533fa4e8ecb59c558fa5b27ff9d",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V016_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4027,
+            "end": 4034,
+            "text": "revenue",
+            "score": 0.9999874830245972
+          }
+        ]
+      },
+      "V016_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V016_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V018_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V018_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V018_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V020_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4173,
+            "end": 4184,
+            "text": "diluted EPS",
+            "score": 0.9889643788337708
+          }
+        ]
+      },
+      "V020_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V020_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V022_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V022_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4237,
+            "end": 4253,
+            "text": "a growth rate of",
+            "score": 0.6729812026023865
+          }
+        ]
+      },
+      "V022_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4237,
+            "end": 4253,
+            "text": "a growth rate of",
+            "score": 0.8263829946517944
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 4103,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 52.70860364800319,
+  "finished_at": "2026-11-15T20:43:57.515035-05:00"
+}

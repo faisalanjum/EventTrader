@@ -12,7 +12,7 @@ Numbers = the 8 recommendations below, in order. Rule numbers point to [DRIVER_R
 | 4 | Essential qualifiers | ✅ No new field: the quote keeps every word that changes the meaning | 1.24 |
 | 5 | Type boundaries | ✅ | 1.23 |
 | 6 | Shared macro facts | ⏸️ Needs the owner's rethink (one story → several companies), later | — |
-| 7 | Inputs and cutoffs | ✅ No outcome in prediction inputs; input checks live in [PrepareStep.md](../PrepareStep.md) | 1.25 |
+| 7 | Inputs and cutoffs | ✅ No outcome in prediction inputs; input checks live in [PrepareStep.md](../Prepare/PrepareStep.md) | 1.25 |
 | 8 | Validation | No rule: already in the plan | — |
 
 **Also decided (2026-10-02), from "Boundaries and next work":** 2.33 clarified (boilerplate; needed context kept) · a company's forecast of an outside decision parked as 10.5 · analyst questions in transcripts → 1.26 · the macro deferral recorded in parking note P3 · pilot reminders moved to rough_design.md · input examples moved to PrepareStep.md T3.

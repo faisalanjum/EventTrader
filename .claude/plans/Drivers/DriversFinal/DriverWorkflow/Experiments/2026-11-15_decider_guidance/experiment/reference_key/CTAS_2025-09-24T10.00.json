@@ -1,0 +1,906 @@
+{
+  "source_id": "CTAS_2025-09-24T10.00",
+  "source_text_sha256": "82cb84301b46757b08d55a25778185a6fc51a53eeb799d11ea05388edafbc461",
+  "snapshot_sha256": "18f13e4ec4e0cb0a72fe9fa8f5651f684e730da05ef59263fa74b067a237197e",
+  "annotated_at": "2026-11-15T15:53:13.058899-05:00",
+  "method": "Full prepared remarks and every Q&A passage read directly by the root agent for this pass. No legacy records or draft-inventory labels consulted during this reading. Prior conversation exposure exists: this is NOT a blinded or independently double-reviewed gold key. Root-agent source annotations are separate from evaluated Decider outputs.",
+  "record_policy": "../record_policy.md",
+  "status": "source-claim inventory with exact evidence; adjudication and full normalized field key remain incomplete",
+  "claims": [
+    {
+      "id": "SEP01",
+      "meaning": "Annual revenue level",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1318,
+          "end": 1431,
+          "global_start": 2620,
+          "global_end": 2733,
+          "text": "We expect our revenue to be in the range of $11.06 billion to $11.18 billion, a total growth rate of 7%, to 8.1%.",
+          "role": "two distinct forecast quantities"
+        },
+        {
+          "passage": "PR002",
+          "start": 1218,
+          "end": 1317,
+          "global_start": 2520,
+          "global_end": 2619,
+          "text": "Reflecting our strong first quarter performance, we are raising our fiscal 2026 financial guidance.",
+          "role": "target period and stated movement; causal introductory words remain source evidence"
+        },
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        },
+        {
+          "passage": "QA006",
+          "start": 776,
+          "end": 1024,
+          "global_start": 19641,
+          "global_end": 19889,
+          "text": "But we're not forecasting for that, and we're planning to grow our business in what I'll say with the current environment. And our guide reflects, I think, attractive growth without, you know, the employment picture being, you know, real favorable.",
+          "role": "guidance does not assume a substantially more favorable employment environment"
+        },
+        {
+          "passage": "QA009",
+          "start": 1554,
+          "end": 1658,
+          "global_start": 24480,
+          "global_end": 24584,
+          "text": "And I'd just like to remind you that our guide contemplates the current environment for tariffs as well.",
+          "role": "stated tariff environment incorporated in guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "value_shape": "closed_range",
+        "level_low": "11060",
+        "level_high": "11180",
+        "level_unit": "m_usd",
+        "source_unit_scale": "billions of dollars",
+        "measurement_words": []
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate applicability of shared employment/tariff/financial assumptions to each specific quantity; do not paste every shared clause into conditions indiscriminately.",
+        "Verify and pin subject fiscal-calendar evidence before date normalization."
+      ],
+      "continuous_quote_interval": {
+        "start": 2520,
+        "end": 24584
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP02",
+      "meaning": "Annual revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1318,
+          "end": 1431,
+          "global_start": 2620,
+          "global_end": 2733,
+          "text": "We expect our revenue to be in the range of $11.06 billion to $11.18 billion, a total growth rate of 7%, to 8.1%.",
+          "role": "two distinct forecast quantities"
+        },
+        {
+          "passage": "PR002",
+          "start": 1218,
+          "end": 1317,
+          "global_start": 2520,
+          "global_end": 2619,
+          "text": "Reflecting our strong first quarter performance, we are raising our fiscal 2026 financial guidance.",
+          "role": "target period and stated movement; causal introductory words remain source evidence"
+        },
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        },
+        {
+          "passage": "QA006",
+          "start": 776,
+          "end": 1024,
+          "global_start": 19641,
+          "global_end": 19889,
+          "text": "But we're not forecasting for that, and we're planning to grow our business in what I'll say with the current environment. And our guide reflects, I think, attractive growth without, you know, the employment picture being, you know, real favorable.",
+          "role": "guidance does not assume a substantially more favorable employment environment"
+        },
+        {
+          "passage": "QA009",
+          "start": 1554,
+          "end": 1658,
+          "global_start": 24480,
+          "global_end": 24584,
+          "text": "And I'd just like to remind you that our guide contemplates the current environment for tariffs as well.",
+          "role": "stated tariff environment incorporated in guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "value_shape": "closed_range",
+        "level_low": "7",
+        "level_high": "8.1",
+        "level_unit": "unknown",
+        "comparison_basis": "not established for this growth figure",
+        "measurement_words": [
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate applicability of shared employment/tariff/financial assumptions to each specific quantity; do not paste every shared clause into conditions indiscriminately.",
+        "Verify and pin subject fiscal-calendar evidence before date normalization.",
+        "Keep growth meaning distinct from the revenue level; no default yearly basis from the fiscal-year label."
+      ],
+      "continuous_quote_interval": {
+        "start": 2520,
+        "end": 24584
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP03",
+      "meaning": "Annual diluted earnings per share level",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1432,
+          "end": 1523,
+          "global_start": 2734,
+          "global_end": 2825,
+          "text": "We expect diluted EPS to be in the range of $4.74 to $4.86, a growth rate of 7.7% to 10.5%.",
+          "role": "two distinct forecast quantities; diluted measurement qualifier"
+        },
+        {
+          "passage": "PR002",
+          "start": 1218,
+          "end": 1317,
+          "global_start": 2520,
+          "global_end": 2619,
+          "text": "Reflecting our strong first quarter performance, we are raising our fiscal 2026 financial guidance.",
+          "role": "target period and stated movement; causal introductory words remain source evidence"
+        },
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        },
+        {
+          "passage": "QA006",
+          "start": 776,
+          "end": 1024,
+          "global_start": 19641,
+          "global_end": 19889,
+          "text": "But we're not forecasting for that, and we're planning to grow our business in what I'll say with the current environment. And our guide reflects, I think, attractive growth without, you know, the employment picture being, you know, real favorable.",
+          "role": "guidance does not assume a substantially more favorable employment environment"
+        },
+        {
+          "passage": "QA009",
+          "start": 1554,
+          "end": 1658,
+          "global_start": 24480,
+          "global_end": 24584,
+          "text": "And I'd just like to remind you that our guide contemplates the current environment for tariffs as well.",
+          "role": "stated tariff environment incorporated in guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "value_shape": "closed_range",
+        "level_low": "4.74",
+        "level_high": "4.86",
+        "level_unit": "usd",
+        "measurement_words": [
+          "diluted"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate applicability of shared employment/tariff/financial assumptions to each specific quantity; do not paste every shared clause into conditions indiscriminately.",
+        "Verify and pin subject fiscal-calendar evidence before date normalization."
+      ],
+      "continuous_quote_interval": {
+        "start": 2520,
+        "end": 24584
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP04",
+      "meaning": "Annual diluted earnings per share growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR002",
+          "start": 1432,
+          "end": 1523,
+          "global_start": 2734,
+          "global_end": 2825,
+          "text": "We expect diluted EPS to be in the range of $4.74 to $4.86, a growth rate of 7.7% to 10.5%.",
+          "role": "two distinct forecast quantities; diluted measurement qualifier"
+        },
+        {
+          "passage": "PR002",
+          "start": 1218,
+          "end": 1317,
+          "global_start": 2520,
+          "global_end": 2619,
+          "text": "Reflecting our strong first quarter performance, we are raising our fiscal 2026 financial guidance.",
+          "role": "target period and stated movement; causal introductory words remain source evidence"
+        },
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        },
+        {
+          "passage": "QA006",
+          "start": 776,
+          "end": 1024,
+          "global_start": 19641,
+          "global_end": 19889,
+          "text": "But we're not forecasting for that, and we're planning to grow our business in what I'll say with the current environment. And our guide reflects, I think, attractive growth without, you know, the employment picture being, you know, real favorable.",
+          "role": "guidance does not assume a substantially more favorable employment environment"
+        },
+        {
+          "passage": "QA009",
+          "start": 1554,
+          "end": 1658,
+          "global_start": 24480,
+          "global_end": 24584,
+          "text": "And I'd just like to remind you that our guide contemplates the current environment for tariffs as well.",
+          "role": "stated tariff environment incorporated in guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "time_type": "duration",
+        "value_shape": "closed_range",
+        "level_low": "7.7",
+        "level_high": "10.5",
+        "level_unit": "unknown",
+        "comparison_basis": "not established for this growth figure",
+        "measurement_words": [
+          "diluted",
+          "growth rate"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Adjudicate applicability of shared employment/tariff/financial assumptions to each specific quantity; do not paste every shared clause into conditions indiscriminately.",
+        "Verify and pin subject fiscal-calendar evidence before date normalization.",
+        "Growth is a guidance value, not the size of a revision."
+      ],
+      "continuous_quote_interval": {
+        "start": 2520,
+        "end": 24584
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP05",
+      "meaning": "Annual net interest expense",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "value_shape": "point",
+        "level_low": "97.0",
+        "level_high": "97.0",
+        "level_unit": "m_usd",
+        "measurement_words": [
+          "approximately"
+        ],
+        "driver_state": "unknown",
+        "company_confirmed": true,
+        "time_type": "duration"
+      },
+      "unresolved_fields_or_policy": [
+        "Pin fiscal-calendar evidence.",
+        "Do not automatically turn every other number in the same assumption sentence into a condition of this forecast."
+      ],
+      "continuous_quote_interval": {
+        "start": 7409,
+        "end": 8033
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP06",
+      "meaning": "Annual effective tax rate",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR004",
+          "start": 1576,
+          "end": 2200,
+          "global_start": 7409,
+          "global_end": 8033,
+          "text": "Earlier, Todd provided our updated guidance for the remainder of the year. That guidance assumes the following expectations. Please note both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. Our guidance does not assume any future acquisitions. Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. And finally, our guide does not include any future share buybacks or significant economic disruptions or downturns.",
+          "role": "shared guidance assumptions and separately forecast interest/tax amounts; applicability is field-specific"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "period_text": "fiscal 2026",
+        "period_scope": "annual",
+        "value_shape": "point",
+        "level_low": "20.0",
+        "level_high": "20.0",
+        "level_unit": "percent",
+        "comparison_text": "which is the same compared to our fiscal 2025",
+        "driver_state": "unknown",
+        "company_confirmed": true,
+        "time_type": "duration"
+      },
+      "unresolved_fields_or_policy": [
+        "Pin fiscal-calendar evidence.",
+        "Adjudicate exact comparison-field encoding of the stated same-as-prior-year rate; do not invent an earlier-forecast comparison."
+      ],
+      "continuous_quote_interval": {
+        "start": 7409,
+        "end": 8033
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP07",
+      "meaning": "Current incremental-margin target",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA008",
+          "start": 0,
+          "end": 965,
+          "global_start": 21691,
+          "global_end": 22656,
+          "text": "Joshua Chan [1461]: Great. Thank you for the color there, Todd. And I noticed that on the EPS guidance, it's a little wider at this juncture of the year than it was last year at this time. Is there any color regarding that or kind of the thought process behind that?\nTodd Schneider [1478]: No, I wouldn't say Joshua would read anything into that. We like where our guide is. We like where our business is performing. And as we think about that, you know, it is a – we're in a position where the guide – would explain to you that we're in a spot where we think our incrementals are attractive. We're able to grow the business nicely. It's right where we like to be, meaning we're performing really well and like the momentum. We've increased the guide at all points in the EPS within the range. Q2 through 4 implied guide also increases at all points within the range. And then also the incrementals are right where we like them to be at that stated 25 to 35% range.",
+          "role": "EPS-guidance question and management scope"
+        },
+        {
+          "passage": "QA008",
+          "start": 868,
+          "end": 1233,
+          "global_start": 22559,
+          "global_end": 22924,
+          "text": "And then also the incrementals are right where we like them to be at that stated 25 to 35% range. And it also implies margin expansion within there as well. This range, Josh, allows us to make the investments that we need for the long term. But being able to make those investments while improving margins at the exact same time, it's real strength of our business.",
+          "role": "current incremental-margin range, implied margin expansion and investment context"
+        }
+      ],
+      "expected_source_fields": {
+        "value_shape": "closed_range",
+        "level_low": "25",
+        "level_high": "35",
+        "level_unit": "percent",
+        "measure_text": "incrementals",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve the precise margin definition from permitted evidence; do not silently supply operating or EBITDA.",
+        "Resolve annual versus remaining-quarter scope and whether the source states reaffirmation."
+      ],
+      "continuous_quote_interval": {
+        "start": 21691,
+        "end": 22924
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP08",
+      "meaning": "Implied margin expansion",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA008",
+          "start": 868,
+          "end": 1233,
+          "global_start": 22559,
+          "global_end": 22924,
+          "text": "And then also the incrementals are right where we like them to be at that stated 25 to 35% range. And it also implies margin expansion within there as well. This range, Josh, allows us to make the investments that we need for the long term. But being able to make those investments while improving margins at the exact same time, it's real strength of our business.",
+          "role": "current incremental-margin range, implied margin expansion and investment context"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "it also implies margin expansion within there as well",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve which margin and target period; distinguish this source claim from the related incremental-margin target."
+      ],
+      "continuous_quote_interval": {
+        "start": 22559,
+        "end": 22924
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP09",
+      "meaning": "EPS guidance for Q2–Q4 is raised",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA008",
+          "start": 0,
+          "end": 867,
+          "global_start": 21691,
+          "global_end": 22558,
+          "text": "Joshua Chan [1461]: Great. Thank you for the color there, Todd. And I noticed that on the EPS guidance, it's a little wider at this juncture of the year than it was last year at this time. Is there any color regarding that or kind of the thought process behind that?\nTodd Schneider [1478]: No, I wouldn't say Joshua would read anything into that. We like where our guide is. We like where our business is performing. And as we think about that, you know, it is a – we're in a position where the guide – would explain to you that we're in a spot where we think our incrementals are attractive. We're able to grow the business nicely. It's right where we like to be, meaning we're performing really well and like the momentum. We've increased the guide at all points in the EPS within the range. Q2 through 4 implied guide also increases at all points within the range.",
+          "role": "analyst identifies EPS; management separately raises the remaining-quarter guide"
+        }
+      ],
+      "expected_source_fields": {
+        "measure_semantics": "earnings per share",
+        "period_text": "Q2 through 4",
+        "driver_state": "raised",
+        "company_confirmed": true,
+        "new_numeric_level_stated": false,
+        "source_value_or_state_wording": "Q2 through 4 implied guide also increases at all points within the range."
+      },
+      "unresolved_fields_or_policy": [
+        "Normalize the Q2–Q4 duration using verified fiscal metadata.",
+        "Determine state-only versus value_text encoding under the current contract; absence of a new amount must not itself discard a permitted state-only guidance claim."
+      ],
+      "continuous_quote_interval": {
+        "start": 21691,
+        "end": 22558
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP10",
+      "meaning": "Unnamed implied growth for Q2–Q4 higher than opening guide",
+      "status": "claim_requires_association",
+      "evidence": [
+        {
+          "passage": "QA002",
+          "start": 0,
+          "end": 586,
+          "global_start": 12447,
+          "global_end": 13033,
+          "text": "George Tong [844]: Got it. That's helpful. And then you increased your revenue guidance as well as your EPS guidance. Can you elaborate on parts of the business that outperformed your initial expectations to drive this increase in the outlook?\nTodd Schneider [860]: Great question, George. Yeah, thank you for that. The guide, first off, is right where we like to be. We're performing really well, and we like the momentum we have in the business. I'll just like to point out the implied growth in queues two through four is higher than the opening guide at all points within the range.",
+          "role": "question names revenue and EPS; management raises an unnamed implied growth guide for Q2–Q4"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "queues two through four",
+        "driver_state": "raised",
+        "value_text": "higher than the opening guide at all points within the range",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Determine whether the claim concerns revenue, EPS, both, or overlaps SEP09; do not force one metric or duplicate it."
+      ],
+      "continuous_quote_interval": {
+        "start": 12447,
+        "end": 13033
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP11",
+      "meaning": "First-aid revenue growth outlook",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA017",
+          "start": 0,
+          "end": 1582,
+          "global_start": 32913,
+          "global_end": 34495,
+          "text": "Faiza Aoui [2291]: Yes. Hi. Good morning. Thank you. I wanted to ask about the first aid business again. And I'm curious, as you're making these investments, sort of how your outlook for, you know, top-line growth here has maybe changed or evolved? Because you've talked about, you know, you're seeing the opportunity. I know historically we've thought about this business as a, you know, maybe low double-digit grower. So curious how you think about, you know, top-line growth moving forward over the next three to five years.\nTodd Schneider [2325]: Yeah, good morning, Faiza. Thanks for the question. We are making investments in that business. And we think we're doing so smartly. We do see it as a low double-digit growth business. And it's performed really well over the last year. And we would expect that low double-digit number to be a good number for us. We are encouraged by how the business is performing. And we are going to continue to invest there. because the future is quite attractive for us. So we think about investments in the manner of, well, we want to make sure we're positioned for the long term. And so we're making those investments so that we can provide great customer service and position our employee partners to be highly successful. And doing so while increasing operating margins is, again, we think a real strength of our business. But we're investing in all of them, all of our route-based businesses, and the first aid is performing very attractively. Again, but I would think about it as a low double-digit growth business for us moving forward.",
+          "role": "analyst identifies first-aid top-line growth and 3–5-year horizon; management confirms worded target"
+        }
+      ],
+      "expected_source_fields": {
+        "subject": "Cintas Corporation",
+        "business_scope_text": "first aid business",
+        "value_text": "low double-digit",
+        "numeric_value_fields": null,
+        "growth_basis": "not explicitly established",
+        "company_confirmed": true,
+        "period_text": [
+          "over the next three to five years",
+          "moving forward"
+        ]
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve an admissible period without inventing an endpoint; source duration range and management long-term investment context need careful separation.",
+        "Do not convert low double-digit into a numeric range or default a yearly comparison basis."
+      ],
+      "continuous_quote_interval": {
+        "start": 32913,
+        "end": 34495
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP12",
+      "meaning": "First-aid margin outlook/leverage",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA018",
+          "start": 0,
+          "end": 1586,
+          "global_start": 34497,
+          "global_end": 36083,
+          "text": "Faiza Aoui [2402]: Understood. And then just, you know, you talked about timing as it relates to the investments. So, And it sounded like, you know, even in the fourth quarter of last year, because you talked about sequential margins being similar. Again, give us a bit more color on the timing. Like, is this... Are you... When do you expect to be sort of through with those? And, you know, do you... How should we think about the incremental margins in that business, you know, going forward?\nTodd Schneider [2434]: Yeah, so... Faiza, from a timing standpoint, we certainly have different initiatives in each of our businesses. First Aid is no different. We'll have certain rollouts of products which might affect the mix, but we're planning to grow that business attractively. And I'll just remind you that that 56.8% gross margin is really attractive. We're quite happy with it. We've had a significant increase over the last few years in that area and we're going to continue to get leverage there but it's a high level, and we think it's really good. And, you know, the mix of the business has been attractive for us, but we're providing more and more value to those customers, and then we're selling other items into those customers outside of the first aid business. So it all works quite nicely, and so I wouldn't be thinking of it as – oh, geez, you know, the first aid margin is going to pop after a certain timing. These are, we'll get leverage and we'll grow that business attractively and provide more value to customers. But we like where it is and in the future as well.",
+          "role": "question asks incremental margins; answer discusses gross margin and future leverage without a sudden pop"
+        }
+      ],
+      "expected_source_fields": {
+        "company_confirmed": true,
+        "quoted_current_level_is_not_new_forecast": "56.8%",
+        "future_wording": "I wouldn't be thinking of it as – oh, geez, you know, the first aid margin is going to pop after a certain timing."
+      },
+      "unresolved_fields_or_policy": [
+        "Determine whether this is sufficiently specific guidance and which margin it concerns; do not promote the current 56.8% gross margin to a future point."
+      ],
+      "continuous_quote_interval": {
+        "start": 34497,
+        "end": 36083
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP13",
+      "meaning": "SG&A investment level does not ramp up or down",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA023",
+          "start": 0,
+          "end": 542,
+          "global_start": 43952,
+          "global_end": 44494,
+          "text": "Tony Kaplan [3105]: Okay, great. And then Just to follow up on all other, you mentioned continuing to invest. We saw SG&A step up there in the quarter. Should we expect a similar level of investment throughout the year? That would be really helpful to understand how SG&A in particular should continue to progress as we proceed through this fiscal year. Thanks.\nTodd Schneider [3130]: Yeah, we think our SG&A investment is appropriate right now where it is. So I don't think you'll see a ramp up or ramp down from there from that perspective.",
+          "role": "analyst asks all-other SG&A through fiscal year; management predicts no ramp from present investment level"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "I don't think you'll see a ramp up or ramp down from there from that perspective.",
+        "company_confirmed": true,
+        "period_text": "throughout the year / this fiscal year"
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve all-other versus total-company scope, and absolute investment level versus expense ratio.",
+        "Do not borrow the later actual 27.5% as the forecast."
+      ],
+      "continuous_quote_interval": {
+        "start": 43952,
+        "end": 44494
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP14",
+      "meaning": "SG&A leverage over time",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA023",
+          "start": 834,
+          "end": 935,
+          "global_start": 44786,
+          "global_end": 44887,
+          "text": "but we think we're in a good spot from an SG&A investment and plan to get leverage on that over time.",
+          "role": "future leverage statement; not the preceding reported expense ratio"
+        }
+      ],
+      "expected_source_fields": {
+        "company_confirmed": true,
+        "period_text": "over time"
+      },
+      "unresolved_fields_or_policy": [
+        "Decide whether this is specific financial guidance or general investment intent and resolve scope/measure."
+      ],
+      "continuous_quote_interval": {
+        "start": 44786,
+        "end": 44887
+      },
+      "complete_record_gold": false
+    },
+    {
+      "id": "SEP15",
+      "meaning": "Standing CapEx percentage target",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA026",
+          "start": 1154,
+          "end": 1311,
+          "global_start": 48611,
+          "global_end": 48768,
+          "text": "From a CapEx standpoint, our 4% targeted CapEx, I think you'll see that be consistent. We would expect that that would be where we plan to be moving forward.",
+          "role": "management confirms standing percentage target; no target fiscal year or denominator is stated here"
+        }
+      ],
+      "expected_source_fields": {
+        "value_shape": "point",
+        "level_low": "4",
+        "level_high": "4",
+        "level_unit": "percent",
+        "driver_state": "reaffirmed",
+        "period_text": "moving forward",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not invent revenue as denominator; identify what permitted current/prior evidence would establish it.",
+        "The source does not explicitly assign this to FY2026; apply the stated-horizon rules, not the call year."
+      ],
+      "continuous_quote_interval": {
+        "start": 48611,
+        "end": 48768
+      },
+      "complete_record_gold": false
+    }
+  ],
+  "passage_coverage": [
+    {
+      "passage": "PR000",
+      "read_in_full": true,
+      "disposition": "Operator introduction; no forecast.",
+      "sha256": "745e88332a64515d7eb61d95a0c1ce5f0ccfe4bb6543d3cd7c9325c292fc6552"
+    },
+    {
+      "passage": "PR001",
+      "read_in_full": true,
+      "disposition": "Participants and forward-looking disclaimer; no specific forecast.",
+      "sha256": "5cf578768f34a2ed4a4669b31f3241eac341346f06db3b552c3d2fa7c8e0c587"
+    },
+    {
+      "passage": "PR002",
+      "read_in_full": true,
+      "disposition": "SEP01–04, period and movement; reported results are negative controls.",
+      "sha256": "e0f2d48f040a8d0e1a30179a5c6014c85c71328335b5efa788037494a212a5ff"
+    },
+    {
+      "passage": "PR003",
+      "read_in_full": true,
+      "disposition": "Actual segment results and business example; no separate specific forecast.",
+      "sha256": "1f49b600a04edbb83fea1c1dd69098668a0d46477d0d63a5605561fc108f1dea"
+    },
+    {
+      "passage": "PR004",
+      "read_in_full": true,
+      "disposition": "SEP05–06 and shared assumptions for annual guidance; actual results/capital allocation are not new guidance.",
+      "sha256": "1b8d1ff1bfff53700f2082457a5d867c60ff7219a33495e275cb6bb86a964e77"
+    },
+    {
+      "passage": "PR005",
+      "read_in_full": true,
+      "disposition": "General confidence and investment intent; no separate specific financial target.",
+      "sha256": "3eca557ad97fca258390beed6fe4878413568eed98852cd8a5134bcae9f73f67"
+    },
+    {
+      "passage": "PR006",
+      "read_in_full": true,
+      "disposition": "Call procedure only.",
+      "sha256": "89e49c962a19e121b932074db20d27b324f7295fbc5027b5ae0b45384a6f8e55"
+    },
+    {
+      "passage": "PR007",
+      "read_in_full": true,
+      "disposition": "Call procedure only.",
+      "sha256": "0e4504cfce45882b6dcf2b5fc557fb84a3b682a30f69af364cd3f7b1587b8638"
+    },
+    {
+      "passage": "QA000",
+      "read_in_full": true,
+      "disposition": "Future investment plans and generic ability to grow; not a specific forecast level. Mixed speaker text must not be inferred from stored label alone.",
+      "sha256": "7c15aa98287e762f26889f8dc813ca8949063cac7b1c44a885c0e37035f2aa34"
+    },
+    {
+      "passage": "QA001",
+      "read_in_full": true,
+      "disposition": "Current selling environment/results, not a specific future forecast.",
+      "sha256": "1b30d0a06c856ea3d7096c1e5a62b11bb2dbfe035b9cb3d472fadfb5fe32910b"
+    },
+    {
+      "passage": "QA002",
+      "read_in_full": true,
+      "disposition": "SEP10, remaining-quarter growth guide; metric association unresolved.",
+      "sha256": "084d6bff64d99e3dafbf7c0e2bc9d615dc8785707c3bdfc7c6d65b0245c78d77"
+    },
+    {
+      "passage": "QA003",
+      "read_in_full": true,
+      "disposition": "Current business drivers and generic growth confidence; employment context, no exact separate forecast.",
+      "sha256": "55f0fc963e8febf8eb66f83d07e23fc9deda335025f492c02c962d58d10ecf6c"
+    },
+    {
+      "passage": "QA004",
+      "read_in_full": true,
+      "disposition": "Observed early-quarter demand, not a new full-period forecast.",
+      "sha256": "dda86a473c1e5cb49e316b5baac73ef915cc578c5e72231a5b74b590751a9fe3"
+    },
+    {
+      "passage": "QA005",
+      "read_in_full": true,
+      "disposition": "Customer example and strategy; no separate guidance target.",
+      "sha256": "bf157457ebbccf99f481e58126dc5c11cdae50ec9b06769855ad2901c3285dd6"
+    },
+    {
+      "passage": "QA006",
+      "read_in_full": true,
+      "disposition": "Employment assumption supporting guidance; inventory/use-of-capital discussion is current explanation, not a stated amount forecast.",
+      "sha256": "b1465305b377676ba6c4581f3ff5e3be685f0860bdbe16b22e2e4fc09b0492a3"
+    },
+    {
+      "passage": "QA007",
+      "read_in_full": true,
+      "disposition": "Current vertical/customer behavior.",
+      "sha256": "2696df1b51f150d67391bcba76594407ce43dd186a8ecc31d9d0226a637537fa"
+    },
+    {
+      "passage": "QA008",
+      "read_in_full": true,
+      "disposition": "SEP07–09; current range and remaining-quarter guidance, with possible scope/meaning ambiguities.",
+      "sha256": "092ceec723fc3881fdb502e3893c6342b38bc98b30cc445fdc63db79f3c83627"
+    },
+    {
+      "passage": "QA009",
+      "read_in_full": true,
+      "disposition": "Tariff environment included in guide; supplier statistics are actuals, not forecasts.",
+      "sha256": "6a653b9cf67f2ff6e3dfbcbe44511d6d5999eca7fc2027b79fc65cd764580803"
+    },
+    {
+      "passage": "QA010",
+      "read_in_full": true,
+      "disposition": "Current sales-cycle observation and general investment intent.",
+      "sha256": "47820ca11ad403088cfa1ed6bfb311d3b23c2a87acae6dd218e0d05501a1235d"
+    },
+    {
+      "passage": "QA011",
+      "read_in_full": true,
+      "disposition": "Actual first-aid margins and investment timing; general positive outlook.",
+      "sha256": "c75e0db6bae498f44af196a17c9275a45462485155f4275c8a7b8de3ab6e89a5"
+    },
+    {
+      "passage": "QA012",
+      "read_in_full": true,
+      "disposition": "Analyst proposes higher investment; management describes timing/ongoing investment, not a clear quantified or specific level forecast.",
+      "sha256": "bddbde4fb1de0990c2da29df82426d3937dd3dbfcafd04be91f4067ce8362f22"
+    },
+    {
+      "passage": "QA013",
+      "read_in_full": true,
+      "disposition": "Competitive strategy/TAM and current customer counts, not company financial forecasts.",
+      "sha256": "4c33f7a723d7a824e5efef897f2a6eb456af3798509e40da71bda7411ac1e7cd"
+    },
+    {
+      "passage": "QA014",
+      "read_in_full": true,
+      "disposition": "Actual all-other margins and planned investment activity.",
+      "sha256": "eeead4d6d75fe626be18f41a4b07a59e6b2307bf162ced4f1aeed7afe740b99c"
+    },
+    {
+      "passage": "QA015",
+      "read_in_full": true,
+      "disposition": "Uniform-direct strategic context, current revenue share and general lumpiness; no specific future level.",
+      "sha256": "f3e1c76854611f53f7700f0f5e77efe553b9298b222ec97a81142909cfe5f2aa"
+    },
+    {
+      "passage": "QA016",
+      "read_in_full": true,
+      "disposition": "M&A opportunity/strategy, explicitly difficult to predict; no specific forecast.",
+      "sha256": "e8e7365ac25e30e9e1fc288ba400b1f2a3655485b45dcc0d2eaa8a287dd22bfe"
+    },
+    {
+      "passage": "QA017",
+      "read_in_full": true,
+      "disposition": "SEP11, first-aid worded growth target and horizon.",
+      "sha256": "1b65afdeb7d11472faa71554179409185e47cb30a860022074e4e44fe3889880"
+    },
+    {
+      "passage": "QA018",
+      "read_in_full": true,
+      "disposition": "SEP12, potential margin/leverage outlook; actual 56.8% is not a future point.",
+      "sha256": "1d08d7fb1e04332b2c81a9ca43a6fa5965adc891579166800a8b0561698426f8"
+    },
+    {
+      "passage": "QA019",
+      "read_in_full": true,
+      "disposition": "Acquisition strategy and historical cadence, no specific financial/operating target.",
+      "sha256": "71a39e07fe8e29f026aeb2d7a403f724209ce55b5128407f9871f5459677d0b1"
+    },
+    {
+      "passage": "QA020",
+      "read_in_full": true,
+      "disposition": "Technology investment plans, not specific forecast amounts/levels.",
+      "sha256": "16374f1d8ef808e1f2db8e1d928422bc77751713f3ba2ecae1f8a6ee3f427ae8"
+    },
+    {
+      "passage": "QA021",
+      "read_in_full": true,
+      "disposition": "Strategy, current counts and possible acquisitions; no specific company forecast.",
+      "sha256": "7360e9a101ae97cd834b5da64f0fc4140df85c668e772fd3fae6ee5027e5a166"
+    },
+    {
+      "passage": "QA022",
+      "read_in_full": true,
+      "disposition": "Current visa-policy impact observations; no future impact forecast.",
+      "sha256": "80a57c50b038f322a2b4ee152e18fbf499a37921582361b88c87250ef76c1719"
+    },
+    {
+      "passage": "QA023",
+      "read_in_full": true,
+      "disposition": "SEP13–14; stable SG&A investment and possible leverage outlook, with actual ratio controls.",
+      "sha256": "566ae13e1c1fee250f0292aa7749a66f4dd1099bf30ac31dec03ae61b63a3f1c"
+    },
+    {
+      "passage": "QA024",
+      "read_in_full": true,
+      "disposition": "Actual growth and counterfactual Q1 9% calculation; not future guidance.",
+      "sha256": "fa2574726fcebed9a167e13e7ec793257466c66becd0ef584ce3b155150b1de6"
+    },
+    {
+      "passage": "QA025",
+      "read_in_full": true,
+      "disposition": "Current M&A prices/strategy and uncertainty; no specific financial forecast.",
+      "sha256": "05979fdcac6a1c40f99cb69843a72b6b00d9c29716c1e96dccf8a7e088654cb0"
+    },
+    {
+      "passage": "QA026",
+      "read_in_full": true,
+      "disposition": "SEP15, standing CapEx target.",
+      "sha256": "f89b44380f335ef75bc9dfe46f76a2233e85d9b39997a78ddc34eaccdd0f9958"
+    },
+    {
+      "passage": "QA027",
+      "read_in_full": true,
+      "disposition": "Next reporting date; an event schedule, not financial guidance.",
+      "sha256": "ad30088ec28e63f948260c3223f40cdc34a4c4e11d090104e234e7dc548a93be"
+    }
+  ]
+}

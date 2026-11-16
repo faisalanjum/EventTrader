@@ -1,0 +1,97 @@
+{
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "F0_modifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "F0_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 852,
+            "end": 914,
+            "text": "Our guidance assumes a constant foreign currency exchange rate",
+            "score": 0.9354435205459595
+          }
+        ]
+      },
+      "F1_modifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "F1_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 852,
+            "end": 914,
+            "text": "Our guidance assumes a constant foreign currency exchange rate",
+            "score": 0.9365983009338379
+          }
+        ]
+      },
+      "F2_modifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "F2_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 572,
+            "end": 681,
+            "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+            "score": 0.9819855690002441
+          }
+        ]
+      },
+      "F3_modifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "F3_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 572,
+            "end": 681,
+            "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+            "score": 0.9930936098098755
+          }
+        ]
+      },
+      "F4_modifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 955,
+            "end": 968,
+            "text": "approximately",
+            "score": 0.9976112246513367
+          }
+        ]
+      },
+      "F4_conditions": {
+        "type": "locate",
+        "spans": []
+      },
+      "F5_modifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "F5_conditions": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1124,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 13.583405809942633,
+  "finished_at": "2026-11-15T17:54:34.279611-05:00"
+}

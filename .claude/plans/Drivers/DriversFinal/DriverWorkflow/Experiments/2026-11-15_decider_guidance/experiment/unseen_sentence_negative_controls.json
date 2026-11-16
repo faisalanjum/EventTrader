@@ -1,0 +1,47 @@
+{
+  "note": "Source-only selection before inspecting these answer probabilities; manual controls, not a complete gold set. No prompt changes.",
+  "controls": [
+    {
+      "company": "MU",
+      "tag": "S0131",
+      "text": "Fiscal Q2 NAND revenue was $1.9 billion, up 18% year-over-year, and represented 23% of Micron's total revenue. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    },
+    {
+      "company": "MU",
+      "tag": "S0140",
+      "text": "Mobile business unit revenue was $1.1 billion, down 30% sequentially, as mobile customers continued to improve their inventory positions. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    },
+    {
+      "company": "FDX",
+      "tag": "S0025",
+      "text": "Revenue was up 2%, growing on a year-over-year basis for the first time this fiscal year. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    },
+    {
+      "company": "FDX",
+      "tag": "S0082",
+      "text": "Consolidated revenue increased 2%, driven by higher volume at Federal Express, partially offset by freight. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    },
+    {
+      "company": "OLLI",
+      "tag": "S0053",
+      "text": "In the quarter, net sales increased 3% to $667 million, driven by new stores and comparable sales growth, partially offset by the impact of last year's 53rd week. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    },
+    {
+      "company": "OLLI",
+      "tag": "S0055",
+      "text": "Excluding the extra week of sales in the comparison, net sales increased 8.5%. ",
+      "expected": false,
+      "reason": "Reports an actual result; does not itself state or qualify management guidance."
+    }
+  ]
+}

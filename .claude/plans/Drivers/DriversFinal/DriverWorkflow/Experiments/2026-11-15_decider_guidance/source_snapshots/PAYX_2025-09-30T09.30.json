@@ -1,0 +1,660 @@
+{
+  "meta": [
+    {
+      "id": "PAYX_2025-09-30T09.30",
+      "company": "Paychex, Inc.",
+      "date": "2025-09-30T09:30:00-04:00",
+      "fiscal_year": "2,026",
+      "fiscal_quarter": "1"
+    }
+  ],
+  "prepared": [
+    {
+      "id": "PAYX_2025-09-30T09.30_pr",
+      "content": "[\"Operator [0]: Good morning and welcome to Paycheck's first quarter fiscal 2026 earnings call. Participating on the call today are John Gibson and Bob Schrader. Following the speaker's prepared remarks, there will be a question and answer period. If you would like to ask a question during this time, simply press star, then the number one on your telephone keypad. If you would like to withdraw your question, please press star two on your telephone keypad. As a reminder, this conference is being recorded and your participation implies consent to our recording of this call. I would now like to turn the call over to Mr. Bob Schrader, Paycheck's Chief Financial Officer. Please go ahead, sir.\", \"Bob Schrader [37]: Thank you for joining us to discuss Paycheck's first quarter fiscal 2026 results. This morning we released our financial results for the quarter ended August 31st, 2025. You can access our earnings release and presentation on our investor relations website. We plan to file our Form 10-Q with the SEC within the next couple of days. This conference call is being webcast live and will be available for replay on our investor relations portal. Today's call includes forward-looking statements that refer to future events and involve some risk. We encourage you to review our filing with the SEC for additional information on factors that could cause actual results to differ from our current expectations. We will also reference non-GAAP financial measures. A description of these items along with the reconciliation of non-GAAP measures can be found in our earnings release. I would now like to turn the call over to John Gibson, Paychex President and CEO. Thanks, Bob.\", \"John Gibson [93]: I will start by sharing our first quarter business highlights and then Bob will come back and discuss our financial results and outlook. And then, of course, we'll open it up for your questions. We are off to a strong start in fiscal year 26, delivering robust 17% revenue growth and solid adjusted diluted earnings per share growth of 5% in the first quarter. This performance reflects continued progress integrating PACOR and sustained demand for our HCM solutions amid a resilient small business environment. We remain pleased with the progress of the PACOR integration. We are on track to achieve targeted PACOR revenue synergies and exceed our initial cost synergy expectations. Our fiscal year 26 cost synergy target remains approximately $90 million. We are pursuing additional synergies beyond this target while retaining our flexibility to reinvest those gains for additional growth and innovation investments. Bringing the two companies together provides us a broader set of technology solutions and service models to both win and retain business. We have already enabled several notable client retention wins in the quarter across our purpose-built platforms. Additionally, we are encouraged by the speed at which we have completed the back-end technology integrations to enable the full breadth of revenue and cost energy opportunities for fiscal year 26. We remain optimistic about the revenue synergies, particularly cross-selling paychecks retirement, ASO, and PO solutions to PACOR's approximately 50,000 clients. More than half of PAYCOR's clients fall right in our sweet spot for ASO and PO, while retirement solutions has a broad relevance across the entire client base. We recently developed a propensity model to target which PAYCOR clients are more likely to purchase Paycheck's broad range of solutions, and we are building a strong pipeline. Among this quarter's cross-sale successes was an ASO sale to a Paycor client with several thousand employees, among the largest in Paycheck's history. This initial progress is promising, and early wins reinforce our confidence in the path forward. Beyond Paycor, we continue to see a long runway to further monetize our entire client base, where we believe penetration rates still remain low. Building on the momentum from Paycor, another cornerstone of our growth strategy is our long-standing relationships with channel partners. Brokers, CPAs, and banks are important referral sources for new business for us and have been for decades. The Partner Plus program for brokers continues to be received well, with broker enrollment nearly doubling since our last earnings call in June. We believe this momentum provides a strong foundation to retain and expand this vital referral channel. The program centers on helping brokers maximize client impact, grow their book of business, and deliver exceptional service and advisory support. We remain confident our partner program is the best in the industry, and we recently launched new marketing campaigns to further expand awareness and growth. Building on our long-standing partnership with the CPA community, we launched our new CPA Partner Pro portal in the quarter. We recently introduced another powerful Paychex Flex solution supporting small and mid-sized businesses and their CPAs. BillPay, powered by Bill, is our new financial management solution designed to simplify payments for SMBs. BillPay integrates payroll, HR, and accounts payable into a seamless experience, providing small business owners real-time financial clarity to make smarter and faster decisions. Additionally, BillPay will enhance CPA's ability to support their clients by integrating critical payment and HR functions to deliver even more valuable insights. We plan to expand BillPay to include accounts receivable and roll that out in our additional platforms in the future. Continuing our track record of innovations, Paychex leads the digital and AI-driven transformation of the human capital management. We deliver pragmatic AI solutions that drive measurable value for our clients and our business. I'm excited to share several recent advancements that demonstrate how we are harnessing AI internally and externally to enhance client experiences, boost operational efficiency, and we believe position Paychex for sustained growth. We recently expanded AI Insights, our generative AI assistant for workforce questions to serve our PO clients in addition to our HCM clients. This AI-powered tool provides instant natural language insights on pay, equity, turnover, hiring trends, and labor costs. Through an intuitive chat interface, users can query complex HR metrics, drill down into detailed analytics, and follow-up questions to uncover deep insights and predictive trends. In June, we launched our generative AI-powered HR guidance tool, developed using HR insights drawn from our nearly 40 million client interactions each year. This internal AI-enabled tool empowers our HR experts to deliver efficient, effective responses to client queries and provide enhanced client support. In addition, we have deployed AI tools across our organization, empowering our teams to focus on higher value work while enhancing quality, efficiency, and innovation. For example, AI is augmenting our software engineering group by automating tasks, improving code quality, and allowing us to accelerate our development. We are also piloting agentic AI solutions this quarter to transform some of our higher volume inbound client tasks across multiple channels. These AI agents autonomously manage routine client interaction, enhancing operational efficiency, and elevating the client experience, all while freeing up our service providers to focus on high value advisory and support to our customers. Our PO business continues to also perform well with another strong quarter of strong demand and retention performance, leading to mid-single-digit worksite employee growth. We remain bullish on PO due to our scale, capabilities, and the growth opportunities we see. The PO model empowers small businesses to offer benefits comparable to Fortune 500 companies addressing one of the top challenges of attracting and retaining talent. Turning to the macro environment, small businesses remain resilient. Our small business employment watch shows stable employment and moderating wage inflation and has over the past year with no signs of recession. Since our last call, we've seen greater clarity on key issues such as tariffs, taxes and inflation. With the tax bill in place and Fed rate cuts done, we believe this will support renewed business confidence. This clarity should encourage business owners, particularly those previously adopting a wait and see approach, to make more informed strategic decisions, potentially boosting investment and hiring. Lastly, I'm proud of the hard work demonstrated by our employees. Despite an ever evolving external environment and the integration of our largest acquisition in the company's history, the team has remained focused on our clients and our purpose. Their dedication and efforts have been recognized once again, this time by Newsweek, which named Paychex one of America's greatest companies and most admired workplaces. Our people and our culture remain a key differentiator underscoring the vital role our employees play in driving our sustained success. I will now turn it over to Bob to provide an update on our financial results and outlook. Bob?\", \"Bob Schrader [626]: Thank you, John. I'll start with a summary of our first quarter financial results and then share an update on our outlook for fiscal 2026. Let me begin by sharing our first quarter results. Total revenue increased 17% over the prior year to $1.5 billion. Management Solutions revenue increased 21% to $1.2 billion, primarily due to the addition of PAYCOR as well as higher revenue per client driven by price realization and increased product penetration. PAYCOR contributed approximately 17% to Management Solutions revenue growth year-over-year. PEO and Insurance Solutions revenue increased 3% to $329 million, primarily driven by solid growth in the number of average PEO worksite employees. Outside of the at-risk plan headwinds, PEO continues to perform well. Interest on fund sales for clients increased 27% to $48 million due to the inclusion of the PACOR balances. Total expenses increased 29% to $998 million, primarily driven by the PACOR acquisition. Operating income margins for the quarter were 35.2%, and adjusted operating income margins were 40.7%. Diluted earnings per share decreased 10% to $1.06 per share, and our adjusted diluted earnings per share for the quarter increased 5% to $1.22. Our financial position remains strong with cash, restricted cash, and total corporate investments of $1.7 billion, and total borrowings of approximately $5 billion as of August 31, 2025. Cash flow from operations was $718 million for the first quarter, primarily driven by net income. We returned $549 million to shareholders during the quarter in the form of cash dividends and share repurchases. Our 12-month rolling return on equity remains robust at 40%. Let me now turn to our updated guidance for the year, which assumes the current macro environment. We are reaffirming our fiscal 2026 outlook with the exception of our earnings expectation, which we are raising. Total revenue is still expected to grow between 16.5% and 18.5%. And as we previously noted, we would expect revenue synergies to contribute 30 to 50 basis points of growth in fiscal 2026. Management Solutions is expected to grow in the range of 20 to 22%. PEO and Insurance Solutions is expected to grow in the range of 6 to 8%. And as previously noted, we expect revenue to accelerate in the back half of the year as we anniversary the at-risk revenue growth headwinds we experienced last fiscal year. Interest on funds held for clients is still expected to be in the range of $190 to $200 million. Adjusted operating income margin is expected to be approximately 43%. Our effective income tax rate is expected to be in the range of 24% to 25%. And as I mentioned, we are now raising our earnings expectations with adjusted diluted earnings per share now expected to grow between 9% and 11% up from 8.5% to 10.5% that we shared with you last quarter. I'll provide you a little bit of color for the second quarter. We would anticipate total revenue growth to be approximately 18% in Q2 with an adjusted operating margin of approximately 41%. And, of course, this is based on our current assumptions, which are subject to change. And with that, I'll now turn the call back over to John.\", \"John Gibson [832]: Thank you, Bob. And with that, we will now open up the call for your questions.\"]"
+    }
+  ],
+  "qa": [
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__0",
+      "sequence": "0",
+      "questioner": "Jared Levine",
+      "questioner_title": "Analyst, TD Cowen",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Jared Levine [857]: Hi, this is actually Jared Levine on for Brian Bergen today. I guess to start here, can you give us an update in terms of the demand environment? Any notable differences when you think about employer size segments or across core offerings here?\", \"speaker\": \"Jared Levine\", \"title\": \"Analyst, TD Cowen\"}, {\"role\": \"answer\", \"text\": \"John Gibson [872]: Jared, this is John. No real change.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [875]: I mean, look, demand remains consistent with what we've been seeing historically. Matter of fact, activity is up. I think there's a lot of shoppers in the market right now. Our PO booking continued to be very solid, up double digits this past quarter. So you're really across the board seeing a lot of activity and good traction in the micro segment as well, which would have been a little lighter in the fourth quarter. But like I said, right now, The demand environment seems stable to me.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__1",
+      "sequence": "1",
+      "questioner": "Jared Levine",
+      "questioner_title": "Analyst, TD Cowen",
+      "responders": "Bob Schrader",
+      "responder_title": "Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Jared Levine [905]: Great. And then we've been getting a lot of questions in terms of the pay core X-flow growth there. So I just want to confirm in one cue, did it still grow low double digits in terms of X-flow growth? And is that still what you're assuming for the year as well?\", \"speaker\": \"Jared Levine\", \"title\": \"Analyst, TD Cowen\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [918]: Yeah, this is Bob. It's certainly on a full-year basis we expect, you know, the recurring revenue to be on pay core to be a double-digit growth. I don't want to get into the quarterly splits. Obviously, you know, they were invested short. on the client fund, so that, you know, with rate decreases that occurred last year and where we are now, that would have been a little bit of a headwind. But the recurring revenue growth for PACOR in Q1 was in line with our expectations, and we would expect, you know, the business to grow double digits on a full-year basis.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__2",
+      "sequence": "2",
+      "questioner": "Mark Marcon",
+      "questioner_title": "Analyst, Baird",
+      "responders": "John Gibson, Bob Schrader",
+      "responder_title": "President and Chief Executive Officer, Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Mark Marcon [959]: Good morning, and thanks for taking my questions. So one, just on the PEO side, I know we're going to laugh, you know, some tough or some easier comps in the second half on the PEO side when we get to the second half. But aside from that, how would you characterize the PEO environment? Because it has been slowing down, and when we take a look at the sequential \\u2013 you know, pattern, you know, Q1 relative to Q4 is a little bit worse than what we've typically seen. And so I'm just wondering, is the environment solid for the PEO, or what are the primary headwinds right now?\", \"speaker\": \"Mark Marcon\", \"title\": \"Analyst, Baird\"}, {\"role\": \"answer\", \"text\": \"John Gibson [1005]: Well, Mark, I'll start, and then, you know, Bob can add maybe a little more color for you. Look, our PO continues to perform well, and if you look at the numbers, mid-single-digit worksite employee growth, I think you're going to find we're leading the market there. Our brokings were double-digit in the quarter. We had record retention in the first quarter. Remember last year we had record retention, and that one we're continuing on that pace. So I continue to see strong demand there. I look at some states, take California. Our medical enrollment is up 10% there. Our medical enrollment overall across the country is up. We can talk about it a bit later where we are in Florida, which is where we have our MPP. That's where we have a little more challenge. Again, you know that market, pretty competitive in that market, and we don't take a lot of risk. So we're not going to go after business that's going to be a bad risk. So overall, I feel very good about where we are from a PO perspective. Really, really like what I'm hearing today. in the early engagements with clients and our broker partners as we approach some of the PayCorp clients as well. So we've been building a pipeline there. As you know, that sales cycle is a little longer, but I'm very pleased with the activity and what we have going on there.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [1084]: Yeah, just to add a little color, Mark, I mean, certainly the PEO, I would say, was probably a bit better than our expectations in the quarter, as John mentioned, and we've talked about this in the past with the PEO. It's all about worksite employees, and that was strong in the quarter. I think John highlighted in the prepared remarks, you know, mid-single digits. I think when you pull the PEO apart, you know, from the agency, the growth of the PEO was, you know, in line with that worksite employee growth, despite the, you know, the at-risk headwinds that we have, which we will anniversary here as we turn, you know, into the new calendar year. The growth rate overall, I'd say if there's one aspect of our business that was maybe a little bit softer than what we expected in the quarter, it was the agency. That was a drag on the growth rate of the category. We continue... to see some rate pressures from a workers' comp standpoint. Certainly, demand was good from an agency standpoint, but, you know, overall, we feel really good about where the PO is, and as you mentioned, we will, you know, anniversary those MPP headwinds, and we'll start seeing some stronger growth with the easier compare as we move into the back half of the year.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__3",
+      "sequence": "3",
+      "questioner": "Mark Marcon",
+      "questioner_title": "Analyst, Baird",
+      "responders": "Bob Schrader",
+      "responder_title": "Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Mark Marcon [1158]: Great, and then for my follow-up, you know, direct expenses as a percentage of revenue, you ended up seeing some some pretty nice leverage there. And so I'm wondering, you know, that was really strong. How would you characterize direct expenses on a go-forward basis? And then compare and contrast that to SG&A when we strip out the one-time charges and the goodwill just in terms of the ongoing operating expenses. Because it seemed like there was a little bit of a contrast between the two. In other words, direct expenses dripping out to everything else looked better. SG&A expense, I imagine just because you've got more overlap and a number of items maybe a little bit heavier than what we were looking for. So how would you expect those to go as the year unfolds? And it seems really encouraging.\", \"speaker\": \"Mark Marcon\", \"title\": \"Analyst, Baird\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [1217]: I mean, I think... Yeah, thanks, Mark. We think so as well. Obviously, we've been focused on this energy, and as you know, we're the best operators in the business, and so we're always focused on trying to be efficient and productive. I think the expense growth in the core, obviously, is a big number driven by the pay core acquisition. If you were to strip it out, it's probably closer to about 3%. expense growth overall. And, you know, the one thing we didn't highlight in the script, which was probably a miss, I mean, if you look at the adjusted operating income growth in the quarter, it was 15%, right? So obviously that's coming from, you know, the strong top line growth of 17%, but certainly trying to find ways to be more productive and more efficient and really strong adjusted operating income growth for the quarter. And, you know, on a four-year basis, expense growth, you know, I would probably think what we saw this quarter organically would probably be consistent with what we would see going forward.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__4",
+      "sequence": "4",
+      "questioner": "Samad Samana",
+      "questioner_title": "Analyst, Jefferies",
+      "responders": "John Gibson, Bob Schrader",
+      "responder_title": "President and Chief Executive Officer, Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Samad Samana [1287]: Hi. Good morning, and thanks for taking my questions. This might be a little bit pointed, but I want to get back to the PACORP. just the recurring revenue component, excluding what revenue, which is uncontrollable, right? What rates will do what rates will do. If we think about the contribution in the quarter, it implies essentially, let's call it, you know, around seven, 8% growth for pay core recurring revenue, which is a pretty material slowdown than what pay core is doing on a standalone basis. So is there some sort of integration related disruption? I know we're not trying to do quarterly businesses, but, That's a pretty material difference versus what the growth rate, what Paycor had as a standalone business. So we're just trying to understand in the first full quarter integrated what the implications of that are and how we should think about that accelerating or improving. And if that improvement or that double digit that you're calling out includes the revenue synergies. And then I have one follow up.\", \"speaker\": \"Samad Samana\", \"title\": \"Analyst, Jefferies\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [1346]: Yeah, let me start and then maybe John could add some color there. Again, I don't want to get into a math reconciliation, but I think our numbers would suggest that the recurring revenue growth is closer to double digits than what you had in Q1. As I mentioned, Q1 was in line with our expectations for pay core. Obviously, there's some performance that builds during the year. We know that last year, particularly in Q4, we were going through an integration and in getting our go-to-market aligned and our new segments aligned. And we called that out last Q4, getting that behind us. Obviously, there's probably some level of disruption there coming into the year. But, you know, Q1 was strong for PACOR. It was, you know, in line with our expectations. And, you know, John can probably add a little bit of color to that.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [1395]: Yeah. Look, as Bob said, PACOR was in line with our expectations that we put together. Client retention was strong. in line and they're at their historical levels. I think the one thing I think that's going to be a challenge for all of us here to talk about, I think we talked about this on the last call, we purposely determined to segment our business and we commingled all of the paychecks assets over 100 employees with PACOR and then PACOR had a business that was under 100 and we moved that business into our mid-market and small market at Paycheck. So we have a lot of moving parts. You didn't take the ancillary components over it. So, you know, as I said, this is going to be extremely difficult for Bob and the team, and it's not the way I'm looking at the business or operating the business. We now have operating segments. They're performing well, very happy with our sales performance, actually exceeding our expectations across the board. and very happy with the progress that we're making with the PAYCOR acquisition. I mean, we're making strong progress. A good example is we have HR outsourcing. So I sell a multi-thousand, one of the largest ASO deals in the company's history, and the ASO portion of that revenue, where do I allocate that? Is that PAYCOR or is that historical paychecks? Where do I put that? $750,000 incremental a year. And depending on where I want to stick it, I guess we have the number, whatever we want the number to be. But I think what we're looking at is segments, and we believe that the pay core acquisition is going to help us in the up market, and we believe by combining the two assets together, we're going to be better together, and we're seeing progress there and very pleased with the progress we're making in the quarter.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__5",
+      "sequence": "5",
+      "questioner": "Samad Samana",
+      "questioner_title": "Analyst, Jefferies",
+      "responders": "Bob Schrader",
+      "responder_title": "Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Samad Samana [1507]: Understood. And then maybe just, again, if I think about, and this will probably be equally difficult just based on the commentary about disaggregating where things should be placed. But if I exclude the paper contribution, it's kind of getting us to, and Bob, I appreciate there's rounding given how you guys give us the contribution, but it gets you to somewhere close to about 4% organic growth for, for the management solutions revenue in the quarter, which, you know, again, it's the slightly easier comp, uh, you know, again, and based on what we were expecting for F4Q, uh, I guess, how should we think about that acceleration through the year? Do you still expect that? It seems to be maybe a little bit out of the gate slower than anything from F4Q carry into F1Q we should be aware of. Again, we're just trying to juggle the different pieces with the full appreciation that it's difficult.\", \"speaker\": \"Samad Samana\", \"title\": \"Analyst, Jefferies\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [1556]: Not really. I mean, I think... Yeah, no, I appreciate that. And no, I wouldn't say anything significant. I think you see an improvement. And again, we are giving you round numbers, so we can debate whether they're higher or lower. But you saw an improvement in the organic growth of the overall business from a total revenue standpoint. I think the guide... implies an organic growth of 5% on a full year basis. You know, we're at 4 in Q1. We knew that. That's how the plan was built. You know, there's a couple of drivers of it, but the big driver of it is the PEO MPP, you know, headwind that we have in the front half of the year that we anniversary, and you got an easier compare as we move forward. So, you know, we feel good about where we are. Through Q1, as John said, we made a ton of progress on the integration. We're really starting to see a lot of momentum on going after the revenue synergies and kind of building a strong pipeline. We haven't talked about that, but we feel good about, you know, where we are. And, you know, the organic growth, there is some improvements as we move through the year as the revenue synergies build on, particularly to the management solution side. So hopefully that provides you some additional color.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__6",
+      "sequence": "6",
+      "questioner": "Tianxin Huang",
+      "questioner_title": "Analyst, J.P. Morgan",
+      "responders": "John Gibson, Bob Schrader",
+      "responder_title": "President and Chief Executive Officer, Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Tianxin Huang [1643]: Thanks so much. Just a clarification on a question. Just on the clarification, what's driving the EPS increase of, I think, 50 pips on either end? And then just with retention, any call-outs there? It sounds like PEO is a record, PAYCOR in line. Any other call-outs? I remember there were higher bankruptcies and mergers at the low end last quarter. Anything new beyond that? Thank you.\", \"speaker\": \"Tianxin Huang\", \"title\": \"Analyst, J.P. Morgan\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [1666]: Yeah, maybe I'll hit the EPS and then John can touch on the retention. I mean, obviously the Q1 came in a little bit stronger tension. Obviously, you know, we have a quarter behind us of owning the asset. There's a higher degree of confidence and certainly the, you know, both the cost and revenue synergies. And so you see some of that playing through. And as you know, there's always a... element of conservatism as you come into the year, particularly when you have a new asset like that. And so just increased confidence. We feel good about, you know, we achieved what we thought we were going to achieve in Q1, and we see a lot of momentum, both from the cost synergy and revenue synergy. So just letting that play through to the bottom line, and John can touch on the retention.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [1709]: Yeah, I'll add on to that. Just to remind everybody, we made a strategic decision. We talked about it last quarter. to get a lot of stuff out of the way quickly, a lot of disruption in the sales organization, pulling them out of the field, resetting territories, relaunching the broker program, and really got aggressive on the synergy front out of the gate. We wanted to get it behind us so we could focus on execution and moving forward into the selling season. We could have dragged that out for a long time. So I think we feel confident. that we've got the cost synergies that we committed to, which were higher than our original commitments at the time. Remind everybody of that. And we have a good list of other items that we can work on. I will say that we also see additional opportunities for investment, both in terms of expanding marketing and sales investment and innovation investment. So we'll manage that appropriately. But we felt, based upon where we were, the degree of confidence we have in the certainty of the synergies that we've already executed, that we felt comfortable in raising their guidance. Relative to retention, I'd say payroll client and revenue retention continue to be strong at pre-pandemic levels, which I'll remind you were near record levels for the company. We did continue to see concentrated losses in the small business area, predominantly out of business. I think you see bankruptcies that we kind of saw in the fourth quarter kind of continue into the first part of the first quarter. But I'll remind everybody, if you go back and look at the bankruptcy data, while it's a little bit elevated, it's still at that kind of pre-pandemic type of level. It's not out of the ordinary. And then as we mentioned, the PO worksite employee retention is maintaining a record level performance from last year. So I feel very good about where we are from a retention. I think our value proposition is resonating. Good job with all the disruption. When you think about all the disruption, what we're seeing in the PayCore client base there, what we're seeing in our client base, given all the uncertainty in the market and all the talk about challenges in the economy, we certainly are not seeing that in our retention numbers, and we're not seeing it in any of our other indicators as well. Great.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__7",
+      "sequence": "7",
+      "questioner": "Andrew Nicholas",
+      "questioner_title": "Analyst, William Blair",
+      "responders": null,
+      "responder_title": null,
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Andrew Nicholas [1857]: Hi, good morning. Thanks for taking my questions. You touched on it briefly in your response to one of the earlier questions, but I just wanted to kind of dig into the second half ramp for PEO. Can you speak a little bit more to kind of the attach rate dynamics in Florida specifically? Have they stabilized and it is mostly just a comp dynamic or have you seen some improvement there\", \"speaker\": \"Andrew Nicholas\", \"title\": \"Analyst, William Blair\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__8",
+      "sequence": "8",
+      "questioner": "Andrew Nicholas",
+      "questioner_title": "Analyst, William Blair",
+      "responders": "John Gibson, Bob Schrader",
+      "responder_title": "President and Chief Executive Officer, Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Andrew Nicholas [1885]: in Florida with that plan?\", \"speaker\": \"Andrew Nicholas\", \"title\": \"Analyst, William Blair\"}, {\"role\": \"answer\", \"text\": \"John Gibson [1891]: Yeah, so I'll take it first, Adriel.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [1894]: What I would say is, look, we're very early. You know our enrollment cycles. We're very early in the process. We have enrollments in October. We have another one in January. Now, only about 25% of the employees will end up electing in the October timeframe. So we're in very, very early days. What I would say is we've done a lot of work to make sure we have a different plan lineups. Those have been put in place. We have several initiatives going on there. We've done some improvements in the underwriting side. We're providing hand-on client and employee enrollment support. We launched an AI partnership that we just recently announced as well that will actually provide a tool to help employees select a plan that they can afford and then combine some things together with savings accounts, which I think is going to help us as well. You know, look, I think we're early in there. We continue to see across insurance, both the agency and in the PO, employees being very particular in terms of cost and value in the plan. So we've done everything we can and we think that we need to do to be able to make sure that we get the participation. When I step back at it, what I know, all the stuff we're doing is working because we're expanding our overall enrollment and our health plans in the PO. The issue really is in that Florida plan, as we've talked about, we continue to monitor. What I'm not going to do is I'm not going to adjust in an environment, a competitive environment in Florida. I'm not going to adjust my underwriting to take on undue risk. That doesn't get you in a lot of places, and it ends up in a place. And, you know, again, when I look at it, I look at California. We're increasing our participation 10%, and that's because we've been rational there the whole time, and we're taking opportunities as they present themselves. So it's a very delicate balance, particularly in the case where we have this program in Florida, in balancing risk along with the growth of the plan. Remind everybody, it doesn't have anything to do with our profitability, and I don't think it has anything to do with the value of our proposition overall.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [2022]: Yeah, and just the only thing I would add to that, Andrew, on your compare question is the enrollment had when the lower enrollment that we had in Florida occurred as we went through, you know, the annual enrollment cycles last year. So when you look at the front half of the year, we have a tougher compare because we had higher enrollment last year. Once you get through that January enrollment, then you've kind of anniversary that that headwind goes away and you have a much easier compare. And then, you know, all the things that John talked about that were focused on driving enrollment as well as worksite employee growth. And that's why you get the the acceleration in the PEO in the back half of the year.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__9",
+      "sequence": "9",
+      "questioner": "Andrew Nicholas",
+      "questioner_title": "Analyst, William Blair",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Andrew Nicholas [2064]: Perfect. Thank you. It makes sense. And maybe just sticking with the PEO market, just broadly, I hear all the momentum there, I mean, single-digit worksite employee growth, double-digit bookings, record retention. How would you describe the competitiveness of the environment, maybe outside of kind of the healthcare and the insurance piece? Like, are your Competitors there being aggressive with price on the admin fee or how aggressive are you willing to be on kind of the administration fee relative to maybe some desperate competitors in that market that aren't seeing the same level of growth as you have this quarter?\", \"speaker\": \"Andrew Nicholas\", \"title\": \"Analyst, William Blair\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2108]: Yeah, Andrew, I don't view it.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2110]: I've been in that business a long time, as you know. So I don't view it any different than any other cycle we've seen, you know, ebbs and flows in terms of who's being more aggressive or less aggressive. I'd say the overall environment is very consistent. There's always going to be one or two irrational players out there. My view is of that value proposition, it's a holistic value proposition. You mentioned admin fee. Well, what the client wants to know is what are you providing from a technology and HR advisory support for the fee that I'm paying? I believe with all the investments we've made, with the data assets we have, we've introduced our AI-based HR assistance tool to support our HR experts in helping clients. We got the retention insight. So while we're going and telling them, what are you getting for your admin fee, it is a comprehensive HCM technology platform supported by the best supported HR experts in the industry. And so, you know, I think head to head with a smaller provider that doesn't offer that type of capability, someone that's looking for HR outsourcing and looking for someone to help them build HR strategies, I think they're going to pay the additional admin fees. So we're not being, we believe we provide a great value proposition comprehensively from our benefits offering, from our technology platforms, from our HR advisory support. And so I feel very good about where we're positioned right now in terms of the competition.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__10",
+      "sequence": "10",
+      "questioner": "Michael Fontana",
+      "questioner_title": "Analyst, Morgan Stanley",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Michael Fontana [2206]: Hi, guys. It's Michael in Fontana for James. Thanks for taking our question. I just wanted to ask about the bill partnership. Can you maybe just paint the picture for us in terms of the customer profile who would be most likely to initially adopt some of these capabilities, how you think about some of the go-to-market dynamics between the two organizations, and maybe how we should be thinking about ARPU uplift potential for your average payroll customer that begins to use some of Bill's AP capabilities? Thanks.\", \"speaker\": \"Michael Fontana\", \"title\": \"Analyst, Morgan Stanley\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2237]: Yeah, Michael. Well, thanks. We're real excited about the partnership. We've kind of been in the payments business, allow our clients to make ancillary payments in the millions, believe it or not, through our system. It's not been our core business. And certainly, we viewed it as another value add. So I'm not looking at a big ARPU increase. We're trying to add value to the platform, and with this full digital integration that we're gonna have with build.com, it really blossomed out of our relationship with the CPAs, and we've had a long-standing one with the Association of CPAs, so does build.com, and that's what kind of, you've started it. So this really allows us to very quickly integrate. It's gonna be integrated in our Flex application. Again, it's focused towards small businesses. They have 7 million payer and vendor network already built into their system, so it's a big advantage for easy payments. We're also going to augment that, so our clients are going to have the most broad set of payment options embedded in the application. We're going to start with AP and then look to add accounts receivable in 2026. We're going to bundle this offering really to bring more value to our overall HCM bundle. I'm not going to get into a lot of details of how we're going to do that because we're getting ready to go into selling season, but I think it's simple to say that we continue to look for opportunities to partner and fully integrate to add the most value in the HCM industry.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__11",
+      "sequence": "11",
+      "questioner": "Michael Fontana",
+      "questioner_title": "Analyst, Morgan Stanley",
+      "responders": "Bob Schrader",
+      "responder_title": "Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Michael Fontana [2335]: That's helpful. I appreciate that. Bob, just a quick housekeeping one on the agency dynamic within the PO. I know you called out the agency piece, but was there anything incremental either in terms of PO versus ASO mix shift and or employees opting for lower cost health plans and maybe how that trended sequentially? Thanks.\", \"speaker\": \"Michael Fontana\", \"title\": \"Analyst, Morgan Stanley\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [2359]: Yeah, no difference there at all, Michael, than what we've seen in the past. I'd say good balance between ASO and PO, so we didn't see the pendulum swinging in one direction or the other. As I mentioned, the PO was actually slightly above what we expected in the quarter, and I wanted to highlight the agency because the overall growth, of that category is being impacted by, you know, what we continue to see is some workers' comp rate headwinds on the agency side. But overall, the PEO business performed solidly and slightly above our expectations in the quarter. Thanks, Tom.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__12",
+      "sequence": "12",
+      "questioner": "Daniel Jester",
+      "questioner_title": "Analyst, BMO Capital Markets",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Daniel Jester [2408]: Great. Thanks for taking my questions. I wanted to go back to the comment that prepared remarks about piling some agentic AI inside your own organization. I guess I know it's early days, but any sense about how much you would expect productivity to improve or how are you measuring the success of these pilot programs?\", \"speaker\": \"Daniel Jester\", \"title\": \"Analyst, BMO Capital Markets\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2432]: Yeah, so Daniel, let me kind of maybe lay out to you.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2436]: It's a pretty impressive track record of what we've done from an AI perspective, dating back to the first AI-based product before chat GPT when we won the award for our retention insights dating back in early 2022 when we've continued to add a series of capabilities into our product set that really are providing more value for our clients. One of the things we strongly believe is we have one of the largest data sets of small medium-sized businesses when it comes to HR. We're having 40 million interactions with our clients on an annual basis that we're now capturing and analyzing. We believe that we are now applying that technology capability to really be able to provide them better insights. We think that's going to differentiate our products and our technology in the industry. And so, number one, the biggest thing we're looking at is how does it continue to help us drive more value, get price in the marketplace, how does it help us win? So that's one key way. We're using it a lot in the back office in terms of determining how we do discounting, how we do pricing. We're using it to help our service providers be more productive, as you mentioned, and we continue to look at ways in which we can leverage it to to help our sales forces target their messaging and the clients in which they're talking to. It's really across the board. We're doing a lot of different things there. We have also just recently launched an actual agentic AI tool that will actually begin to handle some of these high volume transactions through multiple channels. It's early, early innings in this, but we're really optimistic about what the impact can be to really allow us to provide more value for the clients and then for us to free up the transactional time that our frontline service providers are doing today for the client so that they can look at the analytics and go and provide more advisory support. We think that's going to differentiate us from anyone else, particularly the smaller players in the industry that don't have access to the massive data set that we have.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__13",
+      "sequence": "13",
+      "questioner": "Daniel Jester",
+      "questioner_title": "Analyst, BMO Capital Markets",
+      "responders": null,
+      "responder_title": null,
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Daniel Jester [2571]: That's great color. Thank you. And then on the revenue synergies, you know, holding them, you know, consistent with what you shared last quarter, I guess, you know, would you be able to provide any color on sort of the learnings that you've had? You know, you highlighted that big win in the prepared remarks, but as you're approaching the cross-sell revenue synergy opportunity, anything that you may be modifying now that you've been out a couple months trying to do this?\", \"speaker\": \"Daniel Jester\", \"title\": \"Analyst, BMO Capital Markets\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__14",
+      "sequence": "14",
+      "questioner": "Andrew Nicholas",
+      "questioner_title": "Analyst, William Blair",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Andrew Nicholas [2598]: Thank you so much.\", \"speaker\": \"Andrew Nicholas\", \"title\": \"Analyst, William Blair\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2602]: Yeah, look, I think, you know, look, the integration has been going really well. I mean, all the things that can happen during a large integration have been very happy with the progress we're making on getting the cost synergies, as we've already talked about. And I think we actually believe there's additional opportunities over the long term to go after those. There's also additional investment opportunities that we see that we think could drive growth and drive further innovation. On the revenue side, we met our revenue synergy expectations for the first quarter, and every month that we were engaging with PayCourse clients, we continued to see the pipeline grow, and we continued to see the receptivity grow. When we looked at areas where we thought that we may have concerns with channels, we've seen that continue to improve through the course of the course. So all the things that we kind of knew going into it, the knowns, if you will, I've been very pleased with how we've worked through those. The culture and the people side is always the thing you get concerned about. You get concerned about client disruption. So I go and I look at attrition, employee attrition actually is better than what PACOR had seen historically. You take the synergies we took out aside. You look at what we've done from integrating them into the executive leadership team. They're making huge contributions both from the terms of just general management expertise, product expertise, marketing expertise, legal expertise across the board that people at Paychex and PayCorps have come together and we're making more powerful decisions, I think, as an organization. And so then I look at it and I go, what's my biggest surprise? You know, we have a very specific model at Paychex that we went after, particularly in upsell. And we have these target segments that we know exactly what the sweet spot is for an ASO client. Someone's going to use our HR outsourcing. What surprised me is how further up market that value proposition could potentially go. I mean, when I'm getting multi-thousand ASO HR outsourcing deals, two of them, early stages, That was surprising to me. And we're actually now trying to rethink, okay, what does that look like up market in much bigger scale than what we're used to? We've done it before at Paychex, but again, you know, in the first six to eight weeks, we're landing some large that we really would not have thought or certainly was not in our model because we were targeting more of our sweet spots. So that's the thing that I'm most excited about is I think the value, same thing in 401K, I think the value proposition that we've historically had at Paychex I think is also resonating more upmarket, and I think that's going to give us some upside opportunity.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__15",
+      "sequence": "15",
+      "questioner": "David (for Ashish Sabhadra)",
+      "questioner_title": "Analyst, RBC Capital Markets",
+      "responders": "John Gibson",
+      "responder_title": "President and Chief Executive Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"David (for Ashish Sabhadra) [2788]: Hi, good morning. This is David on for Ashish. Thanks for all the color provided on the call so far. Just taking a step back, in terms of the regulatory environment, government shutdowns, maybe changes to H-1B, how are you thinking about that and how is the business doing? I guess, position to whether those changes, whether it be good or bad.\", \"speaker\": \"David (for Ashish Sabhadra)\", \"title\": \"Analyst, RBC Capital Markets\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2812]: Thank you. Yeah, look, we've been through a lot of cycles.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2818]: And what I would say is that our small business clients tend to be resilient. In terms of the paycheck specifically, we don't have a heavy concentration with government with the federal government. And so I don't expect any impact directly to our business. I'm sure we'll have some clients in the D.C. area that may have some issues. And then we don't have a lot of H-1B visa issues internally as a company. So, again, I don't view those things as a big issue. What I would tell you is the small, medium-sized business market continues to be resilient. We've seen stability. in terms of employment since the start of the year. It's not taking off, but it's not going down in a recessionary mode. We continue to see wage inflation below 3%, very steady. That's been very steady for almost 18 quarters now. So we see a very stable small business environment. I think some of the things with the tax bill being behind us, and there's at least some degree of certainty there, which is probably important for people to make some investment decisions, particularly the R&D, of credit issue. And then also, I think with now you getting the Fed, the first rate cut is underway. We'll see where that's going. I'd say that we're still in kind of restrictive environment. But I think if you continue to see that, you continue to see investment capital, I feel pretty good about where small businesses are set up. I think they're more optimistic now than they were at the start of the year. And like I said, I just think we'd like to continue to work through additional surprises.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [2916]: Thanks.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__16",
+      "sequence": "16",
+      "questioner": "Scott Wurzel",
+      "questioner_title": "Analyst, Wolf Research",
+      "responders": "Bob Schrader",
+      "responder_title": "Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Scott Wurzel [2925]: Hey, good morning, guys. Thank you for taking my questions. I appreciate the incremental color on the cost energy side and sort of your view on the targets there. Wondering if you could just talk about, just give us a kind of update or, you know, re-inform us of the milestones that you've hit so far, what's left to come, and where maybe some of these, you know, incremental potential cost synergies would be coming from down the line. Thanks.\", \"speaker\": \"Scott Wurzel\", \"title\": \"Analyst, Wolf Research\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [2949]: Maybe I'll start and John can answer. I would say most of the actions required to realize the cost synergies are behind us, Scott. A lot of that happened early on after we closed the transaction. Obviously, we had some transition resources that we carried through a period of time. to help us there. I would say most of the cost synergies, obviously a lot of that is overlap in functions. You have two public companies coming together. There's other areas that we're going after. We think there's certainly some opportunities from a procurement standpoint in leveraging the combined spend to get better rates and things like that. Those are the additional opportunities that we're going to go after. As we've said, we're going to balance how much of that we drop to the bottom line versus looking for additional investment opportunities as we move forward.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}]"
+    },
+    {
+      "id": "PAYX_2025-09-30T09.30_qa__17",
+      "sequence": "17",
+      "questioner": "Scott Wurzel",
+      "questioner_title": "Analyst, Wolf Research",
+      "responders": "John Gibson, Bob Schrader",
+      "responder_title": "President and Chief Executive Officer, Chief Financial Officer",
+      "exchanges": "[{\"role\": \"question\", \"text\": \"Scott Wurzel [3010]: Got it. Thank you. And then just a quick follow-up, just on the retirement side, wondering if you can maybe quantify how contributory that was to growth this quarter, just given where kind of equity markets landed at the end of the quarter relative to when you guys reported earnings, if there was any incremental tailwind on the retirement side during the quarter. Thanks.\", \"speaker\": \"Scott Wurzel\", \"title\": \"Analyst, Wolf Research\"}, {\"role\": \"answer\", \"text\": \"Bob Schrader [3029]: Yeah, I mean, that's been a strong growth business for us for some time, and in the quarter that continued, I would say it was near double-digit growth in Q1. Great.\", \"speaker\": \"Bob Schrader\", \"title\": \"Chief Financial Officer\"}, {\"role\": \"answer\", \"text\": \"John Gibson [3052]: Okay. Well, thank you both. Appreciate it. Well, listen, in summary, as we stated, we're off to a good start in fiscal year 26, delivering robust revenue growth, solid earnings per share. The integration continues to exceed our expectation. We're hitting the cost synergies, revenue synergy opportunity continues to just reinforce to me the strategic value of the acquisition. And we truly believe that the innovation that we have in front of us with AI-driven solutions are going to drive better value and efficiency really across the entire business for our clients and for our shareholders. I think as you look at the company today, having gotten the major lifting and the integration behind us, we are now stronger as one paychecks. And that's really what we are going forward. And I really believe that we have the most comprehensive, set of platforms and capabilities in the industry that meet the need of any client of any size. And that's only been reinforced in the last quarter, understanding the power of our HR outsourcing and its ability to move upmarket. And I think that we're in a better position than we've ever been to fulfill our purpose to help businesses succeed. So I want to thank you for your interest in Paychex, and I hope you have a great day.\", \"speaker\": \"John Gibson\", \"title\": \"President and Chief Executive Officer\"}]"
+    }
+  ],
+  "guidance": [
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr",
+          "PAYX_2025-09-30T09.30_qa__6"
+        ],
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Adjusted Diluted EPS Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks + Q&A #6 (Tianxin Huang)",
+        "qualitative": "EPS guidance raised 50 bps on each end; driven by Q1 performance exceeding expectations and higher confidence in both cost and revenue synergies from Paycor acquisition.",
+        "time_type": "duration",
+        "basis_norm": "non_gaap",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:adjusted_diluted_eps_growth:gp_2025-06-01_2026-05-31:non_gaap:total",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:59.842235+00:00",
+        "quote": "[PR] We are now raising our earnings expectations with adjusted diluted earnings per share now expected to grow between 9% and 11% up from 8.5% to 10.5% that we shared with you last quarter. [Q&A] Obviously, the Q1 came in a little bit stronger. Obviously, we have a quarter behind us of owning the asset. There's a higher degree of confidence and certainly the, you know, both the cost and revenue synergies. And so you see some of that playing through.",
+        "evhash16": "f4a02a388e5e38f0",
+        "label_slug": "adjusted_diluted_eps_growth",
+        "mid": 10.0,
+        "high": 11.0,
+        "low": 9.0,
+        "basis_raw": "adjusted"
+      },
+      "label": "Adjusted Diluted EPS Growth",
+      "guidance_id": "guidance:adjusted_diluted_eps_growth",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Adjusted Operating Income Margin",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "non_gaap",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:adjusted_operating_income_margin:gp_2025-06-01_2026-05-31:non_gaap:total",
+        "derivation": "point",
+        "created": "2026-03-24T02:01:58.411128+00:00",
+        "quote": "[PR] Adjusted operating income margin is expected to be approximately 43%.",
+        "evhash16": "cf00c94a0155312a",
+        "label_slug": "adjusted_operating_income_margin",
+        "mid": 43.0,
+        "high": 43.0,
+        "low": 43.0,
+        "basis_raw": "adjusted"
+      },
+      "label": "Adjusted Operating Income Margin",
+      "guidance_id": "guidance:adjusted_operating_income_margin",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "period_scope": "quarter",
+        "time_type": "duration",
+        "id": "gu:PAYX_2025-09-30T09.30:adjusted_operating_income_margin:gp_2025-09-01_2025-11-30:non_gaap:total",
+        "created": "2026-03-24T02:02:00.655078+00:00",
+        "quote": "[PR] We would anticipate total revenue growth to be approximately 18% in Q2 with an adjusted operating margin of approximately 41%.",
+        "label_slug": "adjusted_operating_income_margin",
+        "basis_raw": "adjusted",
+        "canonical_unit": "percent",
+        "fiscal_quarter": 2,
+        "label": "Adjusted Operating Income Margin",
+        "given_date": "2025-09-30T13:30:00Z",
+        "section": "CFO Prepared Remarks",
+        "basis_norm": "non_gaap",
+        "fiscal_year": 2026,
+        "conditions": "Based on current assumptions, which are subject to change.",
+        "derivation": "point",
+        "evhash16": "835351234caed113",
+        "mid": 41.0,
+        "high": 41.0,
+        "low": 41.0
+      },
+      "label": "Adjusted Operating Income Margin",
+      "guidance_id": "guidance:adjusted_operating_income_margin",
+      "period": {
+        "id": "gp_2025-09-01_2025-11-30",
+        "end_date": "2025-11-30",
+        "u_id": "gp_2025-09-01_2025-11-30",
+        "start_date": "2025-09-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "xbrl_qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Effective Income Tax Rate",
+        "given_date": "2025-09-30T13:30:00Z",
+        "concept_family_qname": "us-gaap:EffectiveIncomeTaxRateContinuingOperations",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:effective_income_tax_rate:gp_2025-06-01_2026-05-31:unknown:total",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:58.826334+00:00",
+        "quote": "[PR] Our effective income tax rate is expected to be in the range of 24% to 25%.",
+        "evhash16": "57bbf5162b6ce25e",
+        "label_slug": "effective_income_tax_rate",
+        "mid": 24.5,
+        "high": 25.0,
+        "low": 24.0
+      },
+      "label": "Effective Income Tax Rate",
+      "guidance_id": "guidance:effective_income_tax_rate",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "m_usd",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "xbrl_qname": "us-gaap:InterestIncomeOperating",
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Interest on Funds Held for Clients",
+        "given_date": "2025-09-30T13:30:00Z",
+        "concept_family_qname": "us-gaap:InterestIncomeOperating",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:interest_on_funds_held_for_clients:gp_2025-06-01_2026-05-31:unknown:total",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:57.390874+00:00",
+        "quote": "[PR] Interest on funds held for clients is still expected to be in the range of $190 to $200 million.",
+        "evhash16": "8d408bbd21e18444",
+        "label_slug": "interest_on_funds_held_for_clients",
+        "mid": 195.0,
+        "high": 200.0,
+        "low": 190.0
+      },
+      "label": "Interest on Funds Held for Clients",
+      "guidance_id": "guidance:interest_on_funds_held_for_clients",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "management_solutions",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "segment": "Management Solutions",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Management Solutions Revenue Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:management_solutions_revenue_growth:gp_2025-06-01_2026-05-31:unknown:management_solutions",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:56.362007+00:00",
+        "quote": "[PR] Management Solutions is expected to grow in the range of 20 to 22%.",
+        "evhash16": "fad2e6492c00ac6b",
+        "label_slug": "management_solutions_revenue_growth",
+        "mid": 21.0,
+        "high": 22.0,
+        "low": 20.0
+      },
+      "label": "Management Solutions Revenue Growth",
+      "guidance_id": "guidance:management_solutions_revenue_growth",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "peo_and_insurance_solutions",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "segment": "PEO and Insurance Solutions",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "PEO and Insurance Solutions Revenue Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:peo_and_insurance_solutions_revenue_growth:gp_2025-06-01_2026-05-31:unknown:peo_and_insurance_solutions",
+        "conditions": "Revenue expected to accelerate in back half of year as at-risk revenue growth headwinds from last fiscal year are anniversaried.",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:56.882928+00:00",
+        "quote": "[PR] PEO and Insurance Solutions is expected to grow in the range of 6 to 8%. And as previously noted, we expect revenue to accelerate in the back half of the year as we anniversary the at-risk revenue growth headwinds we experienced last fiscal year.",
+        "evhash16": "f8899df2c84a4d6f",
+        "label_slug": "peo_and_insurance_solutions_revenue_growth",
+        "mid": 7.0,
+        "high": 8.0,
+        "low": 6.0
+      },
+      "label": "PEO and Insurance Solutions Revenue Growth",
+      "guidance_id": "guidance:peo_and_insurance_solutions_revenue_growth",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "paycor",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_qa__1"
+        ],
+        "segment": "Paycor",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Paycor Recurring Revenue Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "Q&A #1 (Jared Levine)",
+        "qualitative": "Double-digit growth expected for Paycor recurring revenue on a full-year basis. Q1 was in line with expectations. Excludes client funds interest income (which is impacted by rate changes).",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:paycor_recurring_revenue_growth:gp_2025-06-01_2026-05-31:unknown:paycor",
+        "conditions": "Excludes client funds interest income impact from rate changes.",
+        "derivation": "implied",
+        "created": "2026-03-24T02:05:05.571542+00:00",
+        "quote": "[Q&A] on a full-year basis we expect, you know, the recurring revenue to be on pay core to be a double-digit growth. I don't want to get into the quarterly splits. Obviously, you know, they were invested short on the client fund, so that, you know, with rate decreases that occurred last year and where we are now, that would have been a little bit of a headwind. But the recurring revenue growth for PACOR in Q1 was in line with our expectations, and we would expect, you know, the business to grow double digits on a full-year basis.",
+        "evhash16": "498b6e36973e679a",
+        "label_slug": "paycor_recurring_revenue_growth"
+      },
+      "label": "Paycor Recurring Revenue Growth",
+      "guidance_id": "guidance:paycor_recurring_revenue_growth",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr",
+          "PAYX_2025-09-30T09.30_qa__5"
+        ],
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Total Revenue Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "annual",
+        "section": "CFO Prepared Remarks + Q&A #5 (Samad Samana)",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:total_revenue_growth:gp_2025-06-01_2026-05-31:unknown:total",
+        "conditions": "Assumes current macro environment. Revenue synergies expected to contribute 30 to 50 basis points of growth in fiscal 2026. Organic growth component (excluding Paycor acquisition) implied to be approximately 5% for full year.",
+        "derivation": "explicit",
+        "created": "2026-03-24T02:01:55.950847+00:00",
+        "quote": "[PR] We are reaffirming our fiscal 2026 outlook with the exception of our earnings expectation, which we are raising. Total revenue is still expected to grow between 16.5% and 18.5%. [Q&A] I think the guide implies an organic growth of 5% on a full year basis. You know, we're at 4 in Q1. We knew that. That's how the plan was built. There is some improvements as we move through the year as the revenue synergies build on, particularly to the management solution side.",
+        "evhash16": "6bbcdf339e5a7dff",
+        "label_slug": "total_revenue_growth",
+        "mid": 17.5,
+        "high": 18.5,
+        "low": 16.5
+      },
+      "label": "Total Revenue Growth",
+      "guidance_id": "guidance:total_revenue_growth",
+      "period": {
+        "id": "gp_2025-06-01_2026-05-31",
+        "end_date": "2026-05-31",
+        "u_id": "gp_2025-06-01_2026-05-31",
+        "start_date": "2025-06-01"
+      }
+    },
+    {
+      "update": {
+        "segment_slug": "total",
+        "canonical_unit": "percent",
+        "source_refs": [
+          "PAYX_2025-09-30T09.30_pr"
+        ],
+        "fiscal_quarter": 2,
+        "segment": "Total",
+        "source_key": "full",
+        "source_type": "transcript",
+        "label": "Total Revenue Growth",
+        "given_date": "2025-09-30T13:30:00Z",
+        "period_scope": "quarter",
+        "section": "CFO Prepared Remarks",
+        "time_type": "duration",
+        "basis_norm": "unknown",
+        "fiscal_year": 2026,
+        "id": "gu:PAYX_2025-09-30T09.30:total_revenue_growth:gp_2025-09-01_2025-11-30:unknown:total",
+        "conditions": "Based on current assumptions, which are subject to change.",
+        "derivation": "point",
+        "created": "2026-03-24T02:02:00.248569+00:00",
+        "quote": "[PR] We would anticipate total revenue growth to be approximately 18% in Q2.",
+        "evhash16": "0e00aa6d11e412ea",
+        "label_slug": "total_revenue_growth",
+        "mid": 18.0,
+        "high": 18.0,
+        "low": 18.0
+      },
+      "label": "Total Revenue Growth",
+      "guidance_id": "guidance:total_revenue_growth",
+      "period": {
+        "id": "gp_2025-09-01_2025-11-30",
+        "end_date": "2025-11-30",
+        "u_id": "gp_2025-09-01_2025-11-30",
+        "start_date": "2025-09-01"
+      }
+    }
+  ],
+  "prior_labels": [
+    {
+      "id": "guidance:adjusted_diluted_eps",
+      "label": "Adjusted Diluted EPS"
+    },
+    {
+      "id": "guidance:adjusted_diluted_eps_growth",
+      "label": "Adjusted Diluted EPS Growth"
+    },
+    {
+      "id": "guidance:adjusted_operating_income_margin",
+      "label": "Adjusted Operating Income Margin"
+    },
+    {
+      "id": "guidance:adjusted_operating_margin",
+      "label": "Adjusted Operating Margin"
+    },
+    {
+      "id": "guidance:checks_per_client",
+      "label": "Checks Per Client"
+    },
+    {
+      "id": "guidance:cost_synergies",
+      "label": "Cost Synergies"
+    },
+    {
+      "id": "guidance:dividend_per_share",
+      "label": "Dividend Per Share"
+    },
+    {
+      "id": "guidance:effective_income_tax_rate",
+      "label": "Effective Income Tax Rate"
+    },
+    {
+      "id": "guidance:effective_tax_rate",
+      "label": "Effective Tax Rate"
+    },
+    {
+      "id": "guidance:free_cash_flow_growth",
+      "label": "Free Cash Flow Growth"
+    },
+    {
+      "id": "guidance:interest_on_funds_held_for_clients",
+      "label": "Interest on Funds Held for Clients"
+    },
+    {
+      "id": "guidance:management_solutions_revenue_growth",
+      "label": "Management Solutions Revenue Growth"
+    },
+    {
+      "id": "guidance:operating_cash_flow_growth",
+      "label": "Operating Cash Flow Growth"
+    },
+    {
+      "id": "guidance:operating_income_margin",
+      "label": "Operating Income Margin"
+    },
+    {
+      "id": "guidance:operating_margin",
+      "label": "Operating Margin"
+    },
+    {
+      "id": "guidance:operating_margin_expansion",
+      "label": "Operating Margin Expansion"
+    },
+    {
+      "id": "guidance:organic_client_growth",
+      "label": "Organic Client Growth"
+    },
+    {
+      "id": "guidance:other_income_expense_net",
+      "label": "Other Income (Expense), Net"
+    },
+    {
+      "id": "guidance:other_income_net",
+      "label": "Other Income Net"
+    },
+    {
+      "id": "guidance:peo_and_insurance_solutions_revenue_growth",
+      "label": "PEO and Insurance Solutions Revenue Growth"
+    },
+    {
+      "id": "guidance:restructuring_charges",
+      "label": "Restructuring Charges"
+    },
+    {
+      "id": "guidance:revenue_growth",
+      "label": "Revenue Growth"
+    },
+    {
+      "id": "guidance:total_investment_portfolio_average",
+      "label": "Total Investment Portfolio Average"
+    },
+    {
+      "id": "guidance:total_investment_portfolio_average_balance",
+      "label": "Total Investment Portfolio Average Balance"
+    },
+    {
+      "id": "guidance:total_revenue_growth",
+      "label": "Total Revenue Growth"
+    }
+  ]
+}

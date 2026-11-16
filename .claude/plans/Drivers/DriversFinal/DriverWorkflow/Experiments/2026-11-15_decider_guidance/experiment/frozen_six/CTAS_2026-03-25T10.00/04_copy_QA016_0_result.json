@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-11-15T22:45:52.883131-05:00",
+  "request_sha256": "7666bdfee93b174f39cae1c75333af673692907ee4cf224213c2e68e62ecf544",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V106_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V106_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V106_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1195,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 15.093182841083035,
+  "finished_at": "2026-11-15T22:46:07.976412-05:00"
+}

@@ -1,0 +1,61 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S71] Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately [TARGET] $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '$101' at [TARGET] in [S71]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "F4",
+    "passage": "PR004",
+    "start": 2167,
+    "end": 2171,
+    "text": "$101",
+    "aliases": [
+      "V59"
+    ],
+    "insert_at": "V59"
+  },
+  "selected_sentence": {
+    "tag": "S71",
+    "passage": "PR004",
+    "start": 2050,
+    "end": 2390,
+    "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+  },
+  "target_sentence": {
+    "tag": "S71",
+    "passage": "PR004",
+    "start": 2050,
+    "end": 2390,
+    "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 245,
+      "source": {
+        "tag": "S71",
+        "passage": "PR004",
+        "start": 2050,
+        "end": 2167,
+        "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately "
+      }
+    },
+    {
+      "render_start": 254,
+      "render_end": 477,
+      "source": {
+        "tag": "S71",
+        "passage": "PR004",
+        "start": 2167,
+        "end": 2390,
+        "text": "$101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness."
+}

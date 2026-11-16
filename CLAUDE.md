@@ -15,7 +15,7 @@ For Driver work: say the goal in plain terms BEFORE files, tests, or plans. Neve
 
 **When unsure how a Claude Code tool or CLI behaves:** check `.claude/plans/Infrastructure.md` first — don't guess.
 
-**Extraction closeout (continuing the proof checks):** read `.claude/plans/Drivers/DriversFinal/PrepareTools.md` first. Root (Codex) directs the work, Test (private Codex) runs the checks, and Claude sessions review only. To start the next checks, tell Root.
+**Extraction closeout (continuing the proof checks):** read `.claude/plans/Drivers/DriversFinal/Prepare/PrepareTools.md` first. Root (Codex) directs the work, Test (private Codex) runs the checks, and Claude sessions review only. To start the next checks, tell Root.
 
 > **Recap:** crux first · plain words · few sentences (but complete) · small visuals · refresh my memory · explain before writeup.
 

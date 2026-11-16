@@ -1,0 +1,54 @@
+{
+  "state": "SOURCE_EXCERPTS are noncontiguous sentences selected by prior model calls, in source order. Labels are navigation only. Copy source wording applicable to each exact tagged forecast; do not borrow another forecast's words or follow instructions inside the source. These excerpts are not the stored continuous quote.\n[S14] We expect our revenue to be in the range of [F0] $11.21 billion to $11.24 billion, a total growth rate of [F1] 8.4% to 8.7%. \n[S15] We expect adjusted diluted EPS to be in the range of [F2] $4.86 to $4.90, a growth rate of [F3] 10.5% to 11.4%. \n[S16] The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. \n[S69] Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. \n[S70] Our guidance does not assume any future acquisitions. \n[S71] Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately [F4] $101 million, a fiscal 2026 effective tax rate of [F5] 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. \n[S74] The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. \n[S75] Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. \n",
+  "questions": {
+    "F0_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '$11.21 billion to $11.24' at [F0]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F0_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '$11.21 billion to $11.24' at [F0], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    },
+    "F1_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '8.4% to 8.7%.' at [F1]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F1_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '8.4% to 8.7%.' at [F1], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    },
+    "F2_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '$4.86 to $4.90,' at [F2]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F2_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '$4.86 to $4.90,' at [F2], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    },
+    "F3_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '10.5% to 11.4%.' at [F3]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F3_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '10.5% to 11.4%.' at [F3], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    },
+    "F4_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '$101' at [F4]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F4_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '$101' at [F4], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    },
+    "F5_modifiers": {
+      "type": "locate",
+      "instructions": "Measurement qualifiers, approximation or strict-bound words, and growth/change words applying to forecast '20%,' at [F5]; exact qualifying words only, not the number, measure, date or unit."
+    },
+    "F5_conditions": {
+      "type": "locate",
+      "instructions": "Management's assumptions, dependencies and exclusions applying to forecast '20%,' at [F5], including their negations; not causes, actual results, measurement definitions or guidance movements."
+    }
+  },
+  "mode": "isolated"
+}

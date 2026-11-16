@@ -1,0 +1,593 @@
+{
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "F1": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005312268024832815,
+          "previous_period": 0.003191183707709176,
+          "two_bases": 0.0012117937139570641,
+          "other_stated": 0.015490618150273609,
+          "not_stated": 0.9134667885293688,
+          "unclear": 0.06132734787385851
+        },
+        "choice": "not_stated",
+        "confidence": 0.8961601462352425
+      },
+      "F3": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005235347927592819,
+          "previous_period": 0.00198802772215514,
+          "two_bases": 0.0008796250382928486,
+          "other_stated": 0.008282105487101517,
+          "not_stated": 0.9473077710530537,
+          "unclear": 0.03630712277180395
+        },
+        "choice": "not_stated",
+        "confidence": 0.9367693252636645
+      },
+      "V7": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9959050950553874,
+          "previous_period": 0.0008351391745233914,
+          "two_bases": 0.0001367869772897342,
+          "other_stated": 0.0024352738541591435,
+          "not_stated": 0.0004767580213290499,
+          "unclear": 0.00021094691731132553
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9950861140664649
+      },
+      "V10": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9914741516401838,
+          "previous_period": 0.0014564082958228074,
+          "two_bases": 0.00022098832415128674,
+          "other_stated": 0.00547943636790964,
+          "not_stated": 0.0010194209171755769,
+          "unclear": 0.0003495944547568679
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9897689819682206
+      },
+      "R5": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9711577518415286,
+          "previous_period": 0.0072868686904979055,
+          "two_bases": 0.0005998377010538369,
+          "other_stated": 0.014873052356130768,
+          "not_stated": 0.0043773652124395905,
+          "unclear": 0.001705124198349298
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9653893022098343
+      },
+      "R6": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.004656863644463604,
+          "previous_period": 0.009505013524389098,
+          "two_bases": 0.9818320581880002,
+          "other_stated": 0.0011178280071576993,
+          "not_stated": 0.0015176507866892302,
+          "unclear": 0.0013705858493001006
+        },
+        "choice": "two_bases",
+        "confidence": 0.9781984698256003
+      },
+      "R7": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.00015574674193223373,
+          "previous_period": 0.9982984297279129,
+          "two_bases": 0.00014428456252355628,
+          "other_stated": 0.0007955519541045803,
+          "not_stated": 0.0004541587675282402,
+          "unclear": 0.00015182824599846607
+        },
+        "choice": "previous_period",
+        "confidence": 0.9979581156734956
+      },
+      "R8": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0011360134744054205,
+          "previous_period": 0.03634241387490842,
+          "two_bases": 0.0008156808694456911,
+          "other_stated": 0.9482285808670206,
+          "not_stated": 0.010164686006482012,
+          "unclear": 0.0033126249077378845
+        },
+        "choice": "other_stated",
+        "confidence": 0.9378742970404247
+      },
+      "M1": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.004186340203448067,
+          "previous_period": 0.0027846601268820435,
+          "two_bases": 0.0006036541978898958,
+          "other_stated": 0.005132935085188344,
+          "not_stated": 0.9773362422297204,
+          "unclear": 0.009956168156871245
+        },
+        "choice": "not_stated",
+        "confidence": 0.9728034906756644
+      },
+      "M2": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.5379556612703457,
+          "previous_period": 0.2773447724174878,
+          "two_bases": 0.003464169076519528,
+          "other_stated": 0.14298600383207175,
+          "not_stated": 0.03099627748159487,
+          "unclear": 0.007253115921980446
+        },
+        "choice": "year_earlier",
+        "confidence": 0.44554679352441484
+      },
+      "M3": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0023343742297575933,
+          "previous_period": 0.9546426269425954,
+          "two_bases": 0.000981550642593442,
+          "other_stated": 0.03477033565268618,
+          "not_stated": 0.005551725699349683,
+          "unclear": 0.001719386833017764
+        },
+        "choice": "previous_period",
+        "confidence": 0.9455711523311144
+      },
+      "M4": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0018532922785381026,
+          "previous_period": 0.9778639915729369,
+          "two_bases": 0.0009801303015080278,
+          "other_stated": 0.008549244243346743,
+          "not_stated": 0.007337187169288368,
+          "unclear": 0.003416154434381873
+        },
+        "choice": "previous_period",
+        "confidence": 0.9734367898875242
+      },
+      "M5": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005020003958090826,
+          "previous_period": 0.0013342933309011284,
+          "two_bases": 0.0007617114170690831,
+          "other_stated": 0.007171890973061338,
+          "not_stated": 0.9558340677140988,
+          "unclear": 0.02987803260677875
+        },
+        "choice": "not_stated",
+        "confidence": 0.9470008812569186
+      },
+      "M6": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0034571595686413276,
+          "previous_period": 0.005755026547403425,
+          "two_bases": 0.0014911737971303575,
+          "other_stated": 0.8493014164722075,
+          "not_stated": 0.11059861842218927,
+          "unclear": 0.02939660519242816
+        },
+        "choice": "other_stated",
+        "confidence": 0.819161699766649
+      },
+      "M7": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0028295276686108946,
+          "previous_period": 0.0011897514145414083,
+          "two_bases": 0.00016724131725907252,
+          "other_stated": 0.9930839374985805,
+          "not_stated": 0.0020840919698938945,
+          "unclear": 0.0006454501311142005
+        },
+        "choice": "other_stated",
+        "confidence": 0.9917007249982965
+      },
+      "M8": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.984522918745726,
+          "previous_period": 0.0013060558273826997,
+          "two_bases": 0.00042563765525070486,
+          "other_stated": 0.004913765966670225,
+          "not_stated": 0.0057254946973229566,
+          "unclear": 0.003106127107647427
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9814275024948711
+      },
+      "M9": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.002167171877361558,
+          "previous_period": 0.004423362829267187,
+          "two_bases": 0.0006711799895167533,
+          "other_stated": 0.0027961298907632623,
+          "not_stated": 0.9813623188744582,
+          "unclear": 0.008579836538632982
+        },
+        "choice": "not_stated",
+        "confidence": 0.9776347826493499
+      },
+      "M10": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.007364700707820516,
+          "previous_period": 0.04383318593643752,
+          "two_bases": 0.002167543210457433,
+          "other_stated": 0.022598341596696006,
+          "not_stated": 0.8864174677144793,
+          "unclear": 0.03761876083410921
+        },
+        "choice": "not_stated",
+        "confidence": 0.8637009612573752
+      }
+    },
+    "usage": {
+      "input_tokens": 4242,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 46.51749410200864,
+  "scored": [
+    {
+      "id": "F1",
+      "kind": "real",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005312268024832815,
+          "previous_period": 0.003191183707709176,
+          "two_bases": 0.0012117937139570641,
+          "other_stated": 0.015490618150273609,
+          "not_stated": 0.9134667885293688,
+          "unclear": 0.06132734787385851
+        },
+        "choice": "not_stated",
+        "confidence": 0.8961601462352425
+      },
+      "correct": true
+    },
+    {
+      "id": "F3",
+      "kind": "real",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005235347927592819,
+          "previous_period": 0.00198802772215514,
+          "two_bases": 0.0008796250382928486,
+          "other_stated": 0.008282105487101517,
+          "not_stated": 0.9473077710530537,
+          "unclear": 0.03630712277180395
+        },
+        "choice": "not_stated",
+        "confidence": 0.9367693252636645
+      },
+      "correct": true
+    },
+    {
+      "id": "V7",
+      "kind": "real",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9959050950553874,
+          "previous_period": 0.0008351391745233914,
+          "two_bases": 0.0001367869772897342,
+          "other_stated": 0.0024352738541591435,
+          "not_stated": 0.0004767580213290499,
+          "unclear": 0.00021094691731132553
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9950861140664649
+      },
+      "correct": true
+    },
+    {
+      "id": "V10",
+      "kind": "real",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9914741516401838,
+          "previous_period": 0.0014564082958228074,
+          "two_bases": 0.00022098832415128674,
+          "other_stated": 0.00547943636790964,
+          "not_stated": 0.0010194209171755769,
+          "unclear": 0.0003495944547568679
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9897689819682206
+      },
+      "correct": true
+    },
+    {
+      "id": "R5",
+      "kind": "real",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9711577518415286,
+          "previous_period": 0.0072868686904979055,
+          "two_bases": 0.0005998377010538369,
+          "other_stated": 0.014873052356130768,
+          "not_stated": 0.0043773652124395905,
+          "unclear": 0.001705124198349298
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9653893022098343
+      },
+      "correct": true
+    },
+    {
+      "id": "R6",
+      "kind": "real",
+      "expected": "two_bases",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.004656863644463604,
+          "previous_period": 0.009505013524389098,
+          "two_bases": 0.9818320581880002,
+          "other_stated": 0.0011178280071576993,
+          "not_stated": 0.0015176507866892302,
+          "unclear": 0.0013705858493001006
+        },
+        "choice": "two_bases",
+        "confidence": 0.9781984698256003
+      },
+      "correct": true
+    },
+    {
+      "id": "R7",
+      "kind": "real",
+      "expected": "previous_period",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.00015574674193223373,
+          "previous_period": 0.9982984297279129,
+          "two_bases": 0.00014428456252355628,
+          "other_stated": 0.0007955519541045803,
+          "not_stated": 0.0004541587675282402,
+          "unclear": 0.00015182824599846607
+        },
+        "choice": "previous_period",
+        "confidence": 0.9979581156734956
+      },
+      "correct": true
+    },
+    {
+      "id": "R8",
+      "kind": "real",
+      "expected": "other_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0011360134744054205,
+          "previous_period": 0.03634241387490842,
+          "two_bases": 0.0008156808694456911,
+          "other_stated": 0.9482285808670206,
+          "not_stated": 0.010164686006482012,
+          "unclear": 0.0033126249077378845
+        },
+        "choice": "other_stated",
+        "confidence": 0.9378742970404247
+      },
+      "correct": true
+    },
+    {
+      "id": "M1",
+      "kind": "controlled_mutation",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.004186340203448067,
+          "previous_period": 0.0027846601268820435,
+          "two_bases": 0.0006036541978898958,
+          "other_stated": 0.005132935085188344,
+          "not_stated": 0.9773362422297204,
+          "unclear": 0.009956168156871245
+        },
+        "choice": "not_stated",
+        "confidence": 0.9728034906756644
+      },
+      "correct": true
+    },
+    {
+      "id": "M2",
+      "kind": "controlled_mutation",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.5379556612703457,
+          "previous_period": 0.2773447724174878,
+          "two_bases": 0.003464169076519528,
+          "other_stated": 0.14298600383207175,
+          "not_stated": 0.03099627748159487,
+          "unclear": 0.007253115921980446
+        },
+        "choice": "year_earlier",
+        "confidence": 0.44554679352441484
+      },
+      "correct": true
+    },
+    {
+      "id": "M3",
+      "kind": "controlled_mutation",
+      "expected": "previous_period",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0023343742297575933,
+          "previous_period": 0.9546426269425954,
+          "two_bases": 0.000981550642593442,
+          "other_stated": 0.03477033565268618,
+          "not_stated": 0.005551725699349683,
+          "unclear": 0.001719386833017764
+        },
+        "choice": "previous_period",
+        "confidence": 0.9455711523311144
+      },
+      "correct": true
+    },
+    {
+      "id": "M4",
+      "kind": "controlled_mutation",
+      "expected": "previous_period",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0018532922785381026,
+          "previous_period": 0.9778639915729369,
+          "two_bases": 0.0009801303015080278,
+          "other_stated": 0.008549244243346743,
+          "not_stated": 0.007337187169288368,
+          "unclear": 0.003416154434381873
+        },
+        "choice": "previous_period",
+        "confidence": 0.9734367898875242
+      },
+      "correct": true
+    },
+    {
+      "id": "M5",
+      "kind": "controlled_mutation",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.005020003958090826,
+          "previous_period": 0.0013342933309011284,
+          "two_bases": 0.0007617114170690831,
+          "other_stated": 0.007171890973061338,
+          "not_stated": 0.9558340677140988,
+          "unclear": 0.02987803260677875
+        },
+        "choice": "not_stated",
+        "confidence": 0.9470008812569186
+      },
+      "correct": true
+    },
+    {
+      "id": "M6",
+      "kind": "controlled_mutation",
+      "expected": "other_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0034571595686413276,
+          "previous_period": 0.005755026547403425,
+          "two_bases": 0.0014911737971303575,
+          "other_stated": 0.8493014164722075,
+          "not_stated": 0.11059861842218927,
+          "unclear": 0.02939660519242816
+        },
+        "choice": "other_stated",
+        "confidence": 0.819161699766649
+      },
+      "correct": true
+    },
+    {
+      "id": "M7",
+      "kind": "controlled_mutation",
+      "expected": "other_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.0028295276686108946,
+          "previous_period": 0.0011897514145414083,
+          "two_bases": 0.00016724131725907252,
+          "other_stated": 0.9930839374985805,
+          "not_stated": 0.0020840919698938945,
+          "unclear": 0.0006454501311142005
+        },
+        "choice": "other_stated",
+        "confidence": 0.9917007249982965
+      },
+      "correct": true
+    },
+    {
+      "id": "M8",
+      "kind": "controlled_mutation",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.984522918745726,
+          "previous_period": 0.0013060558273826997,
+          "two_bases": 0.00042563765525070486,
+          "other_stated": 0.004913765966670225,
+          "not_stated": 0.0057254946973229566,
+          "unclear": 0.003106127107647427
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9814275024948711
+      },
+      "correct": true
+    },
+    {
+      "id": "M9",
+      "kind": "controlled_mutation",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.002167171877361558,
+          "previous_period": 0.004423362829267187,
+          "two_bases": 0.0006711799895167533,
+          "other_stated": 0.0027961298907632623,
+          "not_stated": 0.9813623188744582,
+          "unclear": 0.008579836538632982
+        },
+        "choice": "not_stated",
+        "confidence": 0.9776347826493499
+      },
+      "correct": true
+    },
+    {
+      "id": "M10",
+      "kind": "controlled_mutation",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.007364700707820516,
+          "previous_period": 0.04383318593643752,
+          "two_bases": 0.002167543210457433,
+          "other_stated": 0.022598341596696006,
+          "not_stated": 0.8864174677144793,
+          "unclear": 0.03761876083410921
+        },
+        "choice": "not_stated",
+        "confidence": 0.8637009612573752
+      },
+      "correct": true
+    }
+  ],
+  "finished_at": "2026-11-15T14:50:03.309357-05:00",
+  "limitation": "Short quoted-evidence component, not a full-call pipeline or proof of quote construction/completeness."
+}

@@ -1,0 +1,111 @@
+{
+  "V016_measure": [
+    {
+      "start": 2819,
+      "end": 2826,
+      "text": "revenue",
+      "score": 0.9999874830245972
+    }
+  ],
+  "V016_context": [],
+  "V016_qualifiers": [],
+  "V018_measure": [],
+  "V018_context": [],
+  "V018_qualifiers": [],
+  "V020_measure": [
+    {
+      "start": 2930,
+      "end": 2941,
+      "text": "diluted EPS",
+      "score": 0.9889643788337708
+    }
+  ],
+  "V020_context": [],
+  "V020_qualifiers": [],
+  "V022_measure": [],
+  "V022_context": [
+    {
+      "start": 2980,
+      "end": 2996,
+      "text": "a growth rate of",
+      "score": 0.6729812026023865
+    }
+  ],
+  "V022_qualifiers": [
+    {
+      "start": 2980,
+      "end": 2996,
+      "text": "a growth rate of",
+      "score": 0.8263829946517944
+    }
+  ],
+  "V105_measure": [],
+  "V105_context": [],
+  "V105_qualifiers": [],
+  "V108_measure": [
+    {
+      "start": 21479,
+      "end": 21491,
+      "text": "incrementals",
+      "score": 0.7403949499130249
+    }
+  ],
+  "V108_context": [
+    {
+      "start": 21439,
+      "end": 21460,
+      "text": "back half of the year",
+      "score": 0.9998281002044678
+    }
+  ],
+  "V108_qualifiers": [],
+  "V131_measure": [
+    {
+      "start": 30501,
+      "end": 30508,
+      "text": "revenue",
+      "score": 0.8079947233200073
+    }
+  ],
+  "V131_context": [],
+  "V131_qualifiers": [],
+  "V143_measure": [],
+  "V143_context": [
+    {
+      "start": 35652,
+      "end": 35664,
+      "text": "basis points",
+      "score": 0.6102645397186279
+    }
+  ],
+  "V143_qualifiers": [],
+  "V016_conditions": [
+    {
+      "start": 8417,
+      "end": 8470,
+      "text": "Our guidance does not assume any future acquisitions.",
+      "score": 0.987589955329895
+    }
+  ],
+  "V018_conditions": [
+    {
+      "start": 8417,
+      "end": 8470,
+      "text": "Our guidance does not assume any future acquisitions.",
+      "score": 0.9651076197624207
+    }
+  ],
+  "V020_conditions": [],
+  "V022_conditions": [],
+  "V105_conditions": [],
+  "V108_conditions": [],
+  "V131_conditions": [
+    {
+      "start": 8417,
+      "end": 8470,
+      "text": "Our guidance does not assume any future acquisitions.",
+      "score": 0.9830774664878845
+    }
+  ],
+  "V143_conditions": []
+}

@@ -1,0 +1,80 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S75] Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of [TARGET] $0.03 to $0.04. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '$0.03' at [TARGET] in [S75]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "V65",
+    "passage": "PR004",
+    "start": 2888,
+    "end": 2893,
+    "text": "$0.03"
+  },
+  "selected_sentence": {
+    "tag": "S75",
+    "passage": "PR004",
+    "start": 2749,
+    "end": 2904,
+    "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+  },
+  "target_sentence": {
+    "tag": "S75",
+    "passage": "PR004",
+    "start": 2749,
+    "end": 2904,
+    "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 267,
+      "source": {
+        "tag": "S75",
+        "passage": "PR004",
+        "start": 2749,
+        "end": 2888,
+        "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of "
+      }
+    },
+    {
+      "render_start": 276,
+      "render_end": 292,
+      "source": {
+        "tag": "S75",
+        "passage": "PR004",
+        "start": 2888,
+        "end": 2904,
+        "text": "$0.03 to $0.04. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 224,
+            "end": 250,
+            "text": "diluted earnings per share",
+            "score": 0.9999972581863403
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 180,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 2.203313352074474,
+  "finished_at": "2026-11-15T14:59:49.573120-05:00"
+}

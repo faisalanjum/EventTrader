@@ -1,0 +1,41 @@
+{
+  "rows": [
+    {
+      "tag": "F0",
+      "expected": "m_usd_from_billions",
+      "choice": "m_usd_from_billions",
+      "p": 0.5572837064218142,
+      "correct": true
+    },
+    {
+      "tag": "F1",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.6013252750221832,
+      "correct": true
+    },
+    {
+      "tag": "F2",
+      "expected": "usd",
+      "choice": "usd",
+      "p": 0.9116233443319267,
+      "correct": true
+    },
+    {
+      "tag": "F3",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.7591381034509793,
+      "correct": true
+    }
+  ],
+  "correct": 4,
+  "total": 4,
+  "seconds": 19.47850781492889,
+  "usage": {
+    "input_tokens": 1762,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "scope": "Same four targets, selected support sentences, questions and stored continuous quotes. Only input gaps omitted. No complete-record or automatic-evidence-completeness claim."
+}

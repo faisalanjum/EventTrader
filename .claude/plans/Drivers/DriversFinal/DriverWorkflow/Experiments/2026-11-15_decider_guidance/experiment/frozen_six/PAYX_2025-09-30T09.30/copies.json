@@ -1,0 +1,139 @@
+{
+  "V012_measure": [],
+  "V012_context": [],
+  "V012_qualifiers": [],
+  "V045_measure": [],
+  "V045_context": [],
+  "V045_qualifiers": [],
+  "V047_measure": [],
+  "V047_context": [],
+  "V047_qualifiers": [
+    {
+      "start": 11241,
+      "end": 11253,
+      "text": "basis points",
+      "score": 0.901314377784729
+    }
+  ],
+  "V050_measure": [
+    {
+      "start": 11280,
+      "end": 11336,
+      "text": "Management Solutions is expected to grow in the range of",
+      "score": 0.9720311760902405
+    }
+  ],
+  "V050_context": [],
+  "V050_qualifiers": [
+    {
+      "start": 11280,
+      "end": 11336,
+      "text": "Management Solutions is expected to grow in the range of",
+      "score": 0.8854149580001831
+    }
+  ],
+  "V052_measure": [],
+  "V052_context": [],
+  "V052_qualifiers": [],
+  "V054_measure": [
+    {
+      "start": 11595,
+      "end": 11629,
+      "text": "Interest on funds held for clients",
+      "score": 0.8560085296630859
+    }
+  ],
+  "V054_context": [],
+  "V054_qualifiers": [],
+  "V056_measure": [
+    {
+      "start": 11692,
+      "end": 11724,
+      "text": "Adjusted operating income margin",
+      "score": 0.9998228549957275
+    }
+  ],
+  "V056_context": [],
+  "V056_qualifiers": [],
+  "V057_measure": [],
+  "V057_context": [],
+  "V057_qualifiers": [],
+  "V059_measure": [
+    {
+      "start": 11908,
+      "end": 11943,
+      "text": "adjusted diluted earnings per share",
+      "score": 0.9740198254585266
+    }
+  ],
+  "V059_context": [],
+  "V059_qualifiers": [],
+  "V063_measure": [
+    {
+      "start": 12127,
+      "end": 12147,
+      "text": "total revenue growth",
+      "score": 0.6871242523193359
+    }
+  ],
+  "V063_context": [],
+  "V063_qualifiers": [],
+  "V065_measure": [
+    {
+      "start": 12186,
+      "end": 12211,
+      "text": "adjusted operating margin",
+      "score": 0.9969305396080017
+    }
+  ],
+  "V065_context": [],
+  "V065_qualifiers": [
+    {
+      "start": 12215,
+      "end": 12228,
+      "text": "approximately",
+      "score": 0.8721554279327393
+    }
+  ],
+  "V102_measure": [
+    {
+      "start": 24254,
+      "end": 24268,
+      "text": "organic growth",
+      "score": 0.9996488094329834
+    }
+  ],
+  "V102_context": [
+    {
+      "start": 24275,
+      "end": 24295,
+      "text": "on a full year basis",
+      "score": 0.9999992251396179
+    }
+  ],
+  "V102_qualifiers": [
+    {
+      "start": 24275,
+      "end": 24295,
+      "text": "on a full year basis",
+      "score": 0.6947277784347534
+    }
+  ],
+  "V012_conditions": [],
+  "V045_conditions": [],
+  "V047_conditions": [],
+  "V050_conditions": [],
+  "V052_conditions": [],
+  "V054_conditions": [],
+  "V056_conditions": [
+    {
+      "start": 10939,
+      "end": 10976,
+      "text": "assumes the current macro environment",
+      "score": 0.5247839689254761
+    }
+  ],
+  "V059_conditions": [],
+  "V059_comparison_revision": [],
+  "V102_conditions": []
+}

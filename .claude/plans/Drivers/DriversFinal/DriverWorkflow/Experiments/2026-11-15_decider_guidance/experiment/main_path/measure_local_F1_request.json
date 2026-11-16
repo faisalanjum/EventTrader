@@ -1,0 +1,62 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S14] We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of [TARGET] 8.4% to 8.7%. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '8.4% to 8.7%.' at [TARGET] in [S14]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "F1",
+    "passage": "PR002",
+    "start": 1450,
+    "end": 1463,
+    "text": "8.4% to 8.7%.",
+    "aliases": [
+      "V15",
+      "V16"
+    ],
+    "insert_at": "V15"
+  },
+  "selected_sentence": {
+    "tag": "S14",
+    "passage": "PR002",
+    "start": 1349,
+    "end": 1464,
+    "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+  },
+  "target_sentence": {
+    "tag": "S14",
+    "passage": "PR002",
+    "start": 1349,
+    "end": 1464,
+    "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 229,
+      "source": {
+        "tag": "S14",
+        "passage": "PR002",
+        "start": 1349,
+        "end": 1450,
+        "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of "
+      }
+    },
+    {
+      "render_start": 238,
+      "render_end": 252,
+      "source": {
+        "tag": "S14",
+        "passage": "PR002",
+        "start": 1450,
+        "end": 1464,
+        "text": "8.4% to 8.7%. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness."
+}

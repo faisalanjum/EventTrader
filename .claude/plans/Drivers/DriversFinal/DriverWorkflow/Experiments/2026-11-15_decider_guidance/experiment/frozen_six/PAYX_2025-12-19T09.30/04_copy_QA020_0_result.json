@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-11-15T21:42:15.664279-05:00",
+  "request_sha256": "538d4327363585c6c1731dd2395fd37b8f5c4731787f94e334272e57814b611a",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V152_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1623,
+            "end": 1666,
+            "text": "organic growth rate in management solutions",
+            "score": 0.9999998807907104
+          }
+        ]
+      },
+      "V152_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1724,
+            "end": 1729,
+            "text": "range",
+            "score": 0.5379480719566345
+          },
+          {
+            "start": 1730,
+            "end": 1739,
+            "text": "over time",
+            "score": 0.9006571173667908
+          }
+        ]
+      },
+      "V152_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1724,
+            "end": 1729,
+            "text": "range",
+            "score": 0.9033324122428894
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 662,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 8.388448680983856,
+  "finished_at": "2026-11-15T21:42:24.052801-05:00"
+}

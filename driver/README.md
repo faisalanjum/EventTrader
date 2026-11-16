@@ -8,7 +8,7 @@ integration. Independent extraction scoring and actual-worker qualification rema
 
 - [Prepare: usage and limits](prepare/README.md)
 - [Tests: layout, fixtures and command](../tests/driver/README.md)
-- [Current design](../.claude/plans/Drivers/DriversFinal/PrepareStep.md)
+- [Current design](../.claude/plans/Drivers/DriversFinal/Prepare/PrepareStep.md)
 - [Fact-type findings (archived)](../.claude/plans/Drivers/DriversFinal/Archive/fact_types_2026-10-02.md)
 - [Previous implementation](../driver_reference/README.md): reference material; review before reusing.
 

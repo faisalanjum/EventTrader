@@ -1,0 +1,34 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "status": "Independent source review for the common-path diagnostic, not a finished two-pass gold key. Expected answers are never model input.",
+  "definite_requirements": [
+    {"id":"R1","measure":"revenue","period":"FY2026","value":"$11.21 billion to $11.24 billion","unit":"m_usd","movement":"raised","support":["PR002","PR004","QA001","QA003"],"notes":"Include applicable general guidance assumptions. Quote may span speakers."},
+    {"id":"R2","measure":"revenue growth","period":"FY2026","value":"8.4% to 8.7%","movement":"raised","support":["PR002","PR004"],"notes":"Separate from revenue level. Growth comparison basis must be source-supported, not defaulted."},
+    {"id":"R3","measure":"adjusted diluted EPS","period":"FY2026","value":"$4.86 to $4.90","unit":"usd","movement":"raised","support":["PR002","PR004","QA001","QA003"],"notes":"Keep adjusted/diluted and exclusion of non-recurring Unifirst transaction costs, plus applicable general assumptions."},
+    {"id":"R4","measure":"adjusted diluted EPS growth","period":"FY2026","value":"10.5% to 11.4%","movement":"raised","support":["PR002","PR004"],"notes":"Separate growth quantity; not the size of an EPS guidance revision. Growth basis requires evidence."},
+    {"id":"R5","measure":"net interest expense","period":"FY2026","value":"approximately $101 million","unit":"m_usd","movement":"unknown","support":["PR004"],"notes":"Explicit forecast assumption; may also support EPS guidance."},
+    {"id":"R6","measure":"effective tax rate","period":"FY2026","value":"20%","unit":"percent","movement":"unknown","support":["PR004"],"notes":"Explicit forecast assumption; keep comparison with fiscal 2025."},
+    {"id":"R7","measure":"transaction-cost impact on diluted EPS","period":"FY2026","value":"$0.03 to $0.04","unit":"usd","support":["PR004","QA000"],"notes":"Costs reduce EPS; do not confuse the cost effect with the adjusted EPS level. Preserve estimated wording."},
+    {"id":"R8","measure":"transaction-cost impact on diluted EPS","period":"Q4 FY2026","value":"three to four cents","unit":"usd","support":["QA000"],"notes":"Management explicitly relates the estimate to Q4 and the fiscal-year guide. Spelled-out numbers are in scope."},
+    {"id":"R9","measure":"organic growth","period":"Q4 FY2026","value":"7.6","support":["QA016"],"notes":"The metric, unit and guidance meaning are elsewhere in the exchange; do not treat the isolated number as a complete record."},
+    {"id":"R10","measure":"organic growth","period":"H2 FY2026","value":"7.9","support":["QA016"],"notes":"Management states the combined average itself. Code must not calculate a different unstated average."},
+    {"id":"R11","measure":"fire business margin effect of ERP rollout","period":"FY2027","value":"something less than that","support":["QA022"],"notes":"The analyst names the margin headwind and FY27; management confirms a full-year 100 basis points then qualifies actual FY27 impact by rollout timing and no full rollout by June 1. Never accept bare 100 basis points as the unqualified FY27 forecast."},
+    {"id":"R12","measure":"first-aid organic growth","period":"Q4 FY2026","value":"We certainly do not anticipate that again.","support":["QA016"],"notes":"Refers to prior 18.5% and unusual training benefits; not a current forecast of 18.5%. Preserve the management qualification."},
+    {"id":"R13","measure":"total growth target","period":"explicit recurring-quarter horizon; exact normalization needs review","value":"mid to high single-digit total growth rate","support":["QA006"],"notes":"Meaningful standing target. Do not invent a fiscal year or numeric bounds."}
+  ],
+  "must_not_become_unqualified_forecasts": [
+    {"passage":"QA001","text":"30% increase in fuel costs","reason":"Illustrative assumed scenario; management did not commit to forecasting a 30% fuel increase."},
+    {"passage":"QA001","text":"30 basis points of cost","reason":"Conditional illustration tied to that scenario, not an unconditional expected cost."},
+    {"passage":"QA003","text":"we do not have a fuel surcharge","reason":"Current operating policy, not a numerical guidance fact; may be context."},
+    {"passage":"QA016","text":"7.8%","reason":"Earlier H2 guide, explicitly recalled."},
+    {"passage":"QA016","text":"8.2%","reason":"Reported Q3 organic growth, not current guidance."},
+    {"passage":"QA022","text":"100 basis points","reason":"Full-year hypothetical impact is qualified by actual rollout timing."}
+  ],
+  "open_source_interpretations": [
+    "The target period for the repeated current high-end 8% in QA016 needs independent review; do not force it from nearby labels.",
+    "Leverage 1.5x at closing is a stated target, but an exact instant or an admissible horizon is not yet resolved; hold rather than invent a closing date.",
+    "Classify qualitative investment/capital-allocation remarks against the specific-forecast definition rather than counting all optimistic future statements.",
+    "The exact rulebook encoding of the ERP signed relative bound, comparison and conditions requires source-based field review; matching the phrase is not a passed record."
+  ],
+  "caution": "This inventory is not exhaustive gold and does not justify a whole-call recall percentage. Canonical Driver identity, company slices and exact field normalization remain independently checked."
+}

@@ -1,0 +1,84 @@
+{
+  "expected": {
+    "F0_form": "range",
+    "F0_subject_scope": "source_company_total",
+    "F0_period": "FY2026",
+    "F0_sign": "positive",
+    "F0_movement": "raised",
+    "F0_time_type": "duration",
+    "F1_form": "range",
+    "F1_subject_scope": "source_company_total",
+    "F1_period": "FY2026",
+    "F1_sign": "positive",
+    "F1_movement": "raised",
+    "F1_time_type": "duration",
+    "F2_form": "range",
+    "F2_subject_scope": "source_company_total",
+    "F2_period": "FY2026",
+    "F2_sign": "positive",
+    "F2_movement": "raised",
+    "F2_time_type": "duration",
+    "F3_form": "range",
+    "F3_subject_scope": "source_company_total",
+    "F3_period": "FY2026",
+    "F3_sign": "positive",
+    "F3_movement": "raised",
+    "F3_time_type": "duration",
+    "F4_form": "point",
+    "F4_subject_scope": "source_company_total",
+    "F4_period": "FY2026",
+    "F4_sign": "positive",
+    "F4_movement": "not_stated",
+    "F4_time_type": "duration",
+    "F5_form": "point",
+    "F5_subject_scope": "source_company_total",
+    "F5_period": "FY2026",
+    "F5_sign": "positive",
+    "F5_movement": "not_stated",
+    "F5_time_type": "duration",
+    "F0_unit_scale": "m_usd_from_billions",
+    "F1_unit_scale": "unknown",
+    "F2_unit_scale": "usd",
+    "F3_unit_scale": "unknown",
+    "F4_unit_scale": "m_usd_from_millions",
+    "F5_unit_scale": "percent",
+    "CONTROL_cash_flow_time_type": "duration",
+    "CONTROL_cash_balance_time_type": "instant",
+    "CONTROL_openings_time_type": "duration",
+    "CONTROL_stores_time_type": "instant",
+    "CONTROL_growth_time_type": "duration",
+    "CONTROL_unspecified_time_type": "unclear"
+  },
+  "controls": [
+    [
+      "cash_flow",
+      "We expect cash generated during fiscal 2026 to be [TARGET] $50 million.",
+      "duration"
+    ],
+    [
+      "cash_balance",
+      "We expect cash on hand at May 31, 2026, to be [TARGET] $50 million.",
+      "instant"
+    ],
+    [
+      "openings",
+      "We expect to open [TARGET] 100 stores during fiscal 2026.",
+      "duration"
+    ],
+    [
+      "stores",
+      "We expect to have [TARGET] 100 stores operating at the end of fiscal 2026.",
+      "instant"
+    ],
+    [
+      "growth",
+      "We expect revenue in fiscal 2026 to grow by [TARGET] 5%.",
+      "duration"
+    ],
+    [
+      "unspecified",
+      "We expect the measure to be [TARGET] $50 million.",
+      "unclear"
+    ]
+  ]
+}

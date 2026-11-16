@@ -1,0 +1,833 @@
+[
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "id": "SEP10",
+    "meaning": "Unnamed implied growth for Q2\u2013Q4 higher than opening guide",
+    "status": "claim_requires_association",
+    "evidence": [
+      {
+        "passage": "QA002",
+        "start": 0,
+        "end": 586,
+        "global_start": 12447,
+        "global_end": 13033,
+        "text": "George Tong [844]: Got it. That's helpful. And then you increased your revenue guidance as well as your EPS guidance. Can you elaborate on parts of the business that outperformed your initial expectations to drive this increase in the outlook?\nTodd Schneider [860]: Great question, George. Yeah, thank you for that. The guide, first off, is right where we like to be. We're performing really well, and we like the momentum we have in the business. I'll just like to point out the implied growth in queues two through four is higher than the opening guide at all points within the range.",
+        "role": "question names revenue and EPS; management raises an unnamed implied growth guide for Q2\u2013Q4"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "queues two through four",
+      "driver_state": "raised",
+      "value_text": "higher than the opening guide at all points within the range",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Determine whether the claim concerns revenue, EPS, both, or overlaps SEP09; do not force one metric or duplicate it."
+    ],
+    "continuous_quote_interval": {
+      "start": 12447,
+      "end": 13033
+    },
+    "complete_record_gold": false,
+    "reference_disposition": "H_ASSOCIATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "id": "SEP12",
+    "meaning": "First-aid margin outlook/leverage",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA018",
+        "start": 0,
+        "end": 1586,
+        "global_start": 34497,
+        "global_end": 36083,
+        "text": "Faiza Aoui [2402]: Understood. And then just, you know, you talked about timing as it relates to the investments. So, And it sounded like, you know, even in the fourth quarter of last year, because you talked about sequential margins being similar. Again, give us a bit more color on the timing. Like, is this... Are you... When do you expect to be sort of through with those? And, you know, do you... How should we think about the incremental margins in that business, you know, going forward?\nTodd Schneider [2434]: Yeah, so... Faiza, from a timing standpoint, we certainly have different initiatives in each of our businesses. First Aid is no different. We'll have certain rollouts of products which might affect the mix, but we're planning to grow that business attractively. And I'll just remind you that that 56.8% gross margin is really attractive. We're quite happy with it. We've had a significant increase over the last few years in that area and we're going to continue to get leverage there but it's a high level, and we think it's really good. And, you know, the mix of the business has been attractive for us, but we're providing more and more value to those customers, and then we're selling other items into those customers outside of the first aid business. So it all works quite nicely, and so I wouldn't be thinking of it as \u2013 oh, geez, you know, the first aid margin is going to pop after a certain timing. These are, we'll get leverage and we'll grow that business attractively and provide more value to customers. But we like where it is and in the future as well.",
+        "role": "question asks incremental margins; answer discusses gross margin and future leverage without a sudden pop"
+      }
+    ],
+    "expected_source_fields": {
+      "company_confirmed": true,
+      "quoted_current_level_is_not_new_forecast": "56.8%",
+      "future_wording": "I wouldn't be thinking of it as \u2013 oh, geez, you know, the first aid margin is going to pop after a certain timing."
+    },
+    "unresolved_fields_or_policy": [
+      "Determine whether this is sufficiently specific guidance and which margin it concerns; do not promote the current 56.8% gross margin to a future point."
+    ],
+    "continuous_quote_interval": {
+      "start": 34497,
+      "end": 36083
+    },
+    "complete_record_gold": false,
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "id": "SEP14",
+    "meaning": "SG&A leverage over time",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA023",
+        "start": 834,
+        "end": 935,
+        "global_start": 44786,
+        "global_end": 44887,
+        "text": "but we think we're in a good spot from an SG&A investment and plan to get leverage on that over time.",
+        "role": "future leverage statement; not the preceding reported expense ratio"
+      }
+    ],
+    "expected_source_fields": {
+      "company_confirmed": true,
+      "period_text": "over time"
+    },
+    "unresolved_fields_or_policy": [
+      "Decide whether this is specific financial guidance or general investment intent and resolve scope/measure."
+    ],
+    "continuous_quote_interval": {
+      "start": 44786,
+      "end": 44887
+    },
+    "complete_record_gold": false,
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "id": "DEC13",
+    "meaning": "Explicit revenue-growth midpoint",
+    "status": "claim_requires_representation",
+    "evidence": [
+      {
+        "passage": "QA010",
+        "start": 0,
+        "end": 509,
+        "global_start": 30392,
+        "global_end": 30901,
+        "text": "George Tong [2072]: Got it. That's helpful. And then just to follow up, you took up your full year guide for revenue. Can you talk about how much of the increase reflects upside in the quarter versus what you were internally expecting compared to maybe a stronger outlook for the remainder of the year?\nTodd Schneider [2088]: Yeah. First off, our guide for the year is really good. It looks right where we want it to be. If you look at the guide for the years, showing growth of 7.8% to 8.5%. midpoint of 8.2.",
+        "role": "explicit management midpoint of previously stated revenue-growth range"
+      }
+    ],
+    "expected_source_fields": {
+      "level_low": "8.2",
+      "level_high": "8.2",
+      "level_unit": "unknown",
+      "qualifier": "midpoint",
+      "period_text": "full year",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "This midpoint is printed by management, not computed by extractor. Decide its representation with the same forecast range (DEC02), rather than automatically inventing a second independent forecast."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 30392,
+      "end": 30901
+    },
+    "reference_disposition": "H_REPRESENTATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "id": "DEC16",
+    "meaning": "Buyback approach remains opportunistic",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA016",
+        "start": 795,
+        "end": 1256,
+        "global_start": 40704,
+        "global_end": 41165,
+        "text": "So I wouldn't just simply model in that we are going to lever up and be highly aggressive on buybacks. We'll be opportunistic and handle that as we have in the past. And if you look at our history, even our 5, 10, 20-year history, we've been pretty consistent on that, our capital allocation approach. And I wouldn't expect a change to our approach there. We'll continue to look at that opportunistically and return that back to our shareholders as appropriate.",
+        "role": "capital-allocation policy continuity, not a stated buyback amount"
+      }
+    ],
+    "expected_source_fields": {
+      "company_confirmed": true,
+      "value_text": "I wouldn't expect a change to our approach there."
+    },
+    "unresolved_fields_or_policy": [
+      "Adjudicate forecast of a policy level versus general strategy; do not create quantified buyback or leverage guidance."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 40704,
+      "end": 41165
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "id": "DEC17",
+    "meaning": "Remaining-half growth outlook",
+    "status": "claim_requires_association",
+    "evidence": [
+      {
+        "passage": "QA001",
+        "start": 717,
+        "end": 866,
+        "global_start": 13104,
+        "global_end": 13253,
+        "text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility.",
+        "role": "worded standing organic-growth target"
+      },
+      {
+        "passage": "QA018",
+        "start": 2463,
+        "end": 2765,
+        "global_start": 46687,
+        "global_end": 46989,
+        "text": "But, you know, whether it's the first half of the year or our guide for the second half, we're right in the stated range of that mid to high single-digit growth. And as Todd mentioned, the growth algorithm we have, we have a lot of confidence in that we can sustain that level of growth moving forward.",
+        "role": "separate remaining-year and moving-forward horizons; reference back to growth algorithm"
+      }
+    ],
+    "expected_source_fields": {
+      "value_text": "mid to high single-digit growth",
+      "period_text": "second half",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Confirm organic versus total definition from full source, and current fiscal dates; no source comparison basis may be invented."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 13104,
+      "end": 46989
+    },
+    "reference_disposition": "H_ASSOCIATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "id": "MAR10",
+    "meaning": "Fuel sensitivity versus actual guidance assumption",
+    "status": "claim_requires_interpretation",
+    "evidence": [
+      {
+        "passage": "QA001",
+        "start": 0,
+        "end": 1291,
+        "global_start": 13619,
+        "global_end": 14910,
+        "text": "Unknown [901]: Yeah, good point, Scott. I think maybe consensus didn't fully factor in everything because of the one-time gain last year. So that's a good reminder. Thank you. And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? I think this is an important question for investors.\nScott Garula [928]: Yeah, Tim, good question. Energy for the quarter was 1.7 percent, which was flat year over year, and up 10 basis points over the previous quarter. You know, certainly the increase in gas prices will have an impact. But just, you know, I want to remind everyone that, you know, only 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about 100 basis points. So if you just look at, you know, fuel's been, you know, continuing to increase. But if you assume a 30% increase in fuel costs, that would be sustained over an entire quarter, that would add 30 basis points of cost to our results. You know, so yes, it has an impact, but not something that we feel that we can't overcome. And we have contemplated this in our guide.",
+        "role": "conditional fuel sensitivity and general guidance inclusion; numerical assumption not unequivocally adopted"
+      },
+      {
+        "passage": "QA003",
+        "start": 385,
+        "end": 1055,
+        "global_start": 16401,
+        "global_end": 17071,
+        "text": "Scott Garula [1108]: Yeah, thank you, George. As Todd mentioned, clearly this is a dynamic environment. And our guide includes our best estimate of the increase in energy costs. You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. I'll let Todd answer that.\nTodd Schneider [1132]: Yeah. So, you know, Georgia, it is certainly a dynamic environment. Hence the, you look at what oil prices were doing last night and then what they're doing this morning. So they're, they're, they're They're changing by the minute. That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance.",
+        "role": "energy assumption, no stated 30% assumption here"
+      }
+    ],
+    "expected_source_fields": {
+      "conditional_input": "30% increase in fuel costs",
+      "conditional_effect": "30 basis points",
+      "duration": "an entire quarter",
+      "company_confirmed_actual_forecast_amount": false
+    },
+    "unresolved_fields_or_policy": [
+      "Adjudicate illustration versus adopted forecast assumption. Preserve broad guide inclusion, but do not automatically make 30% or 30bp a current forecast."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 13619,
+      "end": 17071
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "id": "MAR14",
+    "meaning": "Organic growth guide high end",
+    "status": "claim_requires_association",
+    "evidence": [
+      {
+        "passage": "QA016",
+        "start": 0,
+        "end": 2189,
+        "global_start": 37265,
+        "global_end": 39454,
+        "text": "Unknown [2548]: Good morning. This is Jun-Yi Ahn for Jason Haas. Thanks for taking our questions. Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. Could you remind us how big those impacts were and any other factors to consider across the board? Thank you.\nTodd Schneider [2571]: Thank you for the question. I'll start. And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. It was our highest revenue growth quarter last year. The organic was at 9%. And we did have some one-time benefits, specifically in our first aid business. that ran 18.5% organic growth. We certainly do not anticipate that again. And then in our uniform direct sale business as well. In first aid, we had an increase in the training business that helped us as it relates to AED training. So that was a spike that we, again, we don't think is going to occur at those levels. And the uniform direct sale business can be a little lumpy, but it had a really good quarter. So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\nScott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. You know, Jim mentioned that we continue to execute at a high level. We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. And if you look at the guide for this quarter, this quarter is also at 8%. And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. In Q3, we just delivered a growth rate of 8.2% organically. And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. So really effectively right in line with the guide that we gave last quarter.",
+        "role": "company/Q4/organic context, actual and earlier guidance, and two current implied values"
+      }
+    ],
+    "expected_source_fields": {
+      "printed_value": "8%",
+      "qualifier": "at the high end of the range",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve precise current versus previous guided period from discourse; no invented lower endpoint."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 37265,
+      "end": 39454
+    },
+    "reference_disposition": "H_ASSOCIATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "id": "MAR17",
+    "meaning": "Investment approach/level unchanged",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA009",
+        "start": 0,
+        "end": 692,
+        "global_start": 26211,
+        "global_end": 26903,
+        "text": "Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there.",
+        "role": "investment continuity, analyst asks FY26 exit/FY27"
+      }
+    ],
+    "expected_source_fields": {
+      "value_text": "no material change",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Determine whether company commits to a level or merely its ongoing approach; do not invent CapEx/revenue or a spending amount."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 26211,
+      "end": 26903
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "id": "MAR18",
+    "meaning": "Q4 incremental margins described as attractive",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA020",
+        "start": 0,
+        "end": 759,
+        "global_start": 44732,
+        "global_end": 45491,
+        "text": "Unknown [3112]: Great, thank you. And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? I see the implied kind of 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\nTodd Schneider [3142]: Yeah, thank you for the question, Faiza. Yeah, our incrementals that we're guiding towards in Q4 are very attractive. But that is not because of a change in approach. That's simply what we've been predicting and timing around for the year.",
+        "role": "Q4 incrementals described as attractive, no quantity"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "Q4",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Attractive is evaluative language, not necessarily a specific forecast value. No prior target may silently fill it."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 44732,
+      "end": 45491
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "id": "P1-14",
+    "meaning": "Organic expense growth continues at current level",
+    "status": "claim_requires_association",
+    "evidence": [
+      {
+        "passage": "QA003",
+        "start": 0,
+        "end": 1865,
+        "global_start": 17388,
+        "global_end": 19253,
+        "text": "Mark Marcon [1158]: Great, and then for my follow-up, you know, direct expenses as a percentage of revenue, you ended up seeing some some pretty nice leverage there. And so I'm wondering, you know, that was really strong. How would you characterize direct expenses on a go-forward basis? And then compare and contrast that to SG&A when we strip out the one-time charges and the goodwill just in terms of the ongoing operating expenses. Because it seemed like there was a little bit of a contrast between the two. In other words, direct expenses dripping out to everything else looked better. SG&A expense, I imagine just because you've got more overlap and a number of items maybe a little bit heavier than what we were looking for. So how would you expect those to go as the year unfolds? And it seems really encouraging.\nBob Schrader [1217]: I mean, I think... Yeah, thanks, Mark. We think so as well. Obviously, we've been focused on this energy, and as you know, we're the best operators in the business, and so we're always focused on trying to be efficient and productive. I think the expense growth in the core, obviously, is a big number driven by the pay core acquisition. If you were to strip it out, it's probably closer to about 3%. expense growth overall. And, you know, the one thing we didn't highlight in the script, which was probably a miss, I mean, if you look at the adjusted operating income growth in the quarter, it was 15%, right? So obviously that's coming from, you know, the strong top line growth of 17%, but certainly trying to find ways to be more productive and more efficient and really strong adjusted operating income growth for the quarter. And, you know, on a four-year basis, expense growth, you know, I would probably think what we saw this quarter organically would probably be consistent with what we would see going forward.",
+        "role": "reference to current organic expense growth as future outlook; source says four-year basis"
+      }
+    ],
+    "expected_source_fields": {
+      "printed_reference_value": "3%",
+      "qualifier": "probably closer to about",
+      "measurement_words": [
+        "strip it out",
+        "organically"
+      ],
+      "period_text": [
+        "four-year basis",
+        "going forward"
+      ],
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Do not silently repair four-year to full-year; determine supported horizon from question and answer.",
+      "Confirm the current 3% reference is adopted as the forecast, not merely an actual; source calls for continuation, not an exact unqualified point."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 17388,
+      "end": 19253
+    },
+    "reference_disposition": "H_ASSOCIATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "id": "P1-16",
+    "meaning": "October enrollment share",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA007",
+        "start": 0,
+        "end": 408,
+        "global_start": 28703,
+        "global_end": 29111,
+        "text": "Andrew Nicholas [1857]: Hi, good morning. Thanks for taking my questions. You touched on it briefly in your response to one of the earlier questions, but I just wanted to kind of dig into the second half ramp for PEO. Can you speak a little bit more to kind of the attach rate dynamics in Florida specifically? Have they stabilized and it is mostly just a comp dynamic or have you seen some improvement there",
+        "role": "analyst question split across stored exchanges"
+      },
+      {
+        "passage": "QA008",
+        "start": 24,
+        "end": 50,
+        "global_start": 29137,
+        "global_end": 29163,
+        "text": "in Florida with that plan?",
+        "role": "question continuation"
+      },
+      {
+        "passage": "QA008",
+        "start": 238,
+        "end": 420,
+        "global_start": 29351,
+        "global_end": 29533,
+        "text": "We have enrollments in October. We have another one in January. Now, only about 25% of the employees will end up electing in the October timeframe. So we're in very, very early days.",
+        "role": "expected employee enrollment share at a stated future enrollment window"
+      }
+    ],
+    "expected_source_fields": {
+      "printed_value": "25%",
+      "qualifier": "only about",
+      "period_text": "October timeframe",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve population denominator and whether this is a forward operating forecast or fixed enrollment-cycle description."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 28703,
+      "end": 29533
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "id": "P1-17",
+    "meaning": "Bill partnership ARPU outlook",
+    "status": "source_insufficient_for_record",
+    "evidence": [
+      {
+        "passage": "QA010",
+        "start": 0,
+        "end": 903,
+        "global_start": 34324,
+        "global_end": 35227,
+        "text": "Michael Fontana [2206]: Hi, guys. It's Michael in Fontana for James. Thanks for taking our question. I just wanted to ask about the bill partnership. Can you maybe just paint the picture for us in terms of the customer profile who would be most likely to initially adopt some of these capabilities, how you think about some of the go-to-market dynamics between the two organizations, and maybe how we should be thinking about ARPU uplift potential for your average payroll customer that begins to use some of Bill's AP capabilities? Thanks.\nJohn Gibson [2237]: Yeah, Michael. Well, thanks. We're real excited about the partnership. We've kind of been in the payments business, allow our clients to make ancillary payments in the millions, believe it or not, through our system. It's not been our core business. And certainly, we viewed it as another value add. So I'm not looking at a big ARPU increase.",
+        "role": "management narrows expected value from new partnership"
+      }
+    ],
+    "expected_source_fields": {
+      "value_text": "not looking at a big ARPU increase",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "No explicit target horizon established here; do not create one from planned product-launch dates."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 34324,
+      "end": 35227
+    },
+    "reference_disposition": "H_EVIDENCE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "id": "P1-18",
+    "meaning": "No direct government-shutdown impact expected",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA015",
+        "start": 0,
+        "end": 736,
+        "global_start": 43200,
+        "global_end": 43936,
+        "text": "David (for Ashish Sabhadra) [2788]: Hi, good morning. This is David on for Ashish. Thanks for all the color provided on the call so far. Just taking a step back, in terms of the regulatory environment, government shutdowns, maybe changes to H-1B, how are you thinking about that and how is the business doing? I guess, position to whether those changes, whether it be good or bad.\nJohn Gibson [2812]: Thank you. Yeah, look, we've been through a lot of cycles.\nJohn Gibson [2818]: And what I would say is that our small business clients tend to be resilient. In terms of the paycheck specifically, we don't have a heavy concentration with government with the federal government. And so I don't expect any impact directly to our business.",
+        "role": "company forecast of direct shutdown exposure; source lacks a precise metric/horizon"
+      }
+    ],
+    "expected_source_fields": {
+      "value_text": "no direct impact",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Determine admissible standing metric and horizon; do not create a generic bucket or treat a policy question as quantified guidance."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 43200,
+      "end": 43936
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "id": "P2-08",
+    "meaning": "Other guidance unchanged",
+    "status": "claim_requires_prior_scope",
+    "evidence": [
+      {
+        "passage": "PR003",
+        "start": 2063,
+        "end": 2286,
+        "global_start": 10970,
+        "global_end": 11193,
+        "text": "I'll now turn to our guidance for fiscal 26. This outlook reflects the current macro environment, which has some uncertainty. We are reaffirming our fiscal 26 outlook with the exception of raising our earnings expectations.",
+        "role": "period, movement and macro assumption"
+      },
+      {
+        "passage": "PR003",
+        "start": 2905,
+        "end": 2949,
+        "global_start": 11812,
+        "global_end": 11856,
+        "text": "All other guidance metrics remain unchanged.",
+        "role": "blanket reaffirmation, no named quantities here"
+      }
+    ],
+    "expected_source_fields": {
+      "subject": "Paychex, Inc.",
+      "period_text": "fiscal 26",
+      "company_confirmed": true,
+      "driver_state": "reaffirmed"
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve exact prior scope under permitted guidance history; do not invent metric names, copy old values or silently drop this claim.",
+      "Owner blanket-hold leaning is not approved rule replacement."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 10970,
+      "end": 11856
+    },
+    "reference_disposition": "H_PRIOR_SCOPE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "id": "P2-14",
+    "meaning": "Analyst-supplied PEO numeric interpolation",
+    "status": "unconfirmed_numeric_claim",
+    "evidence": [
+      {
+        "passage": "QA021",
+        "start": 0,
+        "end": 1818,
+        "global_start": 53748,
+        "global_end": 55566,
+        "text": "Jason Kupferberg [3491]: Understood, understood. And then I want to just ask a follow-up on PEO. I know we've talked about it already a lot on the call, but you're at 4.5% year-to-date, and you'll need to do, I guess, 7.5% in the second half to get to the lower end of the six to eight range that you're pointing us to. And obviously we know the lapping of the comps, et cetera. But, you know, maybe if you can just talk through any other factors driving the acceleration and just some commentary on your visibility to kind of get three points of acceleration from first half to second half.\nBob Schrader [3530]: Thank you. It's a good question. I would start with pointing to the three points of acceleration that happened this quarter relative to last quarter. Again, some of that is I know there's been some confusion around it and concern. A lot of it, there's strong execution there for sure. As I mentioned, we had double-digit demand and really strong retention again this quarter. Um, but, but some of it is just the easier compare Jason, as you move into the back half of the year. So we just anniversary in October, the annual enrollment. Last year, there were some headwinds from that. You know, that's probably only 25% of the MPP enrollment is in October. The rest of it is in January. So you're going to have another lapping or anniversary of the enrollment and the headwind from last year. So the comps are just going to get better. So it's a combination of the comps getting better and we continue to see strong execution in the business. As I mentioned, I mean, that 6% number was was weighted down from some of the challenges that we see in the agency. The PO grew high single digits in the quarter. So we feel really good about where we are with the PO and as we move into the back half of the year.",
+        "role": "analyst proposed 7.5% H2 calculation and annual six-to-eight range; management discusses drivers without expressly confirming the calculated 7.5"
+      }
+    ],
+    "expected_source_fields": {
+      "unconfirmed_analyst_amount": "7.5%",
+      "company_confirmed_numeric_value": false
+    },
+    "unresolved_fields_or_policy": [
+      "Do not treat a polite response or explanation of drivers as confirmation of the analyst calculation.",
+      "Whether the annual six-to-eight range is sufficiently confirmed must be adjudicated separately from 7.5; no numeric import into P2-03 without evidence."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 53748,
+      "end": 55566
+    },
+    "reference_disposition": "EXCLUDED_ANALYST_ONLY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "id": "P2-15",
+    "meaning": "Revenue synergies on track",
+    "status": "claim_requires_prior_scope",
+    "evidence": [
+      {
+        "passage": "PR002",
+        "start": 935,
+        "end": 1028,
+        "global_start": 2498,
+        "global_end": 2591,
+        "text": "We also remain on track to achieve the revenue synergies targets we set for this fiscal year.",
+        "role": "numberless reaffirmation of a named class of target"
+      }
+    ],
+    "expected_source_fields": {
+      "subject": "Paychex, Inc.",
+      "period_text": "fiscal 26",
+      "company_confirmed": true,
+      "driver_state": "reaffirmed",
+      "value_text": "on track to achieve the revenue synergies targets"
+    },
+    "unresolved_fields_or_policy": [
+      "No amount restated here. Resolve target scope and series using only permitted earlier history; no invented current value."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 2498,
+      "end": 2591
+    },
+    "reference_disposition": "H_PRIOR_SCOPE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-02",
+    "meaning": "Other guidance unchanged",
+    "status": "claim_requires_prior_scope",
+    "evidence": [
+      {
+        "passage": "PR008",
+        "start": 2164,
+        "end": 2355,
+        "global_start": 11900,
+        "global_end": 12091,
+        "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+        "role": "annual period, macro assumption and movement"
+      },
+      {
+        "passage": "PR008",
+        "start": 2451,
+        "end": 2495,
+        "global_start": 12187,
+        "global_end": 12231,
+        "text": "All other guidance metrics remain unchanged.",
+        "role": "numberless blanket reaffirmation"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "FY26",
+      "driver_state": "reaffirmed",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve permitted prior scope and individual series; no invented amount or silent drop."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 11900,
+      "end": 12231
+    },
+    "reference_disposition": "H_PRIOR_SCOPE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-12",
+    "meaning": "Comfort with FY27 consensus",
+    "status": "source_insufficient_for_record",
+    "evidence": [
+      {
+        "passage": "QA001",
+        "start": 162,
+        "end": 1472,
+        "global_start": 15917,
+        "global_end": 17227,
+        "text": "Bob Schrader [1459]: Yeah, and maybe head off the question that I'm probably going to get as it relates to next year in guidance. We're in the early stages, I would tell you, of our operating plan, and we're going to finalize that over the next year. six to eight weeks, and I know we kind of established a precedent coming out of COVID in providing maybe some more details around what we were thinking for next year. I think we needed to do that given some of the uncertainty in the environment back then. Our preference now is to kind of build the plan, come out in Q4 like we historically did and consistent with what our competitors do. and provide guidance at that point in time. That being said, we obviously have visibility to what's out there in the models and in fact set, and when I look at that, I really don't see any reason that I need to steer you in one direction or another. I'm fairly comfortable with what's out there, and I think, Brian, what you'll see is the organic growth rate whether it's Q3 or Q4, we're really looking at the back half because there are some timing differences, particularly in the PO between Q3 and Q4. When we look at the organic growth rate and the back half of this year, it pretty much aligns with kind of what's assumed from a consensus standpoint for next year.",
+        "role": "future consensus comfort while explicitly declining to provide detailed next-year guidance"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "next year",
+      "company_statement": "fairly comfortable with what's out there",
+      "numeric_amount_stated": false
+    },
+    "unresolved_fields_or_policy": [
+      "No metric-specific consensus values in this source; do not pull today's consensus or promote comfort to confirmation of every estimate."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 15917,
+      "end": 17227
+    },
+    "reference_disposition": "H_EVIDENCE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-13",
+    "meaning": "Margin expansion as revenue grows",
+    "status": "claim_requires_association",
+    "evidence": [
+      {
+        "passage": "QA003",
+        "start": 0,
+        "end": 1841,
+        "global_start": 19291,
+        "global_end": 21132,
+        "text": "Mark Marcon [1694]: That's great to hear. And then I thought the gross margin performance was particularly impressive. You know, when we take a look, if we're defining gross margin as revenue minus direct costs. And part of that was obviously the higher interest income off of the float. But beyond that, it looks like it's doing extremely well. How much of that is related to some of the AI initiatives that you've put in place in terms of embedding AI across your service infrastructure and making them more productive versus, you know, other initiatives that you've put in place in terms of, you know, perhaps shifting some of your costs to lower cost labor markets like India. And how much more can we do there? Because it's been fairly impressive. I'm wondering if if this is basically setting us up for continued margin expansion for multiple years?\nJohn Gibson [1766]: Mark, I think that we have a long track record of being able to drive as the best operators margin expansion as we grow revenue in the business, and I think you're going to continue to see that. We use every lever imaginable to do that. I think that when you look at AI, as you know, we've been using AI and predecessor type of models for many, many years since I've been here. And now with this new technology that almost every day something new is coming out, what we're seeing is pretty impressive. It's pretty incredible. Some of the things we're doing in terms of genic AI models, which we've now released to scale after the pilots, doing voice payroll, doing email payrolls. what we're seeing early stages in our beta groups in sales using our sales guru tool and what we're seeing from a service perspective. So I feel good about what the opportunities are. Look, if we grow the top line, we are going to be able to grow margins and expand margins over time.",
+        "role": "worded future margin expansion conditioned on revenue growth"
+      },
+      {
+        "passage": "QA016",
+        "start": 1466,
+        "end": 1693,
+        "global_start": 49226,
+        "global_end": 49453,
+        "text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+        "role": "definition of adjusted margin excludes integration-related items"
+      }
+    ],
+    "expected_source_fields": {
+      "value_text": "grow margins and expand margins over time",
+      "condition_text": "if we grow the top line",
+      "period_text": "over time",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve gross versus operating margin from actual management support; do not inherit gross automatically from analyst framing."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 19291,
+      "end": 49453
+    },
+    "reference_disposition": "H_ASSOCIATION",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-14",
+    "meaning": "Short-term technology replacement risk for advisory services",
+    "status": "borderline_claim",
+    "evidence": [
+      {
+        "passage": "QA004",
+        "start": 0,
+        "end": 1310,
+        "global_start": 22002,
+        "global_end": 23312,
+        "text": "Tien-Sin Huang [1903]: Hey, thanks. Hi, John and Bob. I wanted to ask on the advisory work, John, that you talked a little bit about. I think that's probably underappreciated in terms of what Paychex does there. How AI-proof is the advisory side of the business? Because I get the question quite a bit that can rules-based advice from AI come in and supplant what Paychex does on the advisory side? But I'm guessing that a lot of your advisory work is centered around compliance and very complex data issue that only can you maybe elaborate on that?\nJohn Gibson [1938]: Yeah, yeah. Well, Tinson, I think this is something I think is extremely interesting for people to understand. For the vast majority of our clients, we are their HR department, right? So not only do we provide them the advice, we literally are talking to them and holding their hand when they're making some of these decisions and supporting them. You look at our PO, the most comprehensive part of our model, where we're actually in a co-employment arrangement. We're actually helping represent them and deal with their employee situations, which are numerous, I may ask, in today's world. And so we're actually doing so much more that there's no way that I think technology is going to replace that, at least that I see in the short term.",
+        "role": "specific short-term denial of replacement risk; business outlook rather than numbered financial guidance"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "short term",
+      "value_text": "technology is not expected to replace the service",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Determine source-grounded admissible standing metric; preserve this qualitative outlook for scope adjudication, without inventing a general bucket."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 22002,
+      "end": 23312
+    },
+    "reference_disposition": "H_ELIGIBILITY",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-16",
+    "meaning": "Next-year macro assumptions unchanged",
+    "status": "supporting_assumption_only",
+    "evidence": [
+      {
+        "passage": "QA019",
+        "start": 0,
+        "end": 1065,
+        "global_start": 53346,
+        "global_end": 54411,
+        "text": "David Grossman [3884]: Got it. And sorry to kind of stick on the financials here, but just, you know, you did make a general comment about a certain level of comfort with where consensus was for next year. And I know you don't want to make any specific comments about next year, but is there anything now that you're a combined company that, you know, how we should think about PAYS or pricing and management solutions going into next year, you know, particularly given now that we've got PAYCOR in the base? I know it sounds like PAYS look like they're, you know, pretty stable, but I thought I should just ask the question. Anything you want to call out there on either PAYS or pricing?\nJohn Gibson [3925]: No, David, I don't think there's any changes that we're making in any of our assumptions. I think, as you know, we had clients of all sizes before we had PayCool. We've added more upmarket. But I think relative to our assumptions and what we're expecting, we're expecting very similar macro environment that we're seeing right now in a very uncertain time.",
+        "role": "early next-year assumptions, not new pricing or employment figures"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "next year",
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Supporting early planning context, not automatic separate financial metric guidance or completed annual forecast."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 53346,
+      "end": 54411
+    },
+    "reference_disposition": "CONTEXT_NOT_SEPARATE_FACT",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "id": "P3-19",
+    "meaning": "EPS guidance unchanged",
+    "status": "claim_requires_prior_scope",
+    "evidence": [
+      {
+        "passage": "PR008",
+        "start": 2164,
+        "end": 2355,
+        "global_start": 11900,
+        "global_end": 12091,
+        "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+        "role": "annual period, macro assumption and movement"
+      },
+      {
+        "passage": "PR008",
+        "start": 2451,
+        "end": 2495,
+        "global_start": 12187,
+        "global_end": 12231,
+        "text": "All other guidance metrics remain unchanged.",
+        "role": "numberless blanket reaffirmation"
+      },
+      {
+        "passage": "QA027",
+        "start": 94,
+        "end": 1048,
+        "global_start": 65643,
+        "global_end": 66597,
+        "text": "okay understood um and then just a clarification um i know we're not changing eps guidance but we did up the float income guide a little bit which i would have thought would have lifted the eps i don't know maybe a percent or so i mean there's only a quarter left in the year so just curious um is it just some conservatism there leaving the eps guide as is are you going to reinvest some of that um\nBob Schrader [4712]: It's probably a combination of both. I think we're certainly going to look for opportunities as we move through the balance of this year to invest. We want to get out of the gate strong when we get into next fiscal year. So it's always balancing those trade-offs, Jason. John and I will manage to do that as we go through the quarter and see where the opportunities are. But it's really a combination of maybe a little conservatism and and where we may potentially want to take advantage and make some investments as we end the year.",
+        "role": "EPS guide unchanged despite interest improvement; management confirms tradeoff discussion"
+      }
+    ],
+    "expected_source_fields": {
+      "period_text": "FY26",
+      "driver_state": "reaffirmed",
+      "numeric_amount_stated": false,
+      "company_confirmed": true
+    },
+    "unresolved_fields_or_policy": [
+      "Resolve exact EPS measurement/series from source and permitted history; analyst suggested percent uplift is not company guidance."
+    ],
+    "complete_record_gold": false,
+    "continuous_quote_interval": {
+      "start": 11900,
+      "end": 66597
+    },
+    "reference_disposition": "H_PRIOR_SCOPE",
+    "disposition_scope": "Reference-review outcome, not proof this item was detected by the frozen model run. Outside the 79 confirmed-claim denominator."
+  }
+]

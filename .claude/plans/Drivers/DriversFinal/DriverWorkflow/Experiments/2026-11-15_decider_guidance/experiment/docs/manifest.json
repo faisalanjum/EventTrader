@@ -1,0 +1,48 @@
+[
+  {
+    "name": "model.md",
+    "url": "https://huggingface.co/perplexity-ai/pplx-decider-v1.3/raw/main/README.md",
+    "bytes": 12008,
+    "sha256": "e2a1b4e4c54b270343685e9bf4d72b7dbc8b5b66659a86a526a46871e0201d8a"
+  },
+  {
+    "name": "locate.py",
+    "url": "https://huggingface.co/perplexity-ai/pplx-decider-v1.3/raw/main/locate.py",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "name": "protocol.py",
+    "url": "https://huggingface.co/perplexity-ai/pplx-decider-v1.3/raw/main/protocol.py",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "name": "locate_config.json",
+    "url": "https://huggingface.co/perplexity-ai/pplx-decider-v1.3/raw/main/locate-span/locate_config.json",
+    "bytes": 1203,
+    "sha256": "3f8665aa8c193d862792df7824653d7ab12fef6467aad03c3cd29a4727828661"
+  },
+  {
+    "name": "revision.json",
+    "url": "https://huggingface.co/api/models/perplexity-ai/pplx-decider-v1.3",
+    "bytes": 12063,
+    "sha256": "c27f021a4d53079d1eeb65f717c8a565ee94b1913a43a19ac18153282a6a0f3f"
+  },
+  {
+    "name": "typesafe_build.md",
+    "url": "https://docs.typesafe.ai/concepts/how-to-build-with-system-one.md",
+    "bytes": 19802,
+    "sha256": "959269398d5306e69fd98271a5370a090b255b38127f597e9405a341997a6342"
+  },
+  {
+    "name": "typesafe_values.md",
+    "url": "https://docs.typesafe.ai/cookbooks/pre_parsed_value_extraction_cookbook.md",
+    "bytes": 14010,
+    "sha256": "54ecbea30877b9279692dd3dbfaeb9ba6b8d6346935258c3112594c906724cac"
+  },
+  {
+    "name": "typesafe_confidence.md",
+    "url": "https://docs.typesafe.ai/confidence.md",
+    "bytes": 14159,
+    "sha256": "3f15502effc8da348b7e5cf395632a9e7971c7cad91660f56995a9c6beb90ee3"
+  }
+]

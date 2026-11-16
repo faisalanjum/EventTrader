@@ -1,0 +1,75 @@
+{
+  "rows": [
+    {
+      "tag": "F0",
+      "expected": "m_usd_from_billions",
+      "choice": "usd",
+      "p": 0.5282620713361952,
+      "correct": false,
+      "quote_chars": 7073,
+      "support_sentences": [
+        "S14",
+        "S69",
+        "S70",
+        "S71"
+      ]
+    },
+    {
+      "tag": "F1",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.7712597833965827,
+      "correct": true,
+      "quote_chars": 7073,
+      "support_sentences": [
+        "S14",
+        "S69",
+        "S70",
+        "S71"
+      ]
+    },
+    {
+      "tag": "F2",
+      "expected": "usd",
+      "choice": "usd",
+      "p": 0.9364789011492229,
+      "correct": true,
+      "quote_chars": 7472,
+      "support_sentences": [
+        "S15",
+        "S16",
+        "S69",
+        "S70",
+        "S71",
+        "S74",
+        "S75"
+      ]
+    },
+    {
+      "tag": "F3",
+      "expected": "unknown",
+      "choice": "unknown",
+      "p": 0.8081640365481038,
+      "correct": true,
+      "quote_chars": 7472,
+      "support_sentences": [
+        "S15",
+        "S16",
+        "S69",
+        "S70",
+        "S71",
+        "S74",
+        "S75"
+      ]
+    }
+  ],
+  "correct": 3,
+  "total": 4,
+  "seconds": 74.56320020090789,
+  "usage": {
+    "input_tokens": 7083,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "scope": "Actual widened evidence outputs; quote completeness for period and remote conditions remains unproved. No complete-record pass."
+}

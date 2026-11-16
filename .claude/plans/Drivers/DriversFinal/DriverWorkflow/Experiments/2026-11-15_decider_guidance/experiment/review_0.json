@@ -1,0 +1,158 @@
+{
+  "lens": "official-docs",
+  "findings": [
+    {
+      "topic": "Value identity: repeated and overlapping value strings in 2b/2c/2d questions",
+      "applies_to": "draft",
+      "verdict": "wrong",
+      "evidence": "2b/2c/2d name a value only by its text (\"Is '<value>' a forecast…\"). In isolated mode \"each question block attends the context and itself\" (officialdocs/source/src/pplx_decider/model.py:124), and every block's positions restart after the context (model.py:203). So two questions with identical text get identical answers by construction. README.md:96 says \"Put everything a question needs in the state, not in another question.\" Strings recur with different roles in one state: PAYX_2025-12-19 U03 \"18%\" is an actual (\"Total revenue increased 18%\") and the Q3 guide (record #9); \"11%\" appears 3x (actual EPS growth, the current guide's high end in #0, the prior guide); PAYX_2026-03-25 U08 \"41%\" is ROE actual and the Q4 margin guide (#0); CTAS_2026-03-25 U44 has \"8%\" twice. Locate merges only identical (start,end) pairs (locate.py:360), so nested or overlapping spans also reach 2b. e2e/e2e.py:145 had \"overlapping span: keep the first (longest) one\"; the draft drops it.",
+      "recommendation": "Identify each value by its occurrence, not its text. Put the containing sentence, or the [S#] tag already measured (e2e.py:20,159), into every 2b/2c/2d question. Resolve overlapping spans once in code (longest first, as e2e.py did) before 2b.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Metric is single-label; one descriptor can cover several records",
+      "applies_to": "draft",
+      "verdict": "wrong",
+      "evidence": "A choice returns one argmax over a softmax restricted to its options (protocol.py:101 `best = max(...)`; README.md:106-107 \"normalizes a softmax over each question's valid options only\"). PAYX_2025-12-19 PR U03 \"towards the low end of the ranges for management solutions, P-owned insurance, and total revenue\" is one span but three records (#5, #6, #8). A per-value metric choice yields one, and the other two vanish without any flag: the unit still yields a record, so step 4's \"kept units that yield no record\" never fires. Codex's measure-first anchor handles this case but fails the reverse one: CTAS_2025-12-18 U20 has one measure (\"incrementals\") with two forecasts (#3 FY \"29 and 30\", #4 H2 \"30% to 33%\") next to the actuals 49.7, 27 and 44.3%.",
+      "recommendation": "Keep value-first. For descriptor spans (from 2a's descriptor label), ask one noul per candidate metric in the same 2c request, so one descriptor can map to several metrics. Keep the single choice for numeric spans. This adds no request.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Locate misses carry no probability, so they drop silently",
+      "applies_to": "both",
+      "verdict": "missing",
+      "evidence": "README.md:159: \"No matches returns an empty `spans` list\". Blog:53: fields with no answer are trained to \"return an empty list\". An absent condition, name or value therefore has no score, and step 4's \"every field's top probability >= its tuned threshold\" cannot flag it. The flag \"kept units that yield no record\" misses partial losses (the 1-of-3 case above). Codex's plan has no thresholds or flags at all. Locate's held-out average is \"69.0\" (blog:76), far from near-100%.",
+      "recommendation": "Give every Locate-only field an existence noul in the existing 2c request, e.g. \"Does management attach a condition or assumption to <occurrence>?\". Flag yes-with-no-span, and flag a \"New measure\"/\"Other segment\" choice whose 2d request returns no name. Reuse step 3's single number regex as a backstop: any number in a kept management unit that no 2a span covers becomes an extra 2b candidate, or a flag.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Conditions stated in another unit cannot be located",
+      "applies_to": "both",
+      "verdict": "missing",
+      "evidence": "Spans come only from the state: README.md:159 \"`state[start:end] == text`\", and only state tokens are scored (locate.py:317). The draft's 2d state is the value's unit or exchange; Codex's is the passage. CTAS_2025-09-24 #1, #5 and #6 have their values in CEO U02, but their conditions sit in CFO U04 (\"constant foreign currency\", \"same number of workdays\", \"future acquisitions\", \"share buyback\") and in Q&A 9 (tariffs). PAYX_2025-12-19#4 has its value in U03 and its condition in Q&A 10, U30 (\"laddering\").",
+      "recommendation": "Make the prepared-remarks state the whole prepared-remarks section, not one speaker unit. That section is 2.0-2.8k tokens with 60-79 numbers, under the 128-proposal cap, and adds no request. Report Q&A-only conditions as a measured gap.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Several Locate labels in one request change each other's spans",
+      "applies_to": "both",
+      "verdict": "risky",
+      "evidence": "locate.py:15-17: \"The questions are isolated, as in mode=\\\"isolated\\\" … The state attends to all questions, so answers can depend on the other questions.\" README.md:161: Locate questions \"can influence each other through the shared state.\" Local tests/iso_agree.json: of 7 distinct spans that either layout returned, only 4 came back from both. On the 8k-token AMG filing, 'forecasts' gave 1 span alone and 0 when grouped; 'measures' gave 0 alone and 2 when grouped. The draft groups two labels in 2a and K near-identical labels (differing only by the quoted value) in 2d. Folding the \"measure-first Locate label\" into the first run would change 2a's production spans. Codex does not say how its Locate questions are grouped.",
+      "recommendation": "Run the measure-first comparison label in its own request. On the dev set, compare 2a and 2d grouped against one label per request (local mode=\"separate\") and keep grouping only where the spans match. One option to test: a single unit-level conditions label in 2a plus a (value, condition) noul in 2c, instead of K value-specific Locate labels.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Locate-first 'forecasted measures' anchor (Codex)",
+      "applies_to": "codex",
+      "verdict": "risky",
+      "evidence": "Semantic labels are the weak case. USAGE.md:84-85: abstract labels \"returned almost nothing\". The brief (line 27) reports an abstract label finding 3 of 8 items. In iso_agree.json the 'forecasts' label returned \"we are confident in our ability to create long-term shareholder value\". Measures are often implicit: CTAS_2026-03-25 U44 \"Q4 implied of 7.6\" names none, and in PAYX_2025-12-19#7 (\"I would still expect it to be…\") and PAYX_2026-03-25#3 (\"we would expect that to continue\") the measure appears only in the analyst's question. One measure can also carry several forecasts (CTAS_2025-12-18 U20). Value, units, conditions and the qualitative expectation are free text, and the Decider can produce them only as Locate spans (README.md:76-81). Codex does not say how several spans per label are tied to one forecast.",
+      "recommendation": "Anchor on concrete Locate labels (numbers, qualitative phrases); these found 56 of 60 expected spans on short texts. Decide meaning per occurrence with noul and choice questions. Keep measure-first only as the dev-set comparison. State for each Codex field whether it comes from Locate or from a choice.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Locate's 0.5 cutoff is a learned per-label threshold, not a global filter",
+      "applies_to": "both",
+      "verdict": "risky",
+      "evidence": "locate.py:158-159: `probabilities = (scores[0] - thresholds[i, 2]).sigmoid()` and `(probabilities >= threshold)`, with the cutoff 0.5 taken from locate_config.json:34 (locate.py:182). Blog:52-53: the head learns to \"predict field-specific thresholds\" and pushes \"the threshold above every other span\". So 0.5 means \"at this label's own learned threshold\". Lowering it cannot recover spans whose start or end is outside the top 128 candidates (`k = min(proposals, ...)`, locate.py:148, proposals 128). It cannot recover spans longer than max_span (locate.py:157, 128 tokens) or cuts inside merged tokens (USAGE.md:86-88). The official API has no cutoff parameter. Locally the cutoff is read only from config (decider_mlx.py:535), and server.py:100-101 forwards only state, questions, temperature and mode.",
+      "recommendation": "Run the cutoff check as logging only, in the same forward pass. Return pairs between about 0.1 and 0.5 in a separate response field, keep production at 0.5, and adopt a lower cutoff only per label after dev-set tuning. Per unit, the proposals and max_span limits are not binding (at most 49 numbers per unit; quote pieces at most 120 tokens). For whole-call Locate they are: each call has 212-306 numbers against 128 proposals.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "The local runtime is not the official Locate computation",
+      "applies_to": "both",
+      "verdict": "wrong",
+      "evidence": "The brief calls the port \"token-identical to the official code\", and Codex talks about \"the official Locate runtime\". Since 15 Nov the port tokenizes Locate states differently: decider_mlx.py:18 \"Locate cuts tokens at punctuation edges (`locate_encoding`; differs from pplx_decider…\" (see also USAGE.md:86-94). The local Locate mode=\"separate\" (one label per sequence, decider_mlx.py:465) has no official counterpart, because locate.py always groups a request's labels. The local 128-question check counts only Locate questions (server.py:57-61); the official check counts all questions (locate.py:246).",
+      "recommendation": "Record the runtime version with every Locate result. Keep the punctuation cut, which raised recall from 45 to 56 of 60, but verify it on transcripts. Do not send mixed requests with more than 128 questions.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "The dev/test set and reference quality cannot certify near-100%",
+      "applies_to": "both",
+      "verdict": "risky",
+      "evidence": "Blog:111 recommends tuning \"on a small, representative labeled development set\". That is enough to tune, not to certify. The reference has 54 Opus-made records from 2 companies. With zero errors in n records, the 95% upper bound on the error rate is about 3/n, i.e. 5.6% at n=54. The reference also misses guidance: CTAS_2025-12-18 U20 reaffirms \"our stated range of that 25% to 35%\" and has no record. Its conditions and qualitative fields are paraphrases that verbatim spans cannot string-match.",
+      "recommendation": "Adjudicate the reference first (aliases, missing records). Hold out about 300 verified records from untouched calls and new companies before claiming an error rate of 1% or less. Score conditions and qualitative fields by span containment or human judgement, not string equality.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Thresholds sit on a bf16 grid; the weakest true unit is an exact tie",
+      "applies_to": "both",
+      "verdict": "risky",
+      "evidence": "The readout is bf16: model.py:342 and 346 (`dtype=dtype`), with the output only cast at 517 (`.float()`); the local lm_head \"stays bf16\" (convert.py:10). The implied margins T·logit(p) in cintas/classification_summary.json are multiples of 1/16 or 1/32. True unit u43 is exactly 0.5 (margin 0.0, a tie) and true u18 is 0.538 (+0.1875); negative u15 is 0.487 (−0.0625) and false positive u16 is 0.745 (+1.3125). Switching between isolated and separate mode moved probabilities by 0.0335 on average and 0.161 at worst (iso_agree.json); 8-bit versus reference differs by 0.4% on average (USAGE.md:82). README.md:87-89 recommends margins because probabilities \"saturate into ties\", but margins don't remove bf16 grid ties.",
+      "recommendation": "Set tau1, tau2 and the step-4 thresholds as margins, several quanta away from the dev-set positives; tau1 near p=0.25 (as in e2e.py:14), not 0.5. Store p at full precision: T·logit(p) recovers the margin until p saturates.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Isolated mode in 2b/2c: each answer depends on the other questions",
+      "applies_to": "both",
+      "verdict": "risky",
+      "evidence": "README.md:100-101: \"the state also attends to the questions, so answers can shift slightly with the set of questions (… 1.5-2.2% of top answers differ from `separate`). Use `separate` unless the cost of re-reading the state matters.\" In 2b and 2c every value's probability depends on which other values Locate returned. Any upstream change (label wording, cutoff, one extra span) shifts all of them and moves thresholds tuned on the dev set. Isolated mode is still justified on cost: 2c costs about 410-464 question tokens per value (tokenizer estimate) against states of 400-1,400 tokens. Codex does not specify a mode.",
+      "recommendation": "Keep isolated mode but freeze labels and wording before tuning. Run the planned agreement check on 2b and 2c, not only on a sample. If it shows flips, re-ask in separate mode only the items within a small margin band of their threshold.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Near-duplicate options and inconsistent reference labels",
+      "applies_to": "both",
+      "verdict": "missing",
+      "evidence": "Probabilities are normalized over the options (README.md:106-107; protocol.py:101-104), so synonyms split the probability mass and lower the top probability that step 4 tests. PAYX prior_labels hold synonym pairs: 'Effective Income Tax Rate'/'Effective Tax Rate', 'Adjusted Operating Income Margin'/'Adjusted Operating Margin', 'Operating Income Margin'/'Operating Margin', 'Other Income (Expense), Net'/'Other Income Net', 'Total Investment Portfolio Average'/'…Balance'. The reference contradicts itself too: PAYX_2025-09-30#1 'Adjusted Operating Income Margin' vs PAYX_2026-03-25#0 'Adjusted Operating Margin'; 'First Aid and Safety' (CTAS_2025-09-24#7) vs 'First Aid' (CTAS_2025-12-18#9); 'Fire Protection' vs 'Fire Protection Services'; PAYX_2025-09-30#5 segment 'Management Solutions' vs PAYX_2025-12-19#5 segment 'Total' for the same metric.",
+      "recommendation": "Use one option per canonical metric and segment, with its aliases in the option description (`{name: description}`, README.md:78; shown as \"key: description\", protocol.py:81). Score metric and segment against the same alias map.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Unitless values",
+      "applies_to": "draft",
+      "verdict": "missing",
+      "evidence": "The draft sets unit_raw to the value span, and the writer derives canonical units from unit_raw (brief line 19). Several spans have no unit: CTAS_2026-03-25#4 \"Q4 implied of 7.6\" (reference: percent), CTAS_2025-12-18#3 \"between the 29 and 30\" (percent), and also \"midpoint of 8.2\" and \"the 27 this quarter\". Codex's plan asks a units question; the draft does not.",
+      "recommendation": "Add a unit choice (percent, basis points, USD, USD millions, USD billions, other) to 2c, and use it only when the span has no unit token.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "The writer's derivation field is not covered",
+      "applies_to": "both",
+      "verdict": "missing",
+      "evidence": "The brief (line 19) lists \"derivation\" as a writer input. The reference has explicit 27, point 14, implied 12, comparative 1. The draft's form question (exact/approximately/range/at least/at most/qualitative) separates point from range but not implied (CTAS_2026-03-25#4, CTAS_2025-12-18#3/#4) or comparative (PAYX_2026-03-25#3). Codex's \"exact estimate, range or bound\" has the same gap. Fixed categories call for a choice (README.md:78).",
+      "recommendation": "Add one choice to 2c: stated directly / implied or derived by management / comparative only. Map it together with form to the derivation codes.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Choice option descriptions for period, basis and form",
+      "applies_to": "both",
+      "verdict": "missing",
+      "evidence": "Options are shown to the model as \"key: description\" (protocol.py:81). The draft lists bare codes (Q4 FY26, H2 FY26, non_gaap, constant_currency, at least). CTAS_2025-09-24 U04 \"Our guidance assumes a constant foreign currency exchange rate\" is a condition, not a constant-currency basis (reference basis: unknown). Mapping periods needs fiscal dates: \"fully rolled out by June 1st\" means FY27 for CTAS_2026-03-25#1, yet the header omits the fiscal year-end.",
+      "recommendation": "Add one-line descriptions: period options with fiscal dates (e.g. \"FY27: June 1 2026 – May 31 2027\"); \"constant_currency: the figure itself is stated in constant currency, not just assuming constant FX\"; a definition for each form option.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "The descriptor label misses directional and comparative outlooks",
+      "applies_to": "draft",
+      "verdict": "risky",
+      "evidence": "2a's label (\"Growth descriptors without a number (e.g. 'low double digits', 'low end of the range')\") fits 8 of the 10 qualitative-only records. It does not fit CTAS_2026-03-25#1 \"it will be something less than that\" or PAYX_2026-03-25#3 \"continue and maybe accelerate a little bit\". The label text also sets the field's learned threshold (blog:52), and abstract labels already fail on long text (USAGE.md:84-85).",
+      "recommendation": "Widen the label's examples to positions in a range and directions (\"towards the low end\", \"something less than that\", \"accelerate\"). Measure its recall per unit on the dev set; the existence and coverage flags above catch the rest.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Codex's step 2 changes the setup that was measured",
+      "applies_to": "codex",
+      "verdict": "risky",
+      "evidence": "The 8-of-8 result (175 s, 15,101 tokens) used speaker units and the wording \"Under the supplied definition, does unit [U00] itself contain management guidance or quantified evidence supporting guidance? … do not treat an analyst question as management guidance.\" (cintas/classification_request.json). Codex switches to exchange-level passages and new wording (\"states, changes, reaffirms, withdraws or qualifies\"). He also leaves analyst text in the passage with no rule limiting values to management speech, so analyst figures such as \"three to four cents\" (CTAS_2026-03-25 U08) sit inside it.",
+      "recommendation": "Keep the measured unit granularity and wording, or re-measure them. Keep only spans inside management units, as the draft does.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "Choices that match the docs",
+      "applies_to": "both",
+      "verdict": "correct",
+      "evidence": "A single isolated whole-call request for selection fits README.md:101 (\"cheaper when many questions share a long state\"). Step-1 requests are 14.5k-20.8k tokens (my CTAS Mar estimate of 15,088 vs 15,101 measured), below the 30,720-token training length (README.md:178), so nothing is split (protocol.py:314-321). Selecting by noul instead of a passage-level Locate label avoids the 128-token max_span and the 128 proposals. Keeping only spans inside the kept unit excludes analyst figures. Storing probabilities and tuning per-task thresholds follows blog:98 (\"store the probabilities rather than a verdict\"), blog:111 and README.md:108-110. The explicit true/false noul descriptions fit the schema: they replace \"No / false\"/\"Yes / true\", with false shown first (protocol.py:86). Putting the definition in the state follows README.md:96.",
+      "recommendation": "Keep these. Codex's plan names no stored probabilities, thresholds or flags; it should adopt the draft's.",
+      "impact": "accuracy"
+    },
+    {
+      "topic": "No prompt caching; cost estimate",
+      "applies_to": "both",
+      "verdict": "correct",
+      "evidence": "v1.3 cannot cache the state: blog:39 (\"Fully cacheable … We don't use it by default\"), decision_config.json:532 (\"joint_cache_prob\": 0.0), model.py:79 (\"Noncausal classification does not support a KV cache\"). Each of the draft's 4 per-unit requests re-reads its state. My estimate for CTAS Mar (tau1 0.25, 12 kept units) is about 64k tokens, roughly 12.6 min at 85 tokens/s, so 12-15 min is plausible. It is not \"mostly reading text\": in step 2, state re-reads are about 27k tokens and question tokens about 22k. Exchanges with two kept answers (QA3 u15/u16, QA16 u43/u44) are processed twice.",
+      "recommendation": "Run step 2 once per exchange, not once per kept unit. Don't plan on reusing a state across requests.",
+      "impact": "speed"
+    }
+  ],
+  "bottom_line": "Neither plan can promise near-100% yet. The draft's value-first design fits the docs better than Codex's: concrete Locate labels, noul/choice decisions for meaning, stored probabilities and tuned thresholds. Codex's Locate-first 'forecasted measures' relies on semantic labels that measured poorly. As written, though, the draft fails definite reference cases. Identical value strings get identical isolated answers (PAYX 18%, 11%, 41%). A single-label metric choice drops 2 of the 3 records that share one descriptor (PAYX_2025-12-19#5/#6/#8). Per-unit Locate cannot reach conditions stated in another unit (CTAS_2025-09-24#1/#5/#6). Locate misses have no probability, so they drop silently. Small fixes cover all four: name each value occurrence in its questions; use one noul per metric for descriptor spans; use the whole prepared-remarks section as one state; add existence nouls and a number-coverage backstop. Also add canonical options with alias and period descriptions, plus unit and derivation choices. Treat the Locate cutoff as a logging diagnostic of a learned per-label threshold. Test grouped Locate labels and isolated decisions against single-question runs. Tune thresholds as bf16 margins well below 0.5. Size the verified held-out set (about 300 records) before claiming near-100%. Official files are under <scratchpad>/officialdocs; local runtime files are under /Users/faanjum/Developer/local-llm/decider/. No files were changed and the model server was not called."
+}

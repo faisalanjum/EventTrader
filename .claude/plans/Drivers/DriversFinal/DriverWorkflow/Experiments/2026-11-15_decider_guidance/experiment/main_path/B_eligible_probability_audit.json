@@ -1,0 +1,1220 @@
+{
+  "note": "Offline eligibility union diagnostic. No threshold re-tuning, inference or changes to the running test. Reference controls are clear current numeric amounts, not complete-record gold.",
+  "reference_current_ids": [
+    "V13",
+    "V14",
+    "V15",
+    "V16",
+    "V17",
+    "V18",
+    "V19",
+    "V20",
+    "V59",
+    "V61",
+    "V65",
+    "V66",
+    "V108"
+  ],
+  "rows": [
+    {
+      "tag": "V0",
+      "passage": "PR002",
+      "start": 15,
+      "end": 20,
+      "text": "[78]:",
+      "selected": "other",
+      "p_selected": 0.9667728070583452,
+      "p_eligible": 0.0131701876489121
+    },
+    {
+      "tag": "V1",
+      "passage": "PR002",
+      "start": 314,
+      "end": 318,
+      "text": "8.9%",
+      "selected": "actual",
+      "p_selected": 0.8374585230470242,
+      "p_eligible": 0.029888351384076698
+    },
+    {
+      "tag": "V2",
+      "passage": "PR002",
+      "start": 322,
+      "end": 327,
+      "text": "$2.84",
+      "selected": "other",
+      "p_selected": 0.4952444122930453,
+      "p_eligible": 0.03151611094001667
+    },
+    {
+      "tag": "V3",
+      "passage": "PR002",
+      "start": 461,
+      "end": 466,
+      "text": "8.2%.",
+      "selected": "actual",
+      "p_selected": 0.6263961333768523,
+      "p_eligible": 0.01852663460903963
+    },
+    {
+      "tag": "V4",
+      "passage": "PR002",
+      "start": 842,
+      "end": 846,
+      "text": "51%,",
+      "selected": "actual",
+      "p_selected": 0.6713841353506712,
+      "p_eligible": 0.16404210091394045
+    },
+    {
+      "tag": "V5",
+      "passage": "PR002",
+      "start": 849,
+      "end": 851,
+      "text": "40",
+      "selected": "actual",
+      "p_selected": 0.7548804721005162,
+      "p_eligible": 0.039438608673057804
+    },
+    {
+      "tag": "V6",
+      "passage": "PR002",
+      "start": 919,
+      "end": 925,
+      "text": "$659.9",
+      "selected": "actual",
+      "p_selected": 0.6967775668124858,
+      "p_eligible": 0.027940377504736644
+    },
+    {
+      "tag": "V7",
+      "passage": "PR002",
+      "start": 950,
+      "end": 954,
+      "text": "8.2%",
+      "selected": "actual",
+      "p_selected": 0.5615860381329241,
+      "p_eligible": 0.026454463411998665
+    },
+    {
+      "tag": "V8",
+      "passage": "PR002",
+      "start": 1097,
+      "end": 1101,
+      "text": "11%.",
+      "selected": "actual",
+      "p_selected": 0.5834217977006921,
+      "p_eligible": 0.03918110759295204
+    },
+    {
+      "tag": "V9",
+      "passage": "PR002",
+      "start": 1117,
+      "end": 1122,
+      "text": "$1.24",
+      "selected": "actual",
+      "p_selected": 0.9138540613869677,
+      "p_eligible": 0.04193933023357151
+    },
+    {
+      "tag": "V10",
+      "passage": "PR002",
+      "start": 1128,
+      "end": 1132,
+      "text": "9.7%",
+      "selected": "actual",
+      "p_selected": 0.8230853823400176,
+      "p_eligible": 0.033832257517652516
+    },
+    {
+      "tag": "V11",
+      "passage": "PR002",
+      "start": 1270,
+      "end": 1276,
+      "text": "12.7%.",
+      "selected": "actual",
+      "p_selected": 0.6441924621486923,
+      "p_eligible": 0.036248606908182615
+    },
+    {
+      "tag": "V12",
+      "passage": "PR002",
+      "start": 1324,
+      "end": 1328,
+      "text": "2026",
+      "selected": "other",
+      "p_selected": 0.5578105566564365,
+      "p_eligible": 0.4141855475671355
+    },
+    {
+      "tag": "V13",
+      "passage": "PR002",
+      "start": 1393,
+      "end": 1399,
+      "text": "$11.21",
+      "selected": "current",
+      "p_selected": 0.6651216769379996,
+      "p_eligible": 0.8021418779234399
+    },
+    {
+      "tag": "V14",
+      "passage": "PR002",
+      "start": 1411,
+      "end": 1417,
+      "text": "$11.24",
+      "selected": "current",
+      "p_selected": 0.4773663102185421,
+      "p_eligible": 0.6996255838685463
+    },
+    {
+      "tag": "V15",
+      "passage": "PR002",
+      "start": 1450,
+      "end": 1454,
+      "text": "8.4%",
+      "selected": "current",
+      "p_selected": 0.7413153963083379,
+      "p_eligible": 0.9020166352790054
+    },
+    {
+      "tag": "V16",
+      "passage": "PR002",
+      "start": 1458,
+      "end": 1463,
+      "text": "8.7%.",
+      "selected": "other",
+      "p_selected": 0.7715604477724533,
+      "p_eligible": 0.19783048773923118
+    },
+    {
+      "tag": "V17",
+      "passage": "PR002",
+      "start": 1517,
+      "end": 1522,
+      "text": "$4.86",
+      "selected": "current",
+      "p_selected": 0.7303929285553704,
+      "p_eligible": 0.8595271953572651
+    },
+    {
+      "tag": "V18",
+      "passage": "PR002",
+      "start": 1526,
+      "end": 1532,
+      "text": "$4.90,",
+      "selected": "current",
+      "p_selected": 0.8068886921107529,
+      "p_eligible": 0.9648548424915024
+    },
+    {
+      "tag": "V19",
+      "passage": "PR002",
+      "start": 1550,
+      "end": 1555,
+      "text": "10.5%",
+      "selected": "current",
+      "p_selected": 0.942890640395086,
+      "p_eligible": 0.98719978227493
+    },
+    {
+      "tag": "V20",
+      "passage": "PR002",
+      "start": 1559,
+      "end": 1565,
+      "text": "11.4%.",
+      "selected": "other",
+      "p_selected": 0.7024770932587785,
+      "p_eligible": 0.24411581308883357
+    },
+    {
+      "tag": "V21",
+      "passage": "PR003",
+      "start": 12,
+      "end": 18,
+      "text": "[253]:",
+      "selected": "other",
+      "p_selected": 0.9512298533764938,
+      "p_eligible": 0.014647858887780177
+    },
+    {
+      "tag": "V22",
+      "passage": "PR003",
+      "start": 518,
+      "end": 522,
+      "text": "7.3%",
+      "selected": "other",
+      "p_selected": 0.5716814833353283,
+      "p_eligible": 0.016708897765598987
+    },
+    {
+      "tag": "V23",
+      "passage": "PR003",
+      "start": 561,
+      "end": 566,
+      "text": "14.6%",
+      "selected": "actual",
+      "p_selected": 0.7039643031651589,
+      "p_eligible": 0.040953238154552124
+    },
+    {
+      "tag": "V24",
+      "passage": "PR003",
+      "start": 602,
+      "end": 605,
+      "text": "10%",
+      "selected": "actual",
+      "p_selected": 0.7952707941277692,
+      "p_eligible": 0.12204092252667638
+    },
+    {
+      "tag": "V25",
+      "passage": "PR003",
+      "start": 640,
+      "end": 644,
+      "text": "3.1%",
+      "selected": "actual",
+      "p_selected": 0.767453895442038,
+      "p_eligible": 0.03665070166109666
+    },
+    {
+      "tag": "V26",
+      "passage": "PR003",
+      "start": 710,
+      "end": 715,
+      "text": "50.3%",
+      "selected": "actual",
+      "p_selected": 0.6070035501357652,
+      "p_eligible": 0.032610408324132666
+    },
+    {
+      "tag": "V27",
+      "passage": "PR003",
+      "start": 754,
+      "end": 759,
+      "text": "58.1%",
+      "selected": "actual",
+      "p_selected": 0.8567370010751367,
+      "p_eligible": 0.03567371634745075
+    },
+    {
+      "tag": "V28",
+      "passage": "PR003",
+      "start": 795,
+      "end": 800,
+      "text": "50.5%",
+      "selected": "actual",
+      "p_selected": 0.9306853514200404,
+      "p_eligible": 0.030014525551737746
+    },
+    {
+      "tag": "V29",
+      "passage": "PR003",
+      "start": 835,
+      "end": 840,
+      "text": "41.4%",
+      "selected": "actual",
+      "p_selected": 0.6445406562513885,
+      "p_eligible": 0.033436477362770986
+    },
+    {
+      "tag": "V30",
+      "passage": "PR003",
+      "start": 938,
+      "end": 940,
+      "text": "30",
+      "selected": "actual",
+      "p_selected": 0.4850713432204741,
+      "p_eligible": 0.031023097945924505
+    },
+    {
+      "tag": "V31",
+      "passage": "PR003",
+      "start": 974,
+      "end": 979,
+      "text": "50.3%",
+      "selected": "actual",
+      "p_selected": 0.8645632234790801,
+      "p_eligible": 0.02844669193608056
+    },
+    {
+      "tag": "V32",
+      "passage": "PR003",
+      "start": 1473,
+      "end": 1479,
+      "text": "58.1%.",
+      "selected": "actual",
+      "p_selected": 0.6117928280232778,
+      "p_eligible": 0.021027393574325523
+    },
+    {
+      "tag": "V33",
+      "passage": "PR003",
+      "start": 2024,
+      "end": 2027,
+      "text": "28%",
+      "selected": "other",
+      "p_selected": 0.4646156404819161,
+      "p_eligible": 0.06800738621172298
+    },
+    {
+      "tag": "V34",
+      "passage": "PR003",
+      "start": 3328,
+      "end": 3333,
+      "text": "2026.",
+      "selected": "other",
+      "p_selected": 0.8599032234278912,
+      "p_eligible": 0.10247650791999817
+    },
+    {
+      "tag": "V35",
+      "passage": "PR003",
+      "start": 3443,
+      "end": 3447,
+      "text": "2026",
+      "selected": "other",
+      "p_selected": 0.44247740256984525,
+      "p_eligible": 0.5214267247771104
+    },
+    {
+      "tag": "V36",
+      "passage": "PR004",
+      "start": 13,
+      "end": 19,
+      "text": "[438]:",
+      "selected": "other",
+      "p_selected": 0.7872482055820033,
+      "p_eligible": 0.056276404179897405
+    },
+    {
+      "tag": "V37",
+      "passage": "PR004",
+      "start": 290,
+      "end": 296,
+      "text": "27.8%,",
+      "selected": "actual",
+      "p_selected": 0.6887331574489526,
+      "p_eligible": 0.1129215587523045
+    },
+    {
+      "tag": "V38",
+      "passage": "PR004",
+      "start": 309,
+      "end": 311,
+      "text": "60",
+      "selected": "actual",
+      "p_selected": 0.46110795326759785,
+      "p_eligible": 0.033630176832399286
+    },
+    {
+      "tag": "V39",
+      "passage": "PR004",
+      "start": 493,
+      "end": 499,
+      "text": "$659.9",
+      "selected": "actual",
+      "p_selected": 0.5682614819454195,
+      "p_eligible": 0.11235776662917231
+    },
+    {
+      "tag": "V40",
+      "passage": "PR004",
+      "start": 520,
+      "end": 526,
+      "text": "$609.9",
+      "selected": "other",
+      "p_selected": 0.7332181944199245,
+      "p_eligible": 0.025072497828067277
+    },
+    {
+      "tag": "V41",
+      "passage": "PR004",
+      "start": 594,
+      "end": 599,
+      "text": "23.2%",
+      "selected": "other",
+      "p_selected": 0.8359476839763258,
+      "p_eligible": 0.02838661120559067
+    },
+    {
+      "tag": "V42",
+      "passage": "PR004",
+      "start": 631,
+      "end": 635,
+      "text": "2026",
+      "selected": "actual",
+      "p_selected": 0.674594440480333,
+      "p_eligible": 0.09128887024316831
+    },
+    {
+      "tag": "V43",
+      "passage": "PR004",
+      "start": 648,
+      "end": 653,
+      "text": "23.4%",
+      "selected": "other",
+      "p_selected": 0.6447529496302112,
+      "p_eligible": 0.021659434242700632
+    },
+    {
+      "tag": "V44",
+      "passage": "PR004",
+      "start": 792,
+      "end": 794,
+      "text": "40",
+      "selected": "other",
+      "p_selected": 0.7818129279268297,
+      "p_eligible": 0.03290769874956835
+    },
+    {
+      "tag": "V45",
+      "passage": "PR004",
+      "start": 873,
+      "end": 878,
+      "text": "20.6%",
+      "selected": "actual",
+      "p_selected": 0.6719441177666065,
+      "p_eligible": 0.13556800856735604
+    },
+    {
+      "tag": "V46",
+      "passage": "PR004",
+      "start": 891,
+      "end": 894,
+      "text": "21%",
+      "selected": "other",
+      "p_selected": 0.5828307143444924,
+      "p_eligible": 0.02783829425070443
+    },
+    {
+      "tag": "V47",
+      "passage": "PR004",
+      "start": 1082,
+      "end": 1088,
+      "text": "$502.5",
+      "selected": "actual",
+      "p_selected": 0.8014207333869132,
+      "p_eligible": 0.07501114208031313
+    },
+    {
+      "tag": "V48",
+      "passage": "PR004",
+      "start": 1109,
+      "end": 1115,
+      "text": "$463.5",
+      "selected": "other",
+      "p_selected": 0.5053683224023672,
+      "p_eligible": 0.060969770116868355
+    },
+    {
+      "tag": "V49",
+      "passage": "PR004",
+      "start": 1192,
+      "end": 1197,
+      "text": "$1.24",
+      "selected": "actual",
+      "p_selected": 0.8376005717080377,
+      "p_eligible": 0.08405344847674756
+    },
+    {
+      "tag": "V50",
+      "passage": "PR004",
+      "start": 1210,
+      "end": 1215,
+      "text": "$1.13",
+      "selected": "actual",
+      "p_selected": 0.79949244087962,
+      "p_eligible": 0.13541633529769517
+    },
+    {
+      "tag": "V51",
+      "passage": "PR004",
+      "start": 1242,
+      "end": 1247,
+      "text": "9.7%.",
+      "selected": "actual",
+      "p_selected": 0.5093066807377031,
+      "p_eligible": 0.0349181004304103
+    },
+    {
+      "tag": "V52",
+      "passage": "PR004",
+      "start": 1277,
+      "end": 1282,
+      "text": "12.7%",
+      "selected": "actual",
+      "p_selected": 0.47820933855348974,
+      "p_eligible": 0.04549362066126188
+    },
+    {
+      "tag": "V53",
+      "passage": "PR004",
+      "start": 1497,
+      "end": 1500,
+      "text": "1.5",
+      "selected": "other",
+      "p_selected": 0.6962790196305553,
+      "p_eligible": 0.27662899804525604
+    },
+    {
+      "tag": "V54",
+      "passage": "PR004",
+      "start": 1650,
+      "end": 1655,
+      "text": "2026,",
+      "selected": "actual",
+      "p_selected": 0.8881606191880528,
+      "p_eligible": 0.07128801938745767
+    },
+    {
+      "tag": "V55",
+      "passage": "PR004",
+      "start": 1673,
+      "end": 1678,
+      "text": "$1.45",
+      "selected": "other",
+      "p_selected": 0.8599838928185103,
+      "p_eligible": 0.020347380808326255
+    },
+    {
+      "tag": "V56",
+      "passage": "PR004",
+      "start": 1913,
+      "end": 1917,
+      "text": "2025",
+      "selected": "qualification",
+      "p_selected": 0.5840672996116805,
+      "p_eligible": 0.6076230297367238
+    },
+    {
+      "tag": "V57",
+      "passage": "PR004",
+      "start": 1929,
+      "end": 1933,
+      "text": "2026",
+      "selected": "other",
+      "p_selected": 0.6100513209271652,
+      "p_eligible": 0.3293884228175776
+    },
+    {
+      "tag": "V58",
+      "passage": "PR004",
+      "start": 2124,
+      "end": 2128,
+      "text": "2026",
+      "selected": "current",
+      "p_selected": 0.6673008579497244,
+      "p_eligible": 0.844666364698033
+    },
+    {
+      "tag": "V59",
+      "passage": "PR004",
+      "start": 2167,
+      "end": 2171,
+      "text": "$101",
+      "selected": "other",
+      "p_selected": 0.39379347622625754,
+      "p_eligible": 0.5745232449151502
+    },
+    {
+      "tag": "V60",
+      "passage": "PR004",
+      "start": 2190,
+      "end": 2194,
+      "text": "2026",
+      "selected": "current",
+      "p_selected": 0.6994978077091861,
+      "p_eligible": 0.8435996188296997
+    },
+    {
+      "tag": "V61",
+      "passage": "PR004",
+      "start": 2217,
+      "end": 2221,
+      "text": "20%,",
+      "selected": "qualification",
+      "p_selected": 0.6661963244123194,
+      "p_eligible": 0.6774937101810674
+    },
+    {
+      "tag": "V62",
+      "passage": "PR004",
+      "start": 2263,
+      "end": 2268,
+      "text": "2025,",
+      "selected": "qualification",
+      "p_selected": 0.5030172712008025,
+      "p_eligible": 0.5351103618364003
+    },
+    {
+      "tag": "V63",
+      "passage": "PR004",
+      "start": 2560,
+      "end": 2565,
+      "text": "2026,",
+      "selected": "other",
+      "p_selected": 0.6331782322294724,
+      "p_eligible": 0.31192138742859976
+    },
+    {
+      "tag": "V64",
+      "passage": "PR004",
+      "start": 2805,
+      "end": 2809,
+      "text": "2026",
+      "selected": "current",
+      "p_selected": 0.8149282903820453,
+      "p_eligible": 0.9157779855335435
+    },
+    {
+      "tag": "V65",
+      "passage": "PR004",
+      "start": 2888,
+      "end": 2893,
+      "text": "$0.03",
+      "selected": "current",
+      "p_selected": 0.8436906201074362,
+      "p_eligible": 0.928845026889072
+    },
+    {
+      "tag": "V66",
+      "passage": "PR004",
+      "start": 2897,
+      "end": 2903,
+      "text": "$0.04.",
+      "selected": "other",
+      "p_selected": 0.8237902639550106,
+      "p_eligible": 0.1384525940530852
+    },
+    {
+      "tag": "V67",
+      "passage": "QA000",
+      "start": 8,
+      "end": 14,
+      "text": "[783]:",
+      "selected": "other",
+      "p_selected": 0.9518288502386102,
+      "p_eligible": 0.016866056351284988
+    },
+    {
+      "tag": "V68",
+      "passage": "QA000",
+      "start": 637,
+      "end": 643,
+      "text": "[818]:",
+      "selected": "other",
+      "p_selected": 0.7651911637028117,
+      "p_eligible": 0.09001709781778207
+    },
+    {
+      "tag": "V69",
+      "passage": "QA000",
+      "start": 834,
+      "end": 836,
+      "text": "Q3",
+      "selected": "other",
+      "p_selected": 0.5742491780240517,
+      "p_eligible": 0.08942046667677711
+    },
+    {
+      "tag": "V70",
+      "passage": "QA000",
+      "start": 997,
+      "end": 999,
+      "text": "60",
+      "selected": "actual",
+      "p_selected": 0.7376951893077649,
+      "p_eligible": 0.06768722157801271
+    },
+    {
+      "tag": "V71",
+      "passage": "QA000",
+      "start": 1160,
+      "end": 1162,
+      "text": "Q3",
+      "selected": "other",
+      "p_selected": 0.6945014359901637,
+      "p_eligible": 0.04217702379500366
+    },
+    {
+      "tag": "V72",
+      "passage": "QA000",
+      "start": 1368,
+      "end": 1371,
+      "text": "100",
+      "selected": "other",
+      "p_selected": 0.5998684132945001,
+      "p_eligible": 0.029627620070080622
+    },
+    {
+      "tag": "V73",
+      "passage": "QA000",
+      "start": 1422,
+      "end": 1424,
+      "text": "70",
+      "selected": "other",
+      "p_selected": 0.7424086174158406,
+      "p_eligible": 0.021455318908402302
+    },
+    {
+      "tag": "V74",
+      "passage": "QA000",
+      "start": 1481,
+      "end": 1484,
+      "text": "24.",
+      "selected": "actual",
+      "p_selected": 0.7592566163293766,
+      "p_eligible": 0.04338904803390109
+    },
+    {
+      "tag": "V75",
+      "passage": "QA001",
+      "start": 8,
+      "end": 14,
+      "text": "[901]:",
+      "selected": "other",
+      "p_selected": 0.9295306529102701,
+      "p_eligible": 0.016618135829017236
+    },
+    {
+      "tag": "V76",
+      "passage": "QA001",
+      "start": 498,
+      "end": 504,
+      "text": "[928]:",
+      "selected": "other",
+      "p_selected": 0.3785563781388886,
+      "p_eligible": 0.2907854002960896
+    },
+    {
+      "tag": "V77",
+      "passage": "QA001",
+      "start": 558,
+      "end": 561,
+      "text": "1.7",
+      "selected": "actual",
+      "p_selected": 0.7743848880624229,
+      "p_eligible": 0.06130795286935178
+    },
+    {
+      "tag": "V78",
+      "passage": "QA001",
+      "start": 609,
+      "end": 611,
+      "text": "10",
+      "selected": "actual",
+      "p_selected": 0.395714831408795,
+      "p_eligible": 0.16559984477422662
+    },
+    {
+      "tag": "V79",
+      "passage": "QA001",
+      "start": 787,
+      "end": 790,
+      "text": "60%",
+      "selected": "qualification",
+      "p_selected": 0.37213460615680316,
+      "p_eligible": 0.39842483521419053
+    },
+    {
+      "tag": "V80",
+      "passage": "QA001",
+      "start": 907,
+      "end": 910,
+      "text": "100",
+      "selected": "other",
+      "p_selected": 0.7518928736323809,
+      "p_eligible": 0.07552925866376427
+    },
+    {
+      "tag": "V81",
+      "passage": "QA001",
+      "start": 1026,
+      "end": 1029,
+      "text": "30%",
+      "selected": "hypothetical",
+      "p_selected": 0.537497120734676,
+      "p_eligible": 0.15178562077926167
+    },
+    {
+      "tag": "V82",
+      "passage": "QA001",
+      "start": 1117,
+      "end": 1119,
+      "text": "30",
+      "selected": "other",
+      "p_selected": 0.7400870588382903,
+      "p_eligible": 0.08965215244954143
+    },
+    {
+      "tag": "V83",
+      "passage": "QA003",
+      "start": 8,
+      "end": 15,
+      "text": "[1084]:",
+      "selected": "other",
+      "p_selected": 0.8500519562792161,
+      "p_eligible": 0.03805070805539687
+    },
+    {
+      "tag": "V84",
+      "passage": "QA003",
+      "start": 398,
+      "end": 405,
+      "text": "[1108]:",
+      "selected": "other",
+      "p_selected": 0.5845039710073385,
+      "p_eligible": 0.23430045843712874
+    },
+    {
+      "tag": "V85",
+      "passage": "QA003",
+      "start": 704,
+      "end": 711,
+      "text": "[1132]:",
+      "selected": "other",
+      "p_selected": 0.828223889330603,
+      "p_eligible": 0.0775803146237394
+    },
+    {
+      "tag": "V86",
+      "passage": "QA003",
+      "start": 1261,
+      "end": 1264,
+      "text": "100",
+      "selected": "other",
+      "p_selected": 0.6329219463589885,
+      "p_eligible": 0.25080362074465967
+    },
+    {
+      "tag": "V87",
+      "passage": "QA006",
+      "start": 8,
+      "end": 15,
+      "text": "[1443]:",
+      "selected": "other",
+      "p_selected": 0.9689985190202551,
+      "p_eligible": 0.011856929530603315
+    },
+    {
+      "tag": "V88",
+      "passage": "QA006",
+      "start": 511,
+      "end": 518,
+      "text": "[1471]:",
+      "selected": "other",
+      "p_selected": 0.7190576326303406,
+      "p_eligible": 0.11264640669953538
+    },
+    {
+      "tag": "V89",
+      "passage": "QA006",
+      "start": 1184,
+      "end": 1187,
+      "text": "95%",
+      "selected": "actual",
+      "p_selected": 0.4003090683235543,
+      "p_eligible": 0.1668181420858459
+    },
+    {
+      "tag": "V90",
+      "passage": "QA006",
+      "start": 1336,
+      "end": 1338,
+      "text": "2%",
+      "selected": "current",
+      "p_selected": 0.7320298932592073,
+      "p_eligible": 0.8753407903017933
+    },
+    {
+      "tag": "V91",
+      "passage": "QA006",
+      "start": 1342,
+      "end": 1344,
+      "text": "3%",
+      "selected": "current",
+      "p_selected": 0.565162185275512,
+      "p_eligible": 0.7232334210546847
+    },
+    {
+      "tag": "V92",
+      "passage": "QA016",
+      "start": 8,
+      "end": 15,
+      "text": "[2548]:",
+      "selected": "other",
+      "p_selected": 0.962471356740844,
+      "p_eligible": 0.014608449628821938
+    },
+    {
+      "tag": "V93",
+      "passage": "QA016",
+      "start": 169,
+      "end": 171,
+      "text": "4Q",
+      "selected": "other",
+      "p_selected": 0.7847953786300096,
+      "p_eligible": 0.13612593093115682
+    },
+    {
+      "tag": "V94",
+      "passage": "QA016",
+      "start": 256,
+      "end": 258,
+      "text": "4Q",
+      "selected": "other",
+      "p_selected": 0.6021427297459037,
+      "p_eligible": 0.1006901616667686
+    },
+    {
+      "tag": "V95",
+      "passage": "QA016",
+      "start": 438,
+      "end": 445,
+      "text": "[2571]:",
+      "selected": "other",
+      "p_selected": 0.8279583396299858,
+      "p_eligible": 0.057857692768859964
+    },
+    {
+      "tag": "V96",
+      "passage": "QA016",
+      "start": 551,
+      "end": 553,
+      "text": "Q4",
+      "selected": "other",
+      "p_selected": 0.6561328707623029,
+      "p_eligible": 0.1849708213939255
+    },
+    {
+      "tag": "V97",
+      "passage": "QA016",
+      "start": 660,
+      "end": 663,
+      "text": "9%.",
+      "selected": "actual",
+      "p_selected": 0.4718801835437181,
+      "p_eligible": 0.1693051262711962
+    },
+    {
+      "tag": "V98",
+      "passage": "QA016",
+      "start": 753,
+      "end": 758,
+      "text": "18.5%",
+      "selected": "other",
+      "p_selected": 0.484204488021944,
+      "p_eligible": 0.14690750605336528
+    },
+    {
+      "tag": "V99",
+      "passage": "QA016",
+      "start": 1245,
+      "end": 1248,
+      "text": "Q4.",
+      "selected": "other",
+      "p_selected": 0.7876592714951622,
+      "p_eligible": 0.11486722792927181
+    },
+    {
+      "tag": "V100",
+      "passage": "QA016",
+      "start": 1262,
+      "end": 1269,
+      "text": "[2638]:",
+      "selected": "other",
+      "p_selected": 0.5371882710375645,
+      "p_eligible": 0.29151825983799184
+    },
+    {
+      "tag": "V101",
+      "passage": "QA016",
+      "start": 1475,
+      "end": 1477,
+      "text": "Q4",
+      "selected": "other",
+      "p_selected": 0.5541552109150485,
+      "p_eligible": 0.365320872806355
+    },
+    {
+      "tag": "V102",
+      "passage": "QA016",
+      "start": 1730,
+      "end": 1733,
+      "text": "8%.",
+      "selected": "other",
+      "p_selected": 0.3466273294417824,
+      "p_eligible": 0.25538694493455655
+    },
+    {
+      "tag": "V103",
+      "passage": "QA016",
+      "start": 1805,
+      "end": 1808,
+      "text": "8%.",
+      "selected": "earlier",
+      "p_selected": 0.5061693104318042,
+      "p_eligible": 0.28461497531703017
+    },
+    {
+      "tag": "V104",
+      "passage": "QA016",
+      "start": 1965,
+      "end": 1970,
+      "text": "7.8%.",
+      "selected": "other",
+      "p_selected": 0.5972986987024642,
+      "p_eligible": 0.10585084299412623
+    },
+    {
+      "tag": "V105",
+      "passage": "QA016",
+      "start": 1974,
+      "end": 1977,
+      "text": "Q3,",
+      "selected": "actual",
+      "p_selected": 0.9523291607087809,
+      "p_eligible": 0.025033944972539256
+    },
+    {
+      "tag": "V106",
+      "passage": "QA016",
+      "start": 2013,
+      "end": 2017,
+      "text": "8.2%",
+      "selected": "other",
+      "p_selected": 0.6291128376481171,
+      "p_eligible": 0.207005202095473
+    },
+    {
+      "tag": "V107",
+      "passage": "QA016",
+      "start": 2066,
+      "end": 2068,
+      "text": "Q4",
+      "selected": "current",
+      "p_selected": 0.6615196226171541,
+      "p_eligible": 0.8465414186798825
+    },
+    {
+      "tag": "V108",
+      "passage": "QA016",
+      "start": 2080,
+      "end": 2084,
+      "text": "7.6,",
+      "selected": "current",
+      "p_selected": 0.6230957557412925,
+      "p_eligible": 0.8597049781191091
+    },
+    {
+      "tag": "V109",
+      "passage": "QA016",
+      "start": 2107,
+      "end": 2111,
+      "text": "7.9.",
+      "selected": "other",
+      "p_selected": 0.5332963983182101,
+      "p_eligible": 0.14195866022603648
+    },
+    {
+      "tag": "V110",
+      "passage": "QA020",
+      "start": 8,
+      "end": 15,
+      "text": "[3112]:",
+      "selected": "other",
+      "p_selected": 0.8383142206446724,
+      "p_eligible": 0.0616442040948203
+    },
+    {
+      "tag": "V111",
+      "passage": "QA020",
+      "start": 402,
+      "end": 404,
+      "text": "4Q",
+      "selected": "other",
+      "p_selected": 0.5300009383913366,
+      "p_eligible": 0.3637249114183454
+    },
+    {
+      "tag": "V112",
+      "passage": "QA020",
+      "start": 512,
+      "end": 519,
+      "text": "[3142]:",
+      "selected": "other",
+      "p_selected": 0.6837762135715342,
+      "p_eligible": 0.2544261046511312
+    },
+    {
+      "tag": "V113",
+      "passage": "QA020",
+      "start": 614,
+      "end": 616,
+      "text": "Q4",
+      "selected": "other",
+      "p_selected": 0.7093251420208966,
+      "p_eligible": 0.2511445905664847
+    },
+    {
+      "tag": "V114",
+      "passage": "QA022",
+      "start": 8,
+      "end": 15,
+      "text": "[3270]:",
+      "selected": "other",
+      "p_selected": 0.8750273308242399,
+      "p_eligible": 0.024218748488056056
+    },
+    {
+      "tag": "V115",
+      "passage": "QA022",
+      "start": 146,
+      "end": 149,
+      "text": "100",
+      "selected": "other",
+      "p_selected": 0.2888956510568685,
+      "p_eligible": 0.3511550599813631
+    },
+    {
+      "tag": "V116",
+      "passage": "QA022",
+      "start": 193,
+      "end": 196,
+      "text": "27.",
+      "selected": "earlier",
+      "p_selected": 0.47478939756408156,
+      "p_eligible": 0.07139914655874073
+    },
+    {
+      "tag": "V117",
+      "passage": "QA022",
+      "start": 405,
+      "end": 412,
+      "text": "[3296]:",
+      "selected": "other",
+      "p_selected": 0.8301301157871107,
+      "p_eligible": 0.07149512500015821
+    },
+    {
+      "tag": "V118",
+      "passage": "QA022",
+      "start": 816,
+      "end": 819,
+      "text": "100",
+      "selected": "earlier",
+      "p_selected": 0.3262425296219665,
+      "p_eligible": 0.26421348209241724
+    },
+    {
+      "tag": "V119",
+      "passage": "QA022",
+      "start": 1028,
+      "end": 1032,
+      "text": "1st.",
+      "selected": "other",
+      "p_selected": 0.8277116936844616,
+      "p_eligible": 0.12642610048478375
+    }
+  ]
+}

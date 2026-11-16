@@ -1,0 +1,54 @@
+{
+  "started_at": "2026-11-15T20:43:57.517232-05:00",
+  "request_sha256": "f5afb28af26031c5a392508caa49cf24be7c0b03a768e7416796a08cf094903c",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V105_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V105_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V105_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V108_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 5213,
+            "end": 5225,
+            "text": "incrementals",
+            "score": 0.7403949499130249
+          }
+        ]
+      },
+      "V108_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 5173,
+            "end": 5194,
+            "text": "back half of the year",
+            "score": 0.9998281002044678
+          }
+        ]
+      },
+      "V108_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1891,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 23.954981931950897,
+  "finished_at": "2026-11-15T20:44:21.472316-05:00"
+}

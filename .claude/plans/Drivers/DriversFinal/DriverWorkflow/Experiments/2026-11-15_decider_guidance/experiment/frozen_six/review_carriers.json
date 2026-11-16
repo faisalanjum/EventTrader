@@ -1,0 +1,2036 @@
+[
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP01",
+    "meaning": "Annual revenue level",
+    "number_carriers": [
+      {
+        "tag": "V017",
+        "passage": "PR002",
+        "start": 2664,
+        "end": 2670,
+        "text": "$11.06"
+      },
+      {
+        "tag": "V018",
+        "passage": "PR002",
+        "start": 2682,
+        "end": 2688,
+        "text": "$11.18"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S029",
+        "passage": "PR002",
+        "start": 2620,
+        "end": 2734,
+        "text": "We expect our revenue to be in the range of $11.06 billion to $11.18 billion, a total growth rate of 7%, to 8.1%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP02",
+    "meaning": "Annual revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V019",
+        "passage": "PR002",
+        "start": 2721,
+        "end": 2724,
+        "text": "7%,"
+      },
+      {
+        "tag": "V020",
+        "passage": "PR002",
+        "start": 2728,
+        "end": 2733,
+        "text": "8.1%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S029",
+        "passage": "PR002",
+        "start": 2620,
+        "end": 2734,
+        "text": "We expect our revenue to be in the range of $11.06 billion to $11.18 billion, a total growth rate of 7%, to 8.1%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP03",
+    "meaning": "Annual diluted earnings per share level",
+    "number_carriers": [
+      {
+        "tag": "V021",
+        "passage": "PR002",
+        "start": 2778,
+        "end": 2783,
+        "text": "$4.74"
+      },
+      {
+        "tag": "V022",
+        "passage": "PR002",
+        "start": 2787,
+        "end": 2793,
+        "text": "$4.86,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S030",
+        "passage": "PR002",
+        "start": 2734,
+        "end": 2826,
+        "text": "We expect diluted EPS to be in the range of $4.74 to $4.86, a growth rate of 7.7% to 10.5%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP04",
+    "meaning": "Annual diluted earnings per share growth",
+    "number_carriers": [
+      {
+        "tag": "V023",
+        "passage": "PR002",
+        "start": 2811,
+        "end": 2815,
+        "text": "7.7%"
+      },
+      {
+        "tag": "V024",
+        "passage": "PR002",
+        "start": 2819,
+        "end": 2825,
+        "text": "10.5%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S030",
+        "passage": "PR002",
+        "start": 2734,
+        "end": 2826,
+        "text": "We expect diluted EPS to be in the range of $4.74 to $4.86, a growth rate of 7.7% to 10.5%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP05",
+    "meaning": "Annual net interest expense",
+    "number_carriers": [
+      {
+        "tag": "V063",
+        "passage": "PR004",
+        "start": 7813,
+        "end": 7818,
+        "text": "$97.0"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S072",
+        "passage": "PR004",
+        "start": 7695,
+        "end": 7918,
+        "text": "Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP06",
+    "meaning": "Annual effective tax rate",
+    "number_carriers": [
+      {
+        "tag": "V065",
+        "passage": "PR004",
+        "start": 7864,
+        "end": 7870,
+        "text": "20.0%,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S072",
+        "passage": "PR004",
+        "start": 7695,
+        "end": 7918,
+        "text": "Our guidance assumes a constant foreign currency exchange rate, the fiscal 2026 net interest expense of approximately $97.0 million, a fiscal 2026 effective tax rate of 20.0%, which is the same compared to our fiscal 2025. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP07",
+    "meaning": "Current incremental-margin target",
+    "number_carriers": [
+      {
+        "tag": "V096",
+        "passage": "QA008",
+        "start": 22640,
+        "end": 22642,
+        "text": "25"
+      },
+      {
+        "tag": "V097",
+        "passage": "QA008",
+        "start": 22646,
+        "end": 22649,
+        "text": "35%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S244",
+        "passage": "QA008",
+        "start": 22559,
+        "end": 22657,
+        "text": "And then also the incrementals are right where we like them to be at that stated 25 to 35% range. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP08",
+    "meaning": "Implied margin expansion",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S245",
+        "passage": "QA008",
+        "start": 22657,
+        "end": 22716,
+        "text": "And it also implies margin expansion within there as well. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP09",
+    "meaning": "EPS guidance for Q2\u2013Q4 is raised",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S243",
+        "passage": "QA008",
+        "start": 22485,
+        "end": 22559,
+        "text": "Q2 through 4 implied guide also increases at all points within the range. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP11",
+    "meaning": "First-aid revenue growth outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S370",
+        "passage": "QA017",
+        "start": 33597,
+        "end": 33649,
+        "text": "We do see it as a low double-digit growth business. "
+      },
+      {
+        "tag": "S372",
+        "passage": "QA017",
+        "start": 33700,
+        "end": 33777,
+        "text": "And we would expect that low double-digit number to be a good number for us. "
+      },
+      {
+        "tag": "S380",
+        "passage": "QA017",
+        "start": 34401,
+        "end": 34495,
+        "text": "Again, but I would think about it as a low double-digit growth business for us moving forward."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP13",
+    "meaning": "SG&A investment level does not ramp up or down",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S485",
+        "passage": "QA023",
+        "start": 44410,
+        "end": 44495,
+        "text": "So I don't think you'll see a ramp up or ramp down from there from that perspective. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-09-24T10.00",
+    "claim_id": "SEP15",
+    "meaning": "Standing CapEx percentage target",
+    "number_carriers": [
+      {
+        "tag": "V160",
+        "passage": "QA026",
+        "start": 48640,
+        "end": 48642,
+        "text": "4%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S532",
+        "passage": "QA026",
+        "start": 48611,
+        "end": 48698,
+        "text": "From a CapEx standpoint, our 4% targeted CapEx, I think you'll see that be consistent. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC01",
+    "meaning": "Revenue level",
+    "number_carriers": [
+      {
+        "tag": "V016",
+        "passage": "PR002",
+        "start": 2849,
+        "end": 2855,
+        "text": "$11.15"
+      },
+      {
+        "tag": "V017",
+        "passage": "PR002",
+        "start": 2867,
+        "end": 2873,
+        "text": "$11.22"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S027",
+        "passage": "PR002",
+        "start": 2805,
+        "end": 2920,
+        "text": "We expect our revenue to be in the range of $11.15 billion to $11.22 billion, a total growth rate of 7.8% to 8.5%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC02",
+    "meaning": "Revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V018",
+        "passage": "PR002",
+        "start": 2906,
+        "end": 2910,
+        "text": "7.8%"
+      },
+      {
+        "tag": "V019",
+        "passage": "PR002",
+        "start": 2914,
+        "end": 2919,
+        "text": "8.5%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S027",
+        "passage": "PR002",
+        "start": 2805,
+        "end": 2920,
+        "text": "We expect our revenue to be in the range of $11.15 billion to $11.22 billion, a total growth rate of 7.8% to 8.5%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC03",
+    "meaning": "Diluted EPS level",
+    "number_carriers": [
+      {
+        "tag": "V020",
+        "passage": "PR002",
+        "start": 2964,
+        "end": 2969,
+        "text": "$4.81"
+      },
+      {
+        "tag": "V021",
+        "passage": "PR002",
+        "start": 2973,
+        "end": 2979,
+        "text": "$4.88,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S028",
+        "passage": "PR002",
+        "start": 2920,
+        "end": 3012,
+        "text": "We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC04",
+    "meaning": "Diluted EPS growth",
+    "number_carriers": [
+      {
+        "tag": "V022",
+        "passage": "PR002",
+        "start": 2997,
+        "end": 3001,
+        "text": "9.3%"
+      },
+      {
+        "tag": "V023",
+        "passage": "PR002",
+        "start": 3005,
+        "end": 3011,
+        "text": "10.9%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S028",
+        "passage": "PR002",
+        "start": 2920,
+        "end": 3012,
+        "text": "We expect diluted EPS to be in the range of $4.81 to $4.88, a growth rate of 9.3% to 10.9%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC05",
+    "meaning": "Net interest expense",
+    "number_carriers": [
+      {
+        "tag": "V069",
+        "passage": "PR004",
+        "start": 8585,
+        "end": 8589,
+        "text": "$104"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S078",
+        "passage": "PR004",
+        "start": 8471,
+        "end": 8811,
+        "text": "Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC06",
+    "meaning": "Effective tax rate",
+    "number_carriers": [
+      {
+        "tag": "V071",
+        "passage": "PR004",
+        "start": 8635,
+        "end": 8639,
+        "text": "20%,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S078",
+        "passage": "PR004",
+        "start": 8471,
+        "end": 8811,
+        "text": "Our guidance assumes a constant foreign currency exchange rate, fiscal 2026 net interest expense of approximately $104 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guidance does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC07",
+    "meaning": "Standing organic growth target",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S137",
+        "passage": "QA001",
+        "start": 13104,
+        "end": 13254,
+        "text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC08",
+    "meaning": "Acquisition contribution to second-half revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V091",
+        "passage": "QA002",
+        "start": 17605,
+        "end": 17607,
+        "text": "30"
+      },
+      {
+        "tag": "V092",
+        "passage": "QA002",
+        "start": 17611,
+        "end": 17613,
+        "text": "35"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S177",
+        "passage": "QA002",
+        "start": 17583,
+        "end": 17619,
+        "text": "So call it, you know, 30 to 35 bids."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC09",
+    "meaning": "Standing incremental-margin target",
+    "number_carriers": [
+      {
+        "tag": "V100",
+        "passage": "QA003",
+        "start": 19938,
+        "end": 19941,
+        "text": "25%"
+      },
+      {
+        "tag": "V101",
+        "passage": "QA003",
+        "start": 19945,
+        "end": 19949,
+        "text": "35%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S208",
+        "passage": "QA003",
+        "start": 19893,
+        "end": 19950,
+        "text": "And that's right in our stated range of that 25% to 35%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC10",
+    "meaning": "Annual incremental margin excluding prior asset gain",
+    "number_carriers": [
+      {
+        "tag": "V105",
+        "passage": "QA003",
+        "start": 21218,
+        "end": 21220,
+        "text": "29"
+      },
+      {
+        "tag": "V106",
+        "passage": "QA003",
+        "start": 21225,
+        "end": 21227,
+        "text": "30"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S225",
+        "passage": "QA003",
+        "start": 21123,
+        "end": 21298,
+        "text": "If you look at the whole year across the board, incrementals would imply somewhere between the 29 and 30 when you adjust for the $15 million asset sale from last fiscal year. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC11",
+    "meaning": "Second-half incremental margin",
+    "number_carriers": [
+      {
+        "tag": "V108",
+        "passage": "QA003",
+        "start": 21495,
+        "end": 21498,
+        "text": "30%"
+      },
+      {
+        "tag": "V109",
+        "passage": "QA003",
+        "start": 21502,
+        "end": 21506,
+        "text": "33%,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S227",
+        "passage": "QA003",
+        "start": 21416,
+        "end": 21562,
+        "text": "And if you look at the back half of the year, that would imply incrementals of 30% to 33%, so moving back up towards the high side of that range. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC12",
+    "meaning": "First-aid revenue growth outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S262",
+        "passage": "QA005",
+        "start": 24282,
+        "end": 24351,
+        "text": "We see them as a low double-digit grower for the foreseeable future. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC14",
+    "meaning": "Greater future fire ERP costs",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S387",
+        "passage": "QA012",
+        "start": 33916,
+        "end": 34070,
+        "text": "You know, these ERP implementations take time, and we are experiencing some additional costs now, for sure, but there is more cost to come in the future. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2025-12-18T10.00",
+    "claim_id": "DEC15",
+    "meaning": "Fire ERP rollout margin impact",
+    "number_carriers": [
+      {
+        "tag": "V143",
+        "passage": "QA012",
+        "start": 35648,
+        "end": 35651,
+        "text": "100"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S405",
+        "passage": "QA012",
+        "start": 35564,
+        "end": 35698,
+        "text": "And I would just look at the impact for fiscal year 27 to be around that, you know, 100 basis points for the fire protection business."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR01",
+    "meaning": "Annual revenue level",
+    "number_carriers": [
+      {
+        "tag": "V015",
+        "passage": "PR002",
+        "start": 2699,
+        "end": 2705,
+        "text": "$11.21"
+      },
+      {
+        "tag": "V016",
+        "passage": "PR002",
+        "start": 2717,
+        "end": 2723,
+        "text": "$11.24"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S027",
+        "passage": "PR002",
+        "start": 2655,
+        "end": 2770,
+        "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR02",
+    "meaning": "Annual revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V017",
+        "passage": "PR002",
+        "start": 2756,
+        "end": 2760,
+        "text": "8.4%"
+      },
+      {
+        "tag": "V018",
+        "passage": "PR002",
+        "start": 2764,
+        "end": 2769,
+        "text": "8.7%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S027",
+        "passage": "PR002",
+        "start": 2655,
+        "end": 2770,
+        "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR03",
+    "meaning": "Annual adjusted diluted EPS",
+    "number_carriers": [
+      {
+        "tag": "V019",
+        "passage": "PR002",
+        "start": 2823,
+        "end": 2828,
+        "text": "$4.86"
+      },
+      {
+        "tag": "V020",
+        "passage": "PR002",
+        "start": 2832,
+        "end": 2838,
+        "text": "$4.90,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S028",
+        "passage": "PR002",
+        "start": 2770,
+        "end": 2872,
+        "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR04",
+    "meaning": "Annual adjusted diluted EPS growth",
+    "number_carriers": [
+      {
+        "tag": "V021",
+        "passage": "PR002",
+        "start": 2856,
+        "end": 2861,
+        "text": "10.5%"
+      },
+      {
+        "tag": "V022",
+        "passage": "PR002",
+        "start": 2865,
+        "end": 2871,
+        "text": "11.4%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S028",
+        "passage": "PR002",
+        "start": 2770,
+        "end": 2872,
+        "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR05",
+    "meaning": "Annual net interest expense",
+    "number_carriers": [
+      {
+        "tag": "V059",
+        "passage": "PR004",
+        "start": 9505,
+        "end": 9509,
+        "text": "$101"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S084",
+        "passage": "PR004",
+        "start": 9388,
+        "end": 9728,
+        "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR06",
+    "meaning": "Annual effective tax rate",
+    "number_carriers": [
+      {
+        "tag": "V061",
+        "passage": "PR004",
+        "start": 9555,
+        "end": 9559,
+        "text": "20%,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S084",
+        "passage": "PR004",
+        "start": 9388,
+        "end": 9728,
+        "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR07",
+    "meaning": "Debt to EBITDA at acquisition closing",
+    "number_carriers": [
+      {
+        "tag": "V053",
+        "passage": "PR004",
+        "start": 8835,
+        "end": 8838,
+        "text": "1.5"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S078",
+        "passage": "PR004",
+        "start": 8800,
+        "end": 8949,
+        "text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR08",
+    "meaning": "Annual transaction-cost impact on diluted EPS",
+    "number_carriers": [
+      {
+        "tag": "V065",
+        "passage": "PR004",
+        "start": 10226,
+        "end": 10231,
+        "text": "$0.03"
+      },
+      {
+        "tag": "V066",
+        "passage": "PR004",
+        "start": 10235,
+        "end": 10241,
+        "text": "$0.04."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S088",
+        "passage": "PR004",
+        "start": 10087,
+        "end": 10242,
+        "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR09",
+    "meaning": "Q4 transaction-cost impact on diluted EPS",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S121",
+        "passage": "QA000",
+        "start": 12694,
+        "end": 12812,
+        "text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR11",
+    "meaning": "Standing total growth target",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S227",
+        "passage": "QA006",
+        "start": 21413,
+        "end": 21493,
+        "text": "You know, we do like to target that mid to high single-digit total growth rate. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR12",
+    "meaning": "Q4 implied organic revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V106",
+        "passage": "QA016",
+        "start": 39345,
+        "end": 39349,
+        "text": "7.6,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S422",
+        "passage": "QA016",
+        "start": 39296,
+        "end": 39377,
+        "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR13",
+    "meaning": "H2 implied average organic growth",
+    "number_carriers": [
+      {
+        "tag": "V107",
+        "passage": "QA016",
+        "start": 39372,
+        "end": 39376,
+        "text": "7.9."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S422",
+        "passage": "QA016",
+        "start": 39296,
+        "end": 39377,
+        "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR15",
+    "meaning": "First-aid exceptional prior growth not repeated",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S409",
+        "passage": "QA016",
+        "start": 38040,
+        "end": 38083,
+        "text": "We certainly do not anticipate that again. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "CTAS_2026-03-25T10.00",
+    "claim_id": "MAR16",
+    "meaning": "FY27 fire ERP margin impact below full-year scenario",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S514",
+        "passage": "QA022",
+        "start": 47446,
+        "end": 47624,
+        "text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-01",
+    "meaning": "Paycor cost-synergy target",
+    "number_carriers": [
+      {
+        "tag": "V012",
+        "passage": "PR002",
+        "start": 2449,
+        "end": 2452,
+        "text": "$90"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S025",
+        "passage": "PR002",
+        "start": 2388,
+        "end": 2462,
+        "text": "Our fiscal year 26 cost synergy target remains approximately $90 million. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-02",
+    "meaning": "Total revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V045",
+        "passage": "PR003",
+        "start": 11139,
+        "end": 11144,
+        "text": "16.5%"
+      },
+      {
+        "tag": "V046",
+        "passage": "PR003",
+        "start": 11149,
+        "end": 11155,
+        "text": "18.5%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S092",
+        "passage": "PR003",
+        "start": 11091,
+        "end": 11156,
+        "text": "Total revenue is still expected to grow between 16.5% and 18.5%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-03",
+    "meaning": "Revenue-synergy contribution to growth",
+    "number_carriers": [
+      {
+        "tag": "V047",
+        "passage": "PR003",
+        "start": 11232,
+        "end": 11234,
+        "text": "30"
+      },
+      {
+        "tag": "V048",
+        "passage": "PR003",
+        "start": 11238,
+        "end": 11240,
+        "text": "50"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S093",
+        "passage": "PR003",
+        "start": 11156,
+        "end": 11280,
+        "text": "And as we previously noted, we would expect revenue synergies to contribute 30 to 50 basis points of growth in fiscal 2026. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-04",
+    "meaning": "Management Solutions revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V050",
+        "passage": "PR003",
+        "start": 11337,
+        "end": 11339,
+        "text": "20"
+      },
+      {
+        "tag": "V051",
+        "passage": "PR003",
+        "start": 11343,
+        "end": 11347,
+        "text": "22%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S094",
+        "passage": "PR003",
+        "start": 11280,
+        "end": 11348,
+        "text": "Management Solutions is expected to grow in the range of 20 to 22%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-05",
+    "meaning": "PEO and Insurance Solutions revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V052",
+        "passage": "PR003",
+        "start": 11412,
+        "end": 11413,
+        "text": "6"
+      },
+      {
+        "tag": "V053",
+        "passage": "PR003",
+        "start": 11417,
+        "end": 11420,
+        "text": "8%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S095",
+        "passage": "PR003",
+        "start": 11348,
+        "end": 11421,
+        "text": "PEO and Insurance Solutions is expected to grow in the range of 6 to 8%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-06",
+    "meaning": "Interest on funds held for clients",
+    "number_carriers": [
+      {
+        "tag": "V054",
+        "passage": "PR003",
+        "start": 11670,
+        "end": 11674,
+        "text": "$190"
+      },
+      {
+        "tag": "V055",
+        "passage": "PR003",
+        "start": 11678,
+        "end": 11682,
+        "text": "$200"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S097",
+        "passage": "PR003",
+        "start": 11595,
+        "end": 11692,
+        "text": "Interest on funds held for clients is still expected to be in the range of $190 to $200 million. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-07",
+    "meaning": "Adjusted operating income margin",
+    "number_carriers": [
+      {
+        "tag": "V056",
+        "passage": "PR003",
+        "start": 11757,
+        "end": 11761,
+        "text": "43%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S098",
+        "passage": "PR003",
+        "start": 11692,
+        "end": 11762,
+        "text": "Adjusted operating income margin is expected to be approximately 43%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-08",
+    "meaning": "Effective income tax rate",
+    "number_carriers": [
+      {
+        "tag": "V057",
+        "passage": "PR003",
+        "start": 11826,
+        "end": 11829,
+        "text": "24%"
+      },
+      {
+        "tag": "V058",
+        "passage": "PR003",
+        "start": 11833,
+        "end": 11837,
+        "text": "25%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S099",
+        "passage": "PR003",
+        "start": 11762,
+        "end": 11838,
+        "text": "Our effective income tax rate is expected to be in the range of 24% to 25%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-09",
+    "meaning": "Adjusted diluted EPS growth",
+    "number_carriers": [
+      {
+        "tag": "V059",
+        "passage": "PR003",
+        "start": 11973,
+        "end": 11975,
+        "text": "9%"
+      },
+      {
+        "tag": "V060",
+        "passage": "PR003",
+        "start": 11980,
+        "end": 11983,
+        "text": "11%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S100",
+        "passage": "PR003",
+        "start": 11838,
+        "end": 12044,
+        "text": "And as I mentioned, we are now raising our earnings expectations with adjusted diluted earnings per share now expected to grow between 9% and 11% up from 8.5% to 10.5% that we shared with you last quarter. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-10",
+    "meaning": "Q2 total revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V063",
+        "passage": "PR003",
+        "start": 12168,
+        "end": 12171,
+        "text": "18%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S102",
+        "passage": "PR003",
+        "start": 12107,
+        "end": 12234,
+        "text": "We would anticipate total revenue growth to be approximately 18% in Q2 with an adjusted operating margin of approximately 41%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-11",
+    "meaning": "Q2 adjusted operating margin",
+    "number_carriers": [
+      {
+        "tag": "V065",
+        "passage": "PR003",
+        "start": 12229,
+        "end": 12233,
+        "text": "41%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S102",
+        "passage": "PR003",
+        "start": 12107,
+        "end": 12234,
+        "text": "We would anticipate total revenue growth to be approximately 18% in Q2 with an adjusted operating margin of approximately 41%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-12",
+    "meaning": "PEO growth accelerates in H2",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S096",
+        "passage": "PR003",
+        "start": 11421,
+        "end": 11595,
+        "text": "And as previously noted, we expect revenue to accelerate in the back half of the year as we anniversary the at-risk revenue growth headwinds we experienced last fiscal year. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-13",
+    "meaning": "Paycor recurring revenue growth",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S123",
+        "passage": "QA001",
+        "start": 13633,
+        "end": 13759,
+        "text": "It's certainly on a full-year basis we expect, you know, the recurring revenue to be on pay core to be a double-digit growth. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-09-30T09.30",
+    "claim_id": "P1-15",
+    "meaning": "Full-year company organic revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V102",
+        "passage": "QA005",
+        "start": 24272,
+        "end": 24274,
+        "text": "5%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S231",
+        "passage": "QA005",
+        "start": 24222,
+        "end": 24297,
+        "text": "I think the guide... implies an organic growth of 5% on a full year basis. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-01",
+    "meaning": "Paycor cost synergies",
+    "number_carriers": [
+      {
+        "tag": "V009",
+        "passage": "PR002",
+        "start": 2445,
+        "end": 2449,
+        "text": "$100"
+      },
+      {
+        "tag": "V070",
+        "passage": "QA000",
+        "start": 15084,
+        "end": 15088,
+        "text": "$100"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S023",
+        "passage": "PR002",
+        "start": 2340,
+        "end": 2498,
+        "text": "As best operators, we continue to identify additional expense opportunities and now expect approximately $100 million in cost synergies for fiscal year 2026. "
+      },
+      {
+        "tag": "S126",
+        "passage": "QA000",
+        "start": 15002,
+        "end": 15145,
+        "text": "As you recall, our original target was at $80 million, and we've now committed to $100 million, and we have more opportunities we're pursuing. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-02",
+    "meaning": "Management Solutions revenue outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S083",
+        "passage": "PR003",
+        "start": 11194,
+        "end": 11387,
+        "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-03",
+    "meaning": "PEO and insurance revenue outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S083",
+        "passage": "PR003",
+        "start": 11194,
+        "end": 11387,
+        "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-04",
+    "meaning": "Total revenue outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S083",
+        "passage": "PR003",
+        "start": 11194,
+        "end": 11387,
+        "text": "However, given some of the trends that we've discussed earlier, we would now expect to come in towards the low end of the ranges for management solutions, P-owned insurance, and total revenue. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-05",
+    "meaning": "Interest on funds held for clients",
+    "number_carriers": [
+      {
+        "tag": "V044",
+        "passage": "PR003",
+        "start": 11481,
+        "end": 11485,
+        "text": "$190"
+      },
+      {
+        "tag": "V045",
+        "passage": "PR003",
+        "start": 11489,
+        "end": 11493,
+        "text": "$200"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S084",
+        "passage": "PR003",
+        "start": 11387,
+        "end": 11537,
+        "text": "Interest on funds held for clients is now expected to be at the high end of the range, of the $190 to $200 million range that we previously provided. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-06",
+    "meaning": "Adjusted diluted EPS growth",
+    "number_carriers": [
+      {
+        "tag": "V046",
+        "passage": "PR003",
+        "start": 11657,
+        "end": 11660,
+        "text": "10%"
+      },
+      {
+        "tag": "V047",
+        "passage": "PR003",
+        "start": 11665,
+        "end": 11669,
+        "text": "11%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S085",
+        "passage": "PR003",
+        "start": 11537,
+        "end": 11670,
+        "text": "And we are also raising our earnings expectations with adjusted diluted earnings per share now expected to grow between 10% and 11%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-07",
+    "meaning": "Effective income tax rate",
+    "number_carriers": [
+      {
+        "tag": "V050",
+        "passage": "PR003",
+        "start": 11807,
+        "end": 11811,
+        "text": "24%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S087",
+        "passage": "PR003",
+        "start": 11728,
+        "end": 11812,
+        "text": "And our effective income tax rate for the year is expected to be approximately 24%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-09",
+    "meaning": "Q3 total revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V051",
+        "passage": "PR003",
+        "start": 12034,
+        "end": 12037,
+        "text": "18%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S090",
+        "passage": "PR003",
+        "start": 11982,
+        "end": 12092,
+        "text": "We anticipate total revenue growth of approximately 18% with an adjusted operating margin between 47 and 48%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-10",
+    "meaning": "Q3 adjusted operating margin",
+    "number_carriers": [
+      {
+        "tag": "V052",
+        "passage": "PR003",
+        "start": 12080,
+        "end": 12082,
+        "text": "47"
+      },
+      {
+        "tag": "V053",
+        "passage": "PR003",
+        "start": 12087,
+        "end": 12091,
+        "text": "48%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S090",
+        "passage": "PR003",
+        "start": 11982,
+        "end": 12092,
+        "text": "We anticipate total revenue growth of approximately 18% with an adjusted operating margin between 47 and 48%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-11",
+    "meaning": "Paycor growth outlook",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S240",
+        "passage": "QA004",
+        "start": 24999,
+        "end": 25181,
+        "text": "So, hey, we'll see where it plays out as we get to the balance of the year, but I would still expect it to be, if not low double digits, high single digit grower as we move forward. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-12",
+    "meaning": "PEO and insurance growth acceleration",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S504",
+        "passage": "QA018",
+        "start": 51349,
+        "end": 51478,
+        "text": "So we expect the business, as you mentioned, you're going to see acceleration like we did this quarter with the PO in insurance. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2025-12-19T09.30",
+    "claim_id": "P2-13",
+    "meaning": "Management Solutions organic revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V152",
+        "passage": "QA020",
+        "start": 53643,
+        "end": 53645,
+        "text": "5%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S529",
+        "passage": "QA020",
+        "start": 53506,
+        "end": 53746,
+        "text": "But we expect some modest acceleration to the organic growth rate in management solutions, probably moving closer towards the, you know, 5% range over time, but that definitely, there is some acceleration there in the back half of the year."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-01",
+    "meaning": "Annual interest on funds held for clients",
+    "number_carriers": [
+      {
+        "tag": "V055",
+        "passage": "PR008",
+        "start": 12165,
+        "end": 12169,
+        "text": "$200"
+      },
+      {
+        "tag": "V056",
+        "passage": "PR008",
+        "start": 12173,
+        "end": 12177,
+        "text": "$210"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S100",
+        "passage": "PR008",
+        "start": 12092,
+        "end": 12187,
+        "text": "Interest on funds held for clients is now expected to be in the range of $200 to $210 million. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-03",
+    "meaning": "Q4 total revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V057",
+        "passage": "PR008",
+        "start": 12394,
+        "end": 12398,
+        "text": "12%,"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S103",
+        "passage": "PR008",
+        "start": 12332,
+        "end": 12448,
+        "text": "We would anticipate fourth quarter growth to be approximately 12%, with an adjusted operating margin of 41% to 42%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-04",
+    "meaning": "Q4 adjusted operating margin",
+    "number_carriers": [
+      {
+        "tag": "V058",
+        "passage": "PR008",
+        "start": 12436,
+        "end": 12439,
+        "text": "41%"
+      },
+      {
+        "tag": "V059",
+        "passage": "PR008",
+        "start": 12443,
+        "end": 12447,
+        "text": "42%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S103",
+        "passage": "PR008",
+        "start": 12332,
+        "end": 12448,
+        "text": "We would anticipate fourth quarter growth to be approximately 12%, with an adjusted operating margin of 41% to 42%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-05",
+    "meaning": "H2 organic revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V080",
+        "passage": "QA000",
+        "start": 14970,
+        "end": 14973,
+        "text": "6%."
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S135",
+        "passage": "QA000",
+        "start": 14892,
+        "end": 14974,
+        "text": "And so you're now getting to a back half organic growth rate that's closer to 6%. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-06",
+    "meaning": "Full-year organic revenue growth",
+    "number_carriers": [
+      {
+        "tag": "V081",
+        "passage": "QA000",
+        "start": 15036,
+        "end": 15038,
+        "text": "5%"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S136",
+        "passage": "QA000",
+        "start": 14974,
+        "end": 15061,
+        "text": "And then when you put the two of those together, it's roughly 5% on a full year basis. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-07",
+    "meaning": "Q4 organic revenue growth accelerates",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S326",
+        "passage": "QA007",
+        "start": 33160,
+        "end": 33318,
+        "text": "Bob Schrader [2588]: No, I think you would probably see a slight uptick, a continued acceleration in the organic growth of the business in Q4 relative to Q3. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-08",
+    "meaning": "PEO/insurance Q4 growth rate lower",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S348",
+        "passage": "QA008",
+        "start": 35283,
+        "end": 35467,
+        "text": "But the overall growth rate, I think when you start doing the math, you'll see that the math is going to show you that the growth rate is going to be a little bit lower in Q4 than Q3. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-09",
+    "meaning": "PEO/insurance H2 organic growth stronger",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S349",
+        "passage": "QA008",
+        "start": 35467,
+        "end": 35608,
+        "text": "But when you put the two of them together, it's a fairly big step up in the sequential organic growth relative to the first half of the year."
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-10",
+    "meaning": "Cost-synergy target exceeded",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S054",
+        "passage": "PR007",
+        "start": 5965,
+        "end": 6051,
+        "text": "We remain on track to exceed our fiscal 26 synergy targets we discussed last quarter. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-11",
+    "meaning": "Revenue-synergy contribution near high end",
+    "number_carriers": [
+      {
+        "tag": "V149",
+        "passage": "QA010",
+        "start": 38971,
+        "end": 38973,
+        "text": "30"
+      },
+      {
+        "tag": "V150",
+        "passage": "QA010",
+        "start": 38977,
+        "end": 38979,
+        "text": "50"
+      }
+    ],
+    "sentence_carriers": [
+      {
+        "tag": "S383",
+        "passage": "QA010",
+        "start": 39014,
+        "end": 39109,
+        "text": "I would say we're probably on the high end of that, and as John said, we're building momentum. "
+      },
+      {
+        "tag": "S382",
+        "passage": "QA010",
+        "start": 38942,
+        "end": 39014,
+        "text": "We expected it to contribute 30 to 50 basis points of growth this year. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-15",
+    "meaning": "Annual revenue remains toward low end",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S514",
+        "passage": "QA018",
+        "start": 52338,
+        "end": 52410,
+        "text": "Bob Schrader [3829]: Yeah, I think we would stay where we're at, David. "
+      },
+      {
+        "tag": "S515",
+        "passage": "QA018",
+        "start": 52410,
+        "end": 52518,
+        "text": "That's why we reiterated, as we mentioned, listen, I think we are a little bit conservative than what we... "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-17",
+    "meaning": "Enterprise revenue growth at or above peers",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S566",
+        "passage": "QA021",
+        "start": 57864,
+        "end": 58003,
+        "text": "And our expectation would be that we would, you know, prospectively be growing at or above the other assets in that segment of the market. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  },
+  {
+    "source_id": "PAYX_2026-03-25T09.30",
+    "claim_id": "P3-18",
+    "meaning": "Q4 Management Solutions organic growth improves",
+    "number_carriers": [],
+    "sentence_carriers": [
+      {
+        "tag": "S647",
+        "passage": "QA026",
+        "start": 65017,
+        "end": 65188,
+        "text": "Part of it is when you get to Q4, we would expect that to continue and maybe accelerate a little bit to the point that you're making your anniversary and the acquisition. "
+      }
+    ],
+    "reference_status": "confirmed_claim",
+    "complete_record_gold": false
+  }
+]

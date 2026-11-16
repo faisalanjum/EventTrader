@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-11-15T21:42:04.553280-05:00",
+  "request_sha256": "90c7b54ae8e5d0ec3ecdb582c4c6f3f3482911ed594a445db1e5488797861b6f",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V143_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1075,
+            "end": 1095,
+            "text": "total revenue growth",
+            "score": 0.9996388554573059
+          }
+        ]
+      },
+      "V143_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1050,
+            "end": 1052,
+            "text": "3Q",
+            "score": 0.782798707485199
+          }
+        ]
+      },
+      "V143_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1075,
+            "end": 1095,
+            "text": "total revenue growth",
+            "score": 0.7375484108924866
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 866,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 11.109410770004615,
+  "finished_at": "2026-11-15T21:42:15.662784-05:00"
+}

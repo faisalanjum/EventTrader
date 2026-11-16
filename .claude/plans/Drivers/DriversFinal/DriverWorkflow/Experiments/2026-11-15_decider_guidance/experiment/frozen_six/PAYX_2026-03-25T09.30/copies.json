@@ -1,0 +1,56 @@
+{
+  "V055_measure": [
+    {
+      "start": 12092,
+      "end": 12126,
+      "text": "Interest on funds held for clients",
+      "score": 0.9998765587806702
+    }
+  ],
+  "V055_context": [],
+  "V055_qualifiers": [],
+  "V057_measure": [],
+  "V057_context": [
+    {
+      "start": 12352,
+      "end": 12373,
+      "text": "fourth quarter growth",
+      "score": 0.7619546055793762
+    }
+  ],
+  "V057_qualifiers": [],
+  "V058_measure": [
+    {
+      "start": 12407,
+      "end": 12432,
+      "text": "adjusted operating margin",
+      "score": 0.9999989867210388
+    }
+  ],
+  "V058_context": [
+    {
+      "start": 12407,
+      "end": 12432,
+      "text": "adjusted operating margin",
+      "score": 0.9227104187011719
+    }
+  ],
+  "V058_qualifiers": [
+    {
+      "start": 12407,
+      "end": 12432,
+      "text": "adjusted operating margin",
+      "score": 0.9997086524963379
+    }
+  ],
+  "V080_measure": [
+    {
+      "start": 14626,
+      "end": 14654,
+      "text": "total revenue organic growth",
+      "score": 0.9957513809204102
+    }
+  ],
+  "V080_context": [],
+  "V080_qualifiers": []
+}

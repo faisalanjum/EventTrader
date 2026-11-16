@@ -1,0 +1,64 @@
+{
+  "started_at": "2026-11-15T22:46:08.002110-05:00",
+  "request_sha256": "e6d39519eaa7f460593503e309fd8f2913f98e93fd7748f2013bde0e269fac12",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V015_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 11228,
+            "end": 11281,
+            "text": "Our guidance does not assume any future acquisitions.",
+            "score": 0.9087724089622498
+          }
+        ]
+      },
+      "V017_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 11228,
+            "end": 11281,
+            "text": "Our guidance does not assume any future acquisitions.",
+            "score": 0.7720578908920288
+          }
+        ]
+      },
+      "V019_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4143,
+            "end": 4252,
+            "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+            "score": 0.9110899567604065
+          }
+        ]
+      },
+      "V021_conditions": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 4143,
+            "end": 4252,
+            "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+            "score": 0.9031246900558472
+          }
+        ]
+      },
+      "V066_conditions": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 14857,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 163.7705639800988,
+  "finished_at": "2026-11-15T22:48:51.772854-05:00"
+}

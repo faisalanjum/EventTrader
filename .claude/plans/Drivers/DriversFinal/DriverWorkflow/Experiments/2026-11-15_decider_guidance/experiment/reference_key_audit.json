@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "source": "CTAS_2025-09-24T10.00",
+      "passages": 36,
+      "entries": 15,
+      "evidence_references": 32,
+      "sha256": "70aa39457c6daffaf1016276669eedf08bdd4d2a90b90b07ffa8f333fc59691a"
+    },
+    {
+      "source": "CTAS_2025-12-18T10.00",
+      "passages": 28,
+      "entries": 17,
+      "evidence_references": 34,
+      "sha256": "c650b5c4d3acf6eb59c851453715bfe114fff62e26eed962015cd0f40f1ef251"
+    },
+    {
+      "source": "CTAS_2026-03-25T10.00",
+      "passages": 32,
+      "entries": 18,
+      "evidence_references": 36,
+      "sha256": "d37b564ac458d9e8bab5e9fdf0bc9e78d5b7dd68d873883a52c77639f6a8a374"
+    },
+    {
+      "source": "PAYX_2025-09-30T09.30",
+      "passages": 23,
+      "entries": 18,
+      "evidence_references": 33,
+      "sha256": "91e1bb4639f3844bd9b24b888403c7f58e2960382e2d5cc9ada60674c45aa8de"
+    },
+    {
+      "source": "PAYX_2025-12-19T09.30",
+      "passages": 29,
+      "entries": 15,
+      "evidence_references": 30,
+      "sha256": "e2535a775b8fc274818a25f693b816ec342b8791f0aca20edfd96cd2923cd8c0"
+    },
+    {
+      "source": "PAYX_2026-03-25T09.30",
+      "passages": 38,
+      "entries": 19,
+      "evidence_references": 31,
+      "sha256": "17e2248b46a3f513fc27d2cf5f51c38fc9df9936e89ec955628906f20ac749fe"
+    }
+  ],
+  "totals": {
+    "passages": 186,
+    "entries": 102,
+    "evidence_references": 196
+  },
+  "note": "Exact location and coverage checks only; references are not independent blind gold and entries are not an eligible-fact denominator."
+}

@@ -1,0 +1,104 @@
+[
+  {
+    "name": "MU",
+    "questions": 194,
+    "positive_controls": 6,
+    "positive_unique_sentences": 5,
+    "positives_at_half": 6,
+    "positive_min": 0.8362798815411312,
+    "negative_controls": [
+      {
+        "company": "MU",
+        "tag": "S0131",
+        "text": "Fiscal Q2 NAND revenue was $1.9 billion, up 18% year-over-year, and represented 23% of Micron's total revenue. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.02141116773686963
+      },
+      {
+        "company": "MU",
+        "tag": "S0140",
+        "text": "Mobile business unit revenue was $1.1 billion, down 30% sequentially, as mobile customers continued to improve their inventory positions. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.030311114860243238
+      }
+    ],
+    "flagged_at_half": 52,
+    "flagged_at_quarter": 65,
+    "seconds": 293.61775725288317,
+    "usage": {
+      "input_tokens": 24566,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  {
+    "name": "FDX",
+    "questions": 199,
+    "positive_controls": 2,
+    "positive_unique_sentences": 2,
+    "positives_at_half": 2,
+    "positive_min": 0.959288617401664,
+    "negative_controls": [
+      {
+        "company": "FDX",
+        "tag": "S0025",
+        "text": "Revenue was up 2%, growing on a year-over-year basis for the first time this fiscal year. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.017531834150884284
+      },
+      {
+        "company": "FDX",
+        "tag": "S0082",
+        "text": "Consolidated revenue increased 2%, driven by higher volume at Federal Express, partially offset by freight. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.020369008490574828
+      }
+    ],
+    "flagged_at_half": 38,
+    "flagged_at_quarter": 45,
+    "seconds": 348.93490640609525,
+    "usage": {
+      "input_tokens": 28654,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  {
+    "name": "OLLI",
+    "questions": 120,
+    "positive_controls": 4,
+    "positive_unique_sentences": 2,
+    "positives_at_half": 4,
+    "positive_min": 0.8898753920970397,
+    "negative_controls": [
+      {
+        "company": "OLLI",
+        "tag": "S0053",
+        "text": "In the quarter, net sales increased 3% to $667 million, driven by new stores and comparable sales growth, partially offset by the impact of last year's 53rd week. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.06598538462915672
+      },
+      {
+        "company": "OLLI",
+        "tag": "S0055",
+        "text": "Excluding the extra week of sales in the comparison, net sales increased 8.5%. ",
+        "expected": false,
+        "reason": "Reports an actual result; does not itself state or qualify management guidance.",
+        "p": 0.033454701802949634
+      }
+    ],
+    "flagged_at_half": 12,
+    "flagged_at_quarter": 21,
+    "seconds": 232.6264132130891,
+    "usage": {
+      "input_tokens": 20659,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  }
+]

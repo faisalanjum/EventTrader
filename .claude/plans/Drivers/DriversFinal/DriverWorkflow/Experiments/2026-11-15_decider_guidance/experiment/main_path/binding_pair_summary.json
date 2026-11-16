@@ -1,0 +1,327 @@
+[
+  {
+    "tag": "V0",
+    "text": "[78]:",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.9506495962956677
+    },
+    "literal_tag": {
+      "choice": "other",
+      "p": 0.9914987248718657
+    }
+  },
+  {
+    "tag": "V1",
+    "text": "8.9%",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.9420954010415427
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9894736381109781
+    }
+  },
+  {
+    "tag": "V2",
+    "text": "$2.84",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.4641016505611292
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9858525122850175
+    }
+  },
+  {
+    "tag": "V3",
+    "text": "8.2%.",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.8158036795217611
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9724915311763276
+    }
+  },
+  {
+    "tag": "V4",
+    "text": "51%,",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.7562307341222354
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9749608444938015
+    }
+  },
+  {
+    "tag": "V5",
+    "text": "40",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.48837423470266256
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9532417774991199
+    }
+  },
+  {
+    "tag": "V6",
+    "text": "$659.9",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.8202602952889739
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9864363042004964
+    }
+  },
+  {
+    "tag": "V7",
+    "text": "8.2%",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.5670919674485553
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9682291858010863
+    }
+  },
+  {
+    "tag": "V8",
+    "text": "11%.",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.5306237906368982
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.562280037783299
+    }
+  },
+  {
+    "tag": "V9",
+    "text": "$1.24",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.9647061842226834
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9900476311385684
+    }
+  },
+  {
+    "tag": "V10",
+    "text": "9.7%",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "actual",
+      "p": 0.4933244542959213
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.9774987084017956
+    }
+  },
+  {
+    "tag": "V11",
+    "text": "12.7%.",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.38777373541132965
+    },
+    "literal_tag": {
+      "choice": "actual",
+      "p": 0.7080260906732168
+    }
+  },
+  {
+    "tag": "V12",
+    "text": "2026",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.5123660039952863
+    },
+    "literal_tag": {
+      "choice": "other",
+      "p": 0.5276382265129251
+    }
+  },
+  {
+    "tag": "V13",
+    "text": "$11.21",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.5835530699480367
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9843724926291109
+    }
+  },
+  {
+    "tag": "V14",
+    "text": "$11.24",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.5293720876804315
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9751143649262166
+    }
+  },
+  {
+    "tag": "V15",
+    "text": "8.4%",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.5520576969641396
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9432175852598274
+    }
+  },
+  {
+    "tag": "V16",
+    "text": "8.7%.",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.799324993227102
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9624357524904443
+    }
+  },
+  {
+    "tag": "V17",
+    "text": "$4.86",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.7707799876106862
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9884322084641606
+    }
+  },
+  {
+    "tag": "V18",
+    "text": "$4.90,",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.8994576429959291
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9434298054496134
+    }
+  },
+  {
+    "tag": "V19",
+    "text": "10.5%",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.8824005219647363
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9579049154238248
+    }
+  },
+  {
+    "tag": "V20",
+    "text": "11.4%.",
+    "passage": "PR002",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.6543893693721015
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9543164461888024
+    }
+  },
+  {
+    "tag": "V58",
+    "text": "2026",
+    "passage": "PR004",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.9085065504591505
+    },
+    "literal_tag": {
+      "choice": "other",
+      "p": 0.6608368122182635
+    }
+  },
+  {
+    "tag": "V59",
+    "text": "$101",
+    "passage": "PR004",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.35678739593395076
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.8749932215513354
+    }
+  },
+  {
+    "tag": "V60",
+    "text": "2026",
+    "passage": "PR004",
+    "tag_only": {
+      "choice": "current",
+      "p": 0.7582722244459372
+    },
+    "literal_tag": {
+      "choice": "other",
+      "p": 0.6859498095856378
+    }
+  },
+  {
+    "tag": "V61",
+    "text": "20%,",
+    "passage": "PR004",
+    "tag_only": {
+      "choice": "other",
+      "p": 0.46166225023531665
+    },
+    "literal_tag": {
+      "choice": "current",
+      "p": 0.9120269560446601
+    }
+  }
+]

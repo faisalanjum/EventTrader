@@ -1,0 +1,62 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S15] We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of [TARGET] 10.5% to 11.4%. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '10.5% to 11.4%.' at [TARGET] in [S15]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "F3",
+    "passage": "PR002",
+    "start": 1550,
+    "end": 1565,
+    "text": "10.5% to 11.4%.",
+    "aliases": [
+      "V19",
+      "V20"
+    ],
+    "insert_at": "V19"
+  },
+  "selected_sentence": {
+    "tag": "S15",
+    "passage": "PR002",
+    "start": 1464,
+    "end": 1566,
+    "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+  },
+  "target_sentence": {
+    "tag": "S15",
+    "passage": "PR002",
+    "start": 1464,
+    "end": 1566,
+    "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 214,
+      "source": {
+        "tag": "S15",
+        "passage": "PR002",
+        "start": 1464,
+        "end": 1550,
+        "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of "
+      }
+    },
+    {
+      "render_start": 223,
+      "render_end": 239,
+      "source": {
+        "tag": "S15",
+        "passage": "PR002",
+        "start": 1550,
+        "end": 1566,
+        "text": "10.5% to 11.4%. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness."
+}

@@ -1,0 +1,35 @@
+{
+  "started_at": "2026-11-15T20:44:21.473955-05:00",
+  "request_sha256": "951dac49564963f8a4c2b6e5b68b1f25aab7aa6f842f2659d46c8524a4220268",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V131_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 1037,
+            "end": 1044,
+            "text": "revenue",
+            "score": 0.8079947233200073
+          }
+        ]
+      },
+      "V131_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V131_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 804,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 10.32627120311372,
+  "finished_at": "2026-11-15T20:44:31.800325-05:00"
+}

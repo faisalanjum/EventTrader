@@ -1,0 +1,26 @@
+{
+  "sha256": "a2d5f794b4457ecdcb8346cfdc82b4a95f2b028c6cbade89fb2d9c3a59740f4a",
+  "configs": {
+    "forecast_wording": {
+      "words": {
+        "type": "locate",
+        "instructions": "Forecast wording expressed in words, including qualitative expectations, relative bounds, reaffirmations and withdrawals"
+      }
+    },
+    "blind_descriptions": {
+      "quantities": {
+        "type": "locate",
+        "instructions": "Quantities expressed in words"
+      },
+      "comparisons": {
+        "type": "locate",
+        "instructions": "Comparative expressions"
+      },
+      "directions": {
+        "type": "locate",
+        "instructions": "Directions of change"
+      }
+    }
+  },
+  "note": "Frozen before the first call. No changes based on these outputs."
+}

@@ -1,0 +1,125 @@
+{
+  "started_at": "2026-11-15T21:40:47.130055-05:00",
+  "request_sha256": "afda8268f06b9aa759e5f724d3740cde2a8f5029d838cfdc77ca0045bbef3745",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V009_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 3594,
+            "end": 3608,
+            "text": "cost synergies",
+            "score": 0.9913598895072937
+          }
+        ]
+      },
+      "V009_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V009_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V046_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13411,
+            "end": 13446,
+            "text": "adjusted diluted earnings per share",
+            "score": 0.9999656677246094
+          }
+        ]
+      },
+      "V046_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V046_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V050_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13597,
+            "end": 13622,
+            "text": "effective income tax rate",
+            "score": 0.7213596105575562
+          }
+        ]
+      },
+      "V050_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V050_qualifiers": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13654,
+            "end": 13667,
+            "text": "approximately",
+            "score": 0.9701167345046997
+          }
+        ]
+      },
+      "V051_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13885,
+            "end": 13905,
+            "text": "total revenue growth",
+            "score": 0.9968475103378296
+          }
+        ]
+      },
+      "V051_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13758,
+            "end": 13771,
+            "text": "third quarter",
+            "score": 0.7839596271514893
+          }
+        ]
+      },
+      "V051_qualifiers": {
+        "type": "locate",
+        "spans": []
+      },
+      "V052_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 13942,
+            "end": 13967,
+            "text": "adjusted operating margin",
+            "score": 0.9996774196624756
+          }
+        ]
+      },
+      "V052_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V052_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 4514,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 57.93610975006595,
+  "finished_at": "2026-11-15T21:41:45.066221-05:00"
+}

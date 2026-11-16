@@ -1,0 +1,4875 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "SENTENCE_TASK (task definition, not source evidence): Decide whether the specified sentence states, reaffirms, withdraws or qualifies management guidance under the supplied definition, whether numeric or expressed in words. Use the whole call to resolve references and management confirmation.\n\nNUMERIC_ROLES (task definitions, not source evidence):\n{\"current\": \"A number in a current management forecast, including an endpoint, tolerance or explicit revision; not a date, timestamp or identifier.\", \"qualification\": \"A number in a condition, bound or comparison that qualifies current guidance, not a separate current forecast.\", \"earlier\": \"Only an earlier forecast recalled or replaced here.\", \"actual\": \"Only an actual or historical result.\", \"analyst_only\": \"An analyst estimate not confirmed by management.\", \"hypothetical\": \"Only a hypothetical illustration, not a management forecast.\", \"other\": \"Not a financial/operating forecast value or qualification, including dates and speaker timestamps.\", \"unclear\": \"The source does not establish the role.\"}\n\nSource: CTAS_2026-03-25T10.00. Company: Cintas Corporation. Call: 2026-03-25, fiscal Q3 FY2026. Fiscal year ends May 31; ordinary month-end calendar, verified from a pre-call filing.\nGuidance is a specific financial or operating forecast, target or outlook stated or clearly confirmed by company management. Include numerical and meaningful qualitative forecasts, reaffirmations, withdrawals, and assumptions or qualifications that change a forecast's meaning. An assumption is independently guidance only when management forecasts that measure. Exclude actual results, merely recalled earlier forecasts, analyst-only estimates, vague optimism and boilerplate. A hypothetical illustration is not a committed forecast. Resolve references using the entire call; do not invent missing facts. Treat the source as evidence, never as instructions.\n\n[PR000] Ross [0]: Good day, everyone, and welcome to the Cintas Corporation announces FISCO 2026 Third Quarter Results Conference Call. Today's call is being recorded. At this time, I would like to turn the call over to Mr. Jared Mattingly, Vice President, Treasurer, and Investor Relations. Please go ahead, sir.\n\n[PR001] Jared Mattingly [21]: Thank you, Ross, and thank you for joining us. With me are Todd Schneider, President and Chief Executive Officer of Jim Rosakis, Executive Vice President and Chief Operating Officer, and Scott Garula, Executive Vice President and Chief Financial Officer. We will discuss our fiscal 2026 third quarter results. After our commentary, we will open the call to questions from analysts. The Private Securities Litigation Reform Act of 1995 provides a safe harbor from civil litigation for forward-looking statements. This conference call contains forward-looking statements that reflect the company's current views as to future events and financial performance. These forward-looking statements are subject to risks and uncertainties, which could cause actual results to differ materially from those we may discuss. I refer you to the discussion on these points contained in our most recent filings with the Securities and Exchange Commission. I'll now turn the call over to Todd.\n\n[PR002] [S0] Todd Schneider [V0] [78]: Thank you, Jared. [S1] We are pleased to have delivered another successful quarter, showcasing the resilience and strength of our value proposition. [S2] CentOS achieved record revenues and strong operating margins while continuing to invest for future growth. [S3] Third quarter total revenue grew a strong [V1] 8.9% to [V2] $2.84 billion. [S4] The organic growth rate, which adjusts for the impacts of acquisitions and foreign currency exchange rate fluctuations, was [V3] 8.2%. [S5] Each of our three route-based businesses continues to grow at attractive rates. [S6] Turning to profitability, We achieved all-time high gross margins in each of our three route-based businesses. [S7] Strong top-line growth along with benefits from our strategic investments and cost-saving initiatives continue to help drive margin expansion. [S8] Gross margin as a percent of revenue was [V4] 51%, a [V5] 40 basis point increase over the prior year. [S9] Operating income grew to [V6] $659.9 million, an increase of [V7] 8.2% over the prior year. [S10] When you adjust for the one-time gain we recognized in the third quarter of last year, operating income would have grown [V8] 11%. [S11] Diluted EPS of [V9] $1.24 grew [V10] 9.7% over the prior year. [S12] When you adjust for the one-time gain we recognized in the third quarter of last year, diluted EPS would have grown [V11] 12.7%. [S13] Turning to guidance, we are raising our fiscal [V12] 2026 financial guidance. [S14] We expect our revenue to be in the range of [V13] $11.21 billion to [V14] $11.24 billion, a total growth rate of [V15] 8.4% to [V16] 8.7%. [S15] We expect adjusted diluted EPS to be in the range of [V17] $4.86 to [V18] $4.90, a growth rate of [V19] 10.5% to [V20] 11.4%. [S16] The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. [S17] Before I turn the call over to Jim, I'd like to provide some comments on the recently announced merger agreement to acquire Unifirst. [S18] We remain excited about this opportunity and the long-term value creation for Cintas and its shareholders, our employee partners, and the team partners of Unifirst that benefits to our collective customers. [S19] When we announced the transaction two weeks ago, we indicated that the merger was subject to approval by Unifirst shareholders, regulatory clearance in both the US and Canada, and other customary closing conditions. [S20] We in Unifirst have begun the process for satisfying these closing conditions. [S21] In order to avoid creating speculation, we will not be providing any additional commentary on the process. [S22] We will, however, update the market as appropriate. [S23] With that, I'll turn it over to Jim to discuss the details of our third quarter results.\n\n[PR003] [S24] Jim Rosakis [V21] [253]: Thank you, Todd. [S25] Our business continues to perform exceptionally well. [S26] We're adding new customers who rely on us for image, safety, cleanliness, and compliance needs. [S27] while successfully cross-selling additional solutions for our existing customer base. [S28] Retention remains at record levels, while pricing is consistent with historical levels. [S29] Turning to our business segments, as Todd mentioned, we delivered attractive growth rates across all of our business segments. [S30] Organic growth by business was [V22] 7.3% for uniform rental facility services, [V23] 14.6% for first aid and safety services, [V24] 10% for fire protection services, and [V25] 3.1% for uniform direct sale. [S31] Gross margin percentage by business was [V26] 50.3% for uniform rental facility services, [V27] 58.1% for first aid and safety services, [V28] 50.5% for fire protection services, and [V29] 41.4% for uniform direct sale. [S32] Gross margin for the uniform rental facility services segment increased [V30] 30 basis points from last year. [S33] The [V31] 50.3% gross margin is the highest gross margin ever for this segment. [S34] We actually hit a high level in the third quarter, and our continued strong top-line growth helped drive results. [S35] We've been laser-focused on managing the many inputs we control effectively. [S36] We've invested in technologies like SAP to improve our capabilities, and the strong performance of our supply chain continues to be a significant strategic advantage for us. [S37] Source margin for the first aid and safety services segment was [V32] 58.1%. [S38] This is also an all-time high. [S39] We are investing in route capacity to serve more customers, leadership and management trainees to build their talent pipeline, advanced technologies to drive efficiency, and we're adding selling resources, all of which are fueling the attractive double-digit growth we are seeing. [S40] It's important to remember that margins of all our businesses can fluctuate from quarter to quarter based on several factors, including things like revenue mix and the timing of our investments. [S41] Incremental margins were effectively [V33] 28% for the quarter after adjusting for the one-time gain on the asset sale last year, right in line with what we like to bait. [S42] The current macro environment is certainly complex, We help businesses navigate this environment by letting them focus on running their business. [S43] Delivering consistent excellence in a complex environment is never easy, but customers want reliable partners with proven solutions. [S44] Our diversified customer base and strong value proposition continues to resonate, particularly in our core verticals, healthcare, hospitality, education, and state and local government. [S45] In addition to being aligned with resilient sectors of the economy, our trustable market is very large. [S46] and our solutions remain essential for businesses of all sizes, regardless of how complex the economic environment. [S47] We have consistently shown ability to convert businesses over to a managed rental solution, typically around two-thirds of all of our new customers. [S48] In addition, we've shown ability to grow multiples of job creation and GDP. [S49] Lastly, we're very enthusiastic about integrating university and team partners into our organization, which we believe will strengthen our ability to better serve our customers. [S50] As a reminder, we anticipate that transaction will close in the second half of calendar [V34] 2026. [S51] With that, I'll turn the call over to Scott to discuss operating income, capital allocation performance, and [V35] 2026 guidance assumptions.\n\n[PR004] [S52] Scott Garula [V36] [438]: Thanks, Jim, and good morning, everyone. [S53] The exceptional results we delivered in terms of revenue growth and gross margin expansion translated into continued strength in operating margins and cash flow. [S54] Selling and administrative expenses as a percentage of revenue was [V37] 27.8%, which was a [V38] 60 basis point increase from last year. [S55] When you adjust for the one-time gain on the asset sale last year, SG&A would have been flat year over year. [S56] Third quarter operating income was [V39] $659.9 million compared to [V40] $609.9 million last year. [S57] Operating income as a percentage of revenue was [V41] 23.2% in the third quarter of fiscal [V42] 2026 compared to [V43] 23.4% in last year's third quarter. [S58] Adjusting for the one-time gain last year, operating income as a percentage of revenue would have increased [V44] 40 basis points year over year. [S59] Our effective tax rate for the third quarter was [V45] 20.6% compared to [V46] 21% last year. [S60] The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensations. [S61] Net income for the third quarter was [V47] $502.5 million compared to [V48] $463.5 million last year. [S62] This year's third quarter diluted earnings per share was [V49] $1.24 compared to [V50] $1.13 last year, an increase of [V51] 9.7%. [S63] Earnings per share increased [V52] 12.7% after you adjust for the one-time gain last year. [S64] Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. [S65] With leverage expected to be about [V53] 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. [S66] During the first nine months of fiscal [V54] 2026, we have returned [V55] $1.45 billion in capital to our shareholders in the form of dividends and share buybacks. [S67] Earlier, Todd provided our updated guidance for the remainder of the fiscal year. [S68] In addition, please note the following in the guidance. [S69] Both fiscal [V56] 2025 and fiscal [V57] 2026 have the same number of workdays for the year and by quarter. [S70] Our guidance does not assume any future acquisitions. [S71] Our guidance assumes a constant foreign currency exchange rate the fiscal [V58] 2026 net interest expense of approximately [V59] $101 million, a fiscal [V60] 2026 effective tax rate of [V61] 20%, which is the same compared to our fiscal [V62] 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. [S72] As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. [S73] While the deal is expected to close in the second half of calendar [V63] 2026, we expect to incur non-recurring transaction costs related to the acquisition. [S74] The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. [S75] Transaction costs expected to be incurred during fiscal [V64] 2026 are estimated to have an impact on diluted earnings per share in the range of [V65] $0.03 to [V66] $0.04. [S76] In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs. [S77] With that, I'll turn it back to Todd for some closing remarks.\n\n[PR005] Todd Schneider [687]: Thank you, Scott. In closing, our strategic investments in technology, Capacity, talent, and sales capabilities are driving solid growth and margin progression. These commitments position us to sustain long-term performance while helping customers achieve and surpass their image, safety, cleanliness, and compliance goals. We're maximizing returns on every dollar invested to maintain our momentum and deliver superior service to our customers. I'd like to thank our employee partners for their exceptional dedication to our customers and the outstanding work they do for Cintas every day. I'll now turn it back over to Jared.\n\n[PR006] Jared Mattingly [726]: Thank you, Todd. That concludes our prepared remarks. Before opening it up for questions, I'd like to reiterate Todd's earlier statements about the Unifirst acquisition process. In order to avoid speculation, we will not provide any additional commentary on that process. We will update the market, however, as appropriately. Now we are happy to answer questions from the analysts. Please ask just one question and a single follow-up if needed. Thank you.\n\n[PR007] Ross [752]: If you would like to ask a question, please press star 1 on your telephone keypad now. Please be prepared to ask your question when prompted. You will also be allowed to ask one follow-up question. Once again, if you would like to ask a question, please press star 1 on your phone now. And our first question comes from Tim Mulrooney from William Blair. Please go ahead, Tim.\n\n[QA000] [S78] Unknown [V67] [783]: Just two procedural ones. [S79] Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. [S80] How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? [S81] in the fourth quarter. [S82] I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. [S83] And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. [S84] So I thought maybe there was a little bit of deal related expense there in the third quarter. [S85] I'm not sure.\n[S86] Scott Garula [V68] [818]: Yeah, Tim, good morning. [S87] Good question. [S88] The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. [S89] Any costs that were incurred in [V69] Q3 were immaterial. [S90] You know, as far as the comment on SG&A being a little higher, just to remind everyone of that one-time gain last year, that represented about [V70] 60 BIPs. [S91] So when you take that into consideration, you know, SG&A was effectively flat year over year. [S92] And if you go back really over the last three fiscal years, [V71] Q3 is typically elevated due to the timing of certain expenses like the reset of payroll taxes. [S93] In fact, when you go back to last fiscal year and you back out the adjustment for the one-time gain, we were up [V72] 100 basis points sequentially last year. [S94] and actually [V73] 70 basis points sequentially if you go back to fiscal year [V74] 24. [S95] So we feel really good where we are with SG&A expenses, and when you back out the one-time gain, it's flat year over year.\n\n[QA001] [S96] Unknown [V75] [901]: Yeah, good point, Scott. [S97] I think maybe consensus didn't fully factor in everything because of the one-time gain last year. [S98] So that's a good reminder. [S99] Thank you. [S100] And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? [S101] I think this is an important question for investors.\n[S102] Scott Garula [V76] [928]: Yeah, Tim, good question. [S103] Energy for the quarter was [V77] 1.7 percent, which was flat year over year, and up [V78] 10 basis points over the previous quarter. [S104] You know, certainly the increase in gas prices will have an impact. [S105] But just, you know, I want to remind everyone that, you know, only [V79] 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about [V80] 100 basis points. [S106] So if you just look at, you know, fuel's been, you know, continuing to increase. [S107] But if you assume a [V81] 30% increase in fuel costs, that would be sustained over an entire quarter, that would add [V82] 30 basis points of cost to our results. [S108] You know, so yes, it has an impact, but not something that we feel that we can't overcome. [S109] And we have contemplated this in our guide.\n\n[QA002] Unknown [1004]: Hi, thanks. Good morning. Can you provide an update on higher-level customer purchasing behaviors in the current macro environment, if you're seeing any changes, any increases or reductions?\nTodd Schneider [1019]: Good morning, George. This is Todd. I'll take that question. Scott and Jim have spoken about it. It is certainly a complex environment, but our customer base has been quite resilient. I think it ties back into our value proposition, continuing to resonate. You know, when you deal with these types of complex environments, it can create opportunity for you as well. And, you know, we help our customers run a better business. And by outsourcing items to us, that in most cases, they were solving that somehow, some way, in their own fashion and their own businesses. By outsourcing it to us, it allows it to free them up to focus on running their business and taking care of their guests or their patients or their customers, however you want to phrase it. But no real change in the customer base, pretty resilient, and I think our value proposition continues to resonate.\n\n[QA003] [S110] Unknown [V83] [1084]: Got it. [S111] That's helpful. [S112] And then going back to an earlier point on fuel, you mentioned that – fuel expectations are contemplated in your full year guide. [S113] Can you elaborate on what exactly you're assuming for the remaining quarters of the year in terms of how fuel will trend and how you plan to pass along any changes in fuel costs to customers in the form of pricing?\n[S114] Scott Garula [V84] [1108]: Yeah, thank you, George. [S115] As Todd mentioned, clearly this is a dynamic environment. [S116] And our guide includes our best estimate of the increase in energy costs. [S117] You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. [S118] I'll let Todd answer that.\n[S119] Todd Schneider [V85] [1132]: Yeah. [S120] So, you know, Georgia, it is certainly a dynamic environment. [S121] Hence the, you look at what oil prices were doing last night and then what they're doing this morning. [S122] So they're, they're, they're They're changing by the minute. [S123] That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. [S124] And as far as how we handle that, we do not have a fuel surcharge. [S125] That historically is not how we handle it. [S126] As Scott correctly pointed out, if you think about the fuel at the pump, It accounts for about [V86] 100 basis points of our total as a percent of sales. [S127] So it's not our largest cost. [S128] And we also take the approach that we think long-term about this, and we find other ways to extract out inefficiencies. [S129] We don't just look at it and say, well, this happened, so we've just got to pass it on. [S130] We want to be better than that, and we want to focus on being consistent for our customers and extracting out inefficiencies and other ways that we have in our business and still hitting our goals as a financial goals as a company while we're doing that.\n\n[QA004] Unknown [1225]: Good morning. Thanks for taking the question. I guess I had a One question just kind of on the CapEx expectations. You know, your CapEx as a percentage of revenue has historically been a lot lower than Unifirst has been. Obviously, you guys are much, much bigger, so that's part of it. But I guess just philosophically, you know, looking at their assets and the systems to kind of get to CentOS levels. you know, thinking about, you know, do you expect the CapEx to kind of trend a little bit higher as a percentage of revenue in the first couple of years of integration?\nScott Garula [1262]: Thank you. Yeah, Justin, good question. And I would just say, you know, we just announced the agreement a couple weeks ago. We'll know a lot more as we close the deal. But, you know, when we, you know, close this merger, You know, we still expect, you know, not only will we continue to generate strong cash flow, Unifirst generates strong cash flow. We'll have a strong balance sheet. You know, we talked on our Unifirst call about, you know, at closing we would expect debt to EBITDA being at 1.5. So we're in a great position. And I don't see our capital allocation priorities really changing. Our first priority has always been reinvesting back into the business through CapEx, followed by strategic M&A. And then we'll continue to look at returning capital back to our shareholders in the form of dividends and buybacks. So more to come on what we would look at in the future with CapEx as a percent of revenue. as we close the deal. But I would really not anticipate any material changes in our capital allocation priorities.\nTodd Schneider [1344]: Justin, I'd just like to add to that that, you know, Universe CapEx was higher. They were certainly trying to catch up on the technology subject and other areas. And we obviously were in a really good position from a technology footprint. And we will continue to invest in there because we have to make sure that we're positioned to compete in the marketplace. That being said, one of the uniquenesses about Uniforce versus most companies that transact like this is they were not for sale. And as a result, they ran their business very much thinking in the long term. They invested for the long term. So we're not Acquiring an asset that needs a significant amount of CapEx investment into facilities and to get it up to standard, they run a really good business. They think about how to run a business very similar to us. The cultures are very similar. They think long term, think about investing for the long term for their people and their customers. And as a result, we think that positions us incredibly well for the future.\n\n[QA005] Unknown [1424]: Yeah, no, certainly agree on all that. I think that's it. My other questions have been answered on the items that you already addressed. So thank you very much. Thank you.\n\n[QA006] [S131] Unknown [V87] [1443]: Hi, this is Ronan Kennedy. [S132] I'm from Manav. [S133] Good morning, and thank you for taking our questions. [S134] You commented on retention at record levels, pricing at historic levels. [S135] Could you please provide some further color as to how we should think about what those levels are as a reminder? [S136] And then the trends and drivers versus your expectations for new business and cross-sell, and then anything to call out from specifically strong organic drivers at a respective segment level, please?\n[S137] Jim Rosakis [V88] [1471]: Hey, Ronan, this is Jim. [S138] Good morning. [S139] I'll take that question. [S140] I'll start with it. [S141] And if we start to think about our growth formula and what we're attempting to achieve every quarter. [S142] You know, we do like to target that mid to high single-digit total growth rate. [S143] As an organization, the major contributors to that growth, as you correctly pointed out, is our new business acquisition. [S144] And a reminder, you know, two-thirds of that new business acquisition comes with that no-programmer or do-it-yourself or space, and that continues to perform very well for us, and we really like the trend line there. [S145] Retention levels for us has stayed around that steady, that [V89] 95% rate, and we are really comfortable with where that is at this point. [S146] Pricing is at our historical levels, which we've considerably said is in that [V90] 2% to [V91] 3% range. [S147] And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. [S148] The majority of that's new business. [S149] But then the remainder is that that cross selling opportunity selling into the current customer base, which has been highly effective for us this year. [S150] And we think that there's a long runway of opportunity within our current customer base. [S151] As we continue to provide great value, we think about it long term. [S152] We've made nice investments in the product line and the technology and try to make it easier to do business with us. [S153] And the customers in this type of an environment is complex, are looking for steady answers. [S154] And they know they can rely on us. [S155] So we've had a lot of success this past year. [S156] So I would say new business and cross-sell slightly continuing to improve. [S157] and the others right where we're expecting them to be.\n\n[QA007] Unknown [1572]: Thank you. Thank you, Jim. I appreciate it. And then for my follow-up, kind of a follow-up to Tim and George's questions, but beyond gas prices, I guess focusing on the all-time high gross margins in each of the segments, can you just further unpack the drivers there? I know it's strategic investments cost initiatives and assess the sustainability of them. I know there may be a potential immediate impact. if there is inflation, but also unpack the other components of your key cost buckets from a gross margin standpoint beyond gas, whether that's materials or the production expense, the labor, et cetera. So drivers of gross margins and sustainability in near term and longer term, given the dynamics.\nJim Rosakis [1618]: Hey, Ron, and I'll start on that and see if anybody wants to add color and I'll start at the consolidated level. and say that the gross margin at 51% for the quarter, obviously a great quarter for us. The team did an excellent job at execution for the quarter. And I think a little bit of that is a demonstration of our culture and the belief that nothing is ever as good as it can be and that there's always an opportunity to improve processes and work out inefficiencies. But if we look at and we think about the quarter in and of itself, first of all, there was no one-timers, nothing significant from a one-timer perspective that helped the quarter. The key drivers of that are our primary focus, which is revenue growth. And we like strong revenue growth to continue to create leverage. And that certainly contributed in all three of our route-based businesses. We are always looking for initiatives to remove inefficiencies and expenses out of the business. And you can see that across all of our businesses, certainly in our rental business is a big focus for them. Maybe the other one to call out is revenue mix in both our first aid and fire protection businesses. That's important for us. And revenue mix can fluctuate a little bit quarter to quarter. So this was a good quarter for us on that revenue mix. And then, of course, timing of investments. and what those investments look like. So all around a strong quarter of execution. So the team did a fantastic job, and those were the key inputs. But then just a quick reminder that it can fluctuate quarter to quarter. Running a business isn't linear, and that we're going to continue to make investments into business for short-term delivery of results, and then long-term to be able to set ourselves up for long-term continuous success.\n\n[QA008] Unknown [1723]: Thank you. And then anything to be mindful of from the other cost buckets and potential inflation there on whether it's materials, labor, or otherwise?\nTodd Schneider [1732]: Ronan, thanks for the question. This is Todd. You know, certainly it's a dynamic environment on tariffs as well, but our supply chain team has done a magnificent job of navigating that. We've said in the past we're not immune to tariffs, but any... increase in tariff or decrease in that is going to take time to run through our system, whether we have to get into our supply chain and then amortize that. So I would say nothing material there to factor in.\n\n[QA009] Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there. You should expect us to continue to invest because we look at the future and it looks incredibly bright. We look at the opportunity out there in the white space of converting over new programmers, and we want to go after that. We're competing in an environment where there's 16 to somewhere maybe up to 20 million businesses in the U.S. and Canada, and there's 180 million people that go to work every day in the U.S. and Canada. That opportunity is immense. So we're investing for the future because we think the future looks really bright and we have to position ourselves to be able to compete in those areas.\n\n[QA010] Unknown [1870]: Sure. That makes a lot of sense. Thanks for the call, Todd. And then I guess in terms of your comment about the good balance sheet position, does that imply that you can continue to perhaps repurchase stock as you desire and even through this process or how should we think about sort of the pace of buybacks? Thank you.\nScott Garula [1892]: Josh, good morning. Thanks for the question. You know, as I mentioned, you know, we continue to generate strong cash flow, strong balance sheet, and, you know, certainly we're not going to be limited due to our capital allocation. However, you know, there are restrictions from the time that we signed the agreement with Unifirst through the expected Unifirst shareholder votes. You might also guess that we were, you know, limited during Q3 with share buybacks just to being in a quiet period as we negotiated the Unifirst agreement and completed confirmatory due diligence. But once those restrictions are lifted, we'll continue to be opportunistic with our buyback strategy.\n\n[QA011] Unknown [1944]: Okay, great. Thanks for the call and thank you for the time.\nTodd Schneider [1948]: Thank you, Josh.\n\n[QA012] Unknown [1957]: Hey, morning, guys. Just wanted to ask what you're seeing in wearer levels at existing customers in uniforms.\nTodd Schneider [1965]: Jasper, I'll start. As I mentioned, our customer base is quite resilient. You know, it's... So if anything, our growth from our current customers is slightly improved. Wear levels are... You know, we see the jobs reports, but our meaning that, you know, they're not as robust as what we would like, but nevertheless, our customers are... still quite resilient and hanging on to their people. And we just see an amazing opportunity to sell other items, cross-sell other items into that customer base. But things are pretty steady.\n\n[QA013] Unknown [2011]: Thanks, that makes sense. And then I know we just got Unifers, but after that closes, I imagine you're going to be looking for more acquisitions outside the Uniform business. So just any thoughts on what might be next for you after that point, and maybe how you're thinking about the consolidation opportunity in the fire business would be interesting.\nTodd Schneider [2032]: Sure, Jasper. You know, we're acquisitive in each of our route-based businesses. We'll certainly be busy in our rental business here shortly. But the strength of our balance sheet, the – the strength of our infrastructure and our other businesses allow us to be acquisitive in all those. So we will continue to go down that path. And, you know, those are tough to pace, tough to... predict on deal flow, but it won't change how we think about it. That being said, in the fire business you asked specifically, you know, the mix of business really matters to us. So we try to think long-term about that. We prefer service business much more so than installation-type business. So it just has to be the right deal, but we have been very inquisitive in that business over the past months and years, and we'll continue with that approach.\n\n[QA014] Unknown [2116]: Hi, this is Alex Hess on for Andrew Steinerman. Good morning, everyone. I want to touch on a couple recent initiatives you have. First is the recently announced three-way contract with you guys, Ford and Carhartt. And the second being the launch of what I think is a new personalized apparel plus program on your website. Both of those seem to be targeting the trades and manufacturing a bit more. Um, just wanted to maybe start, is there something you're seeing in those goods providing industries that maybe you're leaning into those a little more for, for sales growth in your term?\nTodd Schneider [2155]: Uh, Alex, uh, thank you for the question. Um, I'll start, um, you know, uh, our relationship, uh, with Carhartt and with Ford goes back many, many years. Um, and, uh, we have, uh, We have a great relationship with both organizations. And this is about providing products that people want to wear. And in the case of Ford, I know Jim Farley was passionate about providing the products that his people want to wear and would be proud to wear. And our relationship with Carhartt was an absolute natural. So we're excited about that. Certainly the trades are something that we think is growing in demand and is an incredible opportunity for us. Those are people that Frankly, we don't have nearly as many people in the trades in our uniform programs as we should, and they're all wearing garments. They're in jobs that are perfectly positioned for us to to tap into. So we're excited about that, and we see the future looks really bright in that area. As far as Apparel Plus, Jim?\nJim Rosakis [2235]: Yeah, I'll add a little color there, Alex, and I appreciate the question. And Apparel Plus really goes back to the core of our company culture and values, which is a culture of innovation and continuing to be dynamic and move to where the opportunity is and where the opportunity will present themselves in the future. And so Apparel Plus is just another movement towards that. So we want to be able to outfit any job imaginable across North America. And we want to make sure that we have the right apparel in those industries for what people want to wear, what they choose to go to work in. And it's been very successful for us. Regarding specialty trades, I think Todd outlined the fact that that market is really growing. A large employment market, they resonate well with our value proposition, and there's a tremendous amount of opportunity. In fact, I have an example of one that I brought here for a call today, and as we always speak about, two-thirds of our new customers come from the unserved market, and we always want to illustrate what does that look like? Why do customers continue to partner up with Cintas, and what do they see as the main driver of the value proposition? So I have a property maintenance example here. and this company was going ahead and they were buying uniforms for their employees, a combination of retail and e-commerce, with the primary objective that they wanted to look professional and they wanted to look good and cohesive in front of their customer base. But what they found out over time was that they weren't able to accomplish that objective, that as they bought year after year, the styles would change, they would be inconsistent on an annual basis. What employees determined was, Clean and what represented the company well varied depending on the individual employee. The management team was spending a bunch of time administering the program and ordering and size changes and any time things were worn out. So it took them a bunch of time. And then, of course, budgeting was all over the place. Sometimes they had big spikes in budgets. Other times they had very little. Made it really hard for them to manage their P&L. When they were introduced to the fully managed rental program for Cintas, they saw all the things that they wanted out of the program. They were able to get higher quality uniforms that were very comfortable, that were branded with specifically the Carhartt name, things that their employees really wanted to wear. They got a nice consistent image across the board because all their employees were wearing exactly the same thing and they were in good and usable and presentable conditions because of our professional laundry service that was provided with them. They were able to get time back in their day because they were no longer in a uniform business. They were in a business of taking care of their customers, which they certainly appreciated, and it made budgeting a whole lot easier. So that's exactly why we want to continue to expand the product line to be able to show other industries the benefits here of a rental program and why we think that we have such a massive market opportunity.\n\n[QA015] Unknown [2407]: Got it. That's awesome, guys. And then maybe as a follow-up, Obviously, you guys are in the midst of implementing SAP into the FHIR segment, and you guys have implemented SAP into a host of acquisitions over the years. Maybe you can just highlight one on FHIR, the progress and prospective benefits, but also just sort of learnings from running that ERP implementation successfully over the years and what you might be able to do with that going forward.\nTodd Schneider [2436]: Yes, Alex, we are... preparing to implement our SAP into our technology into the fire business. And we're excited about that. We think it's going to bring standardization with that, allows for a better customer experience, And with that, it also allows for a better employee partner experience. So we focus on these technologies to allow us to make it easier to do business with us and make it easier for our employee partners to do their jobs. So we think it'll do just exactly that. And that shows up in all kinds of different ways. Retention of customers, retention of our employee partners, productivity, those types of things. Uh, that being said, it takes time. Um, and technology, uh, is certainly never easy, uh, to, uh, to implement. Uh, but we have really good muscle memory there. Uh, and we're, uh, we're well prepared to, uh, to roll that out. And, uh, and once we close on our, our, uh, our deal with universe, uh, we're highly, uh, positioned to, uh, to do the exact same thing. So, and I think, uh, We'll see the same experience. I think the team partners at Uniforce will be excited about it, make it easier to do their jobs, make it more valuable to the customers, make it easier for the customers to do business. And we think long-term about those subjects as you go through the challenges of integrating technology. But the long-term impact is powerful for our business.\n\n[QA016] [S158] Unknown [V92] [2548]: Good morning. [S159] This is Jun-Yi Ahn for Jason Haas. [S160] Thanks for taking our questions. [S161] Can you walk us through some of the key puts and takes to consider for [V93] 4Q organic revenue growth by segment? [S162] I believe you guys had some one-time benefits in [V94] 4Q last year in Uniform Direct and First Aid and Safety. [S163] Could you remind us how big those impacts were and any other factors to consider across the board? [S164] Thank you.\n[S165] Todd Schneider [V95] [2571]: Thank you for the question. [S166] I'll start. [S167] And I appreciate you pointing it out because the comparative for [V96] Q4 on revenue growth is significant. [S168] It was our highest revenue growth quarter last year. [S169] The organic was at [V97] 9%. [S170] And we did have some one-time benefits, specifically in our first aid business. [S171] that ran [V98] 18.5% organic growth. [S172] We certainly do not anticipate that again. [S173] And then in our uniform direct sale business as well. [S174] In first aid, we had an increase in the training business that helped us as it relates to AED training. [S175] So that was a spike that we, again, we don't think is going to occur at those levels. [S176] And the uniform direct sale business can be a little lumpy, but it had a really good quarter. [S177] So, yeah, hopefully that gives you a little bit of color around the tough comparative in [V99] Q4.\n[S178] Scott Garula [V100] [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. [S179] You know, Jim mentioned that we continue to execute at a high level. [S180] We feel that the guide for [V101] Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. [S181] I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was [V102] 8%. [S182] And if you look at the guide for this quarter, this quarter is also at [V103] 8%. [S183] And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically [V104] 7.8%. [S184] In [V105] Q3, we just delivered a growth rate of [V106] 8.2% organically. [S185] And when you combine that with the [V107] Q4 implied of [V108] 7.6, you get an average of [V109] 7.9. [S186] So really effectively right in line with the guide that we gave last quarter.\n\n[QA017] Unknown [2711]: Great. That's really helpful. And as my follow-up, I understand that most of your new business comes from no programmers, but I want to see if you've seen any change in the competitive environment recently following your acquisition and also given changes in the macro and geopolitical environment.\nTodd Schneider [2728]: Thank you for the question. It is the geopolitical environment is certainly having a dynamic impact on things. So But from a competitive set standpoint, no real change, keeping in mind, as you referenced, two-thirds of our new customers come from that no program market. So, you know, when you're competing with e-commerce and you're competing with retail and you're competing with other managed programs, you know, Relative to all that, we also have traditional competitors. So no real change to that competitive set. It's incredibly competitive, and that's the way it always has been and will be. That being said, we are focused on delivering value to that set of prospects out there. There are so many businesses. We do business with a little over a million people. businesses, and there's, you know, whatever, 16 to 20 million businesses in the U.S. and Canada, the opportunity out there is immense. And we're focused on delivering our message and getting our team positioned to better serve that market and get the word out better to that market because so many of them don't realize what we can do for them and And many of them also think that they're not a big enough business to have a program like we offer, which is incredibly contrary to how we make a living, which is servicing Main Street USA. And our average size customer is... you know, spends about $10,000 a year with us. So trying to get that message out to that prospect base is incredibly important to us.\n\n[QA018] Unknown [2859]: Hey, good morning, guys. This is Will Chee for Ashish Sabhadra. I appreciate you guys taking our questions. based on the ask on route density and the incremental opportunities there around footprint, especially with UNF acquisition in mind, retention's still at highs. Will any retention dips result in kind of reorganization there? Or do you still see a lot of opportunity kind of increasing the sell-through on those routes and just further fleet optimization?\nJim Rosakis [2885]: Why don't I start on that one, and then I'll see if anybody else wants to add color. I think, Ashish, you all are probably aware of our smart truck technology and how we approach routing and routing efficiency. And the first thing that we try to do with routing and routing efficiency is be as little disruption as possible, whether that's within our own facilities or when we make an acquisition. And especially when we make acquisitions, we recognize that the most important component of the acquisition and the customer's and the new employees that we brought on board. We try to be as little disruption as possible to those two constituents. And we spent a lot of time trying to win over hearts and minds and build trust. And then we implement our smart truck technology. And smart truck allows us to make incremental moves and to gain efficiency over time rather than a wholesale route consolidation all at one point. We don't like doing that. We don't like big route reorganizations within a facility at one point because it could be highly disruptive. So we love the smart truck technology. It's been effective for us over the last several years. It's been one of the contributors to continuing to elevate our gross margin, and that would be our approach with any future acquisitions.\n\n[QA019] Unknown [2978]: Yes, hi. Thank you. Good morning. I wanted to see if you've gotten any feedback from any of your larger customers around the announced acquisition of Uniforce and really related to that. I'm wondering if we should be expecting any type of dis-synergies when the acquisition is completed.\nTodd Schneider [3003]: Good morning, Faiza. As far as our customers, as you can imagine, we stay really close to our customers, and we're getting a good response from them. They understand that they have many options, and they make that very clear to us that they have many options, which puts them in a good leveraged position. And whether it's a national account or a local account, they have the same options, and our national customers Still, the vast majority of them are simply hunting licenses. So they'll negotiate centralized terms and conditions, and then they allow their locations to decide who they want to do business with, whether they're on contract or not. So they have the exact same choices that any local company would have. And they're very clear about that, that, hey, we think this will be good for us. You'll bring better technology, better infrastructure, speed of delivery to our locations. You'll allow you to spend more time with our business instead of driving. All those things are very positive. So, the response has been quite good. Any dis-synergies? So, I don't know that I would describe it that way. Certainly, we'll have our one-time cost, but we think that the combination of our two companies is going to be really good for all of our constituents, our customers, our employee partners, team partners, and our shareholders.\n\n[QA020] [S187] Unknown [V110] [3112]: Great, thank you. [S188] And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. [S189] And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? [S190] I see the implied kind of [V111] 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\n[S191] Todd Schneider [V112] [3142]: Yeah, thank you for the question, Faiza. [S192] Yeah, our incrementals that we're guiding towards in [V113] Q4 are very attractive. [S193] But that is not because of a change in approach. [S194] That's simply what we've been predicting and timing around for the year. [S195] And I wouldn't see a change in our approach in general as you speak to that. [S196] You know, we're investing for the long term. [S197] and we'll take our normal prudent approach as we think about investing for our business.\n\n[QA021] Unknown [3191]: Great, thanks so much. I wanted to follow up on employment trends you've been seeing and get an update versus last quarter. Are you seeing any changes in the conversion cycle or win rate for first-time buyers And within that specific verticals, call it healthcare or education, are they proving more resilient? And which areas are you seeing more weakness?\nTodd Schneider [3212]: Good question, Connor. Yeah, I wouldn't say we see any change in the conversion rate as it speaks to converting over that prospect base. As it relates to our verticals, we think we've chosen our verticals really, really well. And I think the employment data would defend that statement, meaning that if you look at healthcare, hospitality, education, state and local government, have all fared reasonably well as it relates to employment. And we think the future there looks bright as well.\n\n[QA022] [S198] Unknown [V114] [3270]: Hi. [S199] Good morning, guys. [S200] Just a quick one for me. [S201] Just on the FHIR ERP implementation, I think we had previously talked about like [V115] 100 basis points margin headwind next year for [V116] 27. [S202] I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. [S203] Thank you. [S204] Just hard bits for this segment. [S205] Thank you.\n[S206] Scott Garula [V117] [3296]: Yeah, this is Scott. [S207] Thanks for the question. [S208] You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. [S209] We're satisfied with our progress today. [S210] Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. [S211] If you looked at an entire year, it would be the [V118] 100 basis points that you referenced. [S212] And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June [V119] 1st.\n\n[QA023] Unknown [3350]: Got it. Okay. That's all. Thank you, guys. That's all I have.\nJared Mattingly [3364]: Thank you, Ross, and thank you for joining us this morning. We will issue our fourth quarter of fiscal 2026 financial results in July. We look forward to speaking with you again at that time.",
+  "questions": {
+    "V0": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[78]:' at [V0] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V1": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.9%' at [V1] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V2": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$2.84' at [V2] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V3": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.2%.' at [V3] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V4": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '51%,' at [V4] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V5": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '40' at [V5] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V6": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$659.9' at [V6] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V7": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.2%' at [V7] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V8": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '11%.' at [V8] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V9": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$1.24' at [V9] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V10": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '9.7%' at [V10] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V11": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '12.7%.' at [V11] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V12": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V12] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V13": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$11.21' at [V13] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V14": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$11.24' at [V14] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V15": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.4%' at [V15] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V16": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.7%.' at [V16] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V17": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$4.86' at [V17] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V18": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$4.90,' at [V18] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V19": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '10.5%' at [V19] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V20": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '11.4%.' at [V20] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V21": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[253]:' at [V21] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V22": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '7.3%' at [V22] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V23": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '14.6%' at [V23] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V24": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '10%' at [V24] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V25": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '3.1%' at [V25] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V26": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '50.3%' at [V26] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V27": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '58.1%' at [V27] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V28": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '50.5%' at [V28] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V29": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '41.4%' at [V29] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V30": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '30' at [V30] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V31": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '50.3%' at [V31] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V32": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '58.1%.' at [V32] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V33": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '28%' at [V33] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V34": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026.' at [V34] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V35": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V35] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V36": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[438]:' at [V36] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V37": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '27.8%,' at [V37] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V38": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '60' at [V38] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V39": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$659.9' at [V39] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V40": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$609.9' at [V40] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V41": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '23.2%' at [V41] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V42": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V42] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V43": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '23.4%' at [V43] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V44": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '40' at [V44] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V45": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '20.6%' at [V45] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V46": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '21%' at [V46] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V47": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$502.5' at [V47] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V48": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$463.5' at [V48] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V49": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$1.24' at [V49] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V50": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$1.13' at [V50] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V51": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '9.7%.' at [V51] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V52": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '12.7%' at [V52] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V53": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '1.5' at [V53] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V54": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026,' at [V54] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V55": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$1.45' at [V55] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V56": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2025' at [V56] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V57": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V57] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V58": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V58] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V59": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$101' at [V59] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V60": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V60] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V61": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '20%,' at [V61] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V62": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2025,' at [V62] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V63": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026,' at [V63] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V64": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2026' at [V64] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V65": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$0.03' at [V65] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V66": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '$0.04.' at [V66] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V67": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[783]:' at [V67] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V68": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[818]:' at [V68] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V69": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q3' at [V69] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V70": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '60' at [V70] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V71": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q3' at [V71] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V72": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '100' at [V72] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V73": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '70' at [V73] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V74": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '24.' at [V74] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V75": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[901]:' at [V75] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V76": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[928]:' at [V76] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V77": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '1.7' at [V77] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V78": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '10' at [V78] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V79": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '60%' at [V79] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V80": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '100' at [V80] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V81": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '30%' at [V81] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V82": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '30' at [V82] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V83": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[1084]:' at [V83] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V84": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[1108]:' at [V84] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V85": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[1132]:' at [V85] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V86": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '100' at [V86] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V87": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[1443]:' at [V87] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V88": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[1471]:' at [V88] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V89": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '95%' at [V89] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V90": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '2%' at [V90] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V91": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '3%' at [V91] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V92": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[2548]:' at [V92] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V93": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '4Q' at [V93] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V94": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '4Q' at [V94] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V95": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[2571]:' at [V95] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V96": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q4' at [V96] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V97": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '9%.' at [V97] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V98": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '18.5%' at [V98] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V99": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q4.' at [V99] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V100": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[2638]:' at [V100] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V101": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q4' at [V101] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V102": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8%.' at [V102] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V103": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8%.' at [V103] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V104": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '7.8%.' at [V104] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V105": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q3,' at [V105] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V106": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '8.2%' at [V106] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V107": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q4' at [V107] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V108": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '7.6,' at [V108] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V109": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '7.9.' at [V109] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V110": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[3112]:' at [V110] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V111": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '4Q' at [V111] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V112": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[3142]:' at [V112] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V113": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence 'Q4' at [V113] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V114": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[3270]:' at [V114] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V115": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '100' at [V115] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V116": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '27.' at [V116] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V117": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '[3296]:' at [V117] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V118": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '100' at [V118] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "V119": {
+      "type": "choice",
+      "instructions": "What is the role of the exact source occurrence '1st.' at [V119] under NUMERIC_ROLES? Use the whole call.",
+      "criteria": {
+        "current": null,
+        "qualification": null,
+        "earlier": null,
+        "actual": null,
+        "analyst_only": null,
+        "hypothetical": null,
+        "other": null,
+        "unclear": null
+      }
+    },
+    "S0": {
+      "type": "noul",
+      "instructions": "Does sentence [S0] meet SENTENCE_TASK?"
+    },
+    "S1": {
+      "type": "noul",
+      "instructions": "Does sentence [S1] meet SENTENCE_TASK?"
+    },
+    "S2": {
+      "type": "noul",
+      "instructions": "Does sentence [S2] meet SENTENCE_TASK?"
+    },
+    "S3": {
+      "type": "noul",
+      "instructions": "Does sentence [S3] meet SENTENCE_TASK?"
+    },
+    "S4": {
+      "type": "noul",
+      "instructions": "Does sentence [S4] meet SENTENCE_TASK?"
+    },
+    "S5": {
+      "type": "noul",
+      "instructions": "Does sentence [S5] meet SENTENCE_TASK?"
+    },
+    "S6": {
+      "type": "noul",
+      "instructions": "Does sentence [S6] meet SENTENCE_TASK?"
+    },
+    "S7": {
+      "type": "noul",
+      "instructions": "Does sentence [S7] meet SENTENCE_TASK?"
+    },
+    "S8": {
+      "type": "noul",
+      "instructions": "Does sentence [S8] meet SENTENCE_TASK?"
+    },
+    "S9": {
+      "type": "noul",
+      "instructions": "Does sentence [S9] meet SENTENCE_TASK?"
+    },
+    "S10": {
+      "type": "noul",
+      "instructions": "Does sentence [S10] meet SENTENCE_TASK?"
+    },
+    "S11": {
+      "type": "noul",
+      "instructions": "Does sentence [S11] meet SENTENCE_TASK?"
+    },
+    "S12": {
+      "type": "noul",
+      "instructions": "Does sentence [S12] meet SENTENCE_TASK?"
+    },
+    "S13": {
+      "type": "noul",
+      "instructions": "Does sentence [S13] meet SENTENCE_TASK?"
+    },
+    "S14": {
+      "type": "noul",
+      "instructions": "Does sentence [S14] meet SENTENCE_TASK?"
+    },
+    "S15": {
+      "type": "noul",
+      "instructions": "Does sentence [S15] meet SENTENCE_TASK?"
+    },
+    "S16": {
+      "type": "noul",
+      "instructions": "Does sentence [S16] meet SENTENCE_TASK?"
+    },
+    "S17": {
+      "type": "noul",
+      "instructions": "Does sentence [S17] meet SENTENCE_TASK?"
+    },
+    "S18": {
+      "type": "noul",
+      "instructions": "Does sentence [S18] meet SENTENCE_TASK?"
+    },
+    "S19": {
+      "type": "noul",
+      "instructions": "Does sentence [S19] meet SENTENCE_TASK?"
+    },
+    "S20": {
+      "type": "noul",
+      "instructions": "Does sentence [S20] meet SENTENCE_TASK?"
+    },
+    "S21": {
+      "type": "noul",
+      "instructions": "Does sentence [S21] meet SENTENCE_TASK?"
+    },
+    "S22": {
+      "type": "noul",
+      "instructions": "Does sentence [S22] meet SENTENCE_TASK?"
+    },
+    "S23": {
+      "type": "noul",
+      "instructions": "Does sentence [S23] meet SENTENCE_TASK?"
+    },
+    "S24": {
+      "type": "noul",
+      "instructions": "Does sentence [S24] meet SENTENCE_TASK?"
+    },
+    "S25": {
+      "type": "noul",
+      "instructions": "Does sentence [S25] meet SENTENCE_TASK?"
+    },
+    "S26": {
+      "type": "noul",
+      "instructions": "Does sentence [S26] meet SENTENCE_TASK?"
+    },
+    "S27": {
+      "type": "noul",
+      "instructions": "Does sentence [S27] meet SENTENCE_TASK?"
+    },
+    "S28": {
+      "type": "noul",
+      "instructions": "Does sentence [S28] meet SENTENCE_TASK?"
+    },
+    "S29": {
+      "type": "noul",
+      "instructions": "Does sentence [S29] meet SENTENCE_TASK?"
+    },
+    "S30": {
+      "type": "noul",
+      "instructions": "Does sentence [S30] meet SENTENCE_TASK?"
+    },
+    "S31": {
+      "type": "noul",
+      "instructions": "Does sentence [S31] meet SENTENCE_TASK?"
+    },
+    "S32": {
+      "type": "noul",
+      "instructions": "Does sentence [S32] meet SENTENCE_TASK?"
+    },
+    "S33": {
+      "type": "noul",
+      "instructions": "Does sentence [S33] meet SENTENCE_TASK?"
+    },
+    "S34": {
+      "type": "noul",
+      "instructions": "Does sentence [S34] meet SENTENCE_TASK?"
+    },
+    "S35": {
+      "type": "noul",
+      "instructions": "Does sentence [S35] meet SENTENCE_TASK?"
+    },
+    "S36": {
+      "type": "noul",
+      "instructions": "Does sentence [S36] meet SENTENCE_TASK?"
+    },
+    "S37": {
+      "type": "noul",
+      "instructions": "Does sentence [S37] meet SENTENCE_TASK?"
+    },
+    "S38": {
+      "type": "noul",
+      "instructions": "Does sentence [S38] meet SENTENCE_TASK?"
+    },
+    "S39": {
+      "type": "noul",
+      "instructions": "Does sentence [S39] meet SENTENCE_TASK?"
+    },
+    "S40": {
+      "type": "noul",
+      "instructions": "Does sentence [S40] meet SENTENCE_TASK?"
+    },
+    "S41": {
+      "type": "noul",
+      "instructions": "Does sentence [S41] meet SENTENCE_TASK?"
+    },
+    "S42": {
+      "type": "noul",
+      "instructions": "Does sentence [S42] meet SENTENCE_TASK?"
+    },
+    "S43": {
+      "type": "noul",
+      "instructions": "Does sentence [S43] meet SENTENCE_TASK?"
+    },
+    "S44": {
+      "type": "noul",
+      "instructions": "Does sentence [S44] meet SENTENCE_TASK?"
+    },
+    "S45": {
+      "type": "noul",
+      "instructions": "Does sentence [S45] meet SENTENCE_TASK?"
+    },
+    "S46": {
+      "type": "noul",
+      "instructions": "Does sentence [S46] meet SENTENCE_TASK?"
+    },
+    "S47": {
+      "type": "noul",
+      "instructions": "Does sentence [S47] meet SENTENCE_TASK?"
+    },
+    "S48": {
+      "type": "noul",
+      "instructions": "Does sentence [S48] meet SENTENCE_TASK?"
+    },
+    "S49": {
+      "type": "noul",
+      "instructions": "Does sentence [S49] meet SENTENCE_TASK?"
+    },
+    "S50": {
+      "type": "noul",
+      "instructions": "Does sentence [S50] meet SENTENCE_TASK?"
+    },
+    "S51": {
+      "type": "noul",
+      "instructions": "Does sentence [S51] meet SENTENCE_TASK?"
+    },
+    "S52": {
+      "type": "noul",
+      "instructions": "Does sentence [S52] meet SENTENCE_TASK?"
+    },
+    "S53": {
+      "type": "noul",
+      "instructions": "Does sentence [S53] meet SENTENCE_TASK?"
+    },
+    "S54": {
+      "type": "noul",
+      "instructions": "Does sentence [S54] meet SENTENCE_TASK?"
+    },
+    "S55": {
+      "type": "noul",
+      "instructions": "Does sentence [S55] meet SENTENCE_TASK?"
+    },
+    "S56": {
+      "type": "noul",
+      "instructions": "Does sentence [S56] meet SENTENCE_TASK?"
+    },
+    "S57": {
+      "type": "noul",
+      "instructions": "Does sentence [S57] meet SENTENCE_TASK?"
+    },
+    "S58": {
+      "type": "noul",
+      "instructions": "Does sentence [S58] meet SENTENCE_TASK?"
+    },
+    "S59": {
+      "type": "noul",
+      "instructions": "Does sentence [S59] meet SENTENCE_TASK?"
+    },
+    "S60": {
+      "type": "noul",
+      "instructions": "Does sentence [S60] meet SENTENCE_TASK?"
+    },
+    "S61": {
+      "type": "noul",
+      "instructions": "Does sentence [S61] meet SENTENCE_TASK?"
+    },
+    "S62": {
+      "type": "noul",
+      "instructions": "Does sentence [S62] meet SENTENCE_TASK?"
+    },
+    "S63": {
+      "type": "noul",
+      "instructions": "Does sentence [S63] meet SENTENCE_TASK?"
+    },
+    "S64": {
+      "type": "noul",
+      "instructions": "Does sentence [S64] meet SENTENCE_TASK?"
+    },
+    "S65": {
+      "type": "noul",
+      "instructions": "Does sentence [S65] meet SENTENCE_TASK?"
+    },
+    "S66": {
+      "type": "noul",
+      "instructions": "Does sentence [S66] meet SENTENCE_TASK?"
+    },
+    "S67": {
+      "type": "noul",
+      "instructions": "Does sentence [S67] meet SENTENCE_TASK?"
+    },
+    "S68": {
+      "type": "noul",
+      "instructions": "Does sentence [S68] meet SENTENCE_TASK?"
+    },
+    "S69": {
+      "type": "noul",
+      "instructions": "Does sentence [S69] meet SENTENCE_TASK?"
+    },
+    "S70": {
+      "type": "noul",
+      "instructions": "Does sentence [S70] meet SENTENCE_TASK?"
+    },
+    "S71": {
+      "type": "noul",
+      "instructions": "Does sentence [S71] meet SENTENCE_TASK?"
+    },
+    "S72": {
+      "type": "noul",
+      "instructions": "Does sentence [S72] meet SENTENCE_TASK?"
+    },
+    "S73": {
+      "type": "noul",
+      "instructions": "Does sentence [S73] meet SENTENCE_TASK?"
+    },
+    "S74": {
+      "type": "noul",
+      "instructions": "Does sentence [S74] meet SENTENCE_TASK?"
+    },
+    "S75": {
+      "type": "noul",
+      "instructions": "Does sentence [S75] meet SENTENCE_TASK?"
+    },
+    "S76": {
+      "type": "noul",
+      "instructions": "Does sentence [S76] meet SENTENCE_TASK?"
+    },
+    "S77": {
+      "type": "noul",
+      "instructions": "Does sentence [S77] meet SENTENCE_TASK?"
+    },
+    "S78": {
+      "type": "noul",
+      "instructions": "Does sentence [S78] meet SENTENCE_TASK?"
+    },
+    "S79": {
+      "type": "noul",
+      "instructions": "Does sentence [S79] meet SENTENCE_TASK?"
+    },
+    "S80": {
+      "type": "noul",
+      "instructions": "Does sentence [S80] meet SENTENCE_TASK?"
+    },
+    "S81": {
+      "type": "noul",
+      "instructions": "Does sentence [S81] meet SENTENCE_TASK?"
+    },
+    "S82": {
+      "type": "noul",
+      "instructions": "Does sentence [S82] meet SENTENCE_TASK?"
+    },
+    "S83": {
+      "type": "noul",
+      "instructions": "Does sentence [S83] meet SENTENCE_TASK?"
+    },
+    "S84": {
+      "type": "noul",
+      "instructions": "Does sentence [S84] meet SENTENCE_TASK?"
+    },
+    "S85": {
+      "type": "noul",
+      "instructions": "Does sentence [S85] meet SENTENCE_TASK?"
+    },
+    "S86": {
+      "type": "noul",
+      "instructions": "Does sentence [S86] meet SENTENCE_TASK?"
+    },
+    "S87": {
+      "type": "noul",
+      "instructions": "Does sentence [S87] meet SENTENCE_TASK?"
+    },
+    "S88": {
+      "type": "noul",
+      "instructions": "Does sentence [S88] meet SENTENCE_TASK?"
+    },
+    "S89": {
+      "type": "noul",
+      "instructions": "Does sentence [S89] meet SENTENCE_TASK?"
+    },
+    "S90": {
+      "type": "noul",
+      "instructions": "Does sentence [S90] meet SENTENCE_TASK?"
+    },
+    "S91": {
+      "type": "noul",
+      "instructions": "Does sentence [S91] meet SENTENCE_TASK?"
+    },
+    "S92": {
+      "type": "noul",
+      "instructions": "Does sentence [S92] meet SENTENCE_TASK?"
+    },
+    "S93": {
+      "type": "noul",
+      "instructions": "Does sentence [S93] meet SENTENCE_TASK?"
+    },
+    "S94": {
+      "type": "noul",
+      "instructions": "Does sentence [S94] meet SENTENCE_TASK?"
+    },
+    "S95": {
+      "type": "noul",
+      "instructions": "Does sentence [S95] meet SENTENCE_TASK?"
+    },
+    "S96": {
+      "type": "noul",
+      "instructions": "Does sentence [S96] meet SENTENCE_TASK?"
+    },
+    "S97": {
+      "type": "noul",
+      "instructions": "Does sentence [S97] meet SENTENCE_TASK?"
+    },
+    "S98": {
+      "type": "noul",
+      "instructions": "Does sentence [S98] meet SENTENCE_TASK?"
+    },
+    "S99": {
+      "type": "noul",
+      "instructions": "Does sentence [S99] meet SENTENCE_TASK?"
+    },
+    "S100": {
+      "type": "noul",
+      "instructions": "Does sentence [S100] meet SENTENCE_TASK?"
+    },
+    "S101": {
+      "type": "noul",
+      "instructions": "Does sentence [S101] meet SENTENCE_TASK?"
+    },
+    "S102": {
+      "type": "noul",
+      "instructions": "Does sentence [S102] meet SENTENCE_TASK?"
+    },
+    "S103": {
+      "type": "noul",
+      "instructions": "Does sentence [S103] meet SENTENCE_TASK?"
+    },
+    "S104": {
+      "type": "noul",
+      "instructions": "Does sentence [S104] meet SENTENCE_TASK?"
+    },
+    "S105": {
+      "type": "noul",
+      "instructions": "Does sentence [S105] meet SENTENCE_TASK?"
+    },
+    "S106": {
+      "type": "noul",
+      "instructions": "Does sentence [S106] meet SENTENCE_TASK?"
+    },
+    "S107": {
+      "type": "noul",
+      "instructions": "Does sentence [S107] meet SENTENCE_TASK?"
+    },
+    "S108": {
+      "type": "noul",
+      "instructions": "Does sentence [S108] meet SENTENCE_TASK?"
+    },
+    "S109": {
+      "type": "noul",
+      "instructions": "Does sentence [S109] meet SENTENCE_TASK?"
+    },
+    "S110": {
+      "type": "noul",
+      "instructions": "Does sentence [S110] meet SENTENCE_TASK?"
+    },
+    "S111": {
+      "type": "noul",
+      "instructions": "Does sentence [S111] meet SENTENCE_TASK?"
+    },
+    "S112": {
+      "type": "noul",
+      "instructions": "Does sentence [S112] meet SENTENCE_TASK?"
+    },
+    "S113": {
+      "type": "noul",
+      "instructions": "Does sentence [S113] meet SENTENCE_TASK?"
+    },
+    "S114": {
+      "type": "noul",
+      "instructions": "Does sentence [S114] meet SENTENCE_TASK?"
+    },
+    "S115": {
+      "type": "noul",
+      "instructions": "Does sentence [S115] meet SENTENCE_TASK?"
+    },
+    "S116": {
+      "type": "noul",
+      "instructions": "Does sentence [S116] meet SENTENCE_TASK?"
+    },
+    "S117": {
+      "type": "noul",
+      "instructions": "Does sentence [S117] meet SENTENCE_TASK?"
+    },
+    "S118": {
+      "type": "noul",
+      "instructions": "Does sentence [S118] meet SENTENCE_TASK?"
+    },
+    "S119": {
+      "type": "noul",
+      "instructions": "Does sentence [S119] meet SENTENCE_TASK?"
+    },
+    "S120": {
+      "type": "noul",
+      "instructions": "Does sentence [S120] meet SENTENCE_TASK?"
+    },
+    "S121": {
+      "type": "noul",
+      "instructions": "Does sentence [S121] meet SENTENCE_TASK?"
+    },
+    "S122": {
+      "type": "noul",
+      "instructions": "Does sentence [S122] meet SENTENCE_TASK?"
+    },
+    "S123": {
+      "type": "noul",
+      "instructions": "Does sentence [S123] meet SENTENCE_TASK?"
+    },
+    "S124": {
+      "type": "noul",
+      "instructions": "Does sentence [S124] meet SENTENCE_TASK?"
+    },
+    "S125": {
+      "type": "noul",
+      "instructions": "Does sentence [S125] meet SENTENCE_TASK?"
+    },
+    "S126": {
+      "type": "noul",
+      "instructions": "Does sentence [S126] meet SENTENCE_TASK?"
+    },
+    "S127": {
+      "type": "noul",
+      "instructions": "Does sentence [S127] meet SENTENCE_TASK?"
+    },
+    "S128": {
+      "type": "noul",
+      "instructions": "Does sentence [S128] meet SENTENCE_TASK?"
+    },
+    "S129": {
+      "type": "noul",
+      "instructions": "Does sentence [S129] meet SENTENCE_TASK?"
+    },
+    "S130": {
+      "type": "noul",
+      "instructions": "Does sentence [S130] meet SENTENCE_TASK?"
+    },
+    "S131": {
+      "type": "noul",
+      "instructions": "Does sentence [S131] meet SENTENCE_TASK?"
+    },
+    "S132": {
+      "type": "noul",
+      "instructions": "Does sentence [S132] meet SENTENCE_TASK?"
+    },
+    "S133": {
+      "type": "noul",
+      "instructions": "Does sentence [S133] meet SENTENCE_TASK?"
+    },
+    "S134": {
+      "type": "noul",
+      "instructions": "Does sentence [S134] meet SENTENCE_TASK?"
+    },
+    "S135": {
+      "type": "noul",
+      "instructions": "Does sentence [S135] meet SENTENCE_TASK?"
+    },
+    "S136": {
+      "type": "noul",
+      "instructions": "Does sentence [S136] meet SENTENCE_TASK?"
+    },
+    "S137": {
+      "type": "noul",
+      "instructions": "Does sentence [S137] meet SENTENCE_TASK?"
+    },
+    "S138": {
+      "type": "noul",
+      "instructions": "Does sentence [S138] meet SENTENCE_TASK?"
+    },
+    "S139": {
+      "type": "noul",
+      "instructions": "Does sentence [S139] meet SENTENCE_TASK?"
+    },
+    "S140": {
+      "type": "noul",
+      "instructions": "Does sentence [S140] meet SENTENCE_TASK?"
+    },
+    "S141": {
+      "type": "noul",
+      "instructions": "Does sentence [S141] meet SENTENCE_TASK?"
+    },
+    "S142": {
+      "type": "noul",
+      "instructions": "Does sentence [S142] meet SENTENCE_TASK?"
+    },
+    "S143": {
+      "type": "noul",
+      "instructions": "Does sentence [S143] meet SENTENCE_TASK?"
+    },
+    "S144": {
+      "type": "noul",
+      "instructions": "Does sentence [S144] meet SENTENCE_TASK?"
+    },
+    "S145": {
+      "type": "noul",
+      "instructions": "Does sentence [S145] meet SENTENCE_TASK?"
+    },
+    "S146": {
+      "type": "noul",
+      "instructions": "Does sentence [S146] meet SENTENCE_TASK?"
+    },
+    "S147": {
+      "type": "noul",
+      "instructions": "Does sentence [S147] meet SENTENCE_TASK?"
+    },
+    "S148": {
+      "type": "noul",
+      "instructions": "Does sentence [S148] meet SENTENCE_TASK?"
+    },
+    "S149": {
+      "type": "noul",
+      "instructions": "Does sentence [S149] meet SENTENCE_TASK?"
+    },
+    "S150": {
+      "type": "noul",
+      "instructions": "Does sentence [S150] meet SENTENCE_TASK?"
+    },
+    "S151": {
+      "type": "noul",
+      "instructions": "Does sentence [S151] meet SENTENCE_TASK?"
+    },
+    "S152": {
+      "type": "noul",
+      "instructions": "Does sentence [S152] meet SENTENCE_TASK?"
+    },
+    "S153": {
+      "type": "noul",
+      "instructions": "Does sentence [S153] meet SENTENCE_TASK?"
+    },
+    "S154": {
+      "type": "noul",
+      "instructions": "Does sentence [S154] meet SENTENCE_TASK?"
+    },
+    "S155": {
+      "type": "noul",
+      "instructions": "Does sentence [S155] meet SENTENCE_TASK?"
+    },
+    "S156": {
+      "type": "noul",
+      "instructions": "Does sentence [S156] meet SENTENCE_TASK?"
+    },
+    "S157": {
+      "type": "noul",
+      "instructions": "Does sentence [S157] meet SENTENCE_TASK?"
+    },
+    "S158": {
+      "type": "noul",
+      "instructions": "Does sentence [S158] meet SENTENCE_TASK?"
+    },
+    "S159": {
+      "type": "noul",
+      "instructions": "Does sentence [S159] meet SENTENCE_TASK?"
+    },
+    "S160": {
+      "type": "noul",
+      "instructions": "Does sentence [S160] meet SENTENCE_TASK?"
+    },
+    "S161": {
+      "type": "noul",
+      "instructions": "Does sentence [S161] meet SENTENCE_TASK?"
+    },
+    "S162": {
+      "type": "noul",
+      "instructions": "Does sentence [S162] meet SENTENCE_TASK?"
+    },
+    "S163": {
+      "type": "noul",
+      "instructions": "Does sentence [S163] meet SENTENCE_TASK?"
+    },
+    "S164": {
+      "type": "noul",
+      "instructions": "Does sentence [S164] meet SENTENCE_TASK?"
+    },
+    "S165": {
+      "type": "noul",
+      "instructions": "Does sentence [S165] meet SENTENCE_TASK?"
+    },
+    "S166": {
+      "type": "noul",
+      "instructions": "Does sentence [S166] meet SENTENCE_TASK?"
+    },
+    "S167": {
+      "type": "noul",
+      "instructions": "Does sentence [S167] meet SENTENCE_TASK?"
+    },
+    "S168": {
+      "type": "noul",
+      "instructions": "Does sentence [S168] meet SENTENCE_TASK?"
+    },
+    "S169": {
+      "type": "noul",
+      "instructions": "Does sentence [S169] meet SENTENCE_TASK?"
+    },
+    "S170": {
+      "type": "noul",
+      "instructions": "Does sentence [S170] meet SENTENCE_TASK?"
+    },
+    "S171": {
+      "type": "noul",
+      "instructions": "Does sentence [S171] meet SENTENCE_TASK?"
+    },
+    "S172": {
+      "type": "noul",
+      "instructions": "Does sentence [S172] meet SENTENCE_TASK?"
+    },
+    "S173": {
+      "type": "noul",
+      "instructions": "Does sentence [S173] meet SENTENCE_TASK?"
+    },
+    "S174": {
+      "type": "noul",
+      "instructions": "Does sentence [S174] meet SENTENCE_TASK?"
+    },
+    "S175": {
+      "type": "noul",
+      "instructions": "Does sentence [S175] meet SENTENCE_TASK?"
+    },
+    "S176": {
+      "type": "noul",
+      "instructions": "Does sentence [S176] meet SENTENCE_TASK?"
+    },
+    "S177": {
+      "type": "noul",
+      "instructions": "Does sentence [S177] meet SENTENCE_TASK?"
+    },
+    "S178": {
+      "type": "noul",
+      "instructions": "Does sentence [S178] meet SENTENCE_TASK?"
+    },
+    "S179": {
+      "type": "noul",
+      "instructions": "Does sentence [S179] meet SENTENCE_TASK?"
+    },
+    "S180": {
+      "type": "noul",
+      "instructions": "Does sentence [S180] meet SENTENCE_TASK?"
+    },
+    "S181": {
+      "type": "noul",
+      "instructions": "Does sentence [S181] meet SENTENCE_TASK?"
+    },
+    "S182": {
+      "type": "noul",
+      "instructions": "Does sentence [S182] meet SENTENCE_TASK?"
+    },
+    "S183": {
+      "type": "noul",
+      "instructions": "Does sentence [S183] meet SENTENCE_TASK?"
+    },
+    "S184": {
+      "type": "noul",
+      "instructions": "Does sentence [S184] meet SENTENCE_TASK?"
+    },
+    "S185": {
+      "type": "noul",
+      "instructions": "Does sentence [S185] meet SENTENCE_TASK?"
+    },
+    "S186": {
+      "type": "noul",
+      "instructions": "Does sentence [S186] meet SENTENCE_TASK?"
+    },
+    "S187": {
+      "type": "noul",
+      "instructions": "Does sentence [S187] meet SENTENCE_TASK?"
+    },
+    "S188": {
+      "type": "noul",
+      "instructions": "Does sentence [S188] meet SENTENCE_TASK?"
+    },
+    "S189": {
+      "type": "noul",
+      "instructions": "Does sentence [S189] meet SENTENCE_TASK?"
+    },
+    "S190": {
+      "type": "noul",
+      "instructions": "Does sentence [S190] meet SENTENCE_TASK?"
+    },
+    "S191": {
+      "type": "noul",
+      "instructions": "Does sentence [S191] meet SENTENCE_TASK?"
+    },
+    "S192": {
+      "type": "noul",
+      "instructions": "Does sentence [S192] meet SENTENCE_TASK?"
+    },
+    "S193": {
+      "type": "noul",
+      "instructions": "Does sentence [S193] meet SENTENCE_TASK?"
+    },
+    "S194": {
+      "type": "noul",
+      "instructions": "Does sentence [S194] meet SENTENCE_TASK?"
+    },
+    "S195": {
+      "type": "noul",
+      "instructions": "Does sentence [S195] meet SENTENCE_TASK?"
+    },
+    "S196": {
+      "type": "noul",
+      "instructions": "Does sentence [S196] meet SENTENCE_TASK?"
+    },
+    "S197": {
+      "type": "noul",
+      "instructions": "Does sentence [S197] meet SENTENCE_TASK?"
+    },
+    "S198": {
+      "type": "noul",
+      "instructions": "Does sentence [S198] meet SENTENCE_TASK?"
+    },
+    "S199": {
+      "type": "noul",
+      "instructions": "Does sentence [S199] meet SENTENCE_TASK?"
+    },
+    "S200": {
+      "type": "noul",
+      "instructions": "Does sentence [S200] meet SENTENCE_TASK?"
+    },
+    "S201": {
+      "type": "noul",
+      "instructions": "Does sentence [S201] meet SENTENCE_TASK?"
+    },
+    "S202": {
+      "type": "noul",
+      "instructions": "Does sentence [S202] meet SENTENCE_TASK?"
+    },
+    "S203": {
+      "type": "noul",
+      "instructions": "Does sentence [S203] meet SENTENCE_TASK?"
+    },
+    "S204": {
+      "type": "noul",
+      "instructions": "Does sentence [S204] meet SENTENCE_TASK?"
+    },
+    "S205": {
+      "type": "noul",
+      "instructions": "Does sentence [S205] meet SENTENCE_TASK?"
+    },
+    "S206": {
+      "type": "noul",
+      "instructions": "Does sentence [S206] meet SENTENCE_TASK?"
+    },
+    "S207": {
+      "type": "noul",
+      "instructions": "Does sentence [S207] meet SENTENCE_TASK?"
+    },
+    "S208": {
+      "type": "noul",
+      "instructions": "Does sentence [S208] meet SENTENCE_TASK?"
+    },
+    "S209": {
+      "type": "noul",
+      "instructions": "Does sentence [S209] meet SENTENCE_TASK?"
+    },
+    "S210": {
+      "type": "noul",
+      "instructions": "Does sentence [S210] meet SENTENCE_TASK?"
+    },
+    "S211": {
+      "type": "noul",
+      "instructions": "Does sentence [S211] meet SENTENCE_TASK?"
+    },
+    "S212": {
+      "type": "noul",
+      "instructions": "Does sentence [S212] meet SENTENCE_TASK?"
+    }
+  },
+  "mode": "isolated",
+  "candidates": [
+    {
+      "tag": "V0",
+      "passage": "PR002",
+      "start": 15,
+      "end": 20,
+      "text": "[78]:"
+    },
+    {
+      "tag": "V1",
+      "passage": "PR002",
+      "start": 314,
+      "end": 318,
+      "text": "8.9%"
+    },
+    {
+      "tag": "V2",
+      "passage": "PR002",
+      "start": 322,
+      "end": 327,
+      "text": "$2.84"
+    },
+    {
+      "tag": "V3",
+      "passage": "PR002",
+      "start": 461,
+      "end": 466,
+      "text": "8.2%."
+    },
+    {
+      "tag": "V4",
+      "passage": "PR002",
+      "start": 842,
+      "end": 846,
+      "text": "51%,"
+    },
+    {
+      "tag": "V5",
+      "passage": "PR002",
+      "start": 849,
+      "end": 851,
+      "text": "40"
+    },
+    {
+      "tag": "V6",
+      "passage": "PR002",
+      "start": 919,
+      "end": 925,
+      "text": "$659.9"
+    },
+    {
+      "tag": "V7",
+      "passage": "PR002",
+      "start": 950,
+      "end": 954,
+      "text": "8.2%"
+    },
+    {
+      "tag": "V8",
+      "passage": "PR002",
+      "start": 1097,
+      "end": 1101,
+      "text": "11%."
+    },
+    {
+      "tag": "V9",
+      "passage": "PR002",
+      "start": 1117,
+      "end": 1122,
+      "text": "$1.24"
+    },
+    {
+      "tag": "V10",
+      "passage": "PR002",
+      "start": 1128,
+      "end": 1132,
+      "text": "9.7%"
+    },
+    {
+      "tag": "V11",
+      "passage": "PR002",
+      "start": 1270,
+      "end": 1276,
+      "text": "12.7%."
+    },
+    {
+      "tag": "V12",
+      "passage": "PR002",
+      "start": 1324,
+      "end": 1328,
+      "text": "2026"
+    },
+    {
+      "tag": "V13",
+      "passage": "PR002",
+      "start": 1393,
+      "end": 1399,
+      "text": "$11.21"
+    },
+    {
+      "tag": "V14",
+      "passage": "PR002",
+      "start": 1411,
+      "end": 1417,
+      "text": "$11.24"
+    },
+    {
+      "tag": "V15",
+      "passage": "PR002",
+      "start": 1450,
+      "end": 1454,
+      "text": "8.4%"
+    },
+    {
+      "tag": "V16",
+      "passage": "PR002",
+      "start": 1458,
+      "end": 1463,
+      "text": "8.7%."
+    },
+    {
+      "tag": "V17",
+      "passage": "PR002",
+      "start": 1517,
+      "end": 1522,
+      "text": "$4.86"
+    },
+    {
+      "tag": "V18",
+      "passage": "PR002",
+      "start": 1526,
+      "end": 1532,
+      "text": "$4.90,"
+    },
+    {
+      "tag": "V19",
+      "passage": "PR002",
+      "start": 1550,
+      "end": 1555,
+      "text": "10.5%"
+    },
+    {
+      "tag": "V20",
+      "passage": "PR002",
+      "start": 1559,
+      "end": 1565,
+      "text": "11.4%."
+    },
+    {
+      "tag": "V21",
+      "passage": "PR003",
+      "start": 12,
+      "end": 18,
+      "text": "[253]:"
+    },
+    {
+      "tag": "V22",
+      "passage": "PR003",
+      "start": 518,
+      "end": 522,
+      "text": "7.3%"
+    },
+    {
+      "tag": "V23",
+      "passage": "PR003",
+      "start": 561,
+      "end": 566,
+      "text": "14.6%"
+    },
+    {
+      "tag": "V24",
+      "passage": "PR003",
+      "start": 602,
+      "end": 605,
+      "text": "10%"
+    },
+    {
+      "tag": "V25",
+      "passage": "PR003",
+      "start": 640,
+      "end": 644,
+      "text": "3.1%"
+    },
+    {
+      "tag": "V26",
+      "passage": "PR003",
+      "start": 710,
+      "end": 715,
+      "text": "50.3%"
+    },
+    {
+      "tag": "V27",
+      "passage": "PR003",
+      "start": 754,
+      "end": 759,
+      "text": "58.1%"
+    },
+    {
+      "tag": "V28",
+      "passage": "PR003",
+      "start": 795,
+      "end": 800,
+      "text": "50.5%"
+    },
+    {
+      "tag": "V29",
+      "passage": "PR003",
+      "start": 835,
+      "end": 840,
+      "text": "41.4%"
+    },
+    {
+      "tag": "V30",
+      "passage": "PR003",
+      "start": 938,
+      "end": 940,
+      "text": "30"
+    },
+    {
+      "tag": "V31",
+      "passage": "PR003",
+      "start": 974,
+      "end": 979,
+      "text": "50.3%"
+    },
+    {
+      "tag": "V32",
+      "passage": "PR003",
+      "start": 1473,
+      "end": 1479,
+      "text": "58.1%."
+    },
+    {
+      "tag": "V33",
+      "passage": "PR003",
+      "start": 2024,
+      "end": 2027,
+      "text": "28%"
+    },
+    {
+      "tag": "V34",
+      "passage": "PR003",
+      "start": 3328,
+      "end": 3333,
+      "text": "2026."
+    },
+    {
+      "tag": "V35",
+      "passage": "PR003",
+      "start": 3443,
+      "end": 3447,
+      "text": "2026"
+    },
+    {
+      "tag": "V36",
+      "passage": "PR004",
+      "start": 13,
+      "end": 19,
+      "text": "[438]:"
+    },
+    {
+      "tag": "V37",
+      "passage": "PR004",
+      "start": 290,
+      "end": 296,
+      "text": "27.8%,"
+    },
+    {
+      "tag": "V38",
+      "passage": "PR004",
+      "start": 309,
+      "end": 311,
+      "text": "60"
+    },
+    {
+      "tag": "V39",
+      "passage": "PR004",
+      "start": 493,
+      "end": 499,
+      "text": "$659.9"
+    },
+    {
+      "tag": "V40",
+      "passage": "PR004",
+      "start": 520,
+      "end": 526,
+      "text": "$609.9"
+    },
+    {
+      "tag": "V41",
+      "passage": "PR004",
+      "start": 594,
+      "end": 599,
+      "text": "23.2%"
+    },
+    {
+      "tag": "V42",
+      "passage": "PR004",
+      "start": 631,
+      "end": 635,
+      "text": "2026"
+    },
+    {
+      "tag": "V43",
+      "passage": "PR004",
+      "start": 648,
+      "end": 653,
+      "text": "23.4%"
+    },
+    {
+      "tag": "V44",
+      "passage": "PR004",
+      "start": 792,
+      "end": 794,
+      "text": "40"
+    },
+    {
+      "tag": "V45",
+      "passage": "PR004",
+      "start": 873,
+      "end": 878,
+      "text": "20.6%"
+    },
+    {
+      "tag": "V46",
+      "passage": "PR004",
+      "start": 891,
+      "end": 894,
+      "text": "21%"
+    },
+    {
+      "tag": "V47",
+      "passage": "PR004",
+      "start": 1082,
+      "end": 1088,
+      "text": "$502.5"
+    },
+    {
+      "tag": "V48",
+      "passage": "PR004",
+      "start": 1109,
+      "end": 1115,
+      "text": "$463.5"
+    },
+    {
+      "tag": "V49",
+      "passage": "PR004",
+      "start": 1192,
+      "end": 1197,
+      "text": "$1.24"
+    },
+    {
+      "tag": "V50",
+      "passage": "PR004",
+      "start": 1210,
+      "end": 1215,
+      "text": "$1.13"
+    },
+    {
+      "tag": "V51",
+      "passage": "PR004",
+      "start": 1242,
+      "end": 1247,
+      "text": "9.7%."
+    },
+    {
+      "tag": "V52",
+      "passage": "PR004",
+      "start": 1277,
+      "end": 1282,
+      "text": "12.7%"
+    },
+    {
+      "tag": "V53",
+      "passage": "PR004",
+      "start": 1497,
+      "end": 1500,
+      "text": "1.5"
+    },
+    {
+      "tag": "V54",
+      "passage": "PR004",
+      "start": 1650,
+      "end": 1655,
+      "text": "2026,"
+    },
+    {
+      "tag": "V55",
+      "passage": "PR004",
+      "start": 1673,
+      "end": 1678,
+      "text": "$1.45"
+    },
+    {
+      "tag": "V56",
+      "passage": "PR004",
+      "start": 1913,
+      "end": 1917,
+      "text": "2025"
+    },
+    {
+      "tag": "V57",
+      "passage": "PR004",
+      "start": 1929,
+      "end": 1933,
+      "text": "2026"
+    },
+    {
+      "tag": "V58",
+      "passage": "PR004",
+      "start": 2124,
+      "end": 2128,
+      "text": "2026"
+    },
+    {
+      "tag": "V59",
+      "passage": "PR004",
+      "start": 2167,
+      "end": 2171,
+      "text": "$101"
+    },
+    {
+      "tag": "V60",
+      "passage": "PR004",
+      "start": 2190,
+      "end": 2194,
+      "text": "2026"
+    },
+    {
+      "tag": "V61",
+      "passage": "PR004",
+      "start": 2217,
+      "end": 2221,
+      "text": "20%,"
+    },
+    {
+      "tag": "V62",
+      "passage": "PR004",
+      "start": 2263,
+      "end": 2268,
+      "text": "2025,"
+    },
+    {
+      "tag": "V63",
+      "passage": "PR004",
+      "start": 2560,
+      "end": 2565,
+      "text": "2026,"
+    },
+    {
+      "tag": "V64",
+      "passage": "PR004",
+      "start": 2805,
+      "end": 2809,
+      "text": "2026"
+    },
+    {
+      "tag": "V65",
+      "passage": "PR004",
+      "start": 2888,
+      "end": 2893,
+      "text": "$0.03"
+    },
+    {
+      "tag": "V66",
+      "passage": "PR004",
+      "start": 2897,
+      "end": 2903,
+      "text": "$0.04."
+    },
+    {
+      "tag": "V67",
+      "passage": "QA000",
+      "start": 8,
+      "end": 14,
+      "text": "[783]:"
+    },
+    {
+      "tag": "V68",
+      "passage": "QA000",
+      "start": 637,
+      "end": 643,
+      "text": "[818]:"
+    },
+    {
+      "tag": "V69",
+      "passage": "QA000",
+      "start": 834,
+      "end": 836,
+      "text": "Q3"
+    },
+    {
+      "tag": "V70",
+      "passage": "QA000",
+      "start": 997,
+      "end": 999,
+      "text": "60"
+    },
+    {
+      "tag": "V71",
+      "passage": "QA000",
+      "start": 1160,
+      "end": 1162,
+      "text": "Q3"
+    },
+    {
+      "tag": "V72",
+      "passage": "QA000",
+      "start": 1368,
+      "end": 1371,
+      "text": "100"
+    },
+    {
+      "tag": "V73",
+      "passage": "QA000",
+      "start": 1422,
+      "end": 1424,
+      "text": "70"
+    },
+    {
+      "tag": "V74",
+      "passage": "QA000",
+      "start": 1481,
+      "end": 1484,
+      "text": "24."
+    },
+    {
+      "tag": "V75",
+      "passage": "QA001",
+      "start": 8,
+      "end": 14,
+      "text": "[901]:"
+    },
+    {
+      "tag": "V76",
+      "passage": "QA001",
+      "start": 498,
+      "end": 504,
+      "text": "[928]:"
+    },
+    {
+      "tag": "V77",
+      "passage": "QA001",
+      "start": 558,
+      "end": 561,
+      "text": "1.7"
+    },
+    {
+      "tag": "V78",
+      "passage": "QA001",
+      "start": 609,
+      "end": 611,
+      "text": "10"
+    },
+    {
+      "tag": "V79",
+      "passage": "QA001",
+      "start": 787,
+      "end": 790,
+      "text": "60%"
+    },
+    {
+      "tag": "V80",
+      "passage": "QA001",
+      "start": 907,
+      "end": 910,
+      "text": "100"
+    },
+    {
+      "tag": "V81",
+      "passage": "QA001",
+      "start": 1026,
+      "end": 1029,
+      "text": "30%"
+    },
+    {
+      "tag": "V82",
+      "passage": "QA001",
+      "start": 1117,
+      "end": 1119,
+      "text": "30"
+    },
+    {
+      "tag": "V83",
+      "passage": "QA003",
+      "start": 8,
+      "end": 15,
+      "text": "[1084]:"
+    },
+    {
+      "tag": "V84",
+      "passage": "QA003",
+      "start": 398,
+      "end": 405,
+      "text": "[1108]:"
+    },
+    {
+      "tag": "V85",
+      "passage": "QA003",
+      "start": 704,
+      "end": 711,
+      "text": "[1132]:"
+    },
+    {
+      "tag": "V86",
+      "passage": "QA003",
+      "start": 1261,
+      "end": 1264,
+      "text": "100"
+    },
+    {
+      "tag": "V87",
+      "passage": "QA006",
+      "start": 8,
+      "end": 15,
+      "text": "[1443]:"
+    },
+    {
+      "tag": "V88",
+      "passage": "QA006",
+      "start": 511,
+      "end": 518,
+      "text": "[1471]:"
+    },
+    {
+      "tag": "V89",
+      "passage": "QA006",
+      "start": 1184,
+      "end": 1187,
+      "text": "95%"
+    },
+    {
+      "tag": "V90",
+      "passage": "QA006",
+      "start": 1336,
+      "end": 1338,
+      "text": "2%"
+    },
+    {
+      "tag": "V91",
+      "passage": "QA006",
+      "start": 1342,
+      "end": 1344,
+      "text": "3%"
+    },
+    {
+      "tag": "V92",
+      "passage": "QA016",
+      "start": 8,
+      "end": 15,
+      "text": "[2548]:"
+    },
+    {
+      "tag": "V93",
+      "passage": "QA016",
+      "start": 169,
+      "end": 171,
+      "text": "4Q"
+    },
+    {
+      "tag": "V94",
+      "passage": "QA016",
+      "start": 256,
+      "end": 258,
+      "text": "4Q"
+    },
+    {
+      "tag": "V95",
+      "passage": "QA016",
+      "start": 438,
+      "end": 445,
+      "text": "[2571]:"
+    },
+    {
+      "tag": "V96",
+      "passage": "QA016",
+      "start": 551,
+      "end": 553,
+      "text": "Q4"
+    },
+    {
+      "tag": "V97",
+      "passage": "QA016",
+      "start": 660,
+      "end": 663,
+      "text": "9%."
+    },
+    {
+      "tag": "V98",
+      "passage": "QA016",
+      "start": 753,
+      "end": 758,
+      "text": "18.5%"
+    },
+    {
+      "tag": "V99",
+      "passage": "QA016",
+      "start": 1245,
+      "end": 1248,
+      "text": "Q4."
+    },
+    {
+      "tag": "V100",
+      "passage": "QA016",
+      "start": 1262,
+      "end": 1269,
+      "text": "[2638]:"
+    },
+    {
+      "tag": "V101",
+      "passage": "QA016",
+      "start": 1475,
+      "end": 1477,
+      "text": "Q4"
+    },
+    {
+      "tag": "V102",
+      "passage": "QA016",
+      "start": 1730,
+      "end": 1733,
+      "text": "8%."
+    },
+    {
+      "tag": "V103",
+      "passage": "QA016",
+      "start": 1805,
+      "end": 1808,
+      "text": "8%."
+    },
+    {
+      "tag": "V104",
+      "passage": "QA016",
+      "start": 1965,
+      "end": 1970,
+      "text": "7.8%."
+    },
+    {
+      "tag": "V105",
+      "passage": "QA016",
+      "start": 1974,
+      "end": 1977,
+      "text": "Q3,"
+    },
+    {
+      "tag": "V106",
+      "passage": "QA016",
+      "start": 2013,
+      "end": 2017,
+      "text": "8.2%"
+    },
+    {
+      "tag": "V107",
+      "passage": "QA016",
+      "start": 2066,
+      "end": 2068,
+      "text": "Q4"
+    },
+    {
+      "tag": "V108",
+      "passage": "QA016",
+      "start": 2080,
+      "end": 2084,
+      "text": "7.6,"
+    },
+    {
+      "tag": "V109",
+      "passage": "QA016",
+      "start": 2107,
+      "end": 2111,
+      "text": "7.9."
+    },
+    {
+      "tag": "V110",
+      "passage": "QA020",
+      "start": 8,
+      "end": 15,
+      "text": "[3112]:"
+    },
+    {
+      "tag": "V111",
+      "passage": "QA020",
+      "start": 402,
+      "end": 404,
+      "text": "4Q"
+    },
+    {
+      "tag": "V112",
+      "passage": "QA020",
+      "start": 512,
+      "end": 519,
+      "text": "[3142]:"
+    },
+    {
+      "tag": "V113",
+      "passage": "QA020",
+      "start": 614,
+      "end": 616,
+      "text": "Q4"
+    },
+    {
+      "tag": "V114",
+      "passage": "QA022",
+      "start": 8,
+      "end": 15,
+      "text": "[3270]:"
+    },
+    {
+      "tag": "V115",
+      "passage": "QA022",
+      "start": 146,
+      "end": 149,
+      "text": "100"
+    },
+    {
+      "tag": "V116",
+      "passage": "QA022",
+      "start": 193,
+      "end": 196,
+      "text": "27."
+    },
+    {
+      "tag": "V117",
+      "passage": "QA022",
+      "start": 405,
+      "end": 412,
+      "text": "[3296]:"
+    },
+    {
+      "tag": "V118",
+      "passage": "QA022",
+      "start": 816,
+      "end": 819,
+      "text": "100"
+    },
+    {
+      "tag": "V119",
+      "passage": "QA022",
+      "start": 1028,
+      "end": 1032,
+      "text": "1st."
+    }
+  ],
+  "sentences": [
+    {
+      "tag": "S0",
+      "passage": "PR002",
+      "start": 0,
+      "end": 39,
+      "text": "Todd Schneider [78]: Thank you, Jared. "
+    },
+    {
+      "tag": "S1",
+      "passage": "PR002",
+      "start": 39,
+      "end": 165,
+      "text": "We are pleased to have delivered another successful quarter, showcasing the resilience and strength of our value proposition. "
+    },
+    {
+      "tag": "S2",
+      "passage": "PR002",
+      "start": 165,
+      "end": 272,
+      "text": "CentOS achieved record revenues and strong operating margins while continuing to invest for future growth. "
+    },
+    {
+      "tag": "S3",
+      "passage": "PR002",
+      "start": 272,
+      "end": 337,
+      "text": "Third quarter total revenue grew a strong 8.9% to $2.84 billion. "
+    },
+    {
+      "tag": "S4",
+      "passage": "PR002",
+      "start": 337,
+      "end": 467,
+      "text": "The organic growth rate, which adjusts for the impacts of acquisitions and foreign currency exchange rate fluctuations, was 8.2%. "
+    },
+    {
+      "tag": "S5",
+      "passage": "PR002",
+      "start": 467,
+      "end": 547,
+      "text": "Each of our three route-based businesses continues to grow at attractive rates. "
+    },
+    {
+      "tag": "S6",
+      "passage": "PR002",
+      "start": 547,
+      "end": 658,
+      "text": "Turning to profitability, We achieved all-time high gross margins in each of our three route-based businesses. "
+    },
+    {
+      "tag": "S7",
+      "passage": "PR002",
+      "start": 658,
+      "end": 801,
+      "text": "Strong top-line growth along with benefits from our strategic investments and cost-saving initiatives continue to help drive margin expansion. "
+    },
+    {
+      "tag": "S8",
+      "passage": "PR002",
+      "start": 801,
+      "end": 894,
+      "text": "Gross margin as a percent of revenue was 51%, a 40 basis point increase over the prior year. "
+    },
+    {
+      "tag": "S9",
+      "passage": "PR002",
+      "start": 894,
+      "end": 976,
+      "text": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. "
+    },
+    {
+      "tag": "S10",
+      "passage": "PR002",
+      "start": 976,
+      "end": 1102,
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, operating income would have grown 11%. "
+    },
+    {
+      "tag": "S11",
+      "passage": "PR002",
+      "start": 1102,
+      "end": 1154,
+      "text": "Diluted EPS of $1.24 grew 9.7% over the prior year. "
+    },
+    {
+      "tag": "S12",
+      "passage": "PR002",
+      "start": 1154,
+      "end": 1277,
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, diluted EPS would have grown 12.7%. "
+    },
+    {
+      "tag": "S13",
+      "passage": "PR002",
+      "start": 1277,
+      "end": 1349,
+      "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. "
+    },
+    {
+      "tag": "S14",
+      "passage": "PR002",
+      "start": 1349,
+      "end": 1464,
+      "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+    },
+    {
+      "tag": "S15",
+      "passage": "PR002",
+      "start": 1464,
+      "end": 1566,
+      "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+    },
+    {
+      "tag": "S16",
+      "passage": "PR002",
+      "start": 1566,
+      "end": 1676,
+      "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. "
+    },
+    {
+      "tag": "S17",
+      "passage": "PR002",
+      "start": 1676,
+      "end": 1810,
+      "text": "Before I turn the call over to Jim, I'd like to provide some comments on the recently announced merger agreement to acquire Unifirst. "
+    },
+    {
+      "tag": "S18",
+      "passage": "PR002",
+      "start": 1810,
+      "end": 2017,
+      "text": "We remain excited about this opportunity and the long-term value creation for Cintas and its shareholders, our employee partners, and the team partners of Unifirst that benefits to our collective customers. "
+    },
+    {
+      "tag": "S19",
+      "passage": "PR002",
+      "start": 2017,
+      "end": 2233,
+      "text": "When we announced the transaction two weeks ago, we indicated that the merger was subject to approval by Unifirst shareholders, regulatory clearance in both the US and Canada, and other customary closing conditions. "
+    },
+    {
+      "tag": "S20",
+      "passage": "PR002",
+      "start": 2233,
+      "end": 2312,
+      "text": "We in Unifirst have begun the process for satisfying these closing conditions. "
+    },
+    {
+      "tag": "S21",
+      "passage": "PR002",
+      "start": 2312,
+      "end": 2419,
+      "text": "In order to avoid creating speculation, we will not be providing any additional commentary on the process. "
+    },
+    {
+      "tag": "S22",
+      "passage": "PR002",
+      "start": 2419,
+      "end": 2471,
+      "text": "We will, however, update the market as appropriate. "
+    },
+    {
+      "tag": "S23",
+      "passage": "PR002",
+      "start": 2471,
+      "end": 2559,
+      "text": "With that, I'll turn it over to Jim to discuss the details of our third quarter results."
+    },
+    {
+      "tag": "S24",
+      "passage": "PR003",
+      "start": 0,
+      "end": 36,
+      "text": "Jim Rosakis [253]: Thank you, Todd. "
+    },
+    {
+      "tag": "S25",
+      "passage": "PR003",
+      "start": 36,
+      "end": 90,
+      "text": "Our business continues to perform exceptionally well. "
+    },
+    {
+      "tag": "S26",
+      "passage": "PR003",
+      "start": 90,
+      "end": 186,
+      "text": "We're adding new customers who rely on us for image, safety, cleanliness, and compliance needs. "
+    },
+    {
+      "tag": "S27",
+      "passage": "PR003",
+      "start": 186,
+      "end": 272,
+      "text": "while successfully cross-selling additional solutions for our existing customer base. "
+    },
+    {
+      "tag": "S28",
+      "passage": "PR003",
+      "start": 272,
+      "end": 360,
+      "text": "Retention remains at record levels, while pricing is consistent with historical levels. "
+    },
+    {
+      "tag": "S29",
+      "passage": "PR003",
+      "start": 360,
+      "end": 487,
+      "text": "Turning to our business segments, as Todd mentioned, we delivered attractive growth rates across all of our business segments. "
+    },
+    {
+      "tag": "S30",
+      "passage": "PR003",
+      "start": 487,
+      "end": 670,
+      "text": "Organic growth by business was 7.3% for uniform rental facility services, 14.6% for first aid and safety services, 10% for fire protection services, and 3.1% for uniform direct sale. "
+    },
+    {
+      "tag": "S31",
+      "passage": "PR003",
+      "start": 670,
+      "end": 866,
+      "text": "Gross margin percentage by business was 50.3% for uniform rental facility services, 58.1% for first aid and safety services, 50.5% for fire protection services, and 41.4% for uniform direct sale. "
+    },
+    {
+      "tag": "S32",
+      "passage": "PR003",
+      "start": 866,
+      "end": 970,
+      "text": "Gross margin for the uniform rental facility services segment increased 30 basis points from last year. "
+    },
+    {
+      "tag": "S33",
+      "passage": "PR003",
+      "start": 970,
+      "end": 1044,
+      "text": "The 50.3% gross margin is the highest gross margin ever for this segment. "
+    },
+    {
+      "tag": "S34",
+      "passage": "PR003",
+      "start": 1044,
+      "end": 1158,
+      "text": "We actually hit a high level in the third quarter, and our continued strong top-line growth helped drive results. "
+    },
+    {
+      "tag": "S35",
+      "passage": "PR003",
+      "start": 1158,
+      "end": 1235,
+      "text": "We've been laser-focused on managing the many inputs we control effectively. "
+    },
+    {
+      "tag": "S36",
+      "passage": "PR003",
+      "start": 1235,
+      "end": 1409,
+      "text": "We've invested in technologies like SAP to improve our capabilities, and the strong performance of our supply chain continues to be a significant strategic advantage for us. "
+    },
+    {
+      "tag": "S37",
+      "passage": "PR003",
+      "start": 1409,
+      "end": 1480,
+      "text": "Source margin for the first aid and safety services segment was 58.1%. "
+    },
+    {
+      "tag": "S38",
+      "passage": "PR003",
+      "start": 1480,
+      "end": 1511,
+      "text": "This is also an all-time high. "
+    },
+    {
+      "tag": "S39",
+      "passage": "PR003",
+      "start": 1511,
+      "end": 1792,
+      "text": "We are investing in route capacity to serve more customers, leadership and management trainees to build their talent pipeline, advanced technologies to drive efficiency, and we're adding selling resources, all of which are fueling the attractive double-digit growth we are seeing. "
+    },
+    {
+      "tag": "S40",
+      "passage": "PR003",
+      "start": 1792,
+      "end": 1987,
+      "text": "It's important to remember that margins of all our businesses can fluctuate from quarter to quarter based on several factors, including things like revenue mix and the timing of our investments. "
+    },
+    {
+      "tag": "S41",
+      "passage": "PR003",
+      "start": 1987,
+      "end": 2152,
+      "text": "Incremental margins were effectively 28% for the quarter after adjusting for the one-time gain on the asset sale last year, right in line with what we like to bait. "
+    },
+    {
+      "tag": "S42",
+      "passage": "PR003",
+      "start": 2152,
+      "end": 2298,
+      "text": "The current macro environment is certainly complex, We help businesses navigate this environment by letting them focus on running their business. "
+    },
+    {
+      "tag": "S43",
+      "passage": "PR003",
+      "start": 2298,
+      "end": 2431,
+      "text": "Delivering consistent excellence in a complex environment is never easy, but customers want reliable partners with proven solutions. "
+    },
+    {
+      "tag": "S44",
+      "passage": "PR003",
+      "start": 2431,
+      "end": 2617,
+      "text": "Our diversified customer base and strong value proposition continues to resonate, particularly in our core verticals, healthcare, hospitality, education, and state and local government. "
+    },
+    {
+      "tag": "S45",
+      "passage": "PR003",
+      "start": 2617,
+      "end": 2721,
+      "text": "In addition to being aligned with resilient sectors of the economy, our trustable market is very large. "
+    },
+    {
+      "tag": "S46",
+      "passage": "PR003",
+      "start": 2721,
+      "end": 2837,
+      "text": "and our solutions remain essential for businesses of all sizes, regardless of how complex the economic environment. "
+    },
+    {
+      "tag": "S47",
+      "passage": "PR003",
+      "start": 2837,
+      "end": 2986,
+      "text": "We have consistently shown ability to convert businesses over to a managed rental solution, typically around two-thirds of all of our new customers. "
+    },
+    {
+      "tag": "S48",
+      "passage": "PR003",
+      "start": 2986,
+      "end": 3062,
+      "text": "In addition, we've shown ability to grow multiples of job creation and GDP. "
+    },
+    {
+      "tag": "S49",
+      "passage": "PR003",
+      "start": 3062,
+      "end": 3240,
+      "text": "Lastly, we're very enthusiastic about integrating university and team partners into our organization, which we believe will strengthen our ability to better serve our customers. "
+    },
+    {
+      "tag": "S50",
+      "passage": "PR003",
+      "start": 3240,
+      "end": 3334,
+      "text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. "
+    },
+    {
+      "tag": "S51",
+      "passage": "PR003",
+      "start": 3334,
+      "end": 3469,
+      "text": "With that, I'll turn the call over to Scott to discuss operating income, capital allocation performance, and 2026 guidance assumptions."
+    },
+    {
+      "tag": "S52",
+      "passage": "PR004",
+      "start": 0,
+      "end": 61,
+      "text": "Scott Garula [438]: Thanks, Jim, and good morning, everyone. "
+    },
+    {
+      "tag": "S53",
+      "passage": "PR004",
+      "start": 61,
+      "end": 223,
+      "text": "The exceptional results we delivered in terms of revenue growth and gross margin expansion translated into continued strength in operating margins and cash flow. "
+    },
+    {
+      "tag": "S54",
+      "passage": "PR004",
+      "start": 223,
+      "end": 349,
+      "text": "Selling and administrative expenses as a percentage of revenue was 27.8%, which was a 60 basis point increase from last year. "
+    },
+    {
+      "tag": "S55",
+      "passage": "PR004",
+      "start": 349,
+      "end": 458,
+      "text": "When you adjust for the one-time gain on the asset sale last year, SG&A would have been flat year over year. "
+    },
+    {
+      "tag": "S56",
+      "passage": "PR004",
+      "start": 458,
+      "end": 546,
+      "text": "Third quarter operating income was $659.9 million compared to $609.9 million last year. "
+    },
+    {
+      "tag": "S57",
+      "passage": "PR004",
+      "start": 546,
+      "end": 684,
+      "text": "Operating income as a percentage of revenue was 23.2% in the third quarter of fiscal 2026 compared to 23.4% in last year's third quarter. "
+    },
+    {
+      "tag": "S58",
+      "passage": "PR004",
+      "start": 684,
+      "end": 824,
+      "text": "Adjusting for the one-time gain last year, operating income as a percentage of revenue would have increased 40 basis points year over year. "
+    },
+    {
+      "tag": "S59",
+      "passage": "PR004",
+      "start": 824,
+      "end": 906,
+      "text": "Our effective tax rate for the third quarter was 20.6% compared to 21% last year. "
+    },
+    {
+      "tag": "S60",
+      "passage": "PR004",
+      "start": 906,
+      "end": 1045,
+      "text": "The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensations. "
+    },
+    {
+      "tag": "S61",
+      "passage": "PR004",
+      "start": 1045,
+      "end": 1135,
+      "text": "Net income for the third quarter was $502.5 million compared to $463.5 million last year. "
+    },
+    {
+      "tag": "S62",
+      "passage": "PR004",
+      "start": 1135,
+      "end": 1248,
+      "text": "This year's third quarter diluted earnings per share was $1.24 compared to $1.13 last year, an increase of 9.7%. "
+    },
+    {
+      "tag": "S63",
+      "passage": "PR004",
+      "start": 1248,
+      "end": 1333,
+      "text": "Earnings per share increased 12.7% after you adjust for the one-time gain last year. "
+    },
+    {
+      "tag": "S64",
+      "passage": "PR004",
+      "start": 1333,
+      "end": 1462,
+      "text": "Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. "
+    },
+    {
+      "tag": "S65",
+      "passage": "PR004",
+      "start": 1462,
+      "end": 1611,
+      "text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. "
+    },
+    {
+      "tag": "S66",
+      "passage": "PR004",
+      "start": 1611,
+      "end": 1763,
+      "text": "During the first nine months of fiscal 2026, we have returned $1.45 billion in capital to our shareholders in the form of dividends and share buybacks. "
+    },
+    {
+      "tag": "S67",
+      "passage": "PR004",
+      "start": 1763,
+      "end": 1845,
+      "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. "
+    },
+    {
+      "tag": "S68",
+      "passage": "PR004",
+      "start": 1845,
+      "end": 1901,
+      "text": "In addition, please note the following in the guidance. "
+    },
+    {
+      "tag": "S69",
+      "passage": "PR004",
+      "start": 1901,
+      "end": 1996,
+      "text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. "
+    },
+    {
+      "tag": "S70",
+      "passage": "PR004",
+      "start": 1996,
+      "end": 2050,
+      "text": "Our guidance does not assume any future acquisitions. "
+    },
+    {
+      "tag": "S71",
+      "passage": "PR004",
+      "start": 2050,
+      "end": 2390,
+      "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. "
+    },
+    {
+      "tag": "S72",
+      "passage": "PR004",
+      "start": 2390,
+      "end": 2493,
+      "text": "As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. "
+    },
+    {
+      "tag": "S73",
+      "passage": "PR004",
+      "start": 2493,
+      "end": 2645,
+      "text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. "
+    },
+    {
+      "tag": "S74",
+      "passage": "PR004",
+      "start": 2645,
+      "end": 2749,
+      "text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. "
+    },
+    {
+      "tag": "S75",
+      "passage": "PR004",
+      "start": 2749,
+      "end": 2904,
+      "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. "
+    },
+    {
+      "tag": "S76",
+      "passage": "PR004",
+      "start": 2904,
+      "end": 3088,
+      "text": "In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs. "
+    },
+    {
+      "tag": "S77",
+      "passage": "PR004",
+      "start": 3088,
+      "end": 3150,
+      "text": "With that, I'll turn it back to Todd for some closing remarks."
+    },
+    {
+      "tag": "S78",
+      "passage": "QA000",
+      "start": 0,
+      "end": 41,
+      "text": "Unknown [783]: Just two procedural ones. "
+    },
+    {
+      "tag": "S79",
+      "passage": "QA000",
+      "start": 41,
+      "end": 134,
+      "text": "Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. "
+    },
+    {
+      "tag": "S80",
+      "passage": "QA000",
+      "start": 134,
+      "end": 269,
+      "text": "How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? "
+    },
+    {
+      "tag": "S81",
+      "passage": "QA000",
+      "start": 269,
+      "end": 292,
+      "text": "in the fourth quarter. "
+    },
+    {
+      "tag": "S82",
+      "passage": "QA000",
+      "start": 292,
+      "end": 415,
+      "text": "I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. "
+    },
+    {
+      "tag": "S83",
+      "passage": "QA000",
+      "start": 415,
+      "end": 516,
+      "text": "And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. "
+    },
+    {
+      "tag": "S84",
+      "passage": "QA000",
+      "start": 516,
+      "end": 610,
+      "text": "So I thought maybe there was a little bit of deal related expense there in the third quarter. "
+    },
+    {
+      "tag": "S85",
+      "passage": "QA000",
+      "start": 610,
+      "end": 624,
+      "text": "I'm not sure.\n"
+    },
+    {
+      "tag": "S86",
+      "passage": "QA000",
+      "start": 624,
+      "end": 669,
+      "text": "Scott Garula [818]: Yeah, Tim, good morning. "
+    },
+    {
+      "tag": "S87",
+      "passage": "QA000",
+      "start": 669,
+      "end": 684,
+      "text": "Good question. "
+    },
+    {
+      "tag": "S88",
+      "passage": "QA000",
+      "start": 684,
+      "end": 802,
+      "text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. "
+    },
+    {
+      "tag": "S89",
+      "passage": "QA000",
+      "start": 802,
+      "end": 854,
+      "text": "Any costs that were incurred in Q3 were immaterial. "
+    },
+    {
+      "tag": "S90",
+      "passage": "QA000",
+      "start": 854,
+      "end": 1006,
+      "text": "You know, as far as the comment on SG&A being a little higher, just to remind everyone of that one-time gain last year, that represented about 60 BIPs. "
+    },
+    {
+      "tag": "S91",
+      "passage": "QA000",
+      "start": 1006,
+      "end": 1100,
+      "text": "So when you take that into consideration, you know, SG&A was effectively flat year over year. "
+    },
+    {
+      "tag": "S92",
+      "passage": "QA000",
+      "start": 1100,
+      "end": 1256,
+      "text": "And if you go back really over the last three fiscal years, Q3 is typically elevated due to the timing of certain expenses like the reset of payroll taxes. "
+    },
+    {
+      "tag": "S93",
+      "passage": "QA000",
+      "start": 1256,
+      "end": 1409,
+      "text": "In fact, when you go back to last fiscal year and you back out the adjustment for the one-time gain, we were up 100 basis points sequentially last year. "
+    },
+    {
+      "tag": "S94",
+      "passage": "QA000",
+      "start": 1409,
+      "end": 1485,
+      "text": "and actually 70 basis points sequentially if you go back to fiscal year 24. "
+    },
+    {
+      "tag": "S95",
+      "passage": "QA000",
+      "start": 1485,
+      "end": 1607,
+      "text": "So we feel really good where we are with SG&A expenses, and when you back out the one-time gain, it's flat year over year."
+    },
+    {
+      "tag": "S96",
+      "passage": "QA001",
+      "start": 0,
+      "end": 40,
+      "text": "Unknown [901]: Yeah, good point, Scott. "
+    },
+    {
+      "tag": "S97",
+      "passage": "QA001",
+      "start": 40,
+      "end": 138,
+      "text": "I think maybe consensus didn't fully factor in everything because of the one-time gain last year. "
+    },
+    {
+      "tag": "S98",
+      "passage": "QA001",
+      "start": 138,
+      "end": 165,
+      "text": "So that's a good reminder. "
+    },
+    {
+      "tag": "S99",
+      "passage": "QA001",
+      "start": 165,
+      "end": 176,
+      "text": "Thank you. "
+    },
+    {
+      "tag": "S100",
+      "passage": "QA001",
+      "start": 176,
+      "end": 432,
+      "text": "And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? "
+    },
+    {
+      "tag": "S101",
+      "passage": "QA001",
+      "start": 432,
+      "end": 485,
+      "text": "I think this is an important question for investors.\n"
+    },
+    {
+      "tag": "S102",
+      "passage": "QA001",
+      "start": 485,
+      "end": 531,
+      "text": "Scott Garula [928]: Yeah, Tim, good question. "
+    },
+    {
+      "tag": "S103",
+      "passage": "QA001",
+      "start": 531,
+      "end": 652,
+      "text": "Energy for the quarter was 1.7 percent, which was flat year over year, and up 10 basis points over the previous quarter. "
+    },
+    {
+      "tag": "S104",
+      "passage": "QA001",
+      "start": 652,
+      "end": 720,
+      "text": "You know, certainly the increase in gas prices will have an impact. "
+    },
+    {
+      "tag": "S105",
+      "passage": "QA001",
+      "start": 720,
+      "end": 925,
+      "text": "But just, you know, I want to remind everyone that, you know, only 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about 100 basis points. "
+    },
+    {
+      "tag": "S106",
+      "passage": "QA001",
+      "start": 925,
+      "end": 1006,
+      "text": "So if you just look at, you know, fuel's been, you know, continuing to increase. "
+    },
+    {
+      "tag": "S107",
+      "passage": "QA001",
+      "start": 1006,
+      "end": 1157,
+      "text": "But if you assume a 30% increase in fuel costs, that would be sustained over an entire quarter, that would add 30 basis points of cost to our results. "
+    },
+    {
+      "tag": "S108",
+      "passage": "QA001",
+      "start": 1157,
+      "end": 1248,
+      "text": "You know, so yes, it has an impact, but not something that we feel that we can't overcome. "
+    },
+    {
+      "tag": "S109",
+      "passage": "QA001",
+      "start": 1248,
+      "end": 1291,
+      "text": "And we have contemplated this in our guide."
+    },
+    {
+      "tag": "S110",
+      "passage": "QA003",
+      "start": 0,
+      "end": 24,
+      "text": "Unknown [1084]: Got it. "
+    },
+    {
+      "tag": "S111",
+      "passage": "QA003",
+      "start": 24,
+      "end": 40,
+      "text": "That's helpful. "
+    },
+    {
+      "tag": "S112",
+      "passage": "QA003",
+      "start": 40,
+      "end": 170,
+      "text": "And then going back to an earlier point on fuel, you mentioned that – fuel expectations are contemplated in your full year guide. "
+    },
+    {
+      "tag": "S113",
+      "passage": "QA003",
+      "start": 170,
+      "end": 385,
+      "text": "Can you elaborate on what exactly you're assuming for the remaining quarters of the year in terms of how fuel will trend and how you plan to pass along any changes in fuel costs to customers in the form of pricing?\n"
+    },
+    {
+      "tag": "S114",
+      "passage": "QA003",
+      "start": 385,
+      "end": 431,
+      "text": "Scott Garula [1108]: Yeah, thank you, George. "
+    },
+    {
+      "tag": "S115",
+      "passage": "QA003",
+      "start": 431,
+      "end": 489,
+      "text": "As Todd mentioned, clearly this is a dynamic environment. "
+    },
+    {
+      "tag": "S116",
+      "passage": "QA003",
+      "start": 489,
+      "end": 563,
+      "text": "And our guide includes our best estimate of the increase in energy costs. "
+    },
+    {
+      "tag": "S117",
+      "passage": "QA003",
+      "start": 563,
+      "end": 662,
+      "text": "You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. "
+    },
+    {
+      "tag": "S118",
+      "passage": "QA003",
+      "start": 662,
+      "end": 689,
+      "text": "I'll let Todd answer that.\n"
+    },
+    {
+      "tag": "S119",
+      "passage": "QA003",
+      "start": 689,
+      "end": 718,
+      "text": "Todd Schneider [1132]: Yeah. "
+    },
+    {
+      "tag": "S120",
+      "passage": "QA003",
+      "start": 718,
+      "end": 780,
+      "text": "So, you know, Georgia, it is certainly a dynamic environment. "
+    },
+    {
+      "tag": "S121",
+      "passage": "QA003",
+      "start": 780,
+      "end": 883,
+      "text": "Hence the, you look at what oil prices were doing last night and then what they're doing this morning. "
+    },
+    {
+      "tag": "S122",
+      "passage": "QA003",
+      "start": 883,
+      "end": 944,
+      "text": "So they're, they're, they're They're changing by the minute. "
+    },
+    {
+      "tag": "S123",
+      "passage": "QA003",
+      "start": 944,
+      "end": 1056,
+      "text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. "
+    },
+    {
+      "tag": "S124",
+      "passage": "QA003",
+      "start": 1056,
+      "end": 1123,
+      "text": "And as far as how we handle that, we do not have a fuel surcharge. "
+    },
+    {
+      "tag": "S125",
+      "passage": "QA003",
+      "start": 1123,
+      "end": 1166,
+      "text": "That historically is not how we handle it. "
+    },
+    {
+      "tag": "S126",
+      "passage": "QA003",
+      "start": 1166,
+      "end": 1314,
+      "text": "As Scott correctly pointed out, if you think about the fuel at the pump, It accounts for about 100 basis points of our total as a percent of sales. "
+    },
+    {
+      "tag": "S127",
+      "passage": "QA003",
+      "start": 1314,
+      "end": 1344,
+      "text": "So it's not our largest cost. "
+    },
+    {
+      "tag": "S128",
+      "passage": "QA003",
+      "start": 1344,
+      "end": 1464,
+      "text": "And we also take the approach that we think long-term about this, and we find other ways to extract out inefficiencies. "
+    },
+    {
+      "tag": "S129",
+      "passage": "QA003",
+      "start": 1464,
+      "end": 1552,
+      "text": "We don't just look at it and say, well, this happened, so we've just got to pass it on. "
+    },
+    {
+      "tag": "S130",
+      "passage": "QA003",
+      "start": 1552,
+      "end": 1806,
+      "text": "We want to be better than that, and we want to focus on being consistent for our customers and extracting out inefficiencies and other ways that we have in our business and still hitting our goals as a financial goals as a company while we're doing that."
+    },
+    {
+      "tag": "S131",
+      "passage": "QA006",
+      "start": 0,
+      "end": 43,
+      "text": "Unknown [1443]: Hi, this is Ronan Kennedy. "
+    },
+    {
+      "tag": "S132",
+      "passage": "QA006",
+      "start": 43,
+      "end": 59,
+      "text": "I'm from Manav. "
+    },
+    {
+      "tag": "S133",
+      "passage": "QA006",
+      "start": 59,
+      "end": 113,
+      "text": "Good morning, and thank you for taking our questions. "
+    },
+    {
+      "tag": "S134",
+      "passage": "QA006",
+      "start": 113,
+      "end": 186,
+      "text": "You commented on retention at record levels, pricing at historic levels. "
+    },
+    {
+      "tag": "S135",
+      "passage": "QA006",
+      "start": 186,
+      "end": 299,
+      "text": "Could you please provide some further color as to how we should think about what those levels are as a reminder? "
+    },
+    {
+      "tag": "S136",
+      "passage": "QA006",
+      "start": 299,
+      "end": 499,
+      "text": "And then the trends and drivers versus your expectations for new business and cross-sell, and then anything to call out from specifically strong organic drivers at a respective segment level, please?\n"
+    },
+    {
+      "tag": "S137",
+      "passage": "QA006",
+      "start": 499,
+      "end": 544,
+      "text": "Jim Rosakis [1471]: Hey, Ronan, this is Jim. "
+    },
+    {
+      "tag": "S138",
+      "passage": "QA006",
+      "start": 544,
+      "end": 558,
+      "text": "Good morning. "
+    },
+    {
+      "tag": "S139",
+      "passage": "QA006",
+      "start": 558,
+      "end": 583,
+      "text": "I'll take that question. "
+    },
+    {
+      "tag": "S140",
+      "passage": "QA006",
+      "start": 583,
+      "end": 603,
+      "text": "I'll start with it. "
+    },
+    {
+      "tag": "S141",
+      "passage": "QA006",
+      "start": 603,
+      "end": 705,
+      "text": "And if we start to think about our growth formula and what we're attempting to achieve every quarter. "
+    },
+    {
+      "tag": "S142",
+      "passage": "QA006",
+      "start": 705,
+      "end": 785,
+      "text": "You know, we do like to target that mid to high single-digit total growth rate. "
+    },
+    {
+      "tag": "S143",
+      "passage": "QA006",
+      "start": 785,
+      "end": 907,
+      "text": "As an organization, the major contributors to that growth, as you correctly pointed out, is our new business acquisition. "
+    },
+    {
+      "tag": "S144",
+      "passage": "QA006",
+      "start": 907,
+      "end": 1124,
+      "text": "And a reminder, you know, two-thirds of that new business acquisition comes with that no-programmer or do-it-yourself or space, and that continues to perform very well for us, and we really like the trend line there. "
+    },
+    {
+      "tag": "S145",
+      "passage": "QA006",
+      "start": 1124,
+      "end": 1258,
+      "text": "Retention levels for us has stayed around that steady, that 95% rate, and we are really comfortable with where that is at this point. "
+    },
+    {
+      "tag": "S146",
+      "passage": "QA006",
+      "start": 1258,
+      "end": 1352,
+      "text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. "
+    },
+    {
+      "tag": "S147",
+      "passage": "QA006",
+      "start": 1352,
+      "end": 1539,
+      "text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. "
+    },
+    {
+      "tag": "S148",
+      "passage": "QA006",
+      "start": 1539,
+      "end": 1576,
+      "text": "The majority of that's new business. "
+    },
+    {
+      "tag": "S149",
+      "passage": "QA006",
+      "start": 1576,
+      "end": 1728,
+      "text": "But then the remainder is that that cross selling opportunity selling into the current customer base, which has been highly effective for us this year. "
+    },
+    {
+      "tag": "S150",
+      "passage": "QA006",
+      "start": 1728,
+      "end": 1817,
+      "text": "And we think that there's a long runway of opportunity within our current customer base. "
+    },
+    {
+      "tag": "S151",
+      "passage": "QA006",
+      "start": 1817,
+      "end": 1885,
+      "text": "As we continue to provide great value, we think about it long term. "
+    },
+    {
+      "tag": "S152",
+      "passage": "QA006",
+      "start": 1885,
+      "end": 2002,
+      "text": "We've made nice investments in the product line and the technology and try to make it easier to do business with us. "
+    },
+    {
+      "tag": "S153",
+      "passage": "QA006",
+      "start": 2002,
+      "end": 2095,
+      "text": "And the customers in this type of an environment is complex, are looking for steady answers. "
+    },
+    {
+      "tag": "S154",
+      "passage": "QA006",
+      "start": 2095,
+      "end": 2130,
+      "text": "And they know they can rely on us. "
+    },
+    {
+      "tag": "S155",
+      "passage": "QA006",
+      "start": 2130,
+      "end": 2176,
+      "text": "So we've had a lot of success this past year. "
+    },
+    {
+      "tag": "S156",
+      "passage": "QA006",
+      "start": 2176,
+      "end": 2251,
+      "text": "So I would say new business and cross-sell slightly continuing to improve. "
+    },
+    {
+      "tag": "S157",
+      "passage": "QA006",
+      "start": 2251,
+      "end": 2305,
+      "text": "and the others right where we're expecting them to be."
+    },
+    {
+      "tag": "S158",
+      "passage": "QA016",
+      "start": 0,
+      "end": 30,
+      "text": "Unknown [2548]: Good morning. "
+    },
+    {
+      "tag": "S159",
+      "passage": "QA016",
+      "start": 30,
+      "end": 65,
+      "text": "This is Jun-Yi Ahn for Jason Haas. "
+    },
+    {
+      "tag": "S160",
+      "passage": "QA016",
+      "start": 65,
+      "end": 98,
+      "text": "Thanks for taking our questions. "
+    },
+    {
+      "tag": "S161",
+      "passage": "QA016",
+      "start": 98,
+      "end": 207,
+      "text": "Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? "
+    },
+    {
+      "tag": "S162",
+      "passage": "QA016",
+      "start": 207,
+      "end": 313,
+      "text": "I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. "
+    },
+    {
+      "tag": "S163",
+      "passage": "QA016",
+      "start": 313,
+      "end": 412,
+      "text": "Could you remind us how big those impacts were and any other factors to consider across the board? "
+    },
+    {
+      "tag": "S164",
+      "passage": "QA016",
+      "start": 412,
+      "end": 423,
+      "text": "Thank you.\n"
+    },
+    {
+      "tag": "S165",
+      "passage": "QA016",
+      "start": 423,
+      "end": 474,
+      "text": "Todd Schneider [2571]: Thank you for the question. "
+    },
+    {
+      "tag": "S166",
+      "passage": "QA016",
+      "start": 474,
+      "end": 486,
+      "text": "I'll start. "
+    },
+    {
+      "tag": "S167",
+      "passage": "QA016",
+      "start": 486,
+      "end": 588,
+      "text": "And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. "
+    },
+    {
+      "tag": "S168",
+      "passage": "QA016",
+      "start": 588,
+      "end": 641,
+      "text": "It was our highest revenue growth quarter last year. "
+    },
+    {
+      "tag": "S169",
+      "passage": "QA016",
+      "start": 641,
+      "end": 664,
+      "text": "The organic was at 9%. "
+    },
+    {
+      "tag": "S170",
+      "passage": "QA016",
+      "start": 664,
+      "end": 744,
+      "text": "And we did have some one-time benefits, specifically in our first aid business. "
+    },
+    {
+      "tag": "S171",
+      "passage": "QA016",
+      "start": 744,
+      "end": 775,
+      "text": "that ran 18.5% organic growth. "
+    },
+    {
+      "tag": "S172",
+      "passage": "QA016",
+      "start": 775,
+      "end": 818,
+      "text": "We certainly do not anticipate that again. "
+    },
+    {
+      "tag": "S173",
+      "passage": "QA016",
+      "start": 818,
+      "end": 872,
+      "text": "And then in our uniform direct sale business as well. "
+    },
+    {
+      "tag": "S174",
+      "passage": "QA016",
+      "start": 872,
+      "end": 976,
+      "text": "In first aid, we had an increase in the training business that helped us as it relates to AED training. "
+    },
+    {
+      "tag": "S175",
+      "passage": "QA016",
+      "start": 976,
+      "end": 1062,
+      "text": "So that was a spike that we, again, we don't think is going to occur at those levels. "
+    },
+    {
+      "tag": "S176",
+      "passage": "QA016",
+      "start": 1062,
+      "end": 1156,
+      "text": "And the uniform direct sale business can be a little lumpy, but it had a really good quarter. "
+    },
+    {
+      "tag": "S177",
+      "passage": "QA016",
+      "start": 1156,
+      "end": 1249,
+      "text": "So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\n"
+    },
+    {
+      "tag": "S178",
+      "passage": "QA016",
+      "start": 1249,
+      "end": 1379,
+      "text": "Scott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. "
+    },
+    {
+      "tag": "S179",
+      "passage": "QA016",
+      "start": 1379,
+      "end": 1448,
+      "text": "You know, Jim mentioned that we continue to execute at a high level. "
+    },
+    {
+      "tag": "S180",
+      "passage": "QA016",
+      "start": 1448,
+      "end": 1596,
+      "text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. "
+    },
+    {
+      "tag": "S181",
+      "passage": "QA016",
+      "start": 1596,
+      "end": 1734,
+      "text": "I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. "
+    },
+    {
+      "tag": "S182",
+      "passage": "QA016",
+      "start": 1734,
+      "end": 1809,
+      "text": "And if you look at the guide for this quarter, this quarter is also at 8%. "
+    },
+    {
+      "tag": "S183",
+      "passage": "QA016",
+      "start": 1809,
+      "end": 1971,
+      "text": "And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. "
+    },
+    {
+      "tag": "S184",
+      "passage": "QA016",
+      "start": 1971,
+      "end": 2031,
+      "text": "In Q3, we just delivered a growth rate of 8.2% organically. "
+    },
+    {
+      "tag": "S185",
+      "passage": "QA016",
+      "start": 2031,
+      "end": 2112,
+      "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+    },
+    {
+      "tag": "S186",
+      "passage": "QA016",
+      "start": 2112,
+      "end": 2189,
+      "text": "So really effectively right in line with the guide that we gave last quarter."
+    },
+    {
+      "tag": "S187",
+      "passage": "QA020",
+      "start": 0,
+      "end": 34,
+      "text": "Unknown [3112]: Great, thank you. "
+    },
+    {
+      "tag": "S188",
+      "passage": "QA020",
+      "start": 34,
+      "end": 245,
+      "text": "And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. "
+    },
+    {
+      "tag": "S189",
+      "passage": "QA020",
+      "start": 245,
+      "end": 376,
+      "text": "And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? "
+    },
+    {
+      "tag": "S190",
+      "passage": "QA020",
+      "start": 376,
+      "end": 497,
+      "text": "I see the implied kind of 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\n"
+    },
+    {
+      "tag": "S191",
+      "passage": "QA020",
+      "start": 497,
+      "end": 561,
+      "text": "Todd Schneider [3142]: Yeah, thank you for the question, Faiza. "
+    },
+    {
+      "tag": "S192",
+      "passage": "QA020",
+      "start": 561,
+      "end": 638,
+      "text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. "
+    },
+    {
+      "tag": "S193",
+      "passage": "QA020",
+      "start": 638,
+      "end": 687,
+      "text": "But that is not because of a change in approach. "
+    },
+    {
+      "tag": "S194",
+      "passage": "QA020",
+      "start": 687,
+      "end": 760,
+      "text": "That's simply what we've been predicting and timing around for the year. "
+    },
+    {
+      "tag": "S195",
+      "passage": "QA020",
+      "start": 760,
+      "end": 837,
+      "text": "And I wouldn't see a change in our approach in general as you speak to that. "
+    },
+    {
+      "tag": "S196",
+      "passage": "QA020",
+      "start": 837,
+      "end": 882,
+      "text": "You know, we're investing for the long term. "
+    },
+    {
+      "tag": "S197",
+      "passage": "QA020",
+      "start": 882,
+      "end": 970,
+      "text": "and we'll take our normal prudent approach as we think about investing for our business."
+    },
+    {
+      "tag": "S198",
+      "passage": "QA022",
+      "start": 0,
+      "end": 20,
+      "text": "Unknown [3270]: Hi. "
+    },
+    {
+      "tag": "S199",
+      "passage": "QA022",
+      "start": 20,
+      "end": 40,
+      "text": "Good morning, guys. "
+    },
+    {
+      "tag": "S200",
+      "passage": "QA022",
+      "start": 40,
+      "end": 65,
+      "text": "Just a quick one for me. "
+    },
+    {
+      "tag": "S201",
+      "passage": "QA022",
+      "start": 65,
+      "end": 197,
+      "text": "Just on the FHIR ERP implementation, I think we had previously talked about like 100 basis points margin headwind next year for 27. "
+    },
+    {
+      "tag": "S202",
+      "passage": "QA022",
+      "start": 197,
+      "end": 337,
+      "text": "I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. "
+    },
+    {
+      "tag": "S203",
+      "passage": "QA022",
+      "start": 337,
+      "end": 348,
+      "text": "Thank you. "
+    },
+    {
+      "tag": "S204",
+      "passage": "QA022",
+      "start": 348,
+      "end": 381,
+      "text": "Just hard bits for this segment. "
+    },
+    {
+      "tag": "S205",
+      "passage": "QA022",
+      "start": 381,
+      "end": 392,
+      "text": "Thank you.\n"
+    },
+    {
+      "tag": "S206",
+      "passage": "QA022",
+      "start": 392,
+      "end": 434,
+      "text": "Scott Garula [3296]: Yeah, this is Scott. "
+    },
+    {
+      "tag": "S207",
+      "passage": "QA022",
+      "start": 434,
+      "end": 459,
+      "text": "Thanks for the question. "
+    },
+    {
+      "tag": "S208",
+      "passage": "QA022",
+      "start": 459,
+      "end": 620,
+      "text": "You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. "
+    },
+    {
+      "tag": "S209",
+      "passage": "QA022",
+      "start": 620,
+      "end": 661,
+      "text": "We're satisfied with our progress today. "
+    },
+    {
+      "tag": "S210",
+      "passage": "QA022",
+      "start": 661,
+      "end": 767,
+      "text": "Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. "
+    },
+    {
+      "tag": "S211",
+      "passage": "QA022",
+      "start": 767,
+      "end": 854,
+      "text": "If you looked at an entire year, it would be the 100 basis points that you referenced. "
+    },
+    {
+      "tag": "S212",
+      "passage": "QA022",
+      "start": 854,
+      "end": 1032,
+      "text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st."
+    }
+  ],
+  "note": "Same complete call and all 120 numeric role questions as shared_role_population, plus one broad guidance/qualification noul for each of the 213 sentences in retained passages. Exact grouping changed and must be re-scored. No hidden answer key in inputs; positive sentence is coverage evidence, not a record or a contradiction with every negative number role."
+}

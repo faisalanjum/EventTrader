@@ -1,0 +1,908 @@
+{
+  "source_id": "PAYX_2026-03-25T09.30",
+  "source_text_sha256": "33b4097f673c601e6ccad8bf89283e9c6142ab2b071a651c4473916b06056eab",
+  "snapshot_sha256": "6498e13051e7d9a73f6aa80973e7bf4cb3d30e207697c8025a6b31f587bc23d5",
+  "rulebook_sha256": "f9376dcb51f648d58fc1527ca3472fcce6f0ca1bb517969ccc250077cad78ff0",
+  "annotated_at": "2026-11-15T16:05:48.359915-05:00",
+  "method": "Root agent read every source passage before consulting draft labels or legacy rows for this pass. Prior conversation exposure exists; NOT blinded or double-reviewed. Annotations never enter extraction prompts.",
+  "status": "Source claim inventory with exact evidence; not an adjudicated complete-record key.",
+  "record_policy": "../record_policy.md",
+  "claims": [
+    {
+      "id": "P3-01",
+      "meaning": "Annual interest on funds held for clients",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "PR008",
+          "start": 2356,
+          "end": 2450,
+          "global_start": 12092,
+          "global_end": 12186,
+          "text": "Interest on funds held for clients is now expected to be in the range of $200 to $210 million.",
+          "role": "new current range; previous range not printed here"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "FY26",
+        "level_low": "200",
+        "level_high": "210",
+        "level_unit": "m_usd",
+        "driver_state": "raised",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Verify calendar; do not import December endpoints as current-source comparison numbers."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 12186
+      }
+    },
+    {
+      "id": "P3-02",
+      "meaning": "Other guidance unchanged",
+      "status": "claim_requires_prior_scope",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "PR008",
+          "start": 2451,
+          "end": 2495,
+          "global_start": 12187,
+          "global_end": 12231,
+          "text": "All other guidance metrics remain unchanged.",
+          "role": "numberless blanket reaffirmation"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "FY26",
+        "driver_state": "reaffirmed",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve permitted prior scope and individual series; no invented amount or silent drop."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 12231
+      }
+    },
+    {
+      "id": "P3-03",
+      "meaning": "Q4 total revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "PR008",
+          "start": 2496,
+          "end": 3102,
+          "global_start": 12232,
+          "global_end": 12838,
+          "text": "I'm going to turn to the fourth quarter to provide you a little bit of color on the fourth quarter. We would anticipate fourth quarter growth to be approximately 12%, with an adjusted operating margin of 41% to 42%. The fourth quarter growth rate reflects a couple of dynamics. First and foremost, I think most of you know, we anniversary the PACOR acquisition during the quarter. And to a lesser extent, Q3 benefited modestly from the timing of certain items relative to Q4. However, our second half outlook remains consistent with our expectations in the organic revenue growth acceleration we saw in Q3.",
+          "role": "Q4 total growth and adjusted margin; timing explanation separate from assumptions"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fourth quarter",
+        "level_low": "12",
+        "level_high": "12",
+        "level_unit": "unknown",
+        "qualifier": "approximately",
+        "company_confirmed": true,
+        "driver_state": "unknown"
+      },
+      "unresolved_fields_or_policy": [
+        "Confirm total-revenue antecedent and fiscal calendar; do not treat quarter timing cause as a condition."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 12838
+      }
+    },
+    {
+      "id": "P3-04",
+      "meaning": "Q4 adjusted operating margin",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "PR008",
+          "start": 2496,
+          "end": 3102,
+          "global_start": 12232,
+          "global_end": 12838,
+          "text": "I'm going to turn to the fourth quarter to provide you a little bit of color on the fourth quarter. We would anticipate fourth quarter growth to be approximately 12%, with an adjusted operating margin of 41% to 42%. The fourth quarter growth rate reflects a couple of dynamics. First and foremost, I think most of you know, we anniversary the PACOR acquisition during the quarter. And to a lesser extent, Q3 benefited modestly from the timing of certain items relative to Q4. However, our second half outlook remains consistent with our expectations in the organic revenue growth acceleration we saw in Q3.",
+          "role": "Q4 total growth and adjusted margin; timing explanation separate from assumptions"
+        },
+        {
+          "passage": "QA016",
+          "start": 1466,
+          "end": 1693,
+          "global_start": 49226,
+          "global_end": 49453,
+          "text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "role": "definition of adjusted margin excludes integration-related items"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fourth quarter",
+        "level_low": "41",
+        "level_high": "42",
+        "level_unit": "percent",
+        "measurement_words": [
+          "adjusted"
+        ],
+        "company_confirmed": true,
+        "driver_state": "unknown"
+      },
+      "unresolved_fields_or_policy": [
+        "Calendar and applicability of integration-cost exclusion; definition is not an assumption."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 49453
+      }
+    },
+    {
+      "id": "P3-05",
+      "meaning": "H2 organic revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA000",
+          "start": 0,
+          "end": 1190,
+          "global_start": 13870,
+          "global_end": 15060,
+          "text": "Brian Bergen [1326]: Hi, guys. Good morning. Thank you. Bob, can you put some finer points just first on the level of organic growth in the third quarter and then bridge that forward to your commentary on the fourth quarter? If you can kind of unpack that 12% growth across the business, I think that would help.\nBob Schrader [1343]: Yeah, Brian, I think consistently, even if you go back to Q4 of last year, the organic growth of the business has been a bit weaker. I think a lot of that had to do with comparability issues, particularly in the PEO business with our MPP plan in Florida. But if you go back to Q4 of last year, I think we've seen sequential improvement each quarter in the organic growth of the business. So if you look at the first half, total revenue organic growth was roughly 4%, and that improved from Q1 to Q2. And then when you look at the back half, whether it's Q3 or Q4 combined, we would expect it accelerated in Q3, and we would expect to see similar organic growth. growth performance in Q4. And so you're now getting to a back half organic growth rate that's closer to 6%. And then when you put the two of those together, it's roughly 5% on a full year basis.",
+          "role": "current versus future organic growth, H2 and full-year explicit management figures"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "back half",
+        "printed_value": "6%",
+        "qualifier": "closer to",
+        "measurement_words": [
+          "organic"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Preserve closeness qualifier, do not invent exact point; no default growth comparison basis."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13870,
+        "end": 15060
+      }
+    },
+    {
+      "id": "P3-06",
+      "meaning": "Full-year organic revenue growth",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA000",
+          "start": 0,
+          "end": 1190,
+          "global_start": 13870,
+          "global_end": 15060,
+          "text": "Brian Bergen [1326]: Hi, guys. Good morning. Thank you. Bob, can you put some finer points just first on the level of organic growth in the third quarter and then bridge that forward to your commentary on the fourth quarter? If you can kind of unpack that 12% growth across the business, I think that would help.\nBob Schrader [1343]: Yeah, Brian, I think consistently, even if you go back to Q4 of last year, the organic growth of the business has been a bit weaker. I think a lot of that had to do with comparability issues, particularly in the PEO business with our MPP plan in Florida. But if you go back to Q4 of last year, I think we've seen sequential improvement each quarter in the organic growth of the business. So if you look at the first half, total revenue organic growth was roughly 4%, and that improved from Q1 to Q2. And then when you look at the back half, whether it's Q3 or Q4 combined, we would expect it accelerated in Q3, and we would expect to see similar organic growth. growth performance in Q4. And so you're now getting to a back half organic growth rate that's closer to 6%. And then when you put the two of those together, it's roughly 5% on a full year basis.",
+          "role": "current versus future organic growth, H2 and full-year explicit management figures"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "full year",
+        "level_low": "5",
+        "level_high": "5",
+        "level_unit": "unknown",
+        "qualifier": "roughly",
+        "measurement_words": [
+          "organic"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Management states the figure; it is not a value calculated by the extractor. Verify calendar."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13870,
+        "end": 15060
+      }
+    },
+    {
+      "id": "P3-07",
+      "meaning": "Q4 organic revenue growth accelerates",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA000",
+          "start": 0,
+          "end": 1190,
+          "global_start": 13870,
+          "global_end": 15060,
+          "text": "Brian Bergen [1326]: Hi, guys. Good morning. Thank you. Bob, can you put some finer points just first on the level of organic growth in the third quarter and then bridge that forward to your commentary on the fourth quarter? If you can kind of unpack that 12% growth across the business, I think that would help.\nBob Schrader [1343]: Yeah, Brian, I think consistently, even if you go back to Q4 of last year, the organic growth of the business has been a bit weaker. I think a lot of that had to do with comparability issues, particularly in the PEO business with our MPP plan in Florida. But if you go back to Q4 of last year, I think we've seen sequential improvement each quarter in the organic growth of the business. So if you look at the first half, total revenue organic growth was roughly 4%, and that improved from Q1 to Q2. And then when you look at the back half, whether it's Q3 or Q4 combined, we would expect it accelerated in Q3, and we would expect to see similar organic growth. growth performance in Q4. And so you're now getting to a back half organic growth rate that's closer to 6%. And then when you put the two of those together, it's roughly 5% on a full year basis.",
+          "role": "current versus future organic growth, H2 and full-year explicit management figures"
+        },
+        {
+          "passage": "QA007",
+          "start": 459,
+          "end": 663,
+          "global_start": 33160,
+          "global_end": 33364,
+          "text": "Bob Schrader [2588]: No, I think you would probably see a slight uptick, a continued acceleration in the organic growth of the business in Q4 relative to Q3. So we should see sequential improvement there.",
+          "role": "Q4 organic growth rate improves from Q3; source forecast rather than annual comparison-basis proof"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "Q4",
+        "value_text": "a slight uptick, a continued acceleration in the organic growth of the business in Q4 relative to Q3",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not force H2 6% into Q4 or confuse sequential change in a growth rate with its underlying comparison basis."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 13870,
+        "end": 33364
+      }
+    },
+    {
+      "id": "P3-08",
+      "meaning": "PEO/insurance Q4 growth rate lower",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA008",
+          "start": 0,
+          "end": 1179,
+          "global_start": 34429,
+          "global_end": 35608,
+          "text": "Andrew Nicholas [2676]: Hi, guys. Good morning. This is Daniel on for Andrew today. Thanks for taking my questions. Real quick, just turning back to the revenue timing, it sounds like that was mostly concentrated in PEO. Is there any way you can size how large that was and And looking forward, can sequential growth in PEO specifically continue into the fourth quarter off of that?\nBob Schrader [2700]: Yeah, I think the growth rate in Q4 will be lower because of some of those things. I don't have the exact percentage. And I think when we, again, if we look at it, the two quarters combined, Daniel, you'll see sequential or if you look at back half, because of some of those puts and takes between the quarter, you'll see a fairly significant lift in the organic sequential growth of the PO and insurance in the back half relative to the first half. But the overall growth rate, I think when you start doing the math, you'll see that the math is going to show you that the growth rate is going to be a little bit lower in Q4 than Q3. But when you put the two of them together, it's a fairly big step up in the sequential organic growth relative to the first half of the year.",
+          "role": "two PEO/insurance period-specific claims, Q4 versus Q3 and H2 versus H1"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "Q4",
+        "value_text": "the growth rate is going to be a little bit lower in Q4 than Q3",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Preserve quarter-specific direction; do not apply the company-wide organic growth acceleration to this segment."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 34429,
+        "end": 35608
+      }
+    },
+    {
+      "id": "P3-09",
+      "meaning": "PEO/insurance H2 organic growth stronger",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA008",
+          "start": 0,
+          "end": 1179,
+          "global_start": 34429,
+          "global_end": 35608,
+          "text": "Andrew Nicholas [2676]: Hi, guys. Good morning. This is Daniel on for Andrew today. Thanks for taking my questions. Real quick, just turning back to the revenue timing, it sounds like that was mostly concentrated in PEO. Is there any way you can size how large that was and And looking forward, can sequential growth in PEO specifically continue into the fourth quarter off of that?\nBob Schrader [2700]: Yeah, I think the growth rate in Q4 will be lower because of some of those things. I don't have the exact percentage. And I think when we, again, if we look at it, the two quarters combined, Daniel, you'll see sequential or if you look at back half, because of some of those puts and takes between the quarter, you'll see a fairly significant lift in the organic sequential growth of the PO and insurance in the back half relative to the first half. But the overall growth rate, I think when you start doing the math, you'll see that the math is going to show you that the growth rate is going to be a little bit lower in Q4 than Q3. But when you put the two of them together, it's a fairly big step up in the sequential organic growth relative to the first half of the year.",
+          "role": "two PEO/insurance period-specific claims, Q4 versus Q3 and H2 versus H1"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "back half",
+        "value_text": "a fairly big step up in the sequential organic growth relative to the first half of the year",
+        "measurement_words": [
+          "organic"
+        ],
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve exact growth-versus-growth-rate comparison semantics; no numeric value inferred."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 34429,
+        "end": 35608
+      }
+    },
+    {
+      "id": "P3-10",
+      "meaning": "Cost-synergy target exceeded",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR007",
+          "start": 3802,
+          "end": 3939,
+          "global_start": 5913,
+          "global_end": 6050,
+          "text": "The PayCore integration continues to progress well. We remain on track to exceed our fiscal 26 synergy targets we discussed last quarter.",
+          "role": "forward synergy outlook; not itself two named amounts"
+        },
+        {
+          "passage": "QA010",
+          "start": 0,
+          "end": 1339,
+          "global_start": 37769,
+          "global_end": 39108,
+          "text": "Kevin McVeigh [2899]: Great. Thank you so much. Hey, I wonder, can you just remind us what the initial pay core revenue and expense synergies were and where we are today on those, because it seems like you've been doing a nice job on kind of the integration, but just remind us what the, again, the revenue and expense synergies were, because I guess we're bumping up on a year. I think that would help.\nBob Schrader [2922]: Yeah, Kevin, if you go back to, I think, when we originally announced the deal, now I'm kind of losing track of the core, but at one point in time, I think the expense synergies were in the $80 to $90 million range. I think the last update that we gave that we expected those to be in the $100 million range. And as John said, now we're kind of moving into BAU. We'll continue to look for opportunities. And we haven't stopped, even though we kind of exceeded our target. And I think we have ideas, certainly in areas around procurement and things like that. I think there's additional opportunities. But that was kind of the last update on the expense synergies. And then I think the update we gave on revenue synergies was a current year update. We expected it to contribute 30 to 50 basis points of growth this year. I would say we're probably on the high end of that, and as John said, we're building momentum.",
+          "role": "current synergy outlook with earlier expense targets and explicit revenue target range"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "fiscal 26",
+        "printed_earlier_values": [
+          "80",
+          "90",
+          "100"
+        ],
+        "value_text": "exceed our fiscal 26 synergy targets",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Distinguish achieved savings from forward full-year outlook; no exact new current 100 point or computed savings amount.",
+        "Resolve permissible relative-to-prior-target representation."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 5913,
+        "end": 39108
+      }
+    },
+    {
+      "id": "P3-11",
+      "meaning": "Revenue-synergy contribution near high end",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR007",
+          "start": 3802,
+          "end": 3939,
+          "global_start": 5913,
+          "global_end": 6050,
+          "text": "The PayCore integration continues to progress well. We remain on track to exceed our fiscal 26 synergy targets we discussed last quarter.",
+          "role": "forward synergy outlook; not itself two named amounts"
+        },
+        {
+          "passage": "QA010",
+          "start": 0,
+          "end": 1339,
+          "global_start": 37769,
+          "global_end": 39108,
+          "text": "Kevin McVeigh [2899]: Great. Thank you so much. Hey, I wonder, can you just remind us what the initial pay core revenue and expense synergies were and where we are today on those, because it seems like you've been doing a nice job on kind of the integration, but just remind us what the, again, the revenue and expense synergies were, because I guess we're bumping up on a year. I think that would help.\nBob Schrader [2922]: Yeah, Kevin, if you go back to, I think, when we originally announced the deal, now I'm kind of losing track of the core, but at one point in time, I think the expense synergies were in the $80 to $90 million range. I think the last update that we gave that we expected those to be in the $100 million range. And as John said, now we're kind of moving into BAU. We'll continue to look for opportunities. And we haven't stopped, even though we kind of exceeded our target. And I think we have ideas, certainly in areas around procurement and things like that. I think there's additional opportunities. But that was kind of the last update on the expense synergies. And then I think the update we gave on revenue synergies was a current year update. We expected it to contribute 30 to 50 basis points of growth this year. I would say we're probably on the high end of that, and as John said, we're building momentum.",
+          "role": "current synergy outlook with earlier expense targets and explicit revenue target range"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "this year",
+        "printed_values": [
+          "30",
+          "50"
+        ],
+        "level_unit": "basis_points",
+        "qualifier": "probably on the high end of that",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Retain probably and position wording; do not store exact 50 or unqualified range alone."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 5913,
+        "end": 39108
+      }
+    },
+    {
+      "id": "P3-12",
+      "meaning": "Comfort with FY27 consensus",
+      "status": "source_insufficient_for_record",
+      "evidence": [
+        {
+          "passage": "QA001",
+          "start": 162,
+          "end": 1472,
+          "global_start": 15917,
+          "global_end": 17227,
+          "text": "Bob Schrader [1459]: Yeah, and maybe head off the question that I'm probably going to get as it relates to next year in guidance. We're in the early stages, I would tell you, of our operating plan, and we're going to finalize that over the next year. six to eight weeks, and I know we kind of established a precedent coming out of COVID in providing maybe some more details around what we were thinking for next year. I think we needed to do that given some of the uncertainty in the environment back then. Our preference now is to kind of build the plan, come out in Q4 like we historically did and consistent with what our competitors do. and provide guidance at that point in time. That being said, we obviously have visibility to what's out there in the models and in fact set, and when I look at that, I really don't see any reason that I need to steer you in one direction or another. I'm fairly comfortable with what's out there, and I think, Brian, what you'll see is the organic growth rate whether it's Q3 or Q4, we're really looking at the back half because there are some timing differences, particularly in the PO between Q3 and Q4. When we look at the organic growth rate and the back half of this year, it pretty much aligns with kind of what's assumed from a consensus standpoint for next year.",
+          "role": "future consensus comfort while explicitly declining to provide detailed next-year guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "next year",
+        "company_statement": "fairly comfortable with what's out there",
+        "numeric_amount_stated": false
+      },
+      "unresolved_fields_or_policy": [
+        "No metric-specific consensus values in this source; do not pull today's consensus or promote comfort to confirmation of every estimate."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 15917,
+        "end": 17227
+      }
+    },
+    {
+      "id": "P3-13",
+      "meaning": "Margin expansion as revenue grows",
+      "status": "claim_requires_association",
+      "evidence": [
+        {
+          "passage": "QA003",
+          "start": 0,
+          "end": 1841,
+          "global_start": 19291,
+          "global_end": 21132,
+          "text": "Mark Marcon [1694]: That's great to hear. And then I thought the gross margin performance was particularly impressive. You know, when we take a look, if we're defining gross margin as revenue minus direct costs. And part of that was obviously the higher interest income off of the float. But beyond that, it looks like it's doing extremely well. How much of that is related to some of the AI initiatives that you've put in place in terms of embedding AI across your service infrastructure and making them more productive versus, you know, other initiatives that you've put in place in terms of, you know, perhaps shifting some of your costs to lower cost labor markets like India. And how much more can we do there? Because it's been fairly impressive. I'm wondering if if this is basically setting us up for continued margin expansion for multiple years?\nJohn Gibson [1766]: Mark, I think that we have a long track record of being able to drive as the best operators margin expansion as we grow revenue in the business, and I think you're going to continue to see that. We use every lever imaginable to do that. I think that when you look at AI, as you know, we've been using AI and predecessor type of models for many, many years since I've been here. And now with this new technology that almost every day something new is coming out, what we're seeing is pretty impressive. It's pretty incredible. Some of the things we're doing in terms of genic AI models, which we've now released to scale after the pilots, doing voice payroll, doing email payrolls. what we're seeing early stages in our beta groups in sales using our sales guru tool and what we're seeing from a service perspective. So I feel good about what the opportunities are. Look, if we grow the top line, we are going to be able to grow margins and expand margins over time.",
+          "role": "worded future margin expansion conditioned on revenue growth"
+        },
+        {
+          "passage": "QA016",
+          "start": 1466,
+          "end": 1693,
+          "global_start": 49226,
+          "global_end": 49453,
+          "text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "role": "definition of adjusted margin excludes integration-related items"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "grow margins and expand margins over time",
+        "condition_text": "if we grow the top line",
+        "period_text": "over time",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve gross versus operating margin from actual management support; do not inherit gross automatically from analyst framing."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 19291,
+        "end": 49453
+      }
+    },
+    {
+      "id": "P3-14",
+      "meaning": "Short-term technology replacement risk for advisory services",
+      "status": "borderline_claim",
+      "evidence": [
+        {
+          "passage": "QA004",
+          "start": 0,
+          "end": 1310,
+          "global_start": 22002,
+          "global_end": 23312,
+          "text": "Tien-Sin Huang [1903]: Hey, thanks. Hi, John and Bob. I wanted to ask on the advisory work, John, that you talked a little bit about. I think that's probably underappreciated in terms of what Paychex does there. How AI-proof is the advisory side of the business? Because I get the question quite a bit that can rules-based advice from AI come in and supplant what Paychex does on the advisory side? But I'm guessing that a lot of your advisory work is centered around compliance and very complex data issue that only can you maybe elaborate on that?\nJohn Gibson [1938]: Yeah, yeah. Well, Tinson, I think this is something I think is extremely interesting for people to understand. For the vast majority of our clients, we are their HR department, right? So not only do we provide them the advice, we literally are talking to them and holding their hand when they're making some of these decisions and supporting them. You look at our PO, the most comprehensive part of our model, where we're actually in a co-employment arrangement. We're actually helping represent them and deal with their employee situations, which are numerous, I may ask, in today's world. And so we're actually doing so much more that there's no way that I think technology is going to replace that, at least that I see in the short term.",
+          "role": "specific short-term denial of replacement risk; business outlook rather than numbered financial guidance"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "short term",
+        "value_text": "technology is not expected to replace the service",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Determine source-grounded admissible standing metric; preserve this qualitative outlook for scope adjudication, without inventing a general bucket."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 22002,
+        "end": 23312
+      }
+    },
+    {
+      "id": "P3-15",
+      "meaning": "Annual revenue remains toward low end",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "QA018",
+          "start": 0,
+          "end": 509,
+          "global_start": 51926,
+          "global_end": 52435,
+          "text": "David Grossman [3804]: Good morning. Thank you. You know, I think last quarter your bias, you know, was the low end as a revenue growth range. And I'm just wondering, reiterating the guide, are we still favoring the low end or just given some of your commentary about the third quarter and going into the fourth quarter, are you feeling better about the business and feeling maybe we're better than the low end?\nBob Schrader [3829]: Yeah, I think we would stay where we're at, David. That's why we reiterated,",
+          "role": "management responds to annual revenue guide remaining at low end"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "FY26",
+        "value_text": "low end",
+        "driver_state": "reaffirmed",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Exact annual revenue quantity/scope must follow management confirmation; no prior range values printed in this source."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 52435
+      }
+    },
+    {
+      "id": "P3-16",
+      "meaning": "Next-year macro assumptions unchanged",
+      "status": "supporting_assumption_only",
+      "evidence": [
+        {
+          "passage": "QA019",
+          "start": 0,
+          "end": 1065,
+          "global_start": 53346,
+          "global_end": 54411,
+          "text": "David Grossman [3884]: Got it. And sorry to kind of stick on the financials here, but just, you know, you did make a general comment about a certain level of comfort with where consensus was for next year. And I know you don't want to make any specific comments about next year, but is there anything now that you're a combined company that, you know, how we should think about PAYS or pricing and management solutions going into next year, you know, particularly given now that we've got PAYCOR in the base? I know it sounds like PAYS look like they're, you know, pretty stable, but I thought I should just ask the question. Anything you want to call out there on either PAYS or pricing?\nJohn Gibson [3925]: No, David, I don't think there's any changes that we're making in any of our assumptions. I think, as you know, we had clients of all sizes before we had PayCool. We've added more upmarket. But I think relative to our assumptions and what we're expecting, we're expecting very similar macro environment that we're seeing right now in a very uncertain time.",
+          "role": "early next-year assumptions, not new pricing or employment figures"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "next year",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Supporting early planning context, not automatic separate financial metric guidance or completed annual forecast."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 53346,
+        "end": 54411
+      }
+    },
+    {
+      "id": "P3-17",
+      "meaning": "Enterprise revenue growth at or above peers",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA021",
+          "start": 248,
+          "end": 1910,
+          "global_start": 56406,
+          "global_end": 58068,
+          "text": "Bob Schrader [4097]: Yeah, Sheesh, I mean, I think as we've talked about in the past, you know, the lines are somewhat blurred and have become increasingly blurred between what's pay core and what's paychecks, you know, based on our early on decision to integrate those two businesses. And so I think if we look at it, you know, our best estimate is if you were to look at the organic growth of the pay core business, it was consistent, you in Q3 with what we saw in the first half of the year, which is in that upper single-digit range. I would tell you what's less blurred, and this is how we'll talk about the business as we move forward, is when we look at our enterprise business. So when we look at our client base above 100, irrespective of whether, you know, which sales organization sold it, which platform that it was on, you know, that business has been growing. I would tell you in the first half of the year it was growing upper single digits, and in Q3 it grew around 10%. And so that's how we're managing the business. That's how John and I are thinking about it. That's how we're going to market. And, you know, as we move forward after we anniversary, the acquisition and we provide color on, you know, the different areas of the business and how they're performing, that's how we're going to be looking at it. And again, I think that's, you know, similar and maybe not too different than what the other assets in that space are growing at. And our expectation would be that we would, you know, prospectively be growing at or above the other assets in that segment of the market. And that's currently where that enterprise-based performed in Q3.",
+          "role": "future relative growth expectation of enterprise business; prior 10% is actual"
+        }
+      ],
+      "expected_source_fields": {
+        "value_text": "prospectively be growing at or above the other assets in that segment of the market",
+        "business_scope": "enterprise business / client base above 100",
+        "period_text": "prospectively",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not copy current 10% as future value or substitute Paycor brand alone for described enterprise scope.",
+        "Resolve explicit undefined horizon and comparator meaning without a numeric threshold."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 56406,
+        "end": 58068
+      }
+    },
+    {
+      "id": "P3-18",
+      "meaning": "Q4 Management Solutions organic growth improves",
+      "status": "confirmed_claim",
+      "evidence": [
+        {
+          "passage": "QA026",
+          "start": 0,
+          "end": 1198,
+          "global_start": 64349,
+          "global_end": 65547,
+          "text": "Jason Kupferberg [4612]: Thanks, guys. Good morning. I wanted to ask about management solutions specifically. I think the organic growth was 4% in the quarter. I think that's the same as we saw last quarter. Do we expect that to accelerate in Q4? And if so, is that because you'll start to lap PACOR during the quarter? Or would there be other accelerants we should be considering? Thanks.\nBob Schrader [4635]: Hey, Jason. Yes, I would say, you know, I think it was four in Q2 and four in Q3. I would tell you one was a roundup and one was probably a rounddown. And so you're also seeing a sequential improvement in the organic growth of management solutions as well. Part of it is when you get to Q4, we would expect that to continue and maybe accelerate a little bit to the point that you're making your anniversary and the acquisition. So now we have a scale business that's growing faster than the overall growth of the business, so that would be accretive to the organic growth. And then we're continuing to build momentum on the synergy opportunity, and I think that showed up in the Q3 selling results, and that will eventually make its way into P&L. And so you should see improvement there.",
+          "role": "Q4 organic Management Solutions growth outlook; Q2/Q3 fours are actuals"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "Q4",
+        "value_text": "continue and maybe accelerate a little bit",
+        "measurement_words": [
+          "organic"
+        ],
+        "business_scope": "management solutions",
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Do not make current 4% the Q4 value; preserve maybe qualification."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 64349,
+        "end": 65547
+      }
+    },
+    {
+      "id": "P3-19",
+      "meaning": "EPS guidance unchanged",
+      "status": "claim_requires_prior_scope",
+      "evidence": [
+        {
+          "passage": "PR008",
+          "start": 2164,
+          "end": 2355,
+          "global_start": 11900,
+          "global_end": 12091,
+          "text": "Shifting to our guidance for FY26, which is based on current market conditions, we reaffirm our prior fiscal 26 outlook, except for raising our interest on funds held for client expectations.",
+          "role": "annual period, macro assumption and movement"
+        },
+        {
+          "passage": "PR008",
+          "start": 2451,
+          "end": 2495,
+          "global_start": 12187,
+          "global_end": 12231,
+          "text": "All other guidance metrics remain unchanged.",
+          "role": "numberless blanket reaffirmation"
+        },
+        {
+          "passage": "QA027",
+          "start": 94,
+          "end": 1048,
+          "global_start": 65643,
+          "global_end": 66597,
+          "text": "okay understood um and then just a clarification um i know we're not changing eps guidance but we did up the float income guide a little bit which i would have thought would have lifted the eps i don't know maybe a percent or so i mean there's only a quarter left in the year so just curious um is it just some conservatism there leaving the eps guide as is are you going to reinvest some of that um\nBob Schrader [4712]: It's probably a combination of both. I think we're certainly going to look for opportunities as we move through the balance of this year to invest. We want to get out of the gate strong when we get into next fiscal year. So it's always balancing those trade-offs, Jason. John and I will manage to do that as we go through the quarter and see where the opportunities are. But it's really a combination of maybe a little conservatism and and where we may potentially want to take advantage and make some investments as we end the year.",
+          "role": "EPS guide unchanged despite interest improvement; management confirms tradeoff discussion"
+        }
+      ],
+      "expected_source_fields": {
+        "period_text": "FY26",
+        "driver_state": "reaffirmed",
+        "numeric_amount_stated": false,
+        "company_confirmed": true
+      },
+      "unresolved_fields_or_policy": [
+        "Resolve exact EPS measurement/series from source and permitted history; analyst suggested percent uplift is not company guidance."
+      ],
+      "complete_record_gold": false,
+      "continuous_quote_interval": {
+        "start": 11900,
+        "end": 66597
+      }
+    }
+  ],
+  "passage_coverage": [
+    {
+      "passage": "PR000",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "979f0a1b6a0eb0c93edb524a1d7dd115f432035a6c94304b025ea2f533a45add"
+    },
+    {
+      "passage": "PR001",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "cb65cb007aaca0ef5abf7702526af0d7197e88e34073d50d2279d8e3932f9b3d"
+    },
+    {
+      "passage": "PR002",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "7d0dcaab7c9be77edbbd484e2745981b3d0b31ccb08907a279e05047368318de"
+    },
+    {
+      "passage": "PR003",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "6a77a0a6567b210959ddbd41183749476574ba9f0380267a9b8ddaa5c93f9ac9"
+    },
+    {
+      "passage": "PR004",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "dc1ccb5551a4ff1173f34d0f5a62bb59b6bb5df0089ef6d121a21d63cff85f02"
+    },
+    {
+      "passage": "PR005",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "b01c8e55553465d4be1136c893a44d2befebff2c85890ade0fc7b2982ee5a2a2"
+    },
+    {
+      "passage": "PR006",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "b8abd924011d95090841dff5c7d82236c34504894b624a9ec8d15e4fdbba6b64"
+    },
+    {
+      "passage": "PR007",
+      "reason": "P3-10/11 synergy outlook; broad business runway and product plans are not quantified guidance.",
+      "text_sha256": "cc2b9df412b17d7ed1b1da58cc17b3ccd1363d372a66c801ad1364663c298f49"
+    },
+    {
+      "passage": "PR008",
+      "reason": "P3-01–04 and blanket unchanged guidance; preceding metrics actual.",
+      "text_sha256": "d352f7d2b49704c86ff66171315cc208459fa7d114adc900786feac7bcbef1b8"
+    },
+    {
+      "passage": "PR009",
+      "reason": "Question procedure.",
+      "text_sha256": "b05e0a7247219189881822561753402bc028c41fb355909c3561b9dd0aa1744d"
+    },
+    {
+      "passage": "QA000",
+      "reason": "P3-05–07; source-stated H2 and FY amounts distinct from actual H1.",
+      "text_sha256": "e42d6889e1b10dec39c4852f628418df906eae802a3ef254b3b68c4a74c37efc"
+    },
+    {
+      "passage": "QA001",
+      "reason": "P3-12; no published metric-specific FY27 quantities to import.",
+      "text_sha256": "44dbb65a4b772b5a39307493484392221376d5052864637f651a8fc0b6c40e63"
+    },
+    {
+      "passage": "QA002",
+      "reason": "Current bookings and positioning; no new financial forecast amount.",
+      "text_sha256": "f2ef09d5a0b9ee31537de3eaacb72d043ea915ea173f5e606874028a3e0370ee"
+    },
+    {
+      "passage": "QA003",
+      "reason": "P3-13 conditional margin outlook; future planning not quantified savings.",
+      "text_sha256": "1b31cf4dbe5776d6ac2ca9b8de35a904f349619fa9cad80f2b2f0093835cf406"
+    },
+    {
+      "passage": "QA004",
+      "reason": "P3-14 qualitative risk outlook, boundary for source-based scope review.",
+      "text_sha256": "267140dd4803e01ab56617fa43c90c094fa45c7b9dce338243e1638662d340d1"
+    },
+    {
+      "passage": "QA005",
+      "reason": "AI/product value strategy and current operating method, no specific forecast.",
+      "text_sha256": "7518863c23dd410ab2bf858713b2ad532117c695699e0b14c8e020416d77bc99"
+    },
+    {
+      "passage": "QA006",
+      "reason": "Current PEO results, timing explanations and growth strategy; historical CAGR not new forward value.",
+      "text_sha256": "efc68b0d62d1abfa880405435495884604c85ed47f7f62a4fc99a3b88f4d5f7f"
+    },
+    {
+      "passage": "QA007",
+      "reason": "P3-07 source-stated Q4 organic acceleration.",
+      "text_sha256": "ca4e478fda3b8548433f32fcc9ee2bda100187e3da6230ce7e16f4bfad679bac"
+    },
+    {
+      "passage": "QA008",
+      "reason": "P3-08/09 different periods/directions.",
+      "text_sha256": "81517aab04bce3cc905f0bbc5c0e24b5ed57b72ab451a2017efd426020394f07"
+    },
+    {
+      "passage": "QA009",
+      "reason": "Completed cost synergy actions and future opportunity, supports P3-10 context without new amount.",
+      "text_sha256": "5630f2522dc95c0347736933bf5d12f1e079ab7b67be96e86f3e15fa59de6bac"
+    },
+    {
+      "passage": "QA010",
+      "reason": "P3-10/11; prior cost ranges and current high-end revenue outlook differ.",
+      "text_sha256": "d5f7f0e05770a90c8d9ec9c80db7185bc61361128e9de98bd58ae01457880a27"
+    },
+    {
+      "passage": "QA011",
+      "reason": "Customer examples and business model; sizes are not forecast amounts.",
+      "text_sha256": "b097fd72379cf413b8022da631fa023df9cf0d83aae5027116077b1d255a11ae"
+    },
+    {
+      "passage": "QA012",
+      "reason": "Current deal-size trends unchanged.",
+      "text_sha256": "5a2fc2d2c86640a5cf7ae30777ad87b185abb992d2ef4c45a223d068657da3e5"
+    },
+    {
+      "passage": "QA013",
+      "reason": "Current employee/client mix and growth causes.",
+      "text_sha256": "3033077a779f0a920137392a124d83ae2f29fd26d3a1dfcdede75090c0a8043b"
+    },
+    {
+      "passage": "QA014",
+      "reason": "Observed booking conversion lag; current operating metric, not a new specified future guidance value.",
+      "text_sha256": "8ce0ef54e251f036697307873cd8efc0b02f51ad87d4c47a70a2a642b7b4178f"
+    },
+    {
+      "passage": "QA015",
+      "reason": "Current cross-sell implementation speed.",
+      "text_sha256": "324f317827662375358bd208586be99b3ab97e5e342c6297c9c492a58925716b"
+    },
+    {
+      "passage": "QA016",
+      "reason": "P3-04 measurement exclusion and P3-13 future margin context; GAAP 40% is current.",
+      "text_sha256": "6e6adec09516a5c1780c787d4a2d022716d6ca539d356ea9f0f620416aab1ba8"
+    },
+    {
+      "passage": "QA017",
+      "reason": "Actual form-filing performance and pricing.",
+      "text_sha256": "9fb4c623929b52c41ba0b164c09d029b4ba43549084c4bccfc827e1be7e0217b"
+    },
+    {
+      "passage": "QA018",
+      "reason": "P3-15 low-end reaffirmation.",
+      "text_sha256": "fa4b81fdd3d30a626a28f986899e147bcba7e63e1f56d25a560df281c6c74fc6"
+    },
+    {
+      "passage": "QA019",
+      "reason": "P3-16 early planning assumptions.",
+      "text_sha256": "84ffaca80ea3437066d498390eb9079bb7038fecda090d029510a28d04d87093"
+    },
+    {
+      "passage": "QA020",
+      "reason": "Hiring action/strategy, no staffing level or explicit financial target.",
+      "text_sha256": "56607b5f4811a0fd874aeaa207e57f773d9feebe91d28946ac93a2de5028896f"
+    },
+    {
+      "passage": "QA021",
+      "reason": "P3-17; upper-single-digit and 10% values are actuals.",
+      "text_sha256": "6b6947715cd3e312be6cf99f388ec97dc37d5376660508062b410847dc0c9073"
+    },
+    {
+      "passage": "QA022",
+      "reason": "Explicitly declines next-year pricing details; no metric-specific forecast value.",
+      "text_sha256": "7f83103a4fce6ab15cd35a9d7c314e50d62bab26edb89f013c73136df549e9e2"
+    },
+    {
+      "passage": "QA023",
+      "reason": "Current enrollment choices and examples.",
+      "text_sha256": "86a67e80e5d5db49e3bd259789f93a7c610c1d1672854077e313784f4ebac6de"
+    },
+    {
+      "passage": "QA024",
+      "reason": "Sales segmentation/lead-routing strategy, no financial forecast.",
+      "text_sha256": "44aeaa43f36a44825196ce3c3f77df9f04a402763a4a280933640f48a578e2b9"
+    },
+    {
+      "passage": "QA025",
+      "reason": "Buyback philosophy and possible borrowing, no promised amount; analyst proposal not confirmed.",
+      "text_sha256": "73603bb26f71bfa9cc5703aae22a772933de3478be9c6192c0e311e128d3b673"
+    },
+    {
+      "passage": "QA026",
+      "reason": "P3-18; continuation text spills into next exchange.",
+      "text_sha256": "e0c98d9eb875a0bcf56d431436c4866072bdd410bae209ae53543f5a2a533d43"
+    },
+    {
+      "passage": "QA027",
+      "reason": "P3-19 and closing; no analyst-derived EPS increase accepted.",
+      "text_sha256": "64c42e9a0698df9500d0d9a0ec34c6fff0bdb6fc40938cc52364465fa8e6a78e"
+    }
+  ]
+}

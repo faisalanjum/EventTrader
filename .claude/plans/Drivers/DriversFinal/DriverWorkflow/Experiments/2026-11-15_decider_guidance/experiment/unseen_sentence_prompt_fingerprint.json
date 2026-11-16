@@ -1,0 +1,6 @@
+{
+  "definition": "Guidance is a specific financial or operating forecast, target or outlook stated or clearly confirmed by company management. Include numerical and meaningful qualitative forecasts, reaffirmations, withdrawals, and qualifications that change a forecast's meaning. Exclude actual results, merely recalled old forecasts, analyst-only estimates, vague optimism and boilerplate. A hypothetical illustration is not a committed forecast. Resolve references using the entire call; do not invent missing facts.",
+  "question_template": "Under the supplied definition, does sentence [S] state or qualify management guidance elsewhere in this transcript? Use the whole call to resolve references; an analyst's question needs management confirmation.",
+  "package": "pysbd==0.3.4",
+  "mode": "isolated"
+}

@@ -1,0 +1,56 @@
+{
+  "expected_naming_sentences": {
+    "F0": [
+      "S14"
+    ],
+    "F1": [
+      "S14"
+    ],
+    "F2": [
+      "S15"
+    ],
+    "F3": [
+      "S15"
+    ],
+    "F4": [
+      "S71"
+    ],
+    "F5": [
+      "S71"
+    ],
+    "V53": [
+      "S65"
+    ],
+    "V65": [
+      "S75"
+    ],
+    "V66": [
+      "S75"
+    ],
+    "V90": [
+      "S146"
+    ],
+    "V91": [
+      "S146"
+    ],
+    "V103": [
+      "S181",
+      "S183",
+      "S184"
+    ],
+    "V108": [
+      "S181",
+      "S183",
+      "S184"
+    ],
+    "V109": [
+      "S181",
+      "S183",
+      "S184"
+    ],
+    "S212": [
+      "S201"
+    ]
+  },
+  "basis": "Independent reading of frozen source: this reference only checks useful naming sentences; it does not establish complete field wording, attribution, conditions, or record accuracy. Alternate legitimate source evidence must be adjudicated rather than declared wrong solely by ID mismatch."
+}

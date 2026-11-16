@@ -1,0 +1,21 @@
+{
+  "audit_sha256": "e47eb3e81546aa5791b958e8b9d47ee425efe191cfc33b0e6c770fb153143a2e",
+  "totals": {
+    "blocks": 169945,
+    "utterances": 441843,
+    "verified_header": 441764,
+    "numeric_questions_before": 1978968,
+    "numeric_questions_after": 1537122,
+    "question_reduction": 441846,
+    "body_digits_preserved": 3680208,
+    "header_name_not_in_metadata": 79
+  },
+  "question_reduction_percent": 22.32709169627806,
+  "native_and_adapter_sha256": {
+    "/home/faisal/EventMarketDB/transcripts/EarningsCallTranscripts.py": "ce372610cd4a806acfd06987c359d728619ce50049efca4a10dd765282ea9945",
+    "/home/faisal/EventMarketDB/scripts/driver_seed/relocate_probe/phase2/m1_transcript_census.py": "ed932608205904b2939d4a38721f9f01b8bc941965764bad61c78576e165c38b",
+    "/tmp/decider_claude_review_20261115/metadata_candidates.py": "576f80107e88b9b4f49d2da925b28c3f4b88ffcad2fc18209b7c2795865ed5c5",
+    "/tmp/decider_claude_review_20261115/test_metadata_candidates.py": "a37bee1d5c5ff57f3efbdf198c7d194b1767a4e415d8b788b21a3455d90595e9"
+  },
+  "verified": "Category counts reconcile; native body equality and complete body-digit coverage were asserted per utterance in the live audit. All unknown headers keep every candidate. No model acceptance or speed claim."
+}

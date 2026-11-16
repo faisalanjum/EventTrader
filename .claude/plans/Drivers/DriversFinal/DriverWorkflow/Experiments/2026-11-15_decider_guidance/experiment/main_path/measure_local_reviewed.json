@@ -1,0 +1,365 @@
+{
+  "pointer_seconds": 220.1999982399866,
+  "short_locate_seconds": 34.509774789912626,
+  "nonempty": 12,
+  "targets": 15,
+  "complete_record_pass": false,
+  "rows": [
+    {
+      "target": {
+        "tag": "F0",
+        "passage": "PR002",
+        "start": 1393,
+        "end": 1417,
+        "text": "$11.21 billion to $11.24",
+        "aliases": [
+          "V13",
+          "V14"
+        ],
+        "insert_at": "V13"
+      },
+      "selected": "S14",
+      "pointer_probability": 0.990445927296028,
+      "spans": [
+        {
+          "start": 142,
+          "end": 149,
+          "text": "revenue",
+          "score": 1.0,
+          "exact": true,
+          "source_passage": "PR002",
+          "source_start": 1363,
+          "source_end": 1370
+        }
+      ],
+      "review": "Useful exact measure wording: revenue."
+    },
+    {
+      "target": {
+        "tag": "F1",
+        "passage": "PR002",
+        "start": 1450,
+        "end": 1463,
+        "text": "8.4% to 8.7%.",
+        "aliases": [
+          "V15",
+          "V16"
+        ],
+        "insert_at": "V15"
+      },
+      "selected": "S14",
+      "pointer_probability": 0.9754505074249701,
+      "spans": [
+        {
+          "start": 208,
+          "end": 225,
+          "text": "total growth rate",
+          "score": 0.9999149441719055,
+          "exact": true,
+          "source_passage": "PR002",
+          "source_start": 1429,
+          "source_end": 1446
+        }
+      ],
+      "review": "Incomplete as a standalone measure name: total growth rate omits revenue. Source sentence retains it, but extraction has not established a complete field."
+    },
+    {
+      "target": {
+        "tag": "F2",
+        "passage": "PR002",
+        "start": 1517,
+        "end": 1532,
+        "text": "$4.86 to $4.90,",
+        "aliases": [
+          "V17",
+          "V18"
+        ],
+        "insert_at": "V17"
+      },
+      "selected": "S15",
+      "pointer_probability": 0.9956376278221958,
+      "spans": [
+        {
+          "start": 138,
+          "end": 158,
+          "text": "adjusted diluted EPS",
+          "score": 1.0,
+          "exact": true,
+          "source_passage": "PR002",
+          "source_start": 1474,
+          "source_end": 1494
+        }
+      ],
+      "review": "Useful exact measure wording: adjusted diluted EPS."
+    },
+    {
+      "target": {
+        "tag": "F3",
+        "passage": "PR002",
+        "start": 1550,
+        "end": 1565,
+        "text": "10.5% to 11.4%.",
+        "aliases": [
+          "V19",
+          "V20"
+        ],
+        "insert_at": "V19"
+      },
+      "selected": "S15",
+      "pointer_probability": 0.9897901945192756,
+      "spans": [
+        {
+          "start": 138,
+          "end": 158,
+          "text": "adjusted diluted EPS",
+          "score": 0.9909989237785339,
+          "exact": true,
+          "source_passage": "PR002",
+          "source_start": 1474,
+          "source_end": 1494
+        }
+      ],
+      "review": "Measure wording omits growth; do not silently treat this percentage forecast as an EPS amount. Complete meaning still needs supported fields/evidence."
+    },
+    {
+      "target": {
+        "tag": "F4",
+        "passage": "PR004",
+        "start": 2167,
+        "end": 2171,
+        "text": "$101",
+        "aliases": [
+          "V59"
+        ],
+        "insert_at": "V59"
+      },
+      "selected": "S71",
+      "pointer_probability": 0.9879878645095072,
+      "spans": [
+        {
+          "start": 195,
+          "end": 227,
+          "text": "fiscal 2026 net interest expense",
+          "score": 0.9967173933982849,
+          "exact": true,
+          "source_passage": "PR004",
+          "source_start": 2117,
+          "source_end": 2149
+        }
+      ],
+      "review": "Name span also contains the fiscal period; it is not a clean canonical name."
+    },
+    {
+      "target": {
+        "tag": "F5",
+        "passage": "PR004",
+        "start": 2217,
+        "end": 2221,
+        "text": "20%,",
+        "aliases": [
+          "V61"
+        ],
+        "insert_at": "V61"
+      },
+      "selected": "S71",
+      "pointer_probability": 0.9816281876741175,
+      "spans": [
+        {
+          "start": 261,
+          "end": 291,
+          "text": "fiscal 2026 effective tax rate",
+          "score": 0.999366819858551,
+          "exact": true,
+          "source_passage": "PR004",
+          "source_start": 2183,
+          "source_end": 2213
+        }
+      ],
+      "review": "Name span also contains the fiscal period; it is not a clean canonical name."
+    },
+    {
+      "target": {
+        "tag": "V53",
+        "passage": "PR004",
+        "start": 1497,
+        "end": 1500,
+        "text": "1.5"
+      },
+      "selected": "S65",
+      "pointer_probability": 0.9888265852560212,
+      "spans": [
+        {
+          "start": 182,
+          "end": 196,
+          "text": "debt to EBITDA",
+          "score": 0.968765139579773,
+          "exact": true,
+          "source_passage": "PR004",
+          "source_start": 1507,
+          "source_end": 1521
+        }
+      ],
+      "review": "Useful measure wording: debt to EBITDA."
+    },
+    {
+      "target": {
+        "tag": "V65",
+        "passage": "PR004",
+        "start": 2888,
+        "end": 2893,
+        "text": "$0.03"
+      },
+      "selected": "S75",
+      "pointer_probability": 0.9691686663648711,
+      "spans": [
+        {
+          "start": 224,
+          "end": 250,
+          "text": "diluted earnings per share",
+          "score": 0.9999972581863403,
+          "exact": true,
+          "source_passage": "PR004",
+          "source_start": 2845,
+          "source_end": 2871
+        }
+      ],
+      "review": "EPS wording omits the transaction-cost impact qualification; not a complete field by itself."
+    },
+    {
+      "target": {
+        "tag": "V66",
+        "passage": "PR004",
+        "start": 2897,
+        "end": 2903,
+        "text": "$0.04."
+      },
+      "selected": "S75",
+      "pointer_probability": 0.9870107736999105,
+      "spans": [
+        {
+          "start": 224,
+          "end": 250,
+          "text": "diluted earnings per share",
+          "score": 0.9999984502792358,
+          "exact": true,
+          "source_passage": "PR004",
+          "source_start": 2845,
+          "source_end": 2871
+        }
+      ],
+      "review": "Same incomplete field as V65; endpoints are duplicate work, not two facts."
+    },
+    {
+      "target": {
+        "tag": "V90",
+        "passage": "QA006",
+        "start": 1336,
+        "end": 1338,
+        "text": "2%"
+      },
+      "selected": "S146",
+      "pointer_probability": 0.9739688069365288,
+      "spans": [],
+      "review": "No span. This is an actual pricing control wrongly advanced by numeric-role work routing, not a missing expected guidance record."
+    },
+    {
+      "target": {
+        "tag": "V91",
+        "passage": "QA006",
+        "start": 1342,
+        "end": 1344,
+        "text": "3%"
+      },
+      "selected": "S146",
+      "pointer_probability": 0.978616761998909,
+      "spans": [
+        {
+          "start": 129,
+          "end": 136,
+          "text": "Pricing",
+          "score": 0.9898645877838135,
+          "exact": true,
+          "source_passage": "QA006",
+          "source_start": 1258,
+          "source_end": 1265
+        }
+      ],
+      "review": "Pricing is a real source term, but this is an actual control, not proof of guidance eligibility."
+    },
+    {
+      "target": {
+        "tag": "V103",
+        "passage": "QA016",
+        "start": 1805,
+        "end": 1808,
+        "text": "8%."
+      },
+      "selected": "S182",
+      "pointer_probability": 0.7809919976775646,
+      "spans": [],
+      "review": "Pointer selected the value sentence instead of the measure-naming antecedent; no span."
+    },
+    {
+      "target": {
+        "tag": "V108",
+        "passage": "QA016",
+        "start": 2080,
+        "end": 2084,
+        "text": "7.6,"
+      },
+      "selected": "S185",
+      "pointer_probability": 0.7584076718460875,
+      "spans": [
+        {
+          "start": 164,
+          "end": 174,
+          "text": "Q4 implied",
+          "score": 0.9912418723106384,
+          "exact": true,
+          "source_passage": "QA016",
+          "source_start": 2066,
+          "source_end": 2076
+        }
+      ],
+      "review": "Pointer selected the value sentence. Q4 implied is not the measure name despite Locate score >0.99."
+    },
+    {
+      "target": {
+        "tag": "V109",
+        "passage": "QA016",
+        "start": 2107,
+        "end": 2111,
+        "text": "7.9."
+      },
+      "selected": "S185",
+      "pointer_probability": 0.6454760619350173,
+      "spans": [
+        {
+          "start": 194,
+          "end": 201,
+          "text": "average",
+          "score": 0.9945862889289856,
+          "exact": true,
+          "source_passage": "QA016",
+          "source_start": 2096,
+          "source_end": 2103
+        }
+      ],
+      "review": "Pointer selected the value sentence. average does not identify the measure despite Locate score >0.99."
+    },
+    {
+      "target": {
+        "tag": "S212",
+        "passage": "QA022",
+        "start": 854,
+        "end": 1032,
+        "text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st."
+      },
+      "selected": "S211",
+      "pointer_probability": 0.46260299783206127,
+      "spans": [],
+      "review": "Pointer chose an intervening reference rather than the analyst sentence naming the margin headwind; no span."
+    }
+  ],
+  "decision": "Do not adopt this as a solved measure extractor. Short copying is fast for direct wording, but implicit references, type correctness, complete qualifiers and canonical naming remain unresolved. Do not add another repair chain for this failure class."
+}

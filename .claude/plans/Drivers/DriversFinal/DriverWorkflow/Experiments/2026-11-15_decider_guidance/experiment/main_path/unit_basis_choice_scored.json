@@ -1,0 +1,82 @@
+{
+  "seconds": 192.58325905003585,
+  "usage": {
+    "input_tokens": 16189,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "rows": [
+    {
+      "id": "F1",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.04575492787550362,
+          "previous_period": 0.0016245744096547458,
+          "two_bases": 0.000795940165431587,
+          "other_stated": 0.007305622523967045,
+          "not_stated": 0.9252800291562451,
+          "unclear": 0.01923890586919788
+        },
+        "choice": "not_stated",
+        "confidence": 0.910336034987494
+      },
+      "correct": true
+    },
+    {
+      "id": "F3",
+      "expected": "not_stated",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.03950049316485617,
+          "previous_period": 0.0013672177436799817,
+          "two_bases": 0.000760870002167154,
+          "other_stated": 0.0038865125758714993,
+          "not_stated": 0.9307561706283856,
+          "unclear": 0.023728735885039615
+        },
+        "choice": "not_stated",
+        "confidence": 0.9169074047540626
+      },
+      "correct": true
+    },
+    {
+      "id": "V7",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9938812236913008,
+          "previous_period": 0.0006797420197247091,
+          "two_bases": 0.00019011845834166863,
+          "other_stated": 0.004257209125241288,
+          "not_stated": 0.0005833723105545247,
+          "unclear": 0.0004083343948369758
+        },
+        "choice": "year_earlier",
+        "confidence": 0.992657468429561
+      },
+      "correct": true
+    },
+    {
+      "id": "V10",
+      "expected": "year_earlier",
+      "answer": {
+        "type": "choice",
+        "probabilities": {
+          "year_earlier": 0.9967320730882198,
+          "previous_period": 0.0005559769686787583,
+          "two_bases": 0.0001236343034017993,
+          "other_stated": 0.0016212334628209993,
+          "not_stated": 0.0006156337649651846,
+          "unclear": 0.00035144841191344636
+        },
+        "choice": "year_earlier",
+        "confidence": 0.9960784877058637
+      },
+      "correct": true
+    }
+  ]
+}

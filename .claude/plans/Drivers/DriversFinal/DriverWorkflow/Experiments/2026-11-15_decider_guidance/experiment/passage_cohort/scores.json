@@ -1,0 +1,2290 @@
+{
+  "scope": "Six development calls, one fixed passage question. Labels are source-derived, not independently adjudicated gold. Existing 0.5 and 0.25 cutoffs are descriptive comparisons, not tuned or certified settings.",
+  "complete": true,
+  "missing_results": [],
+  "technical_errors": [],
+  "runs": [
+    {
+      "source": "CTAS_2025-09-24T10.00",
+      "seconds": 178.6665050839074,
+      "usage": {
+        "input_tokens": 13394,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    },
+    {
+      "source": "CTAS_2025-12-18T10.00",
+      "seconds": 133.49318959680386,
+      "usage": {
+        "input_tokens": 12575,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    },
+    {
+      "source": "PAYX_2025-09-30T09.30",
+      "seconds": 129.5634376539383,
+      "usage": {
+        "input_tokens": 12249,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    },
+    {
+      "source": "PAYX_2025-12-19T09.30",
+      "seconds": 158.63835058384575,
+      "usage": {
+        "input_tokens": 14699,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    },
+    {
+      "source": "PAYX_2026-03-25T09.30",
+      "seconds": 200.33114540902898,
+      "usage": {
+        "input_tokens": 17800,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    },
+    {
+      "source": "CTAS_2026-03-25T10.00",
+      "seconds": 136.21116977999918,
+      "usage": {
+        "input_tokens": 12807,
+        "output_tokens": 0,
+        "sequences": 1
+      }
+    }
+  ],
+  "rows": [
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction; no forecast.",
+      "text_sha256": "745e88332a64515d7eb61d95a0c1ce5f0ccfe4bb6543d3cd7c9325c292fc6552",
+      "probability": 0.006398304548189541
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Participants and forward-looking disclaimer; no specific forecast.",
+      "text_sha256": "5cf578768f34a2ed4a4669b31f3241eac341346f06db3b552c3d2fa7c8e0c587",
+      "probability": 0.0067305814031481765
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "SEP01–04, period and movement; reported results are negative controls.",
+      "text_sha256": "e0f2d48f040a8d0e1a30179a5c6014c85c71328335b5efa788037494a212a5ff",
+      "probability": 0.9976815993858393
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Actual segment results and business example; no separate specific forecast.",
+      "text_sha256": "1f49b600a04edbb83fea1c1dd69098668a0d46477d0d63a5605561fc108f1dea",
+      "probability": 0.031845417941394304
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "SEP05–06 and shared assumptions for annual guidance; actual results/capital allocation are not new guidance.",
+      "text_sha256": "1b8d1ff1bfff53700f2082457a5d867c60ff7219a33495e275cb6bb86a964e77",
+      "probability": 0.9882693603645621
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "General confidence and investment intent; no separate specific financial target.",
+      "text_sha256": "3eca557ad97fca258390beed6fe4878413568eed98852cd8a5134bcae9f73f67",
+      "probability": 0.12602399477398388
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Call procedure only.",
+      "text_sha256": "89e49c962a19e121b932074db20d27b324f7295fbc5027b5ae0b45384a6f8e55",
+      "probability": 0.005224522997304148
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Call procedure only.",
+      "text_sha256": "0e4504cfce45882b6dcf2b5fc557fb84a3b682a30f69af364cd3f7b1587b8638",
+      "probability": 0.05997471950919985
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Future investment plans and generic ability to grow; not a specific forecast level. Mixed speaker text must not be inferred from stored label alone.",
+      "text_sha256": "7c15aa98287e762f26889f8dc813ca8949063cac7b1c44a885c0e37035f2aa34",
+      "probability": 0.02745450285111255
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA001",
+      "label": "negative",
+      "reason": "Current selling environment/results, not a specific future forecast.",
+      "text_sha256": "1b30d0a06c856ea3d7096c1e5a62b11bb2dbfe035b9cb3d472fadfb5fe32910b",
+      "probability": 0.05716518099735748
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "SEP10, remaining-quarter growth guide; metric association unresolved.",
+      "text_sha256": "084d6bff64d99e3dafbf7c0e2bc9d615dc8785707c3bdfc7c6d65b0245c78d77",
+      "probability": 0.9083222611498496
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA003",
+      "label": "negative",
+      "reason": "Current business drivers and generic growth confidence; employment context, no exact separate forecast.",
+      "text_sha256": "55f0fc963e8febf8eb66f83d07e23fc9deda335025f492c02c962d58d10ecf6c",
+      "probability": 0.17081791162490845
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA004",
+      "label": "negative",
+      "reason": "Observed early-quarter demand, not a new full-period forecast.",
+      "text_sha256": "dda86a473c1e5cb49e316b5baac73ef915cc578c5e72231a5b74b590751a9fe3",
+      "probability": 0.13174488747880198
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Customer example and strategy; no separate guidance target.",
+      "text_sha256": "bf157457ebbccf99f481e58126dc5c11cdae50ec9b06769855ad2901c3285dd6",
+      "probability": 0.07605677843093872
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "Employment assumption supporting guidance; inventory/use-of-capital discussion is current explanation, not a stated amount forecast.",
+      "text_sha256": "b1465305b377676ba6c4581f3ff5e3be685f0860bdbe16b22e2e4fc09b0492a3",
+      "probability": 0.550786690437397
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Current vertical/customer behavior.",
+      "text_sha256": "2696df1b51f150d67391bcba76594407ce43dd186a8ecc31d9d0226a637537fa",
+      "probability": 0.015083759555373402
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "SEP07–09; current range and remaining-quarter guidance, with possible scope/meaning ambiguities.",
+      "text_sha256": "092ceec723fc3881fdb502e3893c6342b38bc98b30cc445fdc63db79f3c83627",
+      "probability": 0.9039892486930694
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA009",
+      "label": "positive",
+      "reason": "Tariff environment included in guide; supplier statistics are actuals, not forecasts.",
+      "text_sha256": "6a653b9cf67f2ff6e3dfbcbe44511d6d5999eca7fc2027b79fc65cd764580803",
+      "probability": 0.8623154163360596
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA010",
+      "label": "negative",
+      "reason": "Current sales-cycle observation and general investment intent.",
+      "text_sha256": "47820ca11ad403088cfa1ed6bfb311d3b23c2a87acae6dd218e0d05501a1235d",
+      "probability": 0.018431563316737818
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Actual first-aid margins and investment timing; general positive outlook.",
+      "text_sha256": "c75e0db6bae498f44af196a17c9275a45462485155f4275c8a7b8de3ab6e89a5",
+      "probability": 0.02612604680428846
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Analyst proposes higher investment; management describes timing/ongoing investment, not a clear quantified or specific level forecast.",
+      "text_sha256": "bddbde4fb1de0990c2da29df82426d3937dd3dbfcafd04be91f4067ce8362f22",
+      "probability": 0.04488366130652771
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Competitive strategy/TAM and current customer counts, not company financial forecasts.",
+      "text_sha256": "4c33f7a723d7a824e5efef897f2a6eb456af3798509e40da71bda7411ac1e7cd",
+      "probability": 0.011730639635437865
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Actual all-other margins and planned investment activity.",
+      "text_sha256": "eeead4d6d75fe626be18f41a4b07a59e6b2307bf162ced4f1aeed7afe740b99c",
+      "probability": 0.033454730608243784
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Uniform-direct strategic context, current revenue share and general lumpiness; no specific future level.",
+      "text_sha256": "f3e1c76854611f53f7700f0f5e77efe553b9298b222ec97a81142909cfe5f2aa",
+      "probability": 0.017531817680978303
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "M&A opportunity/strategy, explicitly difficult to predict; no specific forecast.",
+      "text_sha256": "e8e7365ac25e30e9e1fc288ba400b1f2a3655485b45dcc0d2eaa8a287dd22bfe",
+      "probability": 0.035142389373039845
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA017",
+      "label": "positive",
+      "reason": "SEP11, first-aid worded growth target and horizon.",
+      "text_sha256": "1b65afdeb7d11472faa71554179409185e47cb30a860022074e4e44fe3889880",
+      "probability": 0.6711690225848846
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA018",
+      "label": "unadjudicated",
+      "reason": "SEP12, potential margin/leverage outlook; actual 56.8% is not a future point.",
+      "text_sha256": "1d08d7fb1e04332b2c81a9ca43a6fa5965adc891579166800a8b0561698426f8",
+      "probability": 0.19357368974803285
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Acquisition strategy and historical cadence, no specific financial/operating target.",
+      "text_sha256": "71a39e07fe8e29f026aeb2d7a403f724209ce55b5128407f9871f5459677d0b1",
+      "probability": 0.04071138259833601
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA020",
+      "label": "negative",
+      "reason": "Technology investment plans, not specific forecast amounts/levels.",
+      "text_sha256": "16374f1d8ef808e1f2db8e1d928422bc77751713f3ba2ecae1f8a6ee3f427ae8",
+      "probability": 0.018431563316737818
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA021",
+      "label": "negative",
+      "reason": "Strategy, current counts and possible acquisitions; no specific company forecast.",
+      "text_sha256": "7360e9a101ae97cd834b5da64f0fc4140df85c668e772fd3fae6ee5027e5a166",
+      "probability": 0.019376555854719344
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Current visa-policy impact observations; no future impact forecast.",
+      "text_sha256": "80a57c50b038f322a2b4ee152e18fbf499a37921582361b88c87250ef76c1719",
+      "probability": 0.0691966663746784
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA023",
+      "label": "positive",
+      "reason": "SEP13–14; stable SG&A investment and possible leverage outlook, with actual ratio controls.",
+      "text_sha256": "566ae13e1c1fee250f0292aa7749a66f4dd1099bf30ac31dec03ae61b63a3f1c",
+      "probability": 0.7635318040847778
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA024",
+      "label": "negative",
+      "reason": "Actual growth and counterfactual Q1 9% calculation; not future guidance.",
+      "text_sha256": "fa2574726fcebed9a167e13e7ec793257466c66becd0ef584ce3b155150b1de6",
+      "probability": 0.07605677843093872
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA025",
+      "label": "negative",
+      "reason": "Current M&A prices/strategy and uncertainty; no specific financial forecast.",
+      "text_sha256": "05979fdcac6a1c40f99cb69843a72b6b00d9c29716c1e96dccf8a7e088654cb0",
+      "probability": 0.013642043281854489
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA026",
+      "label": "positive",
+      "reason": "SEP15, standing CapEx target.",
+      "text_sha256": "f89b44380f335ef75bc9dfe46f76a2233e85d9b39997a78ddc34eaccdd0f9958",
+      "probability": 0.9480866997355457
+    },
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "passage": "QA027",
+      "label": "negative",
+      "reason": "Next reporting date; an event schedule, not financial guidance.",
+      "text_sha256": "ad30088ec28e63f948260c3223f40cdc34a4c4e11d090104e234e7dc548a93be",
+      "probability": 0.026126072200031165
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction; no guidance.",
+      "text_sha256": "309fb29fd06eaca177df5a3846cadb27ccdb96497cc30cf18f277033726f1dde",
+      "probability": 0.0040540897029440965
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Participants and cautionary disclaimer; no specific forecast.",
+      "text_sha256": "c64204c4402c0d5e732a2e6d24f577af35a1d6ea15a23d6fdc5d8553cebdd9a9",
+      "probability": 0.003308924970552693
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "DEC01–04; earlier numbers are actual results.",
+      "text_sha256": "f39094e26b18e3c5435a1fd61a5af815328cc63ae974138946853dc5fdaab811",
+      "probability": 0.9980096341801111
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Reported segment performance, strategy and transition to guidance assumptions.",
+      "text_sha256": "0b2666328016222e7b579d89e43df5a9136a62ecd3542b69b031d8bef07548fc",
+      "probability": 0.030311114860243238
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "DEC05–06, shared assumptions and prior asset gain that will not recur; actual capital allocation not guidance.",
+      "text_sha256": "c64bf854de77eb8870a9422395ffe298e28250e76313d7b880c5a17ef2a04db1",
+      "probability": 0.9917600723213701
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "General future commitment, no separate specific metric forecast.",
+      "text_sha256": "d1aaf10be7e2b3a93892be365fd651df42f41e4fef5c2afe4e08e8a066c85df2",
+      "probability": 0.04071135043567903
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Question procedure.",
+      "text_sha256": "dd5c1b049054ad1906f359b0e330d9648d0ddeeaaa64666f32807cbebc1004a9",
+      "probability": 0.003308924970552693
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Operator procedure.",
+      "text_sha256": "73b0f6728a3be6c060703c334508bd17fb73190402269ce10d0b29610bad0444",
+      "probability": 0.03691192992633764
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Observed employment/customer environment; no new specific forecast.",
+      "text_sha256": "d30f636e14b18c6492c64894526c783fa518d5bd689b487e85354369336ec859",
+      "probability": 0.022505423934411076
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA001",
+      "label": "positive",
+      "reason": "DEC07 standing organic-growth target; rest business examples. End includes next analyst introduction/question fragment.",
+      "text_sha256": "a92f4d1b9bac5356432fe3ebb9a26cfeb6888bff684e7af3dfed5051b05aaf97",
+      "probability": 0.38730305433273315
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "DEC08; actual second-quarter contribution distinct from forecast.",
+      "text_sha256": "a46388d308b67227723bb40cbb69cfefde371365a4e0d7903e8b7e04ab67f02a",
+      "probability": 0.8739760052260162
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "DEC09–11; actual incremental margins and comparison numbers must remain separate.",
+      "text_sha256": "cfa14502a7e7bd9ca5652a8302520ba148e4997b208d28ac5fec3f0076187626",
+      "probability": 0.8497613921690402
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "Tariff assumption applies to guide; sourcing statistics actual.",
+      "text_sha256": "cf8df05e8fbc74a705bfff777a2d71e4cdc690f697738541d92761a00f732c2a",
+      "probability": 0.9083221880101505
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA005",
+      "label": "positive",
+      "reason": "DEC12; margin mix discussion is context, not a new quantified target.",
+      "text_sha256": "6e6d06b5472614114f6ea0efc29b53554c7c40c2afc6d7bbabf31ccd24585446",
+      "probability": 0.5882505774497986
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Competition/current pricing and customer statistics.",
+      "text_sha256": "5ee2f676cb6e1f54c6f95adee9744a3da811d9c896171248c09c69e41aecc16b",
+      "probability": 0.012973011459249062
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual capital deployment and uncertain acquisition pipeline, not a promised amount.",
+      "text_sha256": "4bb28884c9a6e5e69fd95366375bf8c0e128e1304b0ab3123f80046c39a25056",
+      "probability": 0.015859882628698987
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Closing greeting.",
+      "text_sha256": "e89048f686708cb5fbe3b794ad9bb4c67e0d06a1a322bf8066dbfb89a37bda91",
+      "probability": 0.004487144618997079
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Current sales/customer conditions.",
+      "text_sha256": "d8ddb0eb5cf6bb47570d4e663855b983133ac41670a98ac6e817da190b4f49c4",
+      "probability": 0.06598544816683644
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "DEC13 explicit midpoint/repeated annual range; generic expected leverage context.",
+      "text_sha256": "becb79d3e9d5c25550bb946617ad71e5eeaf2997b0e5fcdd82ff4fd87ab6d44b",
+      "probability": 0.9551163386934722
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA011",
+      "label": "unadjudicated",
+      "reason": "Generic future margin comments plus the beginning of a question continued in QA012. Regardless of detector label, that context must remain accessible.",
+      "text_sha256": "4760a3c2b71b649cdd524f93054717858871e5da79460a1aec09b2b13c59784d",
+      "probability": 0.1502386078309598
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA012",
+      "label": "positive",
+      "reason": "DEC14–15; rollout schedule itself is a planned act, financial cost/margin forecast distinct; actual acquisition contribution not future value.",
+      "text_sha256": "99be3b27fbc1c041881ce662e1e4ac2c6397f454823ed0fdab2b14238c243a3e",
+      "probability": 0.8291822301216917
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Technology investment plans/general optimism, not a specified financial level.",
+      "text_sha256": "c428e53ca31ce380aa415f3fc425b0ee281ad099e1363984fcab90f792187d3d",
+      "probability": 0.031845443187992595
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Pricing strategy/current level and intent to improve efficiency, no definite amount/period forecast.",
+      "text_sha256": "dbb75e27a8ca32e60abe5e54525865e31ab43def9d6c989bc7be2ebef9bf6aca",
+      "probability": 0.02036899024352674
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current customer behavior.",
+      "text_sha256": "e06e2e1f91e542ec11d92039e30ba15ac6017e46c18031df4534e07d649d645f",
+      "probability": 0.015859882628698987
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA016",
+      "label": "unadjudicated",
+      "reason": "DEC16 policy-continuity borderline; analyst forecast of buybacks is not management guidance.",
+      "text_sha256": "793ae349c86cb23ead2211f15729a2ed4dec4e10d380e75ff995f6021388fc00",
+      "probability": 0.035142389373039845
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Actual segment shares and business examples.",
+      "text_sha256": "a52b77ba3ec0a1f9ec1aa69b0919ec65b5db126370c87659f927d58e772e1dda",
+      "probability": 0.07971636384091595
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "DEC07/17 standing and second-half growth outlook; generic geographic plans separate.",
+      "text_sha256": "beb54c1ce80553dc04781a540752ca090a7e97f3e531593bfa55c13f457c3282",
+      "probability": 0.5633608530950293
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Closing and next release schedule, not financial guidance.",
+      "text_sha256": "003d4dd3f9e2cefcdacd12d26eb565e4807275c07ef57e64534d3098b4c616c8",
+      "probability": 0.012336390621470258
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator introduction.",
+      "text_sha256": "349d7abd08b6c4244487aeea7f2ebec22156b976a5770707952eed72c3ea0bba",
+      "probability": 0.006082334585678089
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclaimer, report/filing schedule, no specific financial forecast.",
+      "text_sha256": "2d90fb544076b8f6efc735f199d245695d5c5b3b7e051b0e5a81a56af1602046",
+      "probability": 0.0036626748003701385
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "P1-01 cost-synergy target; actual performance, product plans and general opportunity statements separate.",
+      "text_sha256": "dcaa2abe7549f9110cc7229660960dff15a7ddc41b42940e2e75f4a16280eda9",
+      "probability": 0.9648576106269602
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR003",
+      "label": "positive",
+      "reason": "P1-02–12, annual and Q2 guidance plus earlier EPS comparison; preceding results are actuals.",
+      "text_sha256": "b0d927c77dc78abee900f958e4c6c8eaf89398f5759d8372ab952fe21279d522",
+      "probability": 0.9976815993858393
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Question transition.",
+      "text_sha256": "2f0a54b53251fef4681f0cb594f1140676d334bfc0671defc7098750a9f562b9",
+      "probability": 0.0034813243355517006
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA000",
+      "label": "negative",
+      "reason": "Current demand/bookings, not future amounts.",
+      "text_sha256": "f20d6216cf6a322a3dbc7b5f616e36a0ce17b5838f22ba3a08f7caf2410c068e",
+      "probability": 0.08752133501645919
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA001",
+      "label": "positive",
+      "reason": "P1-13; analyst low-double-digit wording not fully adopted.",
+      "text_sha256": "745a5dc846347ca8c46f70a5f78f8fe03c8ccb8ab18ec6fe2599f393b0881b32",
+      "probability": 0.9083222611498496
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "P1-12 supporting PEO outlook, actual performance and cause explanation.",
+      "text_sha256": "9aae5267d8d0c1b31e4e2e0c9f11d12497ef21059a14eb0ee51404751724f272",
+      "probability": 0.44921304436883197
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "P1-14 current-to-future expense reference; literal four-year wording cannot be silently corrected.",
+      "text_sha256": "504625641eee566e88c1cab4376bcbf63846fcb3ba3efb7e6a9f7cc81fbdf7d0",
+      "probability": 0.46185219287872314
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA004",
+      "label": "negative",
+      "reason": "Current recurring growth reconciliation, integration and realized sale example, no new forecast amount.",
+      "text_sha256": "a176fac6a9c3da62c7ca408310d97a8c6fd527c541b1544a3a75df28cc757fef",
+      "probability": 0.5381475526646509
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA005",
+      "label": "positive",
+      "reason": "P1-15; source explicitly says total company organic growth. Prior/current Q1 figures are not future guide.",
+      "text_sha256": "e04ddff05fecc1543eefb4a149e23e882d20247d02de4d9d97732f52107e9ce6",
+      "probability": 0.8291822301216917
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "Management expressly confirms raising EPS guidance. A repeated claim still counts as guidance presence; the analyst revision size is not confirmed.",
+      "text_sha256": "6fa8a312b84bcca9081c3baa396b005cd4ae1d49acf3689b3c474bf7c88f76fd",
+      "probability": 0.35170539165421155
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Question-only fragment continued in QA008.",
+      "text_sha256": "af7c36ad88531cbe80c2f04ca1deaa6e28434f44399834133d73a5b9776c24c3",
+      "probability": 0.21856185142511572
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "P1-16 plus repeated PEO H2 outlook; actual enrollment and operating plans separate.",
+      "text_sha256": "8d544d88ffe01c68630052e6929ecdf956f4e1cfe9d847c7c8f77e32f98dca36",
+      "probability": 0.5758538074536977
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Pricing/value strategy; no specific forecast.",
+      "text_sha256": "9f98ddaeaa472d0e261a0a14a3e8691d1464e92bdbde56a14c5590ec659cfbbf",
+      "probability": 0.021411149509231637
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "Management forecasts no big ARPU increase. Missing record period does not make this a passage without a forecast.",
+      "text_sha256": "4651e8a7dd3708f5eebdbd65c98128c20c31e1ac4b160e11427ad1740280963b",
+      "probability": 0.05997471950919985
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Current mix/results.",
+      "text_sha256": "e19b5d9079e165282c3b3ad6e9f666c9d016674a533497770bdcd2943c47902f",
+      "probability": 0.0629131267747795
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "AI/productivity plans and general benefits, no specified financial forecast.",
+      "text_sha256": "4e34e5ec2be8d5aec6cf00284e3efddb824c1fc0c65b7ca673d209540e24facd",
+      "probability": 0.024860230511234222
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Question-only exchange answered in QA014.",
+      "text_sha256": "7888f6e2c4890610d24b835db4ef554bc56344854dba53b2fda1cd3fa29da4be",
+      "probability": 0.12051703511512946
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Current synergies/pipeline and potential opportunities; not a new supported level.",
+      "text_sha256": "67a3be5569957e72235490ff7354c58698069442cbcfa6c6841003332f23bf4a",
+      "probability": 0.5633608530950293
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA015",
+      "label": "unadjudicated",
+      "reason": "P1-18 borderline direct exposure forecast; macro expectations not automatically company financial guidance.",
+      "text_sha256": "6ac7f5926d0ff6d7e9847c02b3e9eef34d6589d6553adfc6849e0b71ac849886",
+      "probability": 0.09167781198984945
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "Actions already taken and opportunities for more savings; no new target beyond P1-01.",
+      "text_sha256": "92e9137b3bd2c8b25b77fcdfc60b3718af3ee003dc044cc2a5ad4c2651b0d5e9",
+      "probability": 0.4241461925463023
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Retirement Q1 result and closing optimism, no new specific forecast.",
+      "text_sha256": "f361971eb49cef3560b473469a1701cd1783adcacfee40603c01b12efd6b6599",
+      "probability": 0.03691192992633764
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "66f85d35876533e7ec9438714f5fea37dba5bbad1b365076da165207a3eead9f",
+      "probability": 0.012336402579305027
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "5bb5b560db8bf970fa3016fe01fcb223e865304861467cf90596de51b45e06d0",
+      "probability": 0.0038534356460600888
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "P2-01 and P2-15; PEO outlook is general reassurance; actual AI accuracy and employment exposure not company forecasts.",
+      "text_sha256": "0263ba821b5d480901845f7779ab057ebffcef35ce005a9a41e1bd984a02ea40",
+      "probability": 0.984140117371301
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR003",
+      "label": "positive",
+      "reason": "P2-02–10 plus current results; repeated actual 18% must not be confused with future 18%.",
+      "text_sha256": "f63276e66aa704e76f5b0c28b9b620c8640489918871ca7feed86e03859bba5e",
+      "probability": 0.9979057869808097
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Transition.",
+      "text_sha256": "895f50ed0e2df2de93a04995282c1ea2a826f205d9ade66ee6e3b5f339ac33dc",
+      "probability": 0.008667004706354104
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "6a41375ff8ce0d5b205d64292388a57f6dffc2de4098310bd5990ab43fa9e340",
+      "probability": 0.05447958490967132
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "P2-01 original-target comparison; 8–9% Paycor is an actual estimate.",
+      "text_sha256": "eb8557022fb61f87ce7043aa59d3f48da1e746d0e97a7f092260916a48bb6ed4",
+      "probability": 0.7726092453689761
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA001",
+      "label": "negative",
+      "reason": "Strategy, current demand and AI capability; no new quantified or specific period forecast.",
+      "text_sha256": "8e5a0a05335a8bdf0d8ee32d694da24974fe69daccbc89e544ed05e176222175",
+      "probability": 0.07605677843093872
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA002",
+      "label": "positive",
+      "reason": "Continuation assumption for revenue-per-client trends and scope explanation behind low-end outlook.",
+      "text_sha256": "c645bb2b214ab700340c280cefc0664b9c6b1da9c490db9b9e22860365fe8fd4",
+      "probability": 0.9480867491821209
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA003",
+      "label": "negative",
+      "reason": "Actual pro-forma comparison only.",
+      "text_sha256": "926d382b81cac6c142693feef787903a0d1b0634211aa5132a432b8d4552c1bf",
+      "probability": 0.3994633913360005
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "P2-11; analyst 8–9 is not adopted as a forecast.",
+      "text_sha256": "f45d5550b2900934b0826b691dbc85141dd3701c5e6214fd899b73df50074c2d",
+      "probability": 0.9630880700736624
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Current mix/pricing causes and commercial strategy.",
+      "text_sha256": "1306b177ff500e97fd54248f013d189a3b46a4646bd4362a42820e419d60e2dd",
+      "probability": 0.0691966663746784
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Pricing/packaging strategy, no specific level forecast.",
+      "text_sha256": "ea582f62cdc5fc4ecfe75ea4e92360602605f887029cb5ba2194bf12275f8680",
+      "probability": 0.017531834150884284
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual PEO, healthcare inflation and possible opportunity; no specific company forecast amount.",
+      "text_sha256": "cac9774b42d86f701f81674c16ff2fb6011d4b5e8693d29836e605fc691ff0d6",
+      "probability": 0.10052590892110697
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Actual customer-origin mix, not a future 50–50 forecast.",
+      "text_sha256": "20be93d3bfe241b4be2cdf4ed0892f748196e3394a3b1f87dd173199cea110c6",
+      "probability": 0.016675279786831126
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Potential productivity/strategy; historical headcount examples not forecasts.",
+      "text_sha256": "0a0dd79155835418914b1f576f6e121f5c20c97c6b8c58b0af8b588ac0444ab4",
+      "probability": 0.02036899024352674
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "Inclusion in P2-05; duration target discussed as historical portfolio management, not a new period or financial forecast.",
+      "text_sha256": "b1a0cb8c970cb2b487b28d04168257eb1155563a18253a841e061a72bb7820e8",
+      "probability": 0.8142577056365522
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Current bookings/integration progress.",
+      "text_sha256": "e694500a80733a736ea7b80c29b4e7a1cc428750471616f72f90a6cc83d6c2a2",
+      "probability": 0.2855028510093689
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA012",
+      "label": "positive",
+      "reason": "Management expressly restates the low-end outlook. The surrounding explanations and actuals are not additional forecast amounts.",
+      "text_sha256": "8af2544b71da9dfe1e285214bc21e83ab6c2f4635ce8617e4a0fa77beabf149d",
+      "probability": 0.6932594569546147
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Current pricing realization.",
+      "text_sha256": "bb02b41dbd77e185343a877001f3c9cb4822411caabe2f56cdf3728fdc738c40",
+      "probability": 0.5381475526646509
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "AI opportunities and productization plans; no specified financial target.",
+      "text_sha256": "054fdf4275407f1fdad082ff239500c90d950be719433f918ec4e26096ecb876",
+      "probability": 0.028848536008237943
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current client bundle selection.",
+      "text_sha256": "bc2d56ce45dcb5d1ad0602bf30b3f616668dffb6e4942f69aa4d10cd04a26256",
+      "probability": 0.4366391469049708
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA016",
+      "label": "negative",
+      "reason": "Buyback-policy explanation and general future confidence; no promised buyback amount.",
+      "text_sha256": "26bfbbdf7b83a885b340ffe80a5733409af73c9af79acdc7b2e32adb755ed46d",
+      "probability": 0.08752133501645919
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "7143440939b0771afe834371ac87d17213baa37e1cdb6768554f7b7913e46c19",
+      "probability": 0.010084305542410067
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "P2-12 and repeated Q3 outlook; causes and current progress separate.",
+      "text_sha256": "e39fbc3ff7a999e4689d43acc3df10bd70daba09f602f55340be0c74983e462e",
+      "probability": 0.8218424075292824
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "AI rollout/current use; no specific financial forecast.",
+      "text_sha256": "8a8af4c1b98af4ad6eb6e7904d58115409fe9e1300fbaf52984fd42f4550370a",
+      "probability": 0.024860230511234222
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA020",
+      "label": "positive",
+      "reason": "P2-13.",
+      "text_sha256": "0b2f1ec8106e0016e6d9fb07f9b37c1fbc1a8eeb679611e003f880d700d77a56",
+      "probability": 0.9738739531957116
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA021",
+      "label": "unadjudicated",
+      "reason": "Current numeric interpolation is analyst-only; whether the qualitative answer qualifies/affirms the future outlook remains unadjudicated.",
+      "text_sha256": "19c15d5b46f289c91b6450752c0fc7668e507af5ff4f255338cfd23bca60cd38",
+      "probability": 0.9164639643098118
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Closing, historical addressable-market expansion and broad optimism.",
+      "text_sha256": "d8913e39bb9dd20e1a1c773f146fe3b388cc5e426df3f4dc7f99455703a91aa1",
+      "probability": 0.03691192992633764
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "979f0a1b6a0eb0c93edb524a1d7dd115f432035a6c94304b025ea2f533a45add",
+      "probability": 0.0029892399144775656
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "cb65cb007aaca0ef5abf7702526af0d7197e88e34073d50d2279d8e3932f9b3d",
+      "probability": 0.002318402937069102
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR002",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "7d0dcaab7c9be77edbbd484e2745981b3d0b31ccb08907a279e05047368318de",
+      "probability": 0.001466777602393961
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "6a77a0a6567b210959ddbd41183749476574ba9f0380267a9b8ddaa5c93f9ac9",
+      "probability": 0.0020942118574751594
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR004",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "dc1ccb5551a4ff1173f34d0f5a62bb59b6bb5df0089ef6d121a21d63cff85f02",
+      "probability": 0.0019903658198888933
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Operator, waiting-room transcription or introduction; no specific forecast.",
+      "text_sha256": "b01c8e55553465d4be1136c893a44d2befebff2c85890ade0fc7b2982ee5a2a2",
+      "probability": 0.0018916613437548373
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Disclosure and schedule.",
+      "text_sha256": "b8abd924011d95090841dff5c7d82236c34504894b624a9ec8d15e4fdbba6b64",
+      "probability": 0.005781874609756336
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR007",
+      "label": "positive",
+      "reason": "P3-10/11 synergy outlook; broad business runway and product plans are not quantified guidance.",
+      "text_sha256": "cc2b9df412b17d7ed1b1da58cc17b3ccd1363d372a66c801ad1364663c298f49",
+      "probability": 0.8064263102519672
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR008",
+      "label": "positive",
+      "reason": "P3-01–04 and blanket unchanged guidance; preceding metrics actual.",
+      "text_sha256": "d352f7d2b49704c86ff66171315cc208459fa7d114adc900786feac7bcbef1b8",
+      "probability": 0.9917600686267759
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "PR009",
+      "label": "negative",
+      "reason": "Question procedure.",
+      "text_sha256": "b05e0a7247219189881822561753402bc028c41fb355909c3561b9dd0aa1744d",
+      "probability": 0.011730634113052267
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "P3-05–07; source-stated H2 and FY amounts distinct from actual H1.",
+      "text_sha256": "e42d6889e1b10dec39c4852f628418df906eae802a3ef254b3b68c4a74c37efc",
+      "probability": 0.8561523173979378
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA001",
+      "label": "unadjudicated",
+      "reason": "P3-12; no published metric-specific FY27 quantities to import.",
+      "text_sha256": "44dbb65a4b772b5a39307493484392221376d5052864637f651a8fc0b6c40e63",
+      "probability": 0.4618524473353491
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA002",
+      "label": "negative",
+      "reason": "Current bookings and positioning; no new financial forecast amount.",
+      "text_sha256": "f2ef09d5a0b9ee31537de3eaacb72d043ea915ea173f5e606874028a3e0370ee",
+      "probability": 0.0691966663746784
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "P3-13 conditional margin outlook; future planning not quantified savings.",
+      "text_sha256": "1b31cf4dbe5776d6ac2ca9b8de35a904f349619fa9cad80f2b2f0093835cf406",
+      "probability": 0.04711975796998088
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA004",
+      "label": "unadjudicated",
+      "reason": "P3-14 qualitative risk outlook, boundary for source-based scope review.",
+      "text_sha256": "267140dd4803e01ab56617fa43c90c094fa45c7b9dce338243e1638662d340d1",
+      "probability": 0.006398304548189541
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "AI/product value strategy and current operating method, no specific forecast.",
+      "text_sha256": "7518863c23dd410ab2bf858713b2ad532117c695699e0b14c8e020416d77bc99",
+      "probability": 0.009116017970241171
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA006",
+      "label": "negative",
+      "reason": "Current PEO results, timing explanations and growth strategy; historical CAGR not new forward value.",
+      "text_sha256": "efc68b0d62d1abfa880405435495884604c85ed47f7f62a4fc99a3b88f4d5f7f",
+      "probability": 0.2752214290135673
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA007",
+      "label": "positive",
+      "reason": "P3-07 source-stated Q4 organic acceleration.",
+      "text_sha256": "ca4e478fda3b8548433f32fcc9ee2bda100187e3da6230ce7e16f4bfad679bac",
+      "probability": 0.7144973278045654
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA008",
+      "label": "positive",
+      "reason": "P3-08/09 different periods/directions.",
+      "text_sha256": "81517aab04bce3cc905f0bbc5c0e24b5ed57b72ab451a2017efd426020394f07",
+      "probability": 0.6823170374442913
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA009",
+      "label": "negative",
+      "reason": "Completed cost synergy actions and future opportunity, supports P3-10 context without new amount.",
+      "text_sha256": "5630f2522dc95c0347736933bf5d12f1e079ab7b67be96e86f3e15fa59de6bac",
+      "probability": 0.3752811141228344
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA010",
+      "label": "positive",
+      "reason": "P3-10/11; prior cost ranges and current high-end revenue outlook differ.",
+      "text_sha256": "d5f7f0e05770a90c8d9ec9c80db7185bc61361128e9de98bd58ae01457880a27",
+      "probability": 0.7635318040847778
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Customer examples and business model; sizes are not forecast amounts.",
+      "text_sha256": "b097fd72379cf413b8022da631fa023df9cf0d83aae5027116077b1d255a11ae",
+      "probability": 0.1052287617004386
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Current deal-size trends unchanged.",
+      "text_sha256": "5a2fc2d2c86640a5cf7ae30777ad87b185abb992d2ef4c45a223d068657da3e5",
+      "probability": 0.04274888272957678
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Current employee/client mix and growth causes.",
+      "text_sha256": "3033077a779f0a920137392a124d83ae2f29fd26d3a1dfcdede75090c0a8043b",
+      "probability": 0.02036899024352674
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Observed booking conversion lag; current operating metric, not a new specified future guidance value.",
+      "text_sha256": "8ce0ef54e251f036697307873cd8efc0b02f51ad87d4c47a70a2a642b7b4178f",
+      "probability": 0.04711975796998088
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "Current cross-sell implementation speed.",
+      "text_sha256": "324f317827662375358bd208586be99b3ab97e5e342c6297c9c492a58925716b",
+      "probability": 0.04946153234403822
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA016",
+      "label": "positive",
+      "reason": "P3-04 measurement exclusion and P3-13 future margin context; GAAP 40% is current.",
+      "text_sha256": "6e6adec09516a5c1780c787d4a2d022716d6ca539d356ea9f0f620416aab1ba8",
+      "probability": 0.09601083683999886
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Actual form-filing performance and pricing.",
+      "text_sha256": "9fb4c623929b52c41ba0b164c09d029b4ba43549084c4bccfc827e1be7e0217b",
+      "probability": 0.18574229436344786
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA018",
+      "label": "positive",
+      "reason": "P3-15 low-end reaffirmation.",
+      "text_sha256": "fa4b81fdd3d30a626a28f986899e147bcba7e63e1f56d25a560df281c6c74fc6",
+      "probability": 0.9428348190026425
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA019",
+      "label": "unadjudicated",
+      "reason": "Management describes next-year macro assumptions without providing detailed next-year financial guidance; scope remains unadjudicated.",
+      "text_sha256": "84ffaca80ea3437066d498390eb9079bb7038fecda090d029510a28d04d87093",
+      "probability": 0.5
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA020",
+      "label": "negative",
+      "reason": "Hiring action/strategy, no staffing level or explicit financial target.",
+      "text_sha256": "56607b5f4811a0fd874aeaa207e57f773d9feebe91d28946ac93a2de5028896f",
+      "probability": 0.019376555854719344
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA021",
+      "label": "positive",
+      "reason": "P3-17; upper-single-digit and 10% values are actuals.",
+      "text_sha256": "6b6947715cd3e312be6cf99f388ec97dc37d5376660508062b410847dc0c9073",
+      "probability": 0.1438476826020621
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA022",
+      "label": "negative",
+      "reason": "Explicitly declines next-year pricing details; no metric-specific forecast value.",
+      "text_sha256": "7f83103a4fce6ab15cd35a9d7c314e50d62bab26edb89f013c73136df549e9e2",
+      "probability": 0.04711975796998088
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA023",
+      "label": "negative",
+      "reason": "Current enrollment choices and examples.",
+      "text_sha256": "86a67e80e5d5db49e3bd259789f93a7c610c1d1672854077e313784f4ebac6de",
+      "probability": 0.014345064608426548
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA024",
+      "label": "negative",
+      "reason": "Sales segmentation/lead-routing strategy, no financial forecast.",
+      "text_sha256": "44aeaa43f36a44825196ce3c3f77df9f04a402763a4a280933640f48a578e2b9",
+      "probability": 0.02250540208570337
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA025",
+      "label": "negative",
+      "reason": "Buyback philosophy and possible borrowing, no promised amount; analyst proposal not confirmed.",
+      "text_sha256": "73603bb26f71bfa9cc5703aae22a772933de3478be9c6192c0e311e128d3b673",
+      "probability": 0.022505423934411076
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA026",
+      "label": "positive",
+      "reason": "P3-18; continuation text spills into next exchange.",
+      "text_sha256": "e0c98d9eb875a0bcf56d431436c4866072bdd410bae209ae53543f5a2a533d43",
+      "probability": 0.8218424075292824
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "passage": "QA027",
+      "label": "positive",
+      "reason": "P3-19 and closing; no analyst-derived EPS increase accepted.",
+      "text_sha256": "64c42e9a0698df9500d0d9a0ec34c6fff0bdb6fc40938cc52364465fa8e6a78e",
+      "probability": 0.550786955631168
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR000",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "bc08e4b60a70d7cd77061746a0d9b951413b68551aa8a4ded63d76f7a37888e8",
+      "probability": 0.0024393211618785123
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR001",
+      "label": "negative",
+      "reason": "Disclosure.",
+      "text_sha256": "1c51e8b8dde11d728ba189fccfd804ab9097a9c2ff1e09607b6dafeab96fa7e5",
+      "probability": 0.003308924970552693
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "label": "positive",
+      "reason": "MAR01–04, EPS exclusion and acquisition closing conditions; deal itself not automatic guidance.",
+      "text_sha256": "638819f2daa5c12559e90a80eb03edf68375f72cda280664364e1a48b4f1717e",
+      "probability": 0.9986751694207548
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR003",
+      "label": "negative",
+      "reason": "Reported segment figures; closing-timing context for MAR07.",
+      "text_sha256": "d9ae2c2cba12b09049360e520038078ab9b177321b05ae4bf2f98d558fda1650",
+      "probability": 0.6365890096601549
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR004",
+      "label": "positive",
+      "reason": "MAR05–09 and shared assumptions; preceding results actual.",
+      "text_sha256": "da719f213bd208287a0740249a87ac46b5e4d2de62017333aeb3459b62b4fcc6",
+      "probability": 0.9952793595063031
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR005",
+      "label": "negative",
+      "reason": "Broad future strategy.",
+      "text_sha256": "20c751f15706c0f5269126efd907297e1ae671f98c79dee3c2b575f50c0d185e",
+      "probability": 0.02486025345453924
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR006",
+      "label": "negative",
+      "reason": "Question protocol and no deal-process detail.",
+      "text_sha256": "ca60464f14d25d3dac44bcf55538ecc00ee168718f8d5787afba96ded1aa18f5",
+      "probability": 0.010084314761717996
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "PR007",
+      "label": "negative",
+      "reason": "Operator.",
+      "text_sha256": "1849c92dc39cdab14f9b43259cfa465db0cda7b0184e2cdcdfb1c8576dacf39f",
+      "probability": 0.03876703261410469
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA000",
+      "label": "positive",
+      "reason": "MAR08/09 period confirmation; past SG&A comparisons not future forecasts.",
+      "text_sha256": "7082f0bc18ba6821f768d666ef6f03c139df24df80c07a50c976971493af8140",
+      "probability": 0.8064263102519672
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA001",
+      "label": "unadjudicated",
+      "reason": "MAR10 uncertain sensitivity versus adopted assumption.",
+      "text_sha256": "2406b28052785371f0c23b47697b7fc25dd94be1b528d88bed7817318da3b131",
+      "probability": 0.6823170374442913
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA002",
+      "label": "negative",
+      "reason": "Current customer behavior.",
+      "text_sha256": "ce42554209d98c55563083d63ddb480b91e38928e35f806c3913865b01e05b2d",
+      "probability": 0.011154297032866443
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA003",
+      "label": "positive",
+      "reason": "Energy assumption; no-fuel-surcharge is current policy, not independent guidance.",
+      "text_sha256": "c716fb447b3794bd24705b510cf2739d79cae11b3906f3f356acbd887bd03e52",
+      "probability": 0.9039892486930694
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA004",
+      "label": "positive",
+      "reason": "MAR07 repeated leverage; no specific CapEx ratio guidance confirmed.",
+      "text_sha256": "47156e8d4bfcd7db112aeb447b3458b91e0856a135354cceace5fc351dff0faa",
+      "probability": 0.14384779762768143
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA005",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "169d030a8388fa00de11a883316be64a7f4c2b413b458f2ece27c210f65801ac",
+      "probability": 0.015083759555373402
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA006",
+      "label": "positive",
+      "reason": "MAR11 standing target; actual 95% retention and 2–3% pricing, illustrative arithmetic not independent forecasts.",
+      "text_sha256": "8c5291de3016e51b33c8e5b536fdc5e9038dbe4ec306f2e4f8b544c9b854a8da",
+      "probability": 0.6005366086639995
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA007",
+      "label": "negative",
+      "reason": "Actual margin drivers and caution on variability; no specific future margin amount.",
+      "text_sha256": "8b29ccc320c1fc04128e70abfa9b62d3fa91f6b3bd470f3d21b9764b4f10f818",
+      "probability": 0.026126072200031165
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA008",
+      "label": "negative",
+      "reason": "Tariff timing/current supply-chain context; nothing material said, no stated forecast level.",
+      "text_sha256": "a8dd4058cc81c962a051d5b08f80d125f4d79e674bcd5b83ccf21f308a50b541",
+      "probability": 0.11521889097662433
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA009",
+      "label": "unadjudicated",
+      "reason": "MAR17 borderline investment outlook.",
+      "text_sha256": "2875393ca882910ec37825f0ea0faa53f3230975ec50c0048c51b7d4cb35da06",
+      "probability": 0.07971629262816034
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA010",
+      "label": "negative",
+      "reason": "Buyback restriction/current policy and future opportunism, no fixed level.",
+      "text_sha256": "238b74f55d215493494933fd793d7ffda93278f4a831cf9daba231ad16c54560",
+      "probability": 0.21856185142511572
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA011",
+      "label": "negative",
+      "reason": "Greeting.",
+      "text_sha256": "d7791fd52c4d5d0c9401bb2dca9f3bffd7a4b0905db54f1ca28e6dc67ec4dd6e",
+      "probability": 0.005781874609756336
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA012",
+      "label": "negative",
+      "reason": "Current wearer/customer levels.",
+      "text_sha256": "416898b4fded1ac1d385d861676c83a597dfdda83d3fa74407544e8a2b35d319",
+      "probability": 0.03876703261410469
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA013",
+      "label": "negative",
+      "reason": "Acquisition strategy, no promised amount.",
+      "text_sha256": "e8f4a4301b6013bf64a93c5e0630907ad7daf97979c1b7febdd4e20c81aa0871",
+      "probability": 0.013642031445316385
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA014",
+      "label": "negative",
+      "reason": "Products/customer example and market opportunity.",
+      "text_sha256": "decc87fe8ceed1a24ae95cfab7c658fc49f4d94f3340b81a165220a07a900679",
+      "probability": 0.010084310152064053
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA015",
+      "label": "negative",
+      "reason": "ERP implementation plans and general benefits, no numeric financial impact.",
+      "text_sha256": "68fdded6300e032e5372402096e1eeae64d86b72b06617f4ecd87b2821f0ef44",
+      "probability": 0.007833724797701138
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA016",
+      "label": "positive",
+      "reason": "MAR12–15, separate target periods and old/actual/current values.",
+      "text_sha256": "f98e6d988adc98d2a153341c636f56f88827793b81e7839694410488738d97fa",
+      "probability": 0.9572511172704232
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA017",
+      "label": "negative",
+      "reason": "Competition/current customer statistics.",
+      "text_sha256": "c8bd33ccaeb6f52d263c83d747878750b33133e7fdd8c0ced0cedc1a0f7a4008",
+      "probability": 0.011730639635437865
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA018",
+      "label": "negative",
+      "reason": "Routing integration strategy, not quantified forecast.",
+      "text_sha256": "80540e9883dae57090dd8c8ddee835764ab96f426a2c3b3cf419704df2f79b35",
+      "probability": 0.007833724797701138
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA019",
+      "label": "negative",
+      "reason": "Deal opportunities and one-time costs discussed generally; no additional amount or target period.",
+      "text_sha256": "ff7695a33c953b75d9fe62f9cabbef34ffb60eaab06b666e13e760a2998558e4",
+      "probability": 0.0691966663746784
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA020",
+      "label": "unadjudicated",
+      "reason": "MAR18 evaluative Q4 margin comment.",
+      "text_sha256": "50e986eea4d794c7026a90b07088f2fde2f62b81440047349854a4e46819119a",
+      "probability": 0.5127378549355908
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA021",
+      "label": "negative",
+      "reason": "Current conversion and employment conditions; broad optimism.",
+      "text_sha256": "204628998c2c6620b84f846b274d3fb26afc325e80154b8beb673d42bf64d11b",
+      "probability": 0.015859897293528692
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA022",
+      "label": "positive",
+      "reason": "MAR16, full question is necessary to identify the headwind and FY27.",
+      "text_sha256": "cdb3a3e8f7536e92733d3060574e1bc60892dbc0866921087e77bb15c676c8e7",
+      "probability": 0.9725454971488875
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "passage": "QA023",
+      "label": "negative",
+      "reason": "Closing and next results schedule.",
+      "text_sha256": "fcbfae0e6554df349f60cc9d4808b381eb0790b03f465a794205bab8cbd4ebfb",
+      "probability": 0.03876699680538461
+    }
+  ],
+  "scores": {
+    "0.5": {
+      "counts": {
+        "tp": 48,
+        "fn": 9,
+        "fp": 4,
+        "tn": 114,
+        "unadjudicated_retained": 4,
+        "unadjudicated_filtered": 7
+      },
+      "per_source": [
+        {
+          "source": "CTAS_2025-09-24T10.00",
+          "tp": 9,
+          "fn": 0,
+          "fp": 0,
+          "tn": 26,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 1
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "tp": 9,
+          "fn": 1,
+          "fp": 0,
+          "tn": 16,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 2
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "tp": 5,
+          "fn": 4,
+          "fp": 2,
+          "tn": 11,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 1
+        },
+        {
+          "source": "PAYX_2025-12-19T09.30",
+          "tp": 9,
+          "fn": 0,
+          "fp": 1,
+          "tn": 18,
+          "unadjudicated_retained": 1,
+          "unadjudicated_filtered": 0
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "tp": 9,
+          "fn": 3,
+          "fp": 0,
+          "tn": 23,
+          "unadjudicated_retained": 1,
+          "unadjudicated_filtered": 2
+        },
+        {
+          "source": "CTAS_2026-03-25T10.00",
+          "tp": 7,
+          "fn": 1,
+          "fp": 1,
+          "tn": 20,
+          "unadjudicated_retained": 2,
+          "unadjudicated_filtered": 1
+        }
+      ],
+      "disagreements": [
+        {
+          "source_id": "CTAS_2025-12-18T10.00",
+          "passage": "QA001",
+          "label": "positive",
+          "reason": "DEC07 standing organic-growth target; rest business examples. End includes next analyst introduction/question fragment.",
+          "text_sha256": "a92f4d1b9bac5356432fe3ebb9a26cfeb6888bff684e7af3dfed5051b05aaf97",
+          "probability": 0.38730305433273315,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA002",
+          "label": "positive",
+          "reason": "P1-12 supporting PEO outlook, actual performance and cause explanation.",
+          "text_sha256": "9aae5267d8d0c1b31e4e2e0c9f11d12497ef21059a14eb0ee51404751724f272",
+          "probability": 0.44921304436883197,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA003",
+          "label": "positive",
+          "reason": "P1-14 current-to-future expense reference; literal four-year wording cannot be silently corrected.",
+          "text_sha256": "504625641eee566e88c1cab4376bcbf63846fcb3ba3efb7e6a9f7cc81fbdf7d0",
+          "probability": 0.46185219287872314,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA004",
+          "label": "negative",
+          "reason": "Current recurring growth reconciliation, integration and realized sale example, no new forecast amount.",
+          "text_sha256": "a176fac6a9c3da62c7ca408310d97a8c6fd527c541b1544a3a75df28cc757fef",
+          "probability": 0.5381475526646509,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA006",
+          "label": "positive",
+          "reason": "Management expressly confirms raising EPS guidance. A repeated claim still counts as guidance presence; the analyst revision size is not confirmed.",
+          "text_sha256": "6fa8a312b84bcca9081c3baa396b005cd4ae1d49acf3689b3c474bf7c88f76fd",
+          "probability": 0.35170539165421155,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA010",
+          "label": "positive",
+          "reason": "Management forecasts no big ARPU increase. Missing record period does not make this a passage without a forecast.",
+          "text_sha256": "4651e8a7dd3708f5eebdbd65c98128c20c31e1ac4b160e11427ad1740280963b",
+          "probability": 0.05997471950919985,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA014",
+          "label": "negative",
+          "reason": "Current synergies/pipeline and potential opportunities; not a new supported level.",
+          "text_sha256": "67a3be5569957e72235490ff7354c58698069442cbcfa6c6841003332f23bf4a",
+          "probability": 0.5633608530950293,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-12-19T09.30",
+          "passage": "QA013",
+          "label": "negative",
+          "reason": "Current pricing realization.",
+          "text_sha256": "bb02b41dbd77e185343a877001f3c9cb4822411caabe2f56cdf3728fdc738c40",
+          "probability": 0.5381475526646509,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA003",
+          "label": "positive",
+          "reason": "P3-13 conditional margin outlook; future planning not quantified savings.",
+          "text_sha256": "1b31cf4dbe5776d6ac2ca9b8de35a904f349619fa9cad80f2b2f0093835cf406",
+          "probability": 0.04711975796998088,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA016",
+          "label": "positive",
+          "reason": "P3-04 measurement exclusion and P3-13 future margin context; GAAP 40% is current.",
+          "text_sha256": "6e6adec09516a5c1780c787d4a2d022716d6ca539d356ea9f0f620416aab1ba8",
+          "probability": 0.09601083683999886,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA021",
+          "label": "positive",
+          "reason": "P3-17; upper-single-digit and 10% values are actuals.",
+          "text_sha256": "6b6947715cd3e312be6cf99f388ec97dc37d5376660508062b410847dc0c9073",
+          "probability": 0.1438476826020621,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "CTAS_2026-03-25T10.00",
+          "passage": "PR003",
+          "label": "negative",
+          "reason": "Reported segment figures; closing-timing context for MAR07.",
+          "text_sha256": "d9ae2c2cba12b09049360e520038078ab9b177321b05ae4bf2f98d558fda1650",
+          "probability": 0.6365890096601549,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "CTAS_2026-03-25T10.00",
+          "passage": "QA004",
+          "label": "positive",
+          "reason": "MAR07 repeated leverage; no specific CapEx ratio guidance confirmed.",
+          "text_sha256": "47156e8d4bfcd7db112aeb447b3458b91e0856a135354cceace5fc351dff0faa",
+          "probability": 0.14384779762768143,
+          "outcome": "fn"
+        }
+      ],
+      "context_outside_retained_passages": [
+        {
+          "source": "CTAS_2025-09-24T10.00",
+          "claim": "SEP12",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "First-aid margin outlook/leverage",
+          "passage": "QA018",
+          "evidence_role": "question asks incremental margins; answer discusses gross margin and future leverage without a sudden pop",
+          "evidence_text": "Faiza Aoui [2402]: Understood. And then just, you know, you talked about timing as it relates to the investments. So, And it sounded like, you know, even in the fourth quarter of last year, because you talked about sequential margins being similar. Again, give us a bit more color on the timing. Like, is this... Are you... When do you expect to be sort of through with those? And, you know, do you... How should we think about the incremental margins in that business, you know, going forward?\nTodd Schneider [2434]: Yeah, so... Faiza, from a timing standpoint, we certainly have different initiatives in each of our businesses. First Aid is no different. We'll have certain rollouts of products which might affect the mix, but we're planning to grow that business attractively. And I'll just remind you that that 56.8% gross margin is really attractive. We're quite happy with it. We've had a significant increase over the last few years in that area and we're going to continue to get leverage there but it's a high level, and we think it's really good. And, you know, the mix of the business has been attractive for us, but we're providing more and more value to those customers, and then we're selling other items into those customers outside of the first aid business. So it all works quite nicely, and so I wouldn't be thinking of it as – oh, geez, you know, the first aid margin is going to pop after a certain timing. These are, we'll get leverage and we'll grow that business attractively and provide more value to customers. But we like where it is and in the future as well.",
+          "probability": 0.19357368974803285,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC07",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Standing organic growth target",
+          "passage": "QA001",
+          "evidence_role": "worded standing organic-growth target",
+          "evidence_text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility.",
+          "probability": 0.38730305433273315,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC14",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Greater future fire ERP costs",
+          "passage": "QA011",
+          "evidence_role": "analyst question begins in the preceding stored exchange",
+          "evidence_text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "probability": 0.1502386078309598,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC15",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Fire ERP rollout margin impact",
+          "passage": "QA011",
+          "evidence_role": "analyst question begins in the preceding stored exchange",
+          "evidence_text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "probability": 0.1502386078309598,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC16",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Buyback approach remains opportunistic",
+          "passage": "QA016",
+          "evidence_role": "capital-allocation policy continuity, not a stated buyback amount",
+          "evidence_text": "So I wouldn't just simply model in that we are going to lever up and be highly aggressive on buybacks. We'll be opportunistic and handle that as we have in the past. And if you look at our history, even our 5, 10, 20-year history, we've been pretty consistent on that, our capital allocation approach. And I wouldn't expect a change to our approach there. We'll continue to look at that opportunistically and return that back to our shareholders as appropriate.",
+          "probability": 0.035142389373039845,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC17",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Remaining-half growth outlook",
+          "passage": "QA001",
+          "evidence_role": "worded standing organic-growth target",
+          "evidence_text": "So our target of mid to high single-digit organic growth is important to us, and we have so many different ways to grow that it gives us flexibility.",
+          "probability": 0.38730305433273315,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-12",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "PEO growth accelerates in H2",
+          "passage": "QA002",
+          "evidence_role": "corroborating same-source PEO growth outlook",
+          "evidence_text": "we feel really good about where the PO is, and as you mentioned, we will, you know, anniversary those MPP headwinds, and we'll start seeing some stronger growth with the easier compare as we move into the back half of the year.",
+          "probability": 0.44921304436883197,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-14",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Organic expense growth continues at current level",
+          "passage": "QA003",
+          "evidence_role": "reference to current organic expense growth as future outlook; source says four-year basis",
+          "evidence_text": "Mark Marcon [1158]: Great, and then for my follow-up, you know, direct expenses as a percentage of revenue, you ended up seeing some some pretty nice leverage there. And so I'm wondering, you know, that was really strong. How would you characterize direct expenses on a go-forward basis? And then compare and contrast that to SG&A when we strip out the one-time charges and the goodwill just in terms of the ongoing operating expenses. Because it seemed like there was a little bit of a contrast between the two. In other words, direct expenses dripping out to everything else looked better. SG&A expense, I imagine just because you've got more overlap and a number of items maybe a little bit heavier than what we were looking for. So how would you expect those to go as the year unfolds? And it seems really encouraging.\nBob Schrader [1217]: I mean, I think... Yeah, thanks, Mark. We think so as well. Obviously, we've been focused on this energy, and as you know, we're the best operators in the business, and so we're always focused on trying to be efficient and productive. I think the expense growth in the core, obviously, is a big number driven by the pay core acquisition. If you were to strip it out, it's probably closer to about 3%. expense growth overall. And, you know, the one thing we didn't highlight in the script, which was probably a miss, I mean, if you look at the adjusted operating income growth in the quarter, it was 15%, right? So obviously that's coming from, you know, the strong top line growth of 17%, but certainly trying to find ways to be more productive and more efficient and really strong adjusted operating income growth for the quarter. And, you know, on a four-year basis, expense growth, you know, I would probably think what we saw this quarter organically would probably be consistent with what we would see going forward.",
+          "probability": 0.46185219287872314,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-16",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "October enrollment share",
+          "passage": "QA007",
+          "evidence_role": "analyst question split across stored exchanges",
+          "evidence_text": "Andrew Nicholas [1857]: Hi, good morning. Thanks for taking my questions. You touched on it briefly in your response to one of the earlier questions, but I just wanted to kind of dig into the second half ramp for PEO. Can you speak a little bit more to kind of the attach rate dynamics in Florida specifically? Have they stabilized and it is mostly just a comp dynamic or have you seen some improvement there",
+          "probability": 0.21856185142511572,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-17",
+          "claim_status": "source_insufficient_for_record",
+          "claim_meaning": "Bill partnership ARPU outlook",
+          "passage": "QA010",
+          "evidence_role": "management narrows expected value from new partnership",
+          "evidence_text": "Michael Fontana [2206]: Hi, guys. It's Michael in Fontana for James. Thanks for taking our question. I just wanted to ask about the bill partnership. Can you maybe just paint the picture for us in terms of the customer profile who would be most likely to initially adopt some of these capabilities, how you think about some of the go-to-market dynamics between the two organizations, and maybe how we should be thinking about ARPU uplift potential for your average payroll customer that begins to use some of Bill's AP capabilities? Thanks.\nJohn Gibson [2237]: Yeah, Michael. Well, thanks. We're real excited about the partnership. We've kind of been in the payments business, allow our clients to make ancillary payments in the millions, believe it or not, through our system. It's not been our core business. And certainly, we viewed it as another value add. So I'm not looking at a big ARPU increase.",
+          "probability": 0.05997471950919985,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-18",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "No direct government-shutdown impact expected",
+          "passage": "QA015",
+          "evidence_role": "company forecast of direct shutdown exposure; source lacks a precise metric/horizon",
+          "evidence_text": "David (for Ashish Sabhadra) [2788]: Hi, good morning. This is David on for Ashish. Thanks for all the color provided on the call so far. Just taking a step back, in terms of the regulatory environment, government shutdowns, maybe changes to H-1B, how are you thinking about that and how is the business doing? I guess, position to whether those changes, whether it be good or bad.\nJohn Gibson [2812]: Thank you. Yeah, look, we've been through a lot of cycles.\nJohn Gibson [2818]: And what I would say is that our small business clients tend to be resilient. In terms of the paycheck specifically, we don't have a heavy concentration with government with the federal government. And so I don't expect any impact directly to our business.",
+          "probability": 0.09167781198984945,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-04",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Q4 adjusted operating margin",
+          "passage": "QA016",
+          "evidence_role": "definition of adjusted margin excludes integration-related items",
+          "evidence_text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "probability": 0.09601083683999886,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-12",
+          "claim_status": "source_insufficient_for_record",
+          "claim_meaning": "Comfort with FY27 consensus",
+          "passage": "QA001",
+          "evidence_role": "future consensus comfort while explicitly declining to provide detailed next-year guidance",
+          "evidence_text": "Bob Schrader [1459]: Yeah, and maybe head off the question that I'm probably going to get as it relates to next year in guidance. We're in the early stages, I would tell you, of our operating plan, and we're going to finalize that over the next year. six to eight weeks, and I know we kind of established a precedent coming out of COVID in providing maybe some more details around what we were thinking for next year. I think we needed to do that given some of the uncertainty in the environment back then. Our preference now is to kind of build the plan, come out in Q4 like we historically did and consistent with what our competitors do. and provide guidance at that point in time. That being said, we obviously have visibility to what's out there in the models and in fact set, and when I look at that, I really don't see any reason that I need to steer you in one direction or another. I'm fairly comfortable with what's out there, and I think, Brian, what you'll see is the organic growth rate whether it's Q3 or Q4, we're really looking at the back half because there are some timing differences, particularly in the PO between Q3 and Q4. When we look at the organic growth rate and the back half of this year, it pretty much aligns with kind of what's assumed from a consensus standpoint for next year.",
+          "probability": 0.4618524473353491,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-13",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Margin expansion as revenue grows",
+          "passage": "QA003",
+          "evidence_role": "worded future margin expansion conditioned on revenue growth",
+          "evidence_text": "Mark Marcon [1694]: That's great to hear. And then I thought the gross margin performance was particularly impressive. You know, when we take a look, if we're defining gross margin as revenue minus direct costs. And part of that was obviously the higher interest income off of the float. But beyond that, it looks like it's doing extremely well. How much of that is related to some of the AI initiatives that you've put in place in terms of embedding AI across your service infrastructure and making them more productive versus, you know, other initiatives that you've put in place in terms of, you know, perhaps shifting some of your costs to lower cost labor markets like India. And how much more can we do there? Because it's been fairly impressive. I'm wondering if if this is basically setting us up for continued margin expansion for multiple years?\nJohn Gibson [1766]: Mark, I think that we have a long track record of being able to drive as the best operators margin expansion as we grow revenue in the business, and I think you're going to continue to see that. We use every lever imaginable to do that. I think that when you look at AI, as you know, we've been using AI and predecessor type of models for many, many years since I've been here. And now with this new technology that almost every day something new is coming out, what we're seeing is pretty impressive. It's pretty incredible. Some of the things we're doing in terms of genic AI models, which we've now released to scale after the pilots, doing voice payroll, doing email payrolls. what we're seeing early stages in our beta groups in sales using our sales guru tool and what we're seeing from a service perspective. So I feel good about what the opportunities are. Look, if we grow the top line, we are going to be able to grow margins and expand margins over time.",
+          "probability": 0.04711975796998088,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-13",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Margin expansion as revenue grows",
+          "passage": "QA016",
+          "evidence_role": "definition of adjusted margin excludes integration-related items",
+          "evidence_text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "probability": 0.09601083683999886,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-14",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Short-term technology replacement risk for advisory services",
+          "passage": "QA004",
+          "evidence_role": "specific short-term denial of replacement risk; business outlook rather than numbered financial guidance",
+          "evidence_text": "Tien-Sin Huang [1903]: Hey, thanks. Hi, John and Bob. I wanted to ask on the advisory work, John, that you talked a little bit about. I think that's probably underappreciated in terms of what Paychex does there. How AI-proof is the advisory side of the business? Because I get the question quite a bit that can rules-based advice from AI come in and supplant what Paychex does on the advisory side? But I'm guessing that a lot of your advisory work is centered around compliance and very complex data issue that only can you maybe elaborate on that?\nJohn Gibson [1938]: Yeah, yeah. Well, Tinson, I think this is something I think is extremely interesting for people to understand. For the vast majority of our clients, we are their HR department, right? So not only do we provide them the advice, we literally are talking to them and holding their hand when they're making some of these decisions and supporting them. You look at our PO, the most comprehensive part of our model, where we're actually in a co-employment arrangement. We're actually helping represent them and deal with their employee situations, which are numerous, I may ask, in today's world. And so we're actually doing so much more that there's no way that I think technology is going to replace that, at least that I see in the short term.",
+          "probability": 0.006398304548189541,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-17",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Enterprise revenue growth at or above peers",
+          "passage": "QA021",
+          "evidence_role": "future relative growth expectation of enterprise business; prior 10% is actual",
+          "evidence_text": "Bob Schrader [4097]: Yeah, Sheesh, I mean, I think as we've talked about in the past, you know, the lines are somewhat blurred and have become increasingly blurred between what's pay core and what's paychecks, you know, based on our early on decision to integrate those two businesses. And so I think if we look at it, you know, our best estimate is if you were to look at the organic growth of the pay core business, it was consistent, you in Q3 with what we saw in the first half of the year, which is in that upper single-digit range. I would tell you what's less blurred, and this is how we'll talk about the business as we move forward, is when we look at our enterprise business. So when we look at our client base above 100, irrespective of whether, you know, which sales organization sold it, which platform that it was on, you know, that business has been growing. I would tell you in the first half of the year it was growing upper single digits, and in Q3 it grew around 10%. And so that's how we're managing the business. That's how John and I are thinking about it. That's how we're going to market. And, you know, as we move forward after we anniversary, the acquisition and we provide color on, you know, the different areas of the business and how they're performing, that's how we're going to be looking at it. And again, I think that's, you know, similar and maybe not too different than what the other assets in that space are growing at. And our expectation would be that we would, you know, prospectively be growing at or above the other assets in that segment of the market. And that's currently where that enterprise-based performed in Q3.",
+          "probability": 0.1438476826020621,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2026-03-25T10.00",
+          "claim": "MAR17",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Investment approach/level unchanged",
+          "passage": "QA009",
+          "evidence_role": "investment continuity, analyst asks FY26 exit/FY27",
+          "evidence_text": "Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there.",
+          "probability": 0.07971629262816034,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        }
+      ]
+    },
+    "0.25": {
+      "counts": {
+        "tp": 52,
+        "fn": 5,
+        "fp": 10,
+        "tn": 108,
+        "unadjudicated_retained": 5,
+        "unadjudicated_filtered": 6
+      },
+      "per_source": [
+        {
+          "source": "CTAS_2025-09-24T10.00",
+          "tp": 9,
+          "fn": 0,
+          "fp": 0,
+          "tn": 26,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 1
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "tp": 10,
+          "fn": 0,
+          "fp": 0,
+          "tn": 16,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 2
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "tp": 8,
+          "fn": 1,
+          "fp": 3,
+          "tn": 10,
+          "unadjudicated_retained": 0,
+          "unadjudicated_filtered": 1
+        },
+        {
+          "source": "PAYX_2025-12-19T09.30",
+          "tp": 9,
+          "fn": 0,
+          "fp": 4,
+          "tn": 15,
+          "unadjudicated_retained": 1,
+          "unadjudicated_filtered": 0
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "tp": 9,
+          "fn": 3,
+          "fp": 2,
+          "tn": 21,
+          "unadjudicated_retained": 2,
+          "unadjudicated_filtered": 1
+        },
+        {
+          "source": "CTAS_2026-03-25T10.00",
+          "tp": 7,
+          "fn": 1,
+          "fp": 1,
+          "tn": 20,
+          "unadjudicated_retained": 2,
+          "unadjudicated_filtered": 1
+        }
+      ],
+      "disagreements": [
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA004",
+          "label": "negative",
+          "reason": "Current recurring growth reconciliation, integration and realized sale example, no new forecast amount.",
+          "text_sha256": "a176fac6a9c3da62c7ca408310d97a8c6fd527c541b1544a3a75df28cc757fef",
+          "probability": 0.5381475526646509,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA010",
+          "label": "positive",
+          "reason": "Management forecasts no big ARPU increase. Missing record period does not make this a passage without a forecast.",
+          "text_sha256": "4651e8a7dd3708f5eebdbd65c98128c20c31e1ac4b160e11427ad1740280963b",
+          "probability": 0.05997471950919985,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA014",
+          "label": "negative",
+          "reason": "Current synergies/pipeline and potential opportunities; not a new supported level.",
+          "text_sha256": "67a3be5569957e72235490ff7354c58698069442cbcfa6c6841003332f23bf4a",
+          "probability": 0.5633608530950293,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-09-30T09.30",
+          "passage": "QA016",
+          "label": "negative",
+          "reason": "Actions already taken and opportunities for more savings; no new target beyond P1-01.",
+          "text_sha256": "92e9137b3bd2c8b25b77fcdfc60b3718af3ee003dc044cc2a5ad4c2651b0d5e9",
+          "probability": 0.4241461925463023,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-12-19T09.30",
+          "passage": "QA003",
+          "label": "negative",
+          "reason": "Actual pro-forma comparison only.",
+          "text_sha256": "926d382b81cac6c142693feef787903a0d1b0634211aa5132a432b8d4552c1bf",
+          "probability": 0.3994633913360005,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-12-19T09.30",
+          "passage": "QA011",
+          "label": "negative",
+          "reason": "Current bookings/integration progress.",
+          "text_sha256": "e694500a80733a736ea7b80c29b4e7a1cc428750471616f72f90a6cc83d6c2a2",
+          "probability": 0.2855028510093689,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-12-19T09.30",
+          "passage": "QA013",
+          "label": "negative",
+          "reason": "Current pricing realization.",
+          "text_sha256": "bb02b41dbd77e185343a877001f3c9cb4822411caabe2f56cdf3728fdc738c40",
+          "probability": 0.5381475526646509,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2025-12-19T09.30",
+          "passage": "QA015",
+          "label": "negative",
+          "reason": "Current client bundle selection.",
+          "text_sha256": "bc2d56ce45dcb5d1ad0602bf30b3f616668dffb6e4942f69aa4d10cd04a26256",
+          "probability": 0.4366391469049708,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA003",
+          "label": "positive",
+          "reason": "P3-13 conditional margin outlook; future planning not quantified savings.",
+          "text_sha256": "1b31cf4dbe5776d6ac2ca9b8de35a904f349619fa9cad80f2b2f0093835cf406",
+          "probability": 0.04711975796998088,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA006",
+          "label": "negative",
+          "reason": "Current PEO results, timing explanations and growth strategy; historical CAGR not new forward value.",
+          "text_sha256": "efc68b0d62d1abfa880405435495884604c85ed47f7f62a4fc99a3b88f4d5f7f",
+          "probability": 0.2752214290135673,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA009",
+          "label": "negative",
+          "reason": "Completed cost synergy actions and future opportunity, supports P3-10 context without new amount.",
+          "text_sha256": "5630f2522dc95c0347736933bf5d12f1e079ab7b67be96e86f3e15fa59de6bac",
+          "probability": 0.3752811141228344,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA016",
+          "label": "positive",
+          "reason": "P3-04 measurement exclusion and P3-13 future margin context; GAAP 40% is current.",
+          "text_sha256": "6e6adec09516a5c1780c787d4a2d022716d6ca539d356ea9f0f620416aab1ba8",
+          "probability": 0.09601083683999886,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "PAYX_2026-03-25T09.30",
+          "passage": "QA021",
+          "label": "positive",
+          "reason": "P3-17; upper-single-digit and 10% values are actuals.",
+          "text_sha256": "6b6947715cd3e312be6cf99f388ec97dc37d5376660508062b410847dc0c9073",
+          "probability": 0.1438476826020621,
+          "outcome": "fn"
+        },
+        {
+          "source_id": "CTAS_2026-03-25T10.00",
+          "passage": "PR003",
+          "label": "negative",
+          "reason": "Reported segment figures; closing-timing context for MAR07.",
+          "text_sha256": "d9ae2c2cba12b09049360e520038078ab9b177321b05ae4bf2f98d558fda1650",
+          "probability": 0.6365890096601549,
+          "outcome": "fp"
+        },
+        {
+          "source_id": "CTAS_2026-03-25T10.00",
+          "passage": "QA004",
+          "label": "positive",
+          "reason": "MAR07 repeated leverage; no specific CapEx ratio guidance confirmed.",
+          "text_sha256": "47156e8d4bfcd7db112aeb447b3458b91e0856a135354cceace5fc351dff0faa",
+          "probability": 0.14384779762768143,
+          "outcome": "fn"
+        }
+      ],
+      "context_outside_retained_passages": [
+        {
+          "source": "CTAS_2025-09-24T10.00",
+          "claim": "SEP12",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "First-aid margin outlook/leverage",
+          "passage": "QA018",
+          "evidence_role": "question asks incremental margins; answer discusses gross margin and future leverage without a sudden pop",
+          "evidence_text": "Faiza Aoui [2402]: Understood. And then just, you know, you talked about timing as it relates to the investments. So, And it sounded like, you know, even in the fourth quarter of last year, because you talked about sequential margins being similar. Again, give us a bit more color on the timing. Like, is this... Are you... When do you expect to be sort of through with those? And, you know, do you... How should we think about the incremental margins in that business, you know, going forward?\nTodd Schneider [2434]: Yeah, so... Faiza, from a timing standpoint, we certainly have different initiatives in each of our businesses. First Aid is no different. We'll have certain rollouts of products which might affect the mix, but we're planning to grow that business attractively. And I'll just remind you that that 56.8% gross margin is really attractive. We're quite happy with it. We've had a significant increase over the last few years in that area and we're going to continue to get leverage there but it's a high level, and we think it's really good. And, you know, the mix of the business has been attractive for us, but we're providing more and more value to those customers, and then we're selling other items into those customers outside of the first aid business. So it all works quite nicely, and so I wouldn't be thinking of it as – oh, geez, you know, the first aid margin is going to pop after a certain timing. These are, we'll get leverage and we'll grow that business attractively and provide more value to customers. But we like where it is and in the future as well.",
+          "probability": 0.19357368974803285,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC14",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Greater future fire ERP costs",
+          "passage": "QA011",
+          "evidence_role": "analyst question begins in the preceding stored exchange",
+          "evidence_text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "probability": 0.1502386078309598,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC15",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Fire ERP rollout margin impact",
+          "passage": "QA011",
+          "evidence_role": "analyst question begins in the preceding stored exchange",
+          "evidence_text": "and then as a follow-up can you just refresh us on the timing of the sap uh fire implementation costs are you expect are you still expecting",
+          "probability": 0.1502386078309598,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2025-12-18T10.00",
+          "claim": "DEC16",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Buyback approach remains opportunistic",
+          "passage": "QA016",
+          "evidence_role": "capital-allocation policy continuity, not a stated buyback amount",
+          "evidence_text": "So I wouldn't just simply model in that we are going to lever up and be highly aggressive on buybacks. We'll be opportunistic and handle that as we have in the past. And if you look at our history, even our 5, 10, 20-year history, we've been pretty consistent on that, our capital allocation approach. And I wouldn't expect a change to our approach there. We'll continue to look at that opportunistically and return that back to our shareholders as appropriate.",
+          "probability": 0.035142389373039845,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-16",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "October enrollment share",
+          "passage": "QA007",
+          "evidence_role": "analyst question split across stored exchanges",
+          "evidence_text": "Andrew Nicholas [1857]: Hi, good morning. Thanks for taking my questions. You touched on it briefly in your response to one of the earlier questions, but I just wanted to kind of dig into the second half ramp for PEO. Can you speak a little bit more to kind of the attach rate dynamics in Florida specifically? Have they stabilized and it is mostly just a comp dynamic or have you seen some improvement there",
+          "probability": 0.21856185142511572,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-17",
+          "claim_status": "source_insufficient_for_record",
+          "claim_meaning": "Bill partnership ARPU outlook",
+          "passage": "QA010",
+          "evidence_role": "management narrows expected value from new partnership",
+          "evidence_text": "Michael Fontana [2206]: Hi, guys. It's Michael in Fontana for James. Thanks for taking our question. I just wanted to ask about the bill partnership. Can you maybe just paint the picture for us in terms of the customer profile who would be most likely to initially adopt some of these capabilities, how you think about some of the go-to-market dynamics between the two organizations, and maybe how we should be thinking about ARPU uplift potential for your average payroll customer that begins to use some of Bill's AP capabilities? Thanks.\nJohn Gibson [2237]: Yeah, Michael. Well, thanks. We're real excited about the partnership. We've kind of been in the payments business, allow our clients to make ancillary payments in the millions, believe it or not, through our system. It's not been our core business. And certainly, we viewed it as another value add. So I'm not looking at a big ARPU increase.",
+          "probability": 0.05997471950919985,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2025-09-30T09.30",
+          "claim": "P1-18",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "No direct government-shutdown impact expected",
+          "passage": "QA015",
+          "evidence_role": "company forecast of direct shutdown exposure; source lacks a precise metric/horizon",
+          "evidence_text": "David (for Ashish Sabhadra) [2788]: Hi, good morning. This is David on for Ashish. Thanks for all the color provided on the call so far. Just taking a step back, in terms of the regulatory environment, government shutdowns, maybe changes to H-1B, how are you thinking about that and how is the business doing? I guess, position to whether those changes, whether it be good or bad.\nJohn Gibson [2812]: Thank you. Yeah, look, we've been through a lot of cycles.\nJohn Gibson [2818]: And what I would say is that our small business clients tend to be resilient. In terms of the paycheck specifically, we don't have a heavy concentration with government with the federal government. And so I don't expect any impact directly to our business.",
+          "probability": 0.09167781198984945,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-04",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Q4 adjusted operating margin",
+          "passage": "QA016",
+          "evidence_role": "definition of adjusted margin excludes integration-related items",
+          "evidence_text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "probability": 0.09601083683999886,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-13",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Margin expansion as revenue grows",
+          "passage": "QA003",
+          "evidence_role": "worded future margin expansion conditioned on revenue growth",
+          "evidence_text": "Mark Marcon [1694]: That's great to hear. And then I thought the gross margin performance was particularly impressive. You know, when we take a look, if we're defining gross margin as revenue minus direct costs. And part of that was obviously the higher interest income off of the float. But beyond that, it looks like it's doing extremely well. How much of that is related to some of the AI initiatives that you've put in place in terms of embedding AI across your service infrastructure and making them more productive versus, you know, other initiatives that you've put in place in terms of, you know, perhaps shifting some of your costs to lower cost labor markets like India. And how much more can we do there? Because it's been fairly impressive. I'm wondering if if this is basically setting us up for continued margin expansion for multiple years?\nJohn Gibson [1766]: Mark, I think that we have a long track record of being able to drive as the best operators margin expansion as we grow revenue in the business, and I think you're going to continue to see that. We use every lever imaginable to do that. I think that when you look at AI, as you know, we've been using AI and predecessor type of models for many, many years since I've been here. And now with this new technology that almost every day something new is coming out, what we're seeing is pretty impressive. It's pretty incredible. Some of the things we're doing in terms of genic AI models, which we've now released to scale after the pilots, doing voice payroll, doing email payrolls. what we're seeing early stages in our beta groups in sales using our sales guru tool and what we're seeing from a service perspective. So I feel good about what the opportunities are. Look, if we grow the top line, we are going to be able to grow margins and expand margins over time.",
+          "probability": 0.04711975796998088,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-13",
+          "claim_status": "claim_requires_association",
+          "claim_meaning": "Margin expansion as revenue grows",
+          "passage": "QA016",
+          "evidence_role": "definition of adjusted margin excludes integration-related items",
+          "evidence_text": "Bob Schrader [3621]: Yeah, and just on the integration-related stuff, some question as it relates to margin, James. I mean, we're backing a lot of that stuff out, so that's really not included in the adjusted operating margins.",
+          "probability": 0.09601083683999886,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-14",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Short-term technology replacement risk for advisory services",
+          "passage": "QA004",
+          "evidence_role": "specific short-term denial of replacement risk; business outlook rather than numbered financial guidance",
+          "evidence_text": "Tien-Sin Huang [1903]: Hey, thanks. Hi, John and Bob. I wanted to ask on the advisory work, John, that you talked a little bit about. I think that's probably underappreciated in terms of what Paychex does there. How AI-proof is the advisory side of the business? Because I get the question quite a bit that can rules-based advice from AI come in and supplant what Paychex does on the advisory side? But I'm guessing that a lot of your advisory work is centered around compliance and very complex data issue that only can you maybe elaborate on that?\nJohn Gibson [1938]: Yeah, yeah. Well, Tinson, I think this is something I think is extremely interesting for people to understand. For the vast majority of our clients, we are their HR department, right? So not only do we provide them the advice, we literally are talking to them and holding their hand when they're making some of these decisions and supporting them. You look at our PO, the most comprehensive part of our model, where we're actually in a co-employment arrangement. We're actually helping represent them and deal with their employee situations, which are numerous, I may ask, in today's world. And so we're actually doing so much more that there's no way that I think technology is going to replace that, at least that I see in the short term.",
+          "probability": 0.006398304548189541,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "PAYX_2026-03-25T09.30",
+          "claim": "P3-17",
+          "claim_status": "confirmed_claim",
+          "claim_meaning": "Enterprise revenue growth at or above peers",
+          "passage": "QA021",
+          "evidence_role": "future relative growth expectation of enterprise business; prior 10% is actual",
+          "evidence_text": "Bob Schrader [4097]: Yeah, Sheesh, I mean, I think as we've talked about in the past, you know, the lines are somewhat blurred and have become increasingly blurred between what's pay core and what's paychecks, you know, based on our early on decision to integrate those two businesses. And so I think if we look at it, you know, our best estimate is if you were to look at the organic growth of the pay core business, it was consistent, you in Q3 with what we saw in the first half of the year, which is in that upper single-digit range. I would tell you what's less blurred, and this is how we'll talk about the business as we move forward, is when we look at our enterprise business. So when we look at our client base above 100, irrespective of whether, you know, which sales organization sold it, which platform that it was on, you know, that business has been growing. I would tell you in the first half of the year it was growing upper single digits, and in Q3 it grew around 10%. And so that's how we're managing the business. That's how John and I are thinking about it. That's how we're going to market. And, you know, as we move forward after we anniversary, the acquisition and we provide color on, you know, the different areas of the business and how they're performing, that's how we're going to be looking at it. And again, I think that's, you know, similar and maybe not too different than what the other assets in that space are growing at. And our expectation would be that we would, you know, prospectively be growing at or above the other assets in that segment of the market. And that's currently where that enterprise-based performed in Q3.",
+          "probability": 0.1438476826020621,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        },
+        {
+          "source": "CTAS_2026-03-25T10.00",
+          "claim": "MAR17",
+          "claim_status": "borderline_claim",
+          "claim_meaning": "Investment approach/level unchanged",
+          "passage": "QA009",
+          "evidence_role": "investment continuity, analyst asks FY26 exit/FY27",
+          "evidence_text": "Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there.",
+          "probability": 0.07971629262816034,
+          "note": "Source remains in full context. A later sentence/choice menu restricted to retained passages cannot point here. This is not automatically a detector error or a complete-record miss."
+        }
+      ]
+    }
+  },
+  "elapsed_sum_seconds": 936.9037981075235,
+  "input_tokens": 83524,
+  "sequences": 6
+}

@@ -1,0 +1,52 @@
+{
+  "frozen_at": "2026-11-15T18:46:05.560780-05:00",
+  "model": "pplx-decider-v1.3:8bit",
+  "mode": "isolated",
+  "requests": [
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "file": "CTAS_2025-09-24T10.00_request.json",
+      "sha256": "acc292317d9dbf552ecf3bb519dc7ce15229f6521f868086fbf89a614c293b27",
+      "questions": 36
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "file": "CTAS_2025-12-18T10.00_request.json",
+      "sha256": "160f14b9114b4733001585e5cde6592bb05a336a6cf8db0e3c3c20b104117a68",
+      "questions": 28
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "file": "PAYX_2025-09-30T09.30_request.json",
+      "sha256": "f8f32d1de6027307e7618b895d35d9364acd1151f25dc300abad9561ae0ff4d8",
+      "questions": 23
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "file": "PAYX_2025-12-19T09.30_request.json",
+      "sha256": "9b15133906649f575b02e051f1395377495468284c683c408353a50177d4d9dd",
+      "questions": 29
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "file": "PAYX_2026-03-25T09.30_request.json",
+      "sha256": "cdf4e86e29ebee2f4ac0799a7a7209f569272970bc7a557eaf24027fd9d349a9",
+      "questions": 38
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "file": "CTAS_2026-03-25T10.00_request.json",
+      "sha256": "d84f5c9c6af6ad140ced70881757157c0004524fde84749f65e068b9c6696ca5",
+      "questions": 32
+    }
+  ],
+  "rulebook_sha256": "f9376dcb51f648d58fc1527ca3472fcce6f0ca1bb517969ccc250077cad78ff0",
+  "reference_sha256": "a5c015cc35a33f76e6b9c7b458e8ada3b603c009e3ffdcd8c0115c2def00f1e6",
+  "runner_sha256": "db7a186659136241e8f9714c12dfa1cfbbef0d9d0371620caa248e1ddc9ecb28",
+  "reference_counts": {
+    "positive": 57,
+    "negative": 118,
+    "unadjudicated": 11
+  },
+  "limits": "Passage presence only. No full-record, unseen-company, calibrated-cutoff or production claim. All source text stays available after routing. The metadata header layout differs from the earlier single-call diagnostic."
+}

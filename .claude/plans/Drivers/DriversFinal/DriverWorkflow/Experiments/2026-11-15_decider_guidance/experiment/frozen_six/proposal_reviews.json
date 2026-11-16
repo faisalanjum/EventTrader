@@ -1,0 +1,392 @@
+{
+  "CTAS_2025-09-24T10.00/V017": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "SEP01 is a closed range, but form is floor. The asserted prior-year baseline is not established for the level. Only FX is copied as a condition; the source also states exclusions. Correct bounds do not cure these errors."
+  },
+  "CTAS_2025-09-24T10.00/V019": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "SEP02 is a closed range, not floor. The growth basis is source-unstated, so prior_year is unsupported. Applicable exclusions remain incomplete; an empty separate context span alone is not the reason for failure."
+  },
+  "CTAS_2025-09-24T10.00/V021": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "SEP03 is a closed EPS range, not floor. Prior-year comparison for this level is unsupported. The source's full guidance assumptions/exclusions are not captured."
+  },
+  "CTAS_2025-09-24T10.00/V023": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "SEP04 is a closed growth range, not floor. Unit is correctly changed to unknown by the existing missing-basis rule, but comparison_baseline still incorrectly says prior_year. Assumptions/exclusions remain incomplete."
+  },
+  "CTAS_2025-09-24T10.00/V160": {
+    "complete_claims": [],
+    "holds": [
+      "H_CALENDAR",
+      "H_EVIDENCE"
+    ],
+    "reason": "SEP15 says the 4% target stays consistent moving forward, not a stated FY2026 window. The saved quote is only '4% targeted CapEx' and omits both reaffirmation and horizon. This proposal has no automatic holds but fails source review."
+  },
+  "CTAS_2025-12-18T10.00/V016": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "DEC01 closed range is labeled floor; the condition output keeps only no future acquisitions, omitting the stated FX and other applicable exclusions."
+  },
+  "CTAS_2025-12-18T10.00/V018": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_MODIFIERS"
+    ],
+    "reason": "DEC02 lacks copied measure wording; its quote starts at the amounts and misses their immediate revenue/growth wording. The prior-year baseline is unsupported and conditions are incomplete."
+  },
+  "CTAS_2025-12-18T10.00/V020": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_MODIFIERS",
+      "H_EVIDENCE"
+    ],
+    "reason": "DEC03 closed range is labeled floor. The 49-character quote establishes neither target period nor the explicitly applicable assumptions; a positive condition answer produced no spans."
+  },
+  "CTAS_2025-12-18T10.00/V022": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_MODIFIERS",
+      "H_EVIDENCE"
+    ],
+    "reason": "DEC04 quote is only a growth-rate expression; it omits diluted EPS identity, target period and applicable assumptions. Prior-year baseline is unsupported despite the unit correctly becoming unknown."
+  },
+  "CTAS_2025-12-18T10.00/V105": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_MODIFIERS",
+      "H_EVIDENCE"
+    ],
+    "reason": "DEC10 quote is only 29 and 30; it omits incrementals, target period and the exclusion of the prior asset-sale gain. Form also says floor rather than range."
+  },
+  "CTAS_2025-12-18T10.00/V108": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD"
+    ],
+    "reason": "DEC11 correctly selects 30 to 33 and the back-half phrase but labels the expression floor. It also has an automatic modifier hold; the field-form error alone establishes incompleteness without inventing a missing assumption."
+  },
+  "CTAS_2025-12-18T10.00/V131": {
+    "complete_claims": [],
+    "holds": [
+      "H_MODIFIERS",
+      "H_EVIDENCE"
+    ],
+    "reason": "Repeated DEC02 revenue-growth range, not a new distinct source claim. Only the no-acquisitions assumption was copied; FX and other relevant guidance exclusions are not fully represented. It remains automatically held.",
+    "related_claims": [
+      "DEC02"
+    ],
+    "duplicate_of": "CTAS_2025-12-18T10.00/V018"
+  },
+  "CTAS_2025-12-18T10.00/V143": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "DEC15 output quote is only 100 basis points, omitting the fire-margin measure, around qualifier and fiscal-year-27 target. No conditions were copied after a positive presence answer."
+  },
+  "PAYX_2025-09-30T09.30/V012": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-01 quote is only $90. It omits cost synergies, approximate wording, annual period and reaffirmation."
+  },
+  "PAYX_2025-09-30T09.30/V045": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-02 quote is only the two percentages; revenue identity, annual period and macro assumption are absent."
+  },
+  "PAYX_2025-09-30T09.30/V047": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-03 quote is only 30 to 50 basis points; revenue-synergy contribution and fiscal 2026 are absent."
+  },
+  "PAYX_2025-09-30T09.30/V050": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "P1-04 quote retains the business and forecast but not the FY2026 frame/reaffirmation or the explicitly stated current-macro assumption."
+  },
+  "PAYX_2025-09-30T09.30/V052": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-05 quote is only 6 to 8%; the PEO and Insurance identity, annual period and macro assumption are absent."
+  },
+  "PAYX_2025-09-30T09.30/V054": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "P1-06 quote ends at $200, before million, and lacks the annual frame and macro assumption. The scale used in normalized values is not in the quote."
+  },
+  "PAYX_2025-09-30T09.30/V057": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-08 quote is only 24% to 25%; effective income tax rate and annual target are absent."
+  },
+  "PAYX_2025-09-30T09.30/V059": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_FIELD",
+      "H_MODIFIERS"
+    ],
+    "reason": "P1-09 current EPS-growth bounds are right, but the quote omits the annual frame, raising wording, prior 8.5%-10.5% comparison and current-macro assumption. A positive comparison answer returned no span."
+  },
+  "PAYX_2025-09-30T09.30/V063": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-10 quote retains revenue growth, approximately and 18%, but stops before Q2. The target quarter is absent."
+  },
+  "PAYX_2025-09-30T09.30/V065": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-11 quote retains adjusted margin, approximately and 41%, but omits Q2, which occurs before its starting position."
+  },
+  "PAYX_2025-09-30T09.30/V102": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "P1-15 quote retains organic growth, 5% and full-year basis, but omits the immediately preceding sentence establishing overall-company total revenue. The required measure association is not evidenced in this quote; do not guess it from organic growth alone."
+  },
+  "PAYX_2025-09-30T09.30/V056": {
+    "complete_claims": [
+      "P1-07"
+    ],
+    "source_content_complete": true,
+    "holds": [],
+    "reason": "At the pre-naming extraction boundary, the actual quote and fields fully support FY2026 company adjusted operating income margin of approximately 43%, reaffirmed, with the explicit current-macro assumption. The quote includes the annual frame, reaffirmation, measure and approximately wording. No extra context or qualifier Locate span is needed to prove fields already in that quote (record policy 9). The frozen code nevertheless assigns H_EVIDENCE because the separate context copy is empty; retain the held runtime outcome and report this correct-content false hold separately.",
+    "unnecessary_automatic_holds": [
+      "H_EVIDENCE"
+    ]
+  },
+  "PAYX_2025-12-19T09.30/V009": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_FIELD"
+    ],
+    "reason": "P2-01 quote proves $100 million cost synergies, but omits the annual target, approximate wording and raised-versus-earlier target context. Previous-guidance comparison is selected without retained comparison evidence."
+  },
+  "PAYX_2025-12-19T09.30/V046": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_FIELD"
+    ],
+    "reason": "P2-06 current EPS growth range 10\u201311 is correct and unstated growth basis correctly becomes unknown. Quote omits fiscal-year frame and explicit raising/previous 9\u201311 comparison; positive comparison check returned no span."
+  },
+  "PAYX_2025-12-19T09.30/V050": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE"
+    ],
+    "reason": "P2-07 quote correctly proves effective tax rate approximately 24% for the year. Reaffirmed is supported by this source\u2019s preceding FY26 guidance header, not by prior-call comparison, but that movement evidence is outside the saved quote. Preserve automatic hold; do not invent a tax-rate revision from old records."
+  },
+  "PAYX_2025-12-19T09.30/V051": {
+    "complete_claims": [
+      "P2-09"
+    ],
+    "source_content_complete": true,
+    "holds": [],
+    "unnecessary_automatic_holds": [
+      "H_CONFIDENCE"
+    ],
+    "reason": "At the pre-naming boundary the quote proves third-quarter total revenue growth of approximately 18%; source metadata identifies reported Q2 FY2026 and verified May31 calendar. No growth comparison basis is stated, and the final unit correctly becomes unknown. Other fields match. Only automatic hold is low confidence in percent_yoy before the evidence rule overrides that unit to unknown; retain held runtime result and count correct source content separately."
+  },
+  "PAYX_2025-12-19T09.30/V052": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE"
+    ],
+    "reason": "P2-10 margin range 47\u201348% is correct, but saved quote omits its third-quarter frame. The nearby higher-margin year-end fee explanation is not automatically a forecast condition."
+  },
+  "PAYX_2025-12-19T09.30/V070": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_MEASURE",
+      "H_FIELD"
+    ],
+    "related_claims": [
+      "P2-01"
+    ],
+    "duplicate_of": "PAYX_2025-12-19T09.30/V009",
+    "reason": "Repeated P2-01 annual synergy target, not an additional forecast. Quote includes earlier $80 million and current $100 but omits measure and annual frame, and stops before current million unit. Comparison span is raw rather than a complete normalized comparison record."
+  },
+  "PAYX_2025-12-19T09.30/V143": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_FIELD"
+    ],
+    "related_claims": [
+      "P2-09"
+    ],
+    "duplicate_of": "PAYX_2025-12-19T09.30/V051",
+    "reason": "Analyst repeats management\u2019s earlier Q3 revenue guidance; do not count a second fact. Local quote omits company confirmation and approximately qualifier. Prior-year comparison baseline is not established by the quoted 18% growth wording."
+  },
+  "PAYX_2025-12-19T09.30/V152": {
+    "complete_claims": [],
+    "holds": [
+      "H_CALENDAR",
+      "H_EVIDENCE"
+    ],
+    "reason": "P2-13 quote identifies organic management-solutions growth moving closer towards 5% over time and retains that qualification. Selected H2 FY26 period is low confidence and absent from quote; full source separately mentions back-half acceleration, whose exact scope needs resolution. Do not silently turn this into a definite 5% H2 target."
+  },
+  "PAYX_2026-03-25T09.30/V055": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "P3-01 has correct 200\u2013210 bounds but calls the closed range a floor. Quote stops before million and omits the annual frame, raising wording and explicit current-market-conditions assumption. Previous-guidance baseline needs its stated raising evidence; no earlier range may be imported from December."
+  },
+  "PAYX_2026-03-25T09.30/V057": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE"
+    ],
+    "reason": "P3-03 quote retains Q4, approximately and 12%, but fourth quarter growth alone does not identify the revenue measure. Measure copy is empty. The source-backed total-revenue antecedent is still needed; quarter timing explanations are not automatically conditions."
+  },
+  "PAYX_2026-03-25T09.30/V058": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "P3-04 fields retain correct 41\u201342% adjusted-margin range, but quote omits Q4. The later source exclusion of integration-related items from adjusted operating margins is not retained; copying adjusted operating margin into context/qualifiers does not provide that missing evidence."
+  },
+  "PAYX_2026-03-25T09.30/V080": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD"
+    ],
+    "unnecessary_automatic_holds": [
+      "H_EVIDENCE"
+    ],
+    "review_uncertainty": "Whether the explicit first-half 4% to back-half near-6% bridge is the headline sequential comparison under 3.52 needs reference adjudication; do not force a comparison or call this a wrong number/period.",
+    "reason": "P3-05 actual quote does contain total-revenue organic measure, back-half period, 6 and closer-to qualifier, despite empty separate context copy. Those contents are not missing. The preceding first-half 4% comparison is present in quote but comparison_baseline is none and comparison extraction is absent; complete-record status remains unadjudicated. Keep the automatic confidence hold, report the redundant evidence hold separately, and do not manually repair fields."
+  },
+  "CTAS_2026-03-25T10.00/V015": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "MAR01 bounds normalize correctly to 11210\u201311240 million USD, but form says floor rather than closed range. Long quote retains the no-acquisitions assumption but ends before the constant-FX assumption; the explicit raising lead-in is before its start. Merely spanning unrelated paragraphs does not make the evidence complete."
+  },
+  "CTAS_2026-03-25T10.00/V017": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "MAR02 correct 8.4\u20138.7 range and final unknown growth unit; prior_year comparison baseline is not established by this forecast\u2019s wording. Quote misses explicit raising and constant-FX assumption despite its length. Prior-year actual comparisons elsewhere in the quote do not establish this forecast\u2019s growth basis."
+  },
+  "CTAS_2026-03-25T10.00/V019": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "MAR03 correct EPS endpoints but floor conflicts with closed range. Quote omits target fiscal-year/raising frame and shared assumptions. The non-recurring transaction-cost exclusion is correctly copied as text but assigned to conditions rather than measurement definition. Prior_year baseline is unsupported for this forecast."
+  },
+  "CTAS_2026-03-25T10.00/V021": {
+    "complete_claims": [],
+    "holds": [
+      "H_EVIDENCE",
+      "H_MODIFIERS"
+    ],
+    "reason": "MAR04 correct growth endpoints and final unknown basis. Quote proves adjusted diluted EPS growth and its transaction-cost exclusion, but omits the annual/raising frame and shared assumptions; the measurement exclusion is put in conditions. Copying growth rate of into context does not prove the missing period."
+  },
+  "CTAS_2026-03-25T10.00/V053": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE",
+      "H_CALENDAR"
+    ],
+    "reason": "MAR07 1.5 times is retained, but quote omits about, debt-to-EBITDA measure and at-closing target. No exact closing date is established. Unclear instant period must remain unresolved, not become an invented date."
+  },
+  "CTAS_2026-03-25T10.00/V066": {
+    "complete_claims": [],
+    "holds": [
+      "H_FIELD",
+      "H_NUMBER",
+      "H_EVIDENCE",
+      "H_MEASURE"
+    ],
+    "reason": "MAR08 quote contains only $0.03 to $0.04 and no measure or annual frame. Form ceiling conflicts with two stated bounds. After applying a negative EPS-impact sign, code leaves lower=-0.03 and upper=-0.04 reversed; H_NUMBER catches this integration defect. Do not attribute the signed-bound ordering error solely to the model."
+  },
+  "CTAS_2026-03-25T10.00/V082": {
+    "complete_claims": [],
+    "holds": [
+      "H_CALENDAR"
+    ],
+    "related_claims": [
+      "MAR07"
+    ],
+    "duplicate_of": "CTAS_2026-03-25T10.00/V053",
+    "reason": "Repeats MAR07 closing leverage target; no additional distinct forecast. Quote identifies debt to EBITDA 1.5 at closing, but the exact instant remains unresolved. Do not assign the deal\u2019s broad expected closing window as an exact closing date."
+  },
+  "CTAS_2026-03-25T10.00/V106": {
+    "complete_claims": [],
+    "holds": [
+      "H_MEASURE",
+      "H_EVIDENCE"
+    ],
+    "reason": "MAR12 7.6 is retained and growth unit correctly becomes unknown, but quote is only 7.6 comma. It contains neither Q4 nor organic revenue-growth association. Discovery recovered the old missed number; complete record extraction did not."
+  }
+}

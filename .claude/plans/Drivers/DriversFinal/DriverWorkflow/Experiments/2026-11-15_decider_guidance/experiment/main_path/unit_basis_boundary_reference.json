@@ -1,0 +1,208 @@
+[
+  {
+    "id": "F1",
+    "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+    "tagged_text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of [T] 8.4% to 8.7%. ",
+    "target": "8.4% to 8.7%",
+    "expected": "not_stated",
+    "kind": "real",
+    "source": {
+      "source": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "start": 1349,
+      "end": 1464,
+      "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+    }
+  },
+  {
+    "id": "F3",
+    "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+    "tagged_text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of [T] 10.5% to 11.4%. ",
+    "target": "10.5% to 11.4%",
+    "expected": "not_stated",
+    "kind": "real",
+    "source": {
+      "source": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "start": 1464,
+      "end": 1566,
+      "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+    }
+  },
+  {
+    "id": "V7",
+    "text": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. ",
+    "tagged_text": "Operating income grew to $659.9 million, an increase of [T] 8.2% over the prior year. ",
+    "target": "8.2%",
+    "expected": "year_earlier",
+    "kind": "real",
+    "source": {
+      "source": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "start": 894,
+      "end": 976,
+      "text": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. "
+    }
+  },
+  {
+    "id": "V10",
+    "text": "Diluted EPS of $1.24 grew 9.7% over the prior year. ",
+    "tagged_text": "Diluted EPS of $1.24 grew [T] 9.7% over the prior year. ",
+    "target": "9.7%",
+    "expected": "year_earlier",
+    "kind": "real",
+    "source": {
+      "source": "CTAS_2026-03-25T10.00",
+      "passage": "PR002",
+      "start": 1102,
+      "end": 1154,
+      "text": "Diluted EPS of $1.24 grew 9.7% over the prior year. "
+    }
+  },
+  {
+    "id": "R5",
+    "text": "As we look ahead, we expect FY25 revenue to be flat to down slightly versus last year. ",
+    "tagged_text": "As we look ahead, we expect FY25 revenue to be [T] flat to down slightly versus last year. ",
+    "target": "flat to down slightly",
+    "expected": "year_earlier",
+    "kind": "real",
+    "source": {
+      "source": "FDX_2025-03-20T17.30",
+      "prepared_block": 3,
+      "start": 3518,
+      "end": 3605
+    }
+  },
+  {
+    "id": "R6",
+    "text": "For Q4, we expect continued execution of our revenue quality strategy and further acceleration in drive savings to support sequential and year-over-year growth in adjusted operating income. ",
+    "tagged_text": "For Q4, we expect continued execution of our revenue quality strategy and further acceleration in drive savings to support [T] sequential and year-over-year growth in adjusted operating income. ",
+    "target": "sequential and year-over-year growth",
+    "expected": "two_bases",
+    "kind": "real",
+    "source": {
+      "source": "FDX_2025-03-20T17.30",
+      "prepared_block": 4,
+      "start": 3168,
+      "end": 3358
+    }
+  },
+  {
+    "id": "R7",
+    "text": "HBM revenue grew more than 50% sequentially to a new milestone of over $1 billion of quarterly revenue. ",
+    "tagged_text": "HBM revenue grew more than [T] 50% sequentially to a new milestone of over $1 billion of quarterly revenue. ",
+    "target": "50%",
+    "expected": "previous_period",
+    "kind": "real",
+    "source": {
+      "source": "MU_2025-03-20T14.30",
+      "prepared_block": 2,
+      "start": 475,
+      "end": 579
+    }
+  },
+  {
+    "id": "R8",
+    "text": "Our HBM4 provides a bandwidth increase of over 60%, compared to HBM3e. ",
+    "tagged_text": "Our HBM4 provides a bandwidth increase of over [T] 60%, compared to HBM3e. ",
+    "target": "60%",
+    "expected": "other_stated",
+    "kind": "real",
+    "source": {
+      "source": "MU_2025-03-20T14.30",
+      "prepared_block": 2,
+      "start": 5486,
+      "end": 5557
+    }
+  },
+  {
+    "id": "M1",
+    "text": "We forecast revenue growth of 8.4% to 8.7% in fiscal 2026.",
+    "tagged_text": "We forecast revenue growth of [T] 8.4% to 8.7% in fiscal 2026.",
+    "target": "8.4% to 8.7%",
+    "expected": "not_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M2",
+    "text": "We forecast revenue growth of 8.4% to 8.7% in fiscal 2026 versus fiscal 2025.",
+    "tagged_text": "We forecast revenue growth of [T] 8.4% to 8.7% in fiscal 2026 versus fiscal 2025.",
+    "target": "8.4% to 8.7%",
+    "expected": "year_earlier",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M3",
+    "text": "We forecast revenue growth of 5% in Q4 versus Q3 of the same fiscal year.",
+    "tagged_text": "We forecast revenue growth of [T] 5% in Q4 versus Q3 of the same fiscal year.",
+    "target": "5%",
+    "expected": "previous_period",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M4",
+    "text": "We forecast annual revenue growth of 5% sequentially in FY2027.",
+    "tagged_text": "We forecast annual revenue growth of [T] 5% sequentially in FY2027.",
+    "target": "5%",
+    "expected": "previous_period",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M5",
+    "text": "Revenue grew 8% year over year. We forecast EPS growth of 10%.",
+    "tagged_text": "Revenue grew 8% year over year. We forecast EPS growth of [T] 10%.",
+    "target": "10%",
+    "expected": "not_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M6",
+    "text": "We forecast revenue growth of 5%, compared with our earlier forecast of 3%.",
+    "tagged_text": "We forecast revenue growth of [T] 5%, compared with our earlier forecast of 3%.",
+    "target": "5%",
+    "expected": "other_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M7",
+    "text": "We forecast revenue growth of 5% compared with the same quarter two years earlier.",
+    "tagged_text": "We forecast revenue growth of [T] 5% compared with the same quarter two years earlier.",
+    "target": "5%",
+    "expected": "other_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M8",
+    "text": "All revenue-growth figures in this outlook compare with the same period of the prior year. We forecast Q4 revenue growth of 5%.",
+    "tagged_text": "All revenue-growth figures in this outlook compare with the same period of the prior year. We forecast Q4 revenue growth of [T] 5%.",
+    "target": "5%",
+    "expected": "year_earlier",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M9",
+    "text": "We forecast Q4 revenue growth of 5%.",
+    "tagged_text": "We forecast Q4 revenue growth of [T] 5%.",
+    "target": "5%",
+    "expected": "not_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  },
+  {
+    "id": "M10",
+    "text": "We forecast revenue growth of 5% next quarter and earnings growth of 10% over the same quarter a year earlier.",
+    "tagged_text": "We forecast revenue growth of [T] 5% next quarter and earnings growth of 10% over the same quarter a year earlier.",
+    "target": "5%",
+    "expected": "not_stated",
+    "kind": "controlled_mutation",
+    "source": null
+  }
+]

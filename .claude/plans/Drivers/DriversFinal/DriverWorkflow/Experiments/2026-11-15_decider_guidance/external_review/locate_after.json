@@ -1,0 +1,1054 @@
+{
+ "cases": [
+  {
+   "text": "Acme Tools expects its operating margin for the current year to be 18.5%.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 67,
+     "end": 72,
+     "text": "18.5%",
+     "score": 0.9997302293777466
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue rose 12%, while costs fell 3%.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 13,
+     "end": 16,
+     "text": "12%",
+     "score": 0.9941562414169312
+    },
+    {
+     "start": 35,
+     "end": 37,
+     "text": "3%",
+     "score": 0.998109757900238
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Gross margin was 41.2% (up from 39.8%).",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 17,
+     "end": 22,
+     "text": "41.2%",
+     "score": 0.9995303153991699
+    },
+    {
+     "start": 32,
+     "end": 37,
+     "text": "39.8%",
+     "score": 0.9958307147026062
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Margin improved to 18.5%; costs fell.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 19,
+     "end": 24,
+     "text": "18.5%",
+     "score": 0.971743106842041
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue rose 12% and costs fell 3% in the quarter.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 13,
+     "end": 16,
+     "text": "12%",
+     "score": 0.9969784021377563
+    },
+    {
+     "start": 32,
+     "end": 34,
+     "text": "3%",
+     "score": 0.999078631401062
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The tax rate was 24.1 percent.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 17,
+     "end": 29,
+     "text": "24.1 percent",
+     "score": 0.9950818419456482
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Same-store sales declined -2.5%.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 26,
+     "end": 31,
+     "text": "-2.5%",
+     "score": 0.9953469038009644
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Organic growth was 7% (8% in constant currency).",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 19,
+     "end": 21,
+     "text": "7%",
+     "score": 0.9945834875106812
+    },
+    {
+     "start": 23,
+     "end": 25,
+     "text": "8%",
+     "score": 0.993681788444519
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "\"Margins of 30%\" were cited by the CFO.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 12,
+     "end": 15,
+     "text": "30%",
+     "score": 0.9944090247154236
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Return on equity reached **15.2%** in 2026.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 27,
+     "end": 32,
+     "text": "15.2%",
+     "score": 0.9574356079101562
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Utilization: 88%",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 13,
+     "end": 16,
+     "text": "88%",
+     "score": 0.998945951461792
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Interest rates rose 0.25%.\nThe bank kept its outlook.",
+   "label": "Percentages",
+   "spans": [
+    {
+     "start": 20,
+     "end": 25,
+     "text": "0.25%",
+     "score": 0.9965511560440063
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Acme raised its revenue forecast to $120 million.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 36,
+     "end": 48,
+     "text": "$120 million",
+     "score": 0.996340274810791
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Net income was $4.2 billion, up from $3.9 billion.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 15,
+     "end": 27,
+     "text": "$4.2 billion",
+     "score": 0.9877250790596008
+    },
+    {
+     "start": 37,
+     "end": 49,
+     "text": "$3.9 billion",
+     "score": 0.9102750420570374
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The company recorded a loss ($3.1 million) in the quarter.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 29,
+     "end": 41,
+     "text": "$3.1 million",
+     "score": 0.9390861392021179
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Earnings per share were $0.25.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 24,
+     "end": 29,
+     "text": "$0.25",
+     "score": 0.9820613861083984
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "It plans a US$5 billion buyback.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 11,
+     "end": 23,
+     "text": "US$5 billion",
+     "score": 0.9880348443984985
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Capital spending will be between $10 million and $12 million.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 33,
+     "end": 44,
+     "text": "$10 million",
+     "score": 0.992877185344696
+    },
+    {
+     "start": 49,
+     "end": 60,
+     "text": "$12 million",
+     "score": 0.9576999545097351
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Sales reached \u20ac500 million.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 14,
+     "end": 26,
+     "text": "\u20ac500 million",
+     "score": 0.9718636274337769
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Debt fell to \u00a32.1 billion; cash rose.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 13,
+     "end": 25,
+     "text": "\u00a32.1 billion",
+     "score": 0.9179686903953552
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue: $1.5 billion",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 9,
+     "end": 21,
+     "text": "$1.5 billion",
+     "score": 0.9906142354011536
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Dividends totaled **$300 million** in 2026.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 20,
+     "end": 32,
+     "text": "$300 million",
+     "score": 0.992709219455719
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The deal (valued at $2 billion) closed.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 20,
+     "end": 30,
+     "text": "$2 billion",
+     "score": 0.926451563835144
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "\"$50 million\" was the figure quoted.",
+   "label": "Dollar amounts",
+   "spans": [
+    {
+     "start": 1,
+     "end": 12,
+     "text": "$50 million",
+     "score": 0.9804031848907471
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The quarter ended March 31, 2027.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 18,
+     "end": 32,
+     "text": "March 31, 2027",
+     "score": 0.9703277945518494
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Guidance for fiscal 2027, announced today, was raised.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 13,
+     "end": 24,
+     "text": "fiscal 2027",
+     "score": 0.8319521546363831
+    },
+    {
+     "start": 36,
+     "end": 41,
+     "text": "today",
+     "score": 0.9640551805496216
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [
+    "today"
+   ],
+   "exact_positions": true
+  },
+  {
+   "text": "Results for Q3 2026; outlook follows.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 12,
+     "end": 19,
+     "text": "Q3 2026",
+     "score": 0.8463969826698303
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The plan runs through 2028 (December 31, 2028).",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 22,
+     "end": 26,
+     "text": "2028",
+     "score": 0.8718339800834656
+    },
+    {
+     "start": 28,
+     "end": 45,
+     "text": "December 31, 2028",
+     "score": 0.9672275185585022
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Shares were issued on 15 January 2026.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 22,
+     "end": 37,
+     "text": "15 January 2026",
+     "score": 0.999784529209137
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The meeting is on 2026-11-14.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 18,
+     "end": 28,
+     "text": "2026-11-14",
+     "score": 0.9991021156311035
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Payment is due \"June 30, 2027\".",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 16,
+     "end": 29,
+     "text": "June 30, 2027",
+     "score": 0.9968574047088623
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue grew in the first quarter of 2027.",
+   "label": "Dates",
+   "spans": [
+    {
+     "start": 20,
+     "end": 41,
+     "text": "first quarter of 2027",
+     "score": 0.6818041801452637
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "CEO Jane Smith said margins would improve.",
+   "label": "People",
+   "spans": [
+    {
+     "start": 4,
+     "end": 14,
+     "text": "Jane Smith",
+     "score": 0.7941228151321411
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The plan was approved by the CFO (John O'Neil).",
+   "label": "People",
+   "spans": [
+    {
+     "start": 34,
+     "end": 45,
+     "text": "John O'Neil",
+     "score": 0.9961890578269958
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "\"We are pleased,\" said Mary Chen.",
+   "label": "People",
+   "spans": [
+    {
+     "start": 23,
+     "end": 32,
+     "text": "Mary Chen",
+     "score": 0.9210982322692871
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Comments came from \u201cRobert Brown\u201d, the chair.",
+   "label": "People",
+   "spans": [
+    {
+     "start": 20,
+     "end": 32,
+     "text": "Robert Brown",
+     "score": 0.8908636569976807
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Dr. Alan Wu; Ms. Priya Patel.",
+   "label": "People",
+   "spans": [],
+   "hits": 0,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The board thanked Sarah Lee.",
+   "label": "People",
+   "spans": [
+    {
+     "start": 18,
+     "end": 27,
+     "text": "Sarah Lee",
+     "score": 0.928382396697998
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "(Thomas Green) will lead the division.",
+   "label": "People",
+   "spans": [
+    {
+     "start": 1,
+     "end": 13,
+     "text": "Thomas Green",
+     "score": 0.9640159606933594
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Acme Tools Inc. reported results.",
+   "label": "Company names",
+   "spans": [
+    {
+     "start": 0,
+     "end": 15,
+     "text": "Acme Tools Inc.",
+     "score": 0.9946538805961609
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Shares of (Northwind Corp) rose.",
+   "label": "Company names",
+   "spans": [
+    {
+     "start": 11,
+     "end": 25,
+     "text": "Northwind Corp",
+     "score": 0.5638056993484497
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "\"Contoso\" agreed to buy Fabrikam, Inc.",
+   "label": "Company names",
+   "spans": [
+    {
+     "start": 24,
+     "end": 38,
+     "text": "Fabrikam, Inc.",
+     "score": 0.8927720189094543
+    }
+   ],
+   "hits": 1,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The supplier, Globex, cut prices.",
+   "label": "Company names",
+   "spans": [
+    {
+     "start": 14,
+     "end": 20,
+     "text": "Globex",
+     "score": 0.9942597150802612
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue at Initech rose; Umbrella Corp fell.",
+   "label": "Company names",
+   "spans": [
+    {
+     "start": 11,
+     "end": 18,
+     "text": "Initech",
+     "score": 0.9809349775314331
+    },
+    {
+     "start": 25,
+     "end": 38,
+     "text": "Umbrella Corp",
+     "score": 0.9697755575180054
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The new factory is in Kingston, Ontario.",
+   "label": "Places",
+   "spans": [
+    {
+     "start": 22,
+     "end": 39,
+     "text": "Kingston, Ontario",
+     "score": 0.8377423286437988
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Sales in (Canada) grew.",
+   "label": "Places",
+   "spans": [
+    {
+     "start": 10,
+     "end": 16,
+     "text": "Canada",
+     "score": 0.9233009815216064
+    }
+   ],
+   "hits": 1,
+   "gold": 1,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Offices in \u201cToronto\u201d and Paris.",
+   "label": "Places",
+   "spans": [
+    {
+     "start": 25,
+     "end": 30,
+     "text": "Paris",
+     "score": 0.6657543182373047
+    }
+   ],
+   "hits": 1,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "It exited Brazil; Mexico remains.",
+   "label": "Places",
+   "spans": [
+    {
+     "start": 10,
+     "end": 16,
+     "text": "Brazil",
+     "score": 0.5963398218154907
+    },
+    {
+     "start": 18,
+     "end": 24,
+     "text": "Mexico",
+     "score": 0.7844886779785156
+    }
+   ],
+   "hits": 2,
+   "gold": 2,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Acme Tools reviewed its warehouse procedures and delivery schedules.",
+   "label": "Percentages",
+   "spans": [],
+   "hits": 0,
+   "gold": 0,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Revenue rose 12%, while costs fell 3%.",
+   "label": "Dividend per share",
+   "spans": [],
+   "hits": 0,
+   "gold": 0,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "The board met on Tuesday (no figures were discussed).",
+   "label": "Dollar amounts",
+   "spans": [],
+   "hits": 0,
+   "gold": 0,
+   "extra": [],
+   "exact_positions": true
+  },
+  {
+   "text": "Margins were stable; no guidance was given.",
+   "label": "Percentages",
+   "spans": [],
+   "hits": 0,
+   "gold": 0,
+   "extra": [],
+   "exact_positions": true
+  }
+ ],
+ "eval": {
+  "ticket/error": {
+   "error": {
+    "spans": [
+     {
+      "start": 36,
+      "end": 39,
+      "text": "401",
+      "score": 0.9998061060905457
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "news/person": {
+   "person": {
+    "spans": [
+     {
+      "start": 0,
+      "end": 8,
+      "text": "Tim Cook",
+      "score": 0.9483450651168823
+     },
+     {
+      "start": 42,
+      "end": 57,
+      "text": "Emmanuel Macron",
+      "score": 0.9765098094940186
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "news/organization": {
+   "organization": {
+    "spans": [
+     {
+      "start": 78,
+      "end": 82,
+      "text": "LVMH",
+      "score": 0.986004650592804
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "news/location": {
+   "location": {
+    "spans": [
+     {
+      "start": 17,
+      "end": 22,
+      "text": "Paris",
+      "score": 0.9986004829406738
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "amg_table/email": {
+   "email": {
+    "spans": [
+     {
+      "start": 608,
+      "end": 618,
+      "text": "ir@amg.com",
+      "score": 0.9986528158187866
+     },
+     {
+      "start": 627,
+      "end": 637,
+      "text": "ir@amg.com",
+      "score": 0.9828281998634338
+     },
+     {
+      "start": 640,
+      "end": 650,
+      "text": "pr@amg.com",
+      "score": 0.9966617822647095
+     },
+     {
+      "start": 659,
+      "end": 669,
+      "text": "pr@amg.com",
+      "score": 0.9776355028152466
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "unicode/places": {
+   "places": {
+    "spans": [
+     {
+      "start": 23,
+      "end": 31,
+      "text": "Montr\u00e9al",
+      "score": 0.9896166324615479
+     },
+     {
+      "start": 40,
+      "end": 42,
+      "text": "\u6771\u4eac",
+      "score": 0.9860922694206238
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "amg_full/forecasts": {
+   "forecasts": {
+    "spans": [
+     {
+      "start": 2698,
+      "end": 2767,
+      "text": "we are confident in our ability to create long-term shareholder value",
+      "score": 0.6095852851867676
+     }
+    ],
+    "same_as_16bit": true
+   }
+  },
+  "amg_full/surprises": {
+   "surprises": {
+    "spans": [],
+    "same_as_16bit": true
+   }
+  },
+  "amg_full/events": {
+   "events": {
+    "spans": [],
+    "same_as_16bit": true
+   }
+  },
+  "amg_full/measures": {
+   "measures": {
+    "spans": [],
+    "same_as_16bit": true
+   }
+  }
+ },
+ "report": {
+  "revenue": {
+   "spans": [
+    {
+     "start": 110,
+     "end": 122,
+     "text": "$120 million",
+     "score": 1.0
+    }
+   ],
+   "expected": true
+  },
+  "margin": {
+   "spans": [
+    {
+     "start": 3906,
+     "end": 3911,
+     "text": "18.5%",
+     "score": 0.9999999403953552
+    }
+   ],
+   "expected": true
+  },
+  "factory": {
+   "spans": [
+    {
+     "start": 7648,
+     "end": 7665,
+     "text": "Kingston, Ontario",
+     "score": 1.0
+    }
+   ],
+   "expected": true
+  },
+  "missing_dividend": {
+   "spans": [],
+   "expected": true
+  }
+ },
+ "all_exact": true,
+ "summary": {
+  "gold_hits": 56,
+  "gold": 60,
+  "extra_spans": 1,
+  "eval_same_as_16bit": 10,
+  "eval_questions": 10,
+  "report_expected": 4,
+  "report_questions": 4,
+  "all_exact_positions": true
+ }
+}

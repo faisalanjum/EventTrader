@@ -1,0 +1,85 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S14] We expect our revenue to be in the range of [TARGET] $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '$11.21 billion to $11.24' at [TARGET] in [S14]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "F0",
+    "passage": "PR002",
+    "start": 1393,
+    "end": 1417,
+    "text": "$11.21 billion to $11.24",
+    "aliases": [
+      "V13",
+      "V14"
+    ],
+    "insert_at": "V13"
+  },
+  "selected_sentence": {
+    "tag": "S14",
+    "passage": "PR002",
+    "start": 1349,
+    "end": 1464,
+    "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+  },
+  "target_sentence": {
+    "tag": "S14",
+    "passage": "PR002",
+    "start": 1349,
+    "end": 1464,
+    "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+  },
+  "mapping": [
+    {
+      "render_start": 128,
+      "render_end": 172,
+      "source": {
+        "tag": "S14",
+        "passage": "PR002",
+        "start": 1349,
+        "end": 1393,
+        "text": "We expect our revenue to be in the range of "
+      }
+    },
+    {
+      "render_start": 181,
+      "render_end": 252,
+      "source": {
+        "tag": "S14",
+        "passage": "PR002",
+        "start": 1393,
+        "end": 1464,
+        "text": "$11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 142,
+            "end": 149,
+            "text": "revenue",
+            "score": 1.0
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 192,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 2.6108695529401302,
+  "finished_at": "2026-11-15T14:59:33.270322-05:00"
+}

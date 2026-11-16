@@ -1,0 +1,2923 @@
+{
+  "scope": "One development call; all 120 numeric seeds and 213 sentences within the ten retained passages. Full sentence/record gold is not complete.",
+  "role_counts": {
+    "not_current__context_only": 98,
+    "current_required__advance": 16,
+    "not_current__advance": 2,
+    "support_role_requires_review__context_only": 4
+  },
+  "roles": [
+    {
+      "tag": "V0",
+      "text": "[78]:",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9816542766136769,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V1",
+      "text": "8.9%",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9875128181507754,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V2",
+      "text": "$2.84",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9806891259057514,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V3",
+      "text": "8.2%.",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9631447722993376,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V4",
+      "text": "51%,",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9814773534807645,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V5",
+      "text": "40",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.923661667311745,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V6",
+      "text": "$659.9",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9880699341077596,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V7",
+      "text": "8.2%",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9731165279096196,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V8",
+      "text": "11%.",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.4964387817156576,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V9",
+      "text": "$1.24",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.985435141060587,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V10",
+      "text": "9.7%",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9808297884938637,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V11",
+      "text": "12.7%.",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.6645304005616474,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V12",
+      "text": "2026",
+      "passage": "PR002",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.686023148376652,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V13",
+      "text": "$11.21",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9905227765884252,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V14",
+      "text": "$11.24",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9914191874884514,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V15",
+      "text": "8.4%",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9731236907398825,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V16",
+      "text": "8.7%.",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.972702377299168,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V17",
+      "text": "$4.86",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9940365159161244,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V18",
+      "text": "$4.90,",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9922782413256819,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V19",
+      "text": "10.5%",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9548667187745766,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V20",
+      "text": "11.4%.",
+      "passage": "PR002",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.9624793840441886,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V21",
+      "text": "[253]:",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9818885099422504,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V22",
+      "text": "7.3%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9809600232447128,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V23",
+      "text": "14.6%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9814848924616131,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V24",
+      "text": "10%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9718260829740242,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V25",
+      "text": "3.1%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9775226851113554,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V26",
+      "text": "50.3%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9818435810244087,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V27",
+      "text": "58.1%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9827954661057176,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V28",
+      "text": "50.5%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9849677668163072,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V29",
+      "text": "41.4%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9850670500340872,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V30",
+      "text": "30",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9173748656715243,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V31",
+      "text": "50.3%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9723489691173154,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V32",
+      "text": "58.1%.",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9801837194876584,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V33",
+      "text": "28%",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8999059584658251,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V34",
+      "text": "2026.",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7920224372976645,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V35",
+      "text": "2026",
+      "passage": "PR003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.846834071811063,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V36",
+      "text": "[438]:",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9834517474081549,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V37",
+      "text": "27.8%,",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9804606970381494,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V38",
+      "text": "60",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8875378673927373,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V39",
+      "text": "$659.9",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.987599561700794,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V40",
+      "text": "$609.9",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9356835207827838,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V41",
+      "text": "23.2%",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9875110688944023,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V42",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9138718962885195,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V43",
+      "text": "23.4%",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9273985327325521,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V44",
+      "text": "40",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.6473267562915151,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V45",
+      "text": "20.6%",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9840627374857157,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V46",
+      "text": "21%",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9311769071681844,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V47",
+      "text": "$502.5",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9893781891481772,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V48",
+      "text": "$463.5",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9581135379503335,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V49",
+      "text": "$1.24",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9853389044059754,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V50",
+      "text": "$1.13",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9443266214414292,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V51",
+      "text": "9.7%.",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9823851421481317,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V52",
+      "text": "12.7%",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8568691330960813,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V53",
+      "text": "1.5",
+      "passage": "PR004",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.6503166619952069,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V54",
+      "text": "2026,",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9337601429445443,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V55",
+      "text": "$1.45",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9747220448058562,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V56",
+      "text": "2025",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7776335222002649,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V57",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7634210049158179,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V58",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7987005959829173,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V59",
+      "text": "$101",
+      "passage": "PR004",
+      "expected_category": "current_required",
+      "choice": "qualification",
+      "p": 0.7186519620720384,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V60",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.792649023211029,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V61",
+      "text": "20%,",
+      "passage": "PR004",
+      "expected_category": "current_required",
+      "choice": "qualification",
+      "p": 0.756370434117668,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V62",
+      "text": "2025,",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8392884606228999,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V63",
+      "text": "2026,",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8189320372839153,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V64",
+      "text": "2026",
+      "passage": "PR004",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8888775418619675,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V65",
+      "text": "$0.03",
+      "passage": "PR004",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.5316311351263429,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V66",
+      "text": "$0.04.",
+      "passage": "PR004",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.6145784213052807,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V67",
+      "text": "[783]:",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9826362321204111,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V68",
+      "text": "[818]:",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9856344120611323,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V69",
+      "text": "Q3",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8395763214542719,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V70",
+      "text": "60",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.6802336849721139,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V71",
+      "text": "Q3",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8379228567700141,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V72",
+      "text": "100",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8944786035414377,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V73",
+      "text": "70",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8997691899028382,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V74",
+      "text": "24.",
+      "passage": "QA000",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.8494895692402301,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V75",
+      "text": "[901]:",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9773917630201092,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V76",
+      "text": "[928]:",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9787362176884776,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V77",
+      "text": "1.7",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.9749449288517668,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V78",
+      "text": "10",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.8765472651366747,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V79",
+      "text": "60%",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.4723260399930144,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V80",
+      "text": "100",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.33718699208991904,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V81",
+      "text": "30%",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "hypothetical",
+      "p": 0.9124749583182671,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V82",
+      "text": "30",
+      "passage": "QA001",
+      "expected_category": "not_current",
+      "choice": "hypothetical",
+      "p": 0.8614456671646357,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V83",
+      "text": "[1084]:",
+      "passage": "QA003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9811518281571447,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V84",
+      "text": "[1108]:",
+      "passage": "QA003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9801501450460145,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V85",
+      "text": "[1132]:",
+      "passage": "QA003",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9854534811587333,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V86",
+      "text": "100",
+      "passage": "QA003",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.37482349598539355,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V87",
+      "text": "[1443]:",
+      "passage": "QA006",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.982990792596178,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V88",
+      "text": "[1471]:",
+      "passage": "QA006",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9817588633902763,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V89",
+      "text": "95%",
+      "passage": "QA006",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.4814279561429334,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V90",
+      "text": "2%",
+      "passage": "QA006",
+      "expected_category": "not_current",
+      "choice": "current",
+      "p": 0.3513435318407308,
+      "advance": true,
+      "uncertain": true
+    },
+    {
+      "tag": "V91",
+      "text": "3%",
+      "passage": "QA006",
+      "expected_category": "not_current",
+      "choice": "current",
+      "p": 0.37768093436613587,
+      "advance": true,
+      "uncertain": true
+    },
+    {
+      "tag": "V92",
+      "text": "[2548]:",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9801802565586991,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V93",
+      "text": "4Q",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.851841771174321,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V94",
+      "text": "4Q",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7939102446357424,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V95",
+      "text": "[2571]:",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9814044385892527,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V96",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7440654935136741,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V97",
+      "text": "9%.",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "actual",
+      "p": 0.75707199950503,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V98",
+      "text": "18.5%",
+      "passage": "QA016",
+      "expected_category": "support_role_requires_review",
+      "choice": "actual",
+      "p": 0.8574234232235058,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V99",
+      "text": "Q4.",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7879385789677853,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V100",
+      "text": "[2638]:",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9787304244586941,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V101",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.6376345130900337,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V102",
+      "text": "8%.",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "earlier",
+      "p": 0.6991786662136813,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V103",
+      "text": "8%.",
+      "passage": "QA016",
+      "expected_category": "current_required",
+      "choice": "current",
+      "p": 0.503545760522194,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V104",
+      "text": "7.8%.",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "earlier",
+      "p": 0.877228103351929,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V105",
+      "text": "Q3,",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.77045427636611,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V106",
+      "text": "8.2%",
+      "passage": "QA016",
+      "expected_category": "support_role_requires_review",
+      "choice": "actual",
+      "p": 0.9231736220865684,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V107",
+      "text": "Q4",
+      "passage": "QA016",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.6496749060393175,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V108",
+      "text": "7.6,",
+      "passage": "QA016",
+      "expected_category": "current_required",
+      "choice": "qualification",
+      "p": 0.48433542731520307,
+      "advance": true,
+      "uncertain": true
+    },
+    {
+      "tag": "V109",
+      "text": "7.9.",
+      "passage": "QA016",
+      "expected_category": "current_required",
+      "choice": "qualification",
+      "p": 0.5899284593258531,
+      "advance": true,
+      "uncertain": false
+    },
+    {
+      "tag": "V110",
+      "text": "[3112]:",
+      "passage": "QA020",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9811423400553649,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V111",
+      "text": "4Q",
+      "passage": "QA020",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7529409471680335,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V112",
+      "text": "[3142]:",
+      "passage": "QA020",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9848668438428048,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V113",
+      "text": "Q4",
+      "passage": "QA020",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.6747525219047144,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V114",
+      "text": "[3270]:",
+      "passage": "QA022",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9814366172695481,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V115",
+      "text": "100",
+      "passage": "QA022",
+      "expected_category": "support_role_requires_review",
+      "choice": "earlier",
+      "p": 0.7320672160619959,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V116",
+      "text": "27.",
+      "passage": "QA022",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.6745719263361996,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V117",
+      "text": "[3296]:",
+      "passage": "QA022",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.9834915962394727,
+      "advance": false,
+      "uncertain": false
+    },
+    {
+      "tag": "V118",
+      "text": "100",
+      "passage": "QA022",
+      "expected_category": "support_role_requires_review",
+      "choice": "earlier",
+      "p": 0.28502767448056643,
+      "advance": false,
+      "uncertain": true
+    },
+    {
+      "tag": "V119",
+      "text": "1st.",
+      "passage": "QA022",
+      "expected_category": "not_current",
+      "choice": "other",
+      "p": 0.7950639167559199,
+      "advance": false,
+      "uncertain": false
+    }
+  ],
+  "sentences": [
+    {
+      "tag": "S0",
+      "passage": "PR002",
+      "start": 0,
+      "end": 39,
+      "text": "Todd Schneider [78]: Thank you, Jared. ",
+      "p": 0.015083766893571403
+    },
+    {
+      "tag": "S1",
+      "passage": "PR002",
+      "start": 39,
+      "end": 165,
+      "text": "We are pleased to have delivered another successful quarter, showcasing the resilience and strength of our value proposition. ",
+      "p": 0.02036899024352674
+    },
+    {
+      "tag": "S2",
+      "passage": "PR002",
+      "start": 165,
+      "end": 272,
+      "text": "CentOS achieved record revenues and strong operating margins while continuing to invest for future growth. ",
+      "p": 0.0494614839553833
+    },
+    {
+      "tag": "S3",
+      "passage": "PR002",
+      "start": 272,
+      "end": 337,
+      "text": "Third quarter total revenue grew a strong 8.9% to $2.84 billion. ",
+      "p": 0.011154297032866443
+    },
+    {
+      "tag": "S4",
+      "passage": "PR002",
+      "start": 337,
+      "end": 467,
+      "text": "The organic growth rate, which adjusts for the impacts of acquisitions and foreign currency exchange rate fluctuations, was 8.2%. ",
+      "p": 0.012336390621470258
+    },
+    {
+      "tag": "S5",
+      "passage": "PR002",
+      "start": 467,
+      "end": 547,
+      "text": "Each of our three route-based businesses continues to grow at attractive rates. ",
+      "p": 0.07605677843093872
+    },
+    {
+      "tag": "S6",
+      "passage": "PR002",
+      "start": 547,
+      "end": 658,
+      "text": "Turning to profitability, We achieved all-time high gross margins in each of our three route-based businesses. ",
+      "p": 0.09601075130693054
+    },
+    {
+      "tag": "S7",
+      "passage": "PR002",
+      "start": 658,
+      "end": 801,
+      "text": "Strong top-line growth along with benefits from our strategic investments and cost-saving initiatives continue to help drive margin expansion. ",
+      "p": 0.1101246079029603
+    },
+    {
+      "tag": "S8",
+      "passage": "PR002",
+      "start": 801,
+      "end": 894,
+      "text": "Gross margin as a percent of revenue was 51%, a 40 basis point increase over the prior year. ",
+      "p": 0.011730634113052267
+    },
+    {
+      "tag": "S9",
+      "passage": "PR002",
+      "start": 894,
+      "end": 976,
+      "text": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. ",
+      "p": 0.0166752631463032
+    },
+    {
+      "tag": "S10",
+      "passage": "PR002",
+      "start": 976,
+      "end": 1102,
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, operating income would have grown 11%. ",
+      "p": 0.04488366130652771
+    },
+    {
+      "tag": "S11",
+      "passage": "PR002",
+      "start": 1102,
+      "end": 1154,
+      "text": "Diluted EPS of $1.24 grew 9.7% over the prior year. ",
+      "p": 0.018431563316737818
+    },
+    {
+      "tag": "S12",
+      "passage": "PR002",
+      "start": 1154,
+      "end": 1277,
+      "text": "When you adjust for the one-time gain we recognized in the third quarter of last year, diluted EPS would have grown 12.7%. ",
+      "p": 0.031845443187992595
+    },
+    {
+      "tag": "S13",
+      "passage": "PR002",
+      "start": 1277,
+      "end": 1349,
+      "text": "Turning to guidance, we are raising our fiscal 2026 financial guidance. ",
+      "p": 0.9849162404446266
+    },
+    {
+      "tag": "S14",
+      "passage": "PR002",
+      "start": 1349,
+      "end": 1464,
+      "text": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. ",
+      "p": 0.9971588606243766
+    },
+    {
+      "tag": "S15",
+      "passage": "PR002",
+      "start": 1464,
+      "end": 1566,
+      "text": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. ",
+      "p": 0.9952793618236183
+    },
+    {
+      "tag": "S16",
+      "passage": "PR002",
+      "start": 1566,
+      "end": 1676,
+      "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. ",
+      "p": 0.9849162404446266
+    },
+    {
+      "tag": "S17",
+      "passage": "PR002",
+      "start": 1676,
+      "end": 1810,
+      "text": "Before I turn the call over to Jim, I'd like to provide some comments on the recently announced merger agreement to acquire Unifirst. ",
+      "p": 0.031845417941394304
+    },
+    {
+      "tag": "S18",
+      "passage": "PR002",
+      "start": 1810,
+      "end": 2017,
+      "text": "We remain excited about this opportunity and the long-term value creation for Cintas and its shareholders, our employee partners, and the team partners of Unifirst that benefits to our collective customers. ",
+      "p": 0.03691192992633764
+    },
+    {
+      "tag": "S19",
+      "passage": "PR002",
+      "start": 2017,
+      "end": 2233,
+      "text": "When we announced the transaction two weeks ago, we indicated that the merger was subject to approval by Unifirst shareholders, regulatory clearance in both the US and Canada, and other customary closing conditions. ",
+      "p": 0.11521889097662433
+    },
+    {
+      "tag": "S20",
+      "passage": "PR002",
+      "start": 2233,
+      "end": 2312,
+      "text": "We in Unifirst have begun the process for satisfying these closing conditions. ",
+      "p": 0.1052287617004386
+    },
+    {
+      "tag": "S21",
+      "passage": "PR002",
+      "start": 2312,
+      "end": 2419,
+      "text": "In order to avoid creating speculation, we will not be providing any additional commentary on the process. ",
+      "p": 0.018431563316737818
+    },
+    {
+      "tag": "S22",
+      "passage": "PR002",
+      "start": 2419,
+      "end": 2471,
+      "text": "We will, however, update the market as appropriate. ",
+      "p": 0.02612604680428846
+    },
+    {
+      "tag": "S23",
+      "passage": "PR002",
+      "start": 2471,
+      "end": 2559,
+      "text": "With that, I'll turn it over to Jim to discuss the details of our third quarter results.",
+      "p": 0.005781879702414197
+    },
+    {
+      "tag": "S24",
+      "passage": "PR003",
+      "start": 0,
+      "end": 36,
+      "text": "Jim Rosakis [253]: Thank you, Todd. ",
+      "p": 0.008239927678629959
+    },
+    {
+      "tag": "S25",
+      "passage": "PR003",
+      "start": 36,
+      "end": 90,
+      "text": "Our business continues to perform exceptionally well. ",
+      "p": 0.027454529673538012
+    },
+    {
+      "tag": "S26",
+      "passage": "PR003",
+      "start": 90,
+      "end": 186,
+      "text": "We're adding new customers who rely on us for image, safety, cleanliness, and compliance needs. ",
+      "p": 0.0691966663746784
+    },
+    {
+      "tag": "S27",
+      "passage": "PR003",
+      "start": 186,
+      "end": 272,
+      "text": "while successfully cross-selling additional solutions for our existing customer base. ",
+      "p": 0.04071138259833601
+    },
+    {
+      "tag": "S28",
+      "passage": "PR003",
+      "start": 272,
+      "end": 360,
+      "text": "Retention remains at record levels, while pricing is consistent with historical levels. ",
+      "p": 0.21856185142511572
+    },
+    {
+      "tag": "S29",
+      "passage": "PR003",
+      "start": 360,
+      "end": 487,
+      "text": "Turning to our business segments, as Todd mentioned, we delivered attractive growth rates across all of our business segments. ",
+      "p": 0.04071138259833601
+    },
+    {
+      "tag": "S30",
+      "passage": "PR003",
+      "start": 487,
+      "end": 670,
+      "text": "Organic growth by business was 7.3% for uniform rental facility services, 14.6% for first aid and safety services, 10% for fire protection services, and 3.1% for uniform direct sale. ",
+      "p": 0.015083752253601373
+    },
+    {
+      "tag": "S31",
+      "passage": "PR003",
+      "start": 670,
+      "end": 866,
+      "text": "Gross margin percentage by business was 50.3% for uniform rental facility services, 58.1% for first aid and safety services, 50.5% for fire protection services, and 41.4% for uniform direct sale. ",
+      "p": 0.00823993137322411
+    },
+    {
+      "tag": "S32",
+      "passage": "PR003",
+      "start": 866,
+      "end": 970,
+      "text": "Gross margin for the uniform rental facility services segment increased 30 basis points from last year. ",
+      "p": 0.018431563316737818
+    },
+    {
+      "tag": "S33",
+      "passage": "PR003",
+      "start": 970,
+      "end": 1044,
+      "text": "The 50.3% gross margin is the highest gross margin ever for this segment. ",
+      "p": 0.015083759555373402
+    },
+    {
+      "tag": "S34",
+      "passage": "PR003",
+      "start": 1044,
+      "end": 1158,
+      "text": "We actually hit a high level in the third quarter, and our continued strong top-line growth helped drive results. ",
+      "p": 0.030311114860243238
+    },
+    {
+      "tag": "S35",
+      "passage": "PR003",
+      "start": 1158,
+      "end": 1235,
+      "text": "We've been laser-focused on managing the many inputs we control effectively. ",
+      "p": 0.013642037875638321
+    },
+    {
+      "tag": "S36",
+      "passage": "PR003",
+      "start": 1235,
+      "end": 1409,
+      "text": "We've invested in technologies like SAP to improve our capabilities, and the strong performance of our supply chain continues to be a significant strategic advantage for us. ",
+      "p": 0.015859889961113895
+    },
+    {
+      "tag": "S37",
+      "passage": "PR003",
+      "start": 1409,
+      "end": 1480,
+      "text": "Source margin for the first aid and safety services segment was 58.1%. ",
+      "p": 0.009588064608000098
+    },
+    {
+      "tag": "S38",
+      "passage": "PR003",
+      "start": 1480,
+      "end": 1511,
+      "text": "This is also an all-time high. ",
+      "p": 0.018431563316737818
+    },
+    {
+      "tag": "S39",
+      "passage": "PR003",
+      "start": 1511,
+      "end": 1792,
+      "text": "We are investing in route capacity to serve more customers, leadership and management trainees to build their talent pipeline, advanced technologies to drive efficiency, and we're adding selling resources, all of which are fueling the attractive double-digit growth we are seeing. ",
+      "p": 0.13768458366394043
+    },
+    {
+      "tag": "S40",
+      "passage": "PR003",
+      "start": 1792,
+      "end": 1987,
+      "text": "It's important to remember that margins of all our businesses can fluctuate from quarter to quarter based on several factors, including things like revenue mix and the timing of our investments. ",
+      "p": 0.07971636384091595
+    },
+    {
+      "tag": "S41",
+      "passage": "PR003",
+      "start": 1987,
+      "end": 2152,
+      "text": "Incremental margins were effectively 28% for the quarter after adjusting for the one-time gain on the asset sale last year, right in line with what we like to bait. ",
+      "p": 0.042748921955995896
+    },
+    {
+      "tag": "S42",
+      "passage": "PR003",
+      "start": 2152,
+      "end": 2298,
+      "text": "The current macro environment is certainly complex, We help businesses navigate this environment by letting them focus on running their business. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S43",
+      "passage": "PR003",
+      "start": 2298,
+      "end": 2431,
+      "text": "Delivering consistent excellence in a complex environment is never easy, but customers want reliable partners with proven solutions. ",
+      "p": 0.007833728493808503
+    },
+    {
+      "tag": "S44",
+      "passage": "PR003",
+      "start": 2431,
+      "end": 2617,
+      "text": "Our diversified customer base and strong value proposition continues to resonate, particularly in our core verticals, healthcare, hospitality, education, and state and local government. ",
+      "p": 0.010605966007673258
+    },
+    {
+      "tag": "S45",
+      "passage": "PR003",
+      "start": 2617,
+      "end": 2721,
+      "text": "In addition to being aligned with resilient sectors of the economy, our trustable market is very large. ",
+      "p": 0.013642037875638321
+    },
+    {
+      "tag": "S46",
+      "passage": "PR003",
+      "start": 2721,
+      "end": 2837,
+      "text": "and our solutions remain essential for businesses of all sizes, regardless of how complex the economic environment. ",
+      "p": 0.012336396140470957
+    },
+    {
+      "tag": "S47",
+      "passage": "PR003",
+      "start": 2837,
+      "end": 2986,
+      "text": "We have consistently shown ability to convert businesses over to a managed rental solution, typically around two-thirds of all of our new customers. ",
+      "p": 0.08752133501645919
+    },
+    {
+      "tag": "S48",
+      "passage": "PR003",
+      "start": 2986,
+      "end": 3062,
+      "text": "In addition, we've shown ability to grow multiples of job creation and GDP. ",
+      "p": 0.018431570998892706
+    },
+    {
+      "tag": "S49",
+      "passage": "PR003",
+      "start": 3062,
+      "end": 3240,
+      "text": "Lastly, we're very enthusiastic about integrating university and team partners into our organization, which we believe will strengthen our ability to better serve our customers. ",
+      "p": 0.042748921955995896
+    },
+    {
+      "tag": "S50",
+      "passage": "PR003",
+      "start": 3240,
+      "end": 3334,
+      "text": "As a reminder, we anticipate that transaction will close in the second half of calendar 2026. ",
+      "p": 0.9665452981970504
+    },
+    {
+      "tag": "S51",
+      "passage": "PR003",
+      "start": 3334,
+      "end": 3469,
+      "text": "With that, I'll turn the call over to Scott to discuss operating income, capital allocation performance, and 2026 guidance assumptions.",
+      "p": 0.12602388858795166
+    },
+    {
+      "tag": "S52",
+      "passage": "PR004",
+      "start": 0,
+      "end": 61,
+      "text": "Scott Garula [438]: Thanks, Jim, and good morning, everyone. ",
+      "p": 0.008667004706354104
+    },
+    {
+      "tag": "S53",
+      "passage": "PR004",
+      "start": 61,
+      "end": 223,
+      "text": "The exceptional results we delivered in terms of revenue growth and gross margin expansion translated into continued strength in operating margins and cash flow. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S54",
+      "passage": "PR004",
+      "start": 223,
+      "end": 349,
+      "text": "Selling and administrative expenses as a percentage of revenue was 27.8%, which was a 60 basis point increase from last year. ",
+      "p": 0.010084310152064053
+    },
+    {
+      "tag": "S55",
+      "passage": "PR004",
+      "start": 349,
+      "end": 458,
+      "text": "When you adjust for the one-time gain on the asset sale last year, SG&A would have been flat year over year. ",
+      "p": 0.06598544816683644
+    },
+    {
+      "tag": "S56",
+      "passage": "PR004",
+      "start": 458,
+      "end": 546,
+      "text": "Third quarter operating income was $659.9 million compared to $609.9 million last year. ",
+      "p": 0.010084310152064053
+    },
+    {
+      "tag": "S57",
+      "passage": "PR004",
+      "start": 546,
+      "end": 684,
+      "text": "Operating income as a percentage of revenue was 23.2% in the third quarter of fiscal 2026 compared to 23.4% in last year's third quarter. ",
+      "p": 0.012336396140470957
+    },
+    {
+      "tag": "S58",
+      "passage": "PR004",
+      "start": 684,
+      "end": 824,
+      "text": "Adjusting for the one-time gain last year, operating income as a percentage of revenue would have increased 40 basis points year over year. ",
+      "p": 0.08353603569018814
+    },
+    {
+      "tag": "S59",
+      "passage": "PR004",
+      "start": 824,
+      "end": 906,
+      "text": "Our effective tax rate for the third quarter was 20.6% compared to 21% last year. ",
+      "p": 0.022505423934411076
+    },
+    {
+      "tag": "S60",
+      "passage": "PR004",
+      "start": 906,
+      "end": 1045,
+      "text": "The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensations. ",
+      "p": 0.10052590892110697
+    },
+    {
+      "tag": "S61",
+      "passage": "PR004",
+      "start": 1045,
+      "end": 1135,
+      "text": "Net income for the third quarter was $502.5 million compared to $463.5 million last year. ",
+      "p": 0.008667004706354104
+    },
+    {
+      "tag": "S62",
+      "passage": "PR004",
+      "start": 1135,
+      "end": 1248,
+      "text": "This year's third quarter diluted earnings per share was $1.24 compared to $1.13 last year, an increase of 9.7%. ",
+      "p": 0.009116022584404145
+    },
+    {
+      "tag": "S63",
+      "passage": "PR004",
+      "start": 1248,
+      "end": 1333,
+      "text": "Earnings per share increased 12.7% after you adjust for the one-time gain last year. ",
+      "p": 0.03876699680538461
+    },
+    {
+      "tag": "S64",
+      "passage": "PR004",
+      "start": 1333,
+      "end": 1462,
+      "text": "Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. ",
+      "p": 0.0691966663746784
+    },
+    {
+      "tag": "S65",
+      "passage": "PR004",
+      "start": 1462,
+      "end": 1611,
+      "text": "With leverage expected to be about 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. ",
+      "p": 0.9164639643098118
+    },
+    {
+      "tag": "S66",
+      "passage": "PR004",
+      "start": 1611,
+      "end": 1763,
+      "text": "During the first nine months of fiscal 2026, we have returned $1.45 billion in capital to our shareholders in the form of dividends and share buybacks. ",
+      "p": 0.012973017893932626
+    },
+    {
+      "tag": "S67",
+      "passage": "PR004",
+      "start": 1763,
+      "end": 1845,
+      "text": "Earlier, Todd provided our updated guidance for the remainder of the fiscal year. ",
+      "p": 0.13174488747880198
+    },
+    {
+      "tag": "S68",
+      "passage": "PR004",
+      "start": 1845,
+      "end": 1901,
+      "text": "In addition, please note the following in the guidance. ",
+      "p": 0.16372011845886883
+    },
+    {
+      "tag": "S69",
+      "passage": "PR004",
+      "start": 1901,
+      "end": 1996,
+      "text": "Both fiscal 2025 and fiscal 2026 have the same number of workdays for the year and by quarter. ",
+      "p": 0.7900172472000122
+    },
+    {
+      "tag": "S70",
+      "passage": "PR004",
+      "start": 1996,
+      "end": 2050,
+      "text": "Our guidance does not assume any future acquisitions. ",
+      "p": 0.9665452693917562
+    },
+    {
+      "tag": "S71",
+      "passage": "PR004",
+      "start": 2050,
+      "end": 2390,
+      "text": "Our guidance assumes a constant foreign currency exchange rate the fiscal 2026 net interest expense of approximately $101 million, a fiscal 2026 effective tax rate of 20%, which is the same compared to our fiscal 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. ",
+      "p": 0.9572511172704232
+    },
+    {
+      "tag": "S72",
+      "passage": "PR004",
+      "start": 2390,
+      "end": 2493,
+      "text": "As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. ",
+      "p": 0.033454730608243784
+    },
+    {
+      "tag": "S73",
+      "passage": "PR004",
+      "start": 2493,
+      "end": 2645,
+      "text": "While the deal is expected to close in the second half of calendar 2026, we expect to incur non-recurring transaction costs related to the acquisition. ",
+      "p": 0.9428348190026425
+    },
+    {
+      "tag": "S74",
+      "passage": "PR004",
+      "start": 2645,
+      "end": 2749,
+      "text": "The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. ",
+      "p": 0.9551163386934722
+    },
+    {
+      "tag": "S75",
+      "passage": "PR004",
+      "start": 2749,
+      "end": 2904,
+      "text": "Transaction costs expected to be incurred during fiscal 2026 are estimated to have an impact on diluted earnings per share in the range of $0.03 to $0.04. ",
+      "p": 0.9774945760655889
+    },
+    {
+      "tag": "S76",
+      "passage": "PR004",
+      "start": 2904,
+      "end": 3088,
+      "text": "In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs. ",
+      "p": 0.48726189136505127
+    },
+    {
+      "tag": "S77",
+      "passage": "PR004",
+      "start": 3088,
+      "end": 3150,
+      "text": "With that, I'll turn it back to Todd for some closing remarks.",
+      "p": 0.005224522997304148
+    },
+    {
+      "tag": "S78",
+      "passage": "QA000",
+      "start": 0,
+      "end": 41,
+      "text": "Unknown [783]: Just two procedural ones. ",
+      "p": 0.011154291507260805
+    },
+    {
+      "tag": "S79",
+      "passage": "QA000",
+      "start": 41,
+      "end": 134,
+      "text": "Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. ",
+      "p": 0.024860230511234222
+    },
+    {
+      "tag": "S80",
+      "passage": "QA000",
+      "start": 134,
+      "end": 269,
+      "text": "How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? ",
+      "p": 0.0691966663746784
+    },
+    {
+      "tag": "S81",
+      "passage": "QA000",
+      "start": 269,
+      "end": 292,
+      "text": "in the fourth quarter. ",
+      "p": 0.04071138259833601
+    },
+    {
+      "tag": "S82",
+      "passage": "QA000",
+      "start": 292,
+      "end": 415,
+      "text": "I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. ",
+      "p": 0.0117306451578234
+    },
+    {
+      "tag": "S83",
+      "passage": "QA000",
+      "start": 415,
+      "end": 516,
+      "text": "And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. ",
+      "p": 0.03876703261410469
+    },
+    {
+      "tag": "S84",
+      "passage": "QA000",
+      "start": 516,
+      "end": 610,
+      "text": "So I thought maybe there was a little bit of deal related expense there in the third quarter. ",
+      "p": 0.04711975796998088
+    },
+    {
+      "tag": "S85",
+      "passage": "QA000",
+      "start": 610,
+      "end": 624,
+      "text": "I'm not sure.\n",
+      "p": 0.007079994477406011
+    },
+    {
+      "tag": "S86",
+      "passage": "QA000",
+      "start": 624,
+      "end": 669,
+      "text": "Scott Garula [818]: Yeah, Tim, good morning. ",
+      "p": 0.035142389373039845
+    },
+    {
+      "tag": "S87",
+      "passage": "QA000",
+      "start": 669,
+      "end": 684,
+      "text": "Good question. ",
+      "p": 0.004054091558037985
+    },
+    {
+      "tag": "S88",
+      "passage": "QA000",
+      "start": 684,
+      "end": 802,
+      "text": "The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. ",
+      "p": 0.6711690225848846
+    },
+    {
+      "tag": "S89",
+      "passage": "QA000",
+      "start": 802,
+      "end": 854,
+      "text": "Any costs that were incurred in Q3 were immaterial. ",
+      "p": 0.20165351634185064
+    },
+    {
+      "tag": "S90",
+      "passage": "QA000",
+      "start": 854,
+      "end": 1006,
+      "text": "You know, as far as the comment on SG&A being a little higher, just to remind everyone of that one-time gain last year, that represented about 60 BIPs. ",
+      "p": 0.12051693619453019
+    },
+    {
+      "tag": "S91",
+      "passage": "QA000",
+      "start": 1006,
+      "end": 1100,
+      "text": "So when you take that into consideration, you know, SG&A was effectively flat year over year. ",
+      "p": 0.1101246079029603
+    },
+    {
+      "tag": "S92",
+      "passage": "QA000",
+      "start": 1100,
+      "end": 1256,
+      "text": "And if you go back really over the last three fiscal years, Q3 is typically elevated due to the timing of certain expenses like the reset of payroll taxes. ",
+      "p": 0.03691192992633764
+    },
+    {
+      "tag": "S93",
+      "passage": "QA000",
+      "start": 1256,
+      "end": 1409,
+      "text": "In fact, when you go back to last fiscal year and you back out the adjustment for the one-time gain, we were up 100 basis points sequentially last year. ",
+      "p": 0.015083759555373402
+    },
+    {
+      "tag": "S94",
+      "passage": "QA000",
+      "start": 1409,
+      "end": 1485,
+      "text": "and actually 70 basis points sequentially if you go back to fiscal year 24. ",
+      "p": 0.024860230511234222
+    },
+    {
+      "tag": "S95",
+      "passage": "QA000",
+      "start": 1485,
+      "end": 1607,
+      "text": "So we feel really good where we are with SG&A expenses, and when you back out the one-time gain, it's flat year over year.",
+      "p": 0.08752133501645919
+    },
+    {
+      "tag": "S96",
+      "passage": "QA001",
+      "start": 0,
+      "end": 40,
+      "text": "Unknown [901]: Yeah, good point, Scott. ",
+      "p": 0.012336390621470258
+    },
+    {
+      "tag": "S97",
+      "passage": "QA001",
+      "start": 40,
+      "end": 138,
+      "text": "I think maybe consensus didn't fully factor in everything because of the one-time gain last year. ",
+      "p": 0.028848536008237943
+    },
+    {
+      "tag": "S98",
+      "passage": "QA001",
+      "start": 138,
+      "end": 165,
+      "text": "So that's a good reminder. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S99",
+      "passage": "QA001",
+      "start": 165,
+      "end": 176,
+      "text": "Thank you. ",
+      "p": 0.012336390621470258
+    },
+    {
+      "tag": "S100",
+      "passage": "QA001",
+      "start": 176,
+      "end": 432,
+      "text": "And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? ",
+      "p": 0.016675279786831126
+    },
+    {
+      "tag": "S101",
+      "passage": "QA001",
+      "start": 432,
+      "end": 485,
+      "text": "I think this is an important question for investors.\n",
+      "p": 0.010605966007673258
+    },
+    {
+      "tag": "S102",
+      "passage": "QA001",
+      "start": 485,
+      "end": 531,
+      "text": "Scott Garula [928]: Yeah, Tim, good question. ",
+      "p": 0.08752133501645919
+    },
+    {
+      "tag": "S103",
+      "passage": "QA001",
+      "start": 531,
+      "end": 652,
+      "text": "Energy for the quarter was 1.7 percent, which was flat year over year, and up 10 basis points over the previous quarter. ",
+      "p": 0.019376555854719344
+    },
+    {
+      "tag": "S104",
+      "passage": "QA001",
+      "start": 652,
+      "end": 720,
+      "text": "You know, certainly the increase in gas prices will have an impact. ",
+      "p": 0.20165351634185064
+    },
+    {
+      "tag": "S105",
+      "passage": "QA001",
+      "start": 720,
+      "end": 925,
+      "text": "But just, you know, I want to remind everyone that, you know, only 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about 100 basis points. ",
+      "p": 0.14384779762768143
+    },
+    {
+      "tag": "S106",
+      "passage": "QA001",
+      "start": 925,
+      "end": 1006,
+      "text": "So if you just look at, you know, fuel's been, you know, continuing to increase. ",
+      "p": 0.028848536008237943
+    },
+    {
+      "tag": "S107",
+      "passage": "QA001",
+      "start": 1006,
+      "end": 1157,
+      "text": "But if you assume a 30% increase in fuel costs, that would be sustained over an entire quarter, that would add 30 basis points of cost to our results. ",
+      "p": 0.25536197423934937
+    },
+    {
+      "tag": "S108",
+      "passage": "QA001",
+      "start": 1157,
+      "end": 1248,
+      "text": "You know, so yes, it has an impact, but not something that we feel that we can't overcome. ",
+      "p": 0.2752214290135673
+    },
+    {
+      "tag": "S109",
+      "passage": "QA001",
+      "start": 1248,
+      "end": 1291,
+      "text": "And we have contemplated this in our guide.",
+      "p": 0.46185219287872314
+    },
+    {
+      "tag": "S110",
+      "passage": "QA003",
+      "start": 0,
+      "end": 24,
+      "text": "Unknown [1084]: Got it. ",
+      "p": 0.013642031445316385
+    },
+    {
+      "tag": "S111",
+      "passage": "QA003",
+      "start": 24,
+      "end": 40,
+      "text": "That's helpful. ",
+      "p": 0.012336390621470258
+    },
+    {
+      "tag": "S112",
+      "passage": "QA003",
+      "start": 40,
+      "end": 170,
+      "text": "And then going back to an earlier point on fuel, you mentioned that \u2013 fuel expectations are contemplated in your full year guide. ",
+      "p": 0.2752214290135673
+    },
+    {
+      "tag": "S113",
+      "passage": "QA003",
+      "start": 170,
+      "end": 385,
+      "text": "Can you elaborate on what exactly you're assuming for the remaining quarters of the year in terms of how fuel will trend and how you plan to pass along any changes in fuel costs to customers in the form of pricing?\n",
+      "p": 0.017531817680978303
+    },
+    {
+      "tag": "S114",
+      "passage": "QA003",
+      "start": 385,
+      "end": 431,
+      "text": "Scott Garula [1108]: Yeah, thank you, George. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S115",
+      "passage": "QA003",
+      "start": 431,
+      "end": 489,
+      "text": "As Todd mentioned, clearly this is a dynamic environment. ",
+      "p": 0.04711975796998088
+    },
+    {
+      "tag": "S116",
+      "passage": "QA003",
+      "start": 489,
+      "end": 563,
+      "text": "And our guide includes our best estimate of the increase in energy costs. ",
+      "p": 0.8218422654545645
+    },
+    {
+      "tag": "S117",
+      "passage": "QA003",
+      "start": 563,
+      "end": 662,
+      "text": "You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. ",
+      "p": 0.04488366130652771
+    },
+    {
+      "tag": "S118",
+      "passage": "QA003",
+      "start": 662,
+      "end": 689,
+      "text": "I'll let Todd answer that.\n",
+      "p": 0.011730639635437865
+    },
+    {
+      "tag": "S119",
+      "passage": "QA003",
+      "start": 689,
+      "end": 718,
+      "text": "Todd Schneider [1132]: Yeah. ",
+      "p": 0.06598538462915672
+    },
+    {
+      "tag": "S120",
+      "passage": "QA003",
+      "start": 718,
+      "end": 780,
+      "text": "So, you know, Georgia, it is certainly a dynamic environment. ",
+      "p": 0.031845443187992595
+    },
+    {
+      "tag": "S121",
+      "passage": "QA003",
+      "start": 780,
+      "end": 883,
+      "text": "Hence the, you look at what oil prices were doing last night and then what they're doing this morning. ",
+      "p": 0.012973024328616108
+    },
+    {
+      "tag": "S122",
+      "passage": "QA003",
+      "start": 883,
+      "end": 944,
+      "text": "So they're, they're, they're They're changing by the minute. ",
+      "p": 0.015083759555373402
+    },
+    {
+      "tag": "S123",
+      "passage": "QA003",
+      "start": 944,
+      "end": 1056,
+      "text": "That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. ",
+      "p": 0.7039888501167297
+    },
+    {
+      "tag": "S124",
+      "passage": "QA003",
+      "start": 1056,
+      "end": 1123,
+      "text": "And as far as how we handle that, we do not have a fuel surcharge. ",
+      "p": 0.0691966663746784
+    },
+    {
+      "tag": "S125",
+      "passage": "QA003",
+      "start": 1123,
+      "end": 1166,
+      "text": "That historically is not how we handle it. ",
+      "p": 0.018431563316737818
+    },
+    {
+      "tag": "S126",
+      "passage": "QA003",
+      "start": 1166,
+      "end": 1314,
+      "text": "As Scott correctly pointed out, if you think about the fuel at the pump, It accounts for about 100 basis points of our total as a percent of sales. ",
+      "p": 0.19357368974803285
+    },
+    {
+      "tag": "S127",
+      "passage": "QA003",
+      "start": 1314,
+      "end": 1344,
+      "text": "So it's not our largest cost. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S128",
+      "passage": "QA003",
+      "start": 1344,
+      "end": 1464,
+      "text": "And we also take the approach that we think long-term about this, and we find other ways to extract out inefficiencies. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S129",
+      "passage": "QA003",
+      "start": 1464,
+      "end": 1552,
+      "text": "We don't just look at it and say, well, this happened, so we've just got to pass it on. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S130",
+      "passage": "QA003",
+      "start": 1552,
+      "end": 1806,
+      "text": "We want to be better than that, and we want to focus on being consistent for our customers and extracting out inefficiencies and other ways that we have in our business and still hitting our goals as a financial goals as a company while we're doing that.",
+      "p": 0.02486025345453924
+    },
+    {
+      "tag": "S131",
+      "passage": "QA006",
+      "start": 0,
+      "end": 43,
+      "text": "Unknown [1443]: Hi, this is Ronan Kennedy. ",
+      "p": 0.004265149040549873
+    },
+    {
+      "tag": "S132",
+      "passage": "QA006",
+      "start": 43,
+      "end": 59,
+      "text": "I'm from Manav. ",
+      "p": 0.0038534340225259583
+    },
+    {
+      "tag": "S133",
+      "passage": "QA006",
+      "start": 59,
+      "end": 113,
+      "text": "Good morning, and thank you for taking our questions. ",
+      "p": 0.005224525313446434
+    },
+    {
+      "tag": "S134",
+      "passage": "QA006",
+      "start": 113,
+      "end": 186,
+      "text": "You commented on retention at record levels, pricing at historic levels. ",
+      "p": 0.1005259886305632
+    },
+    {
+      "tag": "S135",
+      "passage": "QA006",
+      "start": 186,
+      "end": 299,
+      "text": "Could you please provide some further color as to how we should think about what those levels are as a reminder? ",
+      "p": 0.02141116773686963
+    },
+    {
+      "tag": "S136",
+      "passage": "QA006",
+      "start": 299,
+      "end": 499,
+      "text": "And then the trends and drivers versus your expectations for new business and cross-sell, and then anything to call out from specifically strong organic drivers at a respective segment level, please?\n",
+      "p": 0.012336390621470258
+    },
+    {
+      "tag": "S137",
+      "passage": "QA006",
+      "start": 499,
+      "end": 544,
+      "text": "Jim Rosakis [1471]: Hey, Ronan, this is Jim. ",
+      "p": 0.010084305542410067
+    },
+    {
+      "tag": "S138",
+      "passage": "QA006",
+      "start": 544,
+      "end": 558,
+      "text": "Good morning. ",
+      "p": 0.004720640493696892
+    },
+    {
+      "tag": "S139",
+      "passage": "QA006",
+      "start": 558,
+      "end": 583,
+      "text": "I'll take that question. ",
+      "p": 0.008667004706354104
+    },
+    {
+      "tag": "S140",
+      "passage": "QA006",
+      "start": 583,
+      "end": 603,
+      "text": "I'll start with it. ",
+      "p": 0.005496179490485396
+    },
+    {
+      "tag": "S141",
+      "passage": "QA006",
+      "start": 603,
+      "end": 705,
+      "text": "And if we start to think about our growth formula and what we're attempting to achieve every quarter. ",
+      "p": 0.031845417941394304
+    },
+    {
+      "tag": "S142",
+      "passage": "QA006",
+      "start": 705,
+      "end": 785,
+      "text": "You know, we do like to target that mid to high single-digit total growth rate. ",
+      "p": 0.7348270258204357
+    },
+    {
+      "tag": "S143",
+      "passage": "QA006",
+      "start": 785,
+      "end": 907,
+      "text": "As an organization, the major contributors to that growth, as you correctly pointed out, is our new business acquisition. ",
+      "p": 0.05716518099735748
+    },
+    {
+      "tag": "S144",
+      "passage": "QA006",
+      "start": 907,
+      "end": 1124,
+      "text": "And a reminder, you know, two-thirds of that new business acquisition comes with that no-programmer or do-it-yourself or space, and that continues to perform very well for us, and we really like the trend line there. ",
+      "p": 0.1502387180853272
+    },
+    {
+      "tag": "S145",
+      "passage": "QA006",
+      "start": 1124,
+      "end": 1258,
+      "text": "Retention levels for us has stayed around that steady, that 95% rate, and we are really comfortable with where that is at this point. ",
+      "p": 0.3994636118571874
+    },
+    {
+      "tag": "S146",
+      "passage": "QA006",
+      "start": 1258,
+      "end": 1352,
+      "text": "Pricing is at our historical levels, which we've considerably said is in that 2% to 3% range. ",
+      "p": 0.5254594370448925
+    },
+    {
+      "tag": "S147",
+      "passage": "QA006",
+      "start": 1352,
+      "end": 1539,
+      "text": "And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. ",
+      "p": 0.5
+    },
+    {
+      "tag": "S148",
+      "passage": "QA006",
+      "start": 1539,
+      "end": 1576,
+      "text": "The majority of that's new business. ",
+      "p": 0.1101246079029603
+    },
+    {
+      "tag": "S149",
+      "passage": "QA006",
+      "start": 1576,
+      "end": 1728,
+      "text": "But then the remainder is that that cross selling opportunity selling into the current customer base, which has been highly effective for us this year. ",
+      "p": 0.11521889097662433
+    },
+    {
+      "tag": "S150",
+      "passage": "QA006",
+      "start": 1728,
+      "end": 1817,
+      "text": "And we think that there's a long runway of opportunity within our current customer base. ",
+      "p": 0.3067405430453854
+    },
+    {
+      "tag": "S151",
+      "passage": "QA006",
+      "start": 1817,
+      "end": 1885,
+      "text": "As we continue to provide great value, we think about it long term. ",
+      "p": 0.05997471950919985
+    },
+    {
+      "tag": "S152",
+      "passage": "QA006",
+      "start": 1885,
+      "end": 2002,
+      "text": "We've made nice investments in the product line and the technology and try to make it easier to do business with us. ",
+      "p": 0.017531834150884284
+    },
+    {
+      "tag": "S153",
+      "passage": "QA006",
+      "start": 2002,
+      "end": 2095,
+      "text": "And the customers in this type of an environment is complex, are looking for steady answers. ",
+      "p": 0.012973011459249062
+    },
+    {
+      "tag": "S154",
+      "passage": "QA006",
+      "start": 2095,
+      "end": 2130,
+      "text": "And they know they can rely on us. ",
+      "p": 0.012973017893932626
+    },
+    {
+      "tag": "S155",
+      "passage": "QA006",
+      "start": 2130,
+      "end": 2176,
+      "text": "So we've had a lot of success this past year. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S156",
+      "passage": "QA006",
+      "start": 2176,
+      "end": 2251,
+      "text": "So I would say new business and cross-sell slightly continuing to improve. ",
+      "p": 0.7348270258204357
+    },
+    {
+      "tag": "S157",
+      "passage": "QA006",
+      "start": 2251,
+      "end": 2305,
+      "text": "and the others right where we're expecting them to be.",
+      "p": 0.44921304436883197
+    },
+    {
+      "tag": "S158",
+      "passage": "QA016",
+      "start": 0,
+      "end": 30,
+      "text": "Unknown [2548]: Good morning. ",
+      "p": 0.007447399845958321
+    },
+    {
+      "tag": "S159",
+      "passage": "QA016",
+      "start": 30,
+      "end": 65,
+      "text": "This is Jun-Yi Ahn for Jason Haas. ",
+      "p": 0.006082337362652185
+    },
+    {
+      "tag": "S160",
+      "passage": "QA016",
+      "start": 65,
+      "end": 98,
+      "text": "Thanks for taking our questions. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S161",
+      "passage": "QA016",
+      "start": 98,
+      "end": 207,
+      "text": "Can you walk us through some of the key puts and takes to consider for 4Q organic revenue growth by segment? ",
+      "p": 0.028848536008237943
+    },
+    {
+      "tag": "S162",
+      "passage": "QA016",
+      "start": 207,
+      "end": 313,
+      "text": "I believe you guys had some one-time benefits in 4Q last year in Uniform Direct and First Aid and Safety. ",
+      "p": 0.13174488747880198
+    },
+    {
+      "tag": "S163",
+      "passage": "QA016",
+      "start": 313,
+      "end": 412,
+      "text": "Could you remind us how big those impacts were and any other factors to consider across the board? ",
+      "p": 0.06291317939758301
+    },
+    {
+      "tag": "S164",
+      "passage": "QA016",
+      "start": 412,
+      "end": 423,
+      "text": "Thank you.\n",
+      "p": 0.0117306451578234
+    },
+    {
+      "tag": "S165",
+      "passage": "QA016",
+      "start": 423,
+      "end": 474,
+      "text": "Todd Schneider [2571]: Thank you for the question. ",
+      "p": 0.017531834150884284
+    },
+    {
+      "tag": "S166",
+      "passage": "QA016",
+      "start": 474,
+      "end": 486,
+      "text": "I'll start. ",
+      "p": 0.004720640493696892
+    },
+    {
+      "tag": "S167",
+      "passage": "QA016",
+      "start": 486,
+      "end": 588,
+      "text": "And I appreciate you pointing it out because the comparative for Q4 on revenue growth is significant. ",
+      "p": 0.22739075463102393
+    },
+    {
+      "tag": "S168",
+      "passage": "QA016",
+      "start": 588,
+      "end": 641,
+      "text": "It was our highest revenue growth quarter last year. ",
+      "p": 0.028848536008237943
+    },
+    {
+      "tag": "S169",
+      "passage": "QA016",
+      "start": 641,
+      "end": 664,
+      "text": "The organic was at 9%. ",
+      "p": 0.03691192992633764
+    },
+    {
+      "tag": "S170",
+      "passage": "QA016",
+      "start": 664,
+      "end": 744,
+      "text": "And we did have some one-time benefits, specifically in our first aid business. ",
+      "p": 0.25536197423934937
+    },
+    {
+      "tag": "S171",
+      "passage": "QA016",
+      "start": 744,
+      "end": 775,
+      "text": "that ran 18.5% organic growth. ",
+      "p": 0.0691966663746784
+    },
+    {
+      "tag": "S172",
+      "passage": "QA016",
+      "start": 775,
+      "end": 818,
+      "text": "We certainly do not anticipate that again. ",
+      "p": 0.8064263102519672
+    },
+    {
+      "tag": "S173",
+      "passage": "QA016",
+      "start": 818,
+      "end": 872,
+      "text": "And then in our uniform direct sale business as well. ",
+      "p": 0.07605677843093872
+    },
+    {
+      "tag": "S174",
+      "passage": "QA016",
+      "start": 872,
+      "end": 976,
+      "text": "In first aid, we had an increase in the training business that helped us as it relates to AED training. ",
+      "p": 0.13174488747880198
+    },
+    {
+      "tag": "S175",
+      "passage": "QA016",
+      "start": 976,
+      "end": 1062,
+      "text": "So that was a spike that we, again, we don't think is going to occur at those levels. ",
+      "p": 0.6932594569546147
+    },
+    {
+      "tag": "S176",
+      "passage": "QA016",
+      "start": 1062,
+      "end": 1156,
+      "text": "And the uniform direct sale business can be a little lumpy, but it had a really good quarter. ",
+      "p": 0.0629131267747795
+    },
+    {
+      "tag": "S177",
+      "passage": "QA016",
+      "start": 1156,
+      "end": 1249,
+      "text": "So, yeah, hopefully that gives you a little bit of color around the tough comparative in Q4.\n",
+      "p": 0.2960113286972046
+    },
+    {
+      "tag": "S178",
+      "passage": "QA016",
+      "start": 1249,
+      "end": 1379,
+      "text": "Scott Garula [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. ",
+      "p": 0.1005259886305632
+    },
+    {
+      "tag": "S179",
+      "passage": "QA016",
+      "start": 1379,
+      "end": 1448,
+      "text": "You know, Jim mentioned that we continue to execute at a high level. ",
+      "p": 0.05997471950919985
+    },
+    {
+      "tag": "S180",
+      "passage": "QA016",
+      "start": 1448,
+      "end": 1596,
+      "text": "We feel that the guide for Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. ",
+      "p": 0.8739761114120483
+    },
+    {
+      "tag": "S181",
+      "passage": "QA016",
+      "start": 1596,
+      "end": 1734,
+      "text": "I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was 8%. ",
+      "p": 0.24579272065493224
+    },
+    {
+      "tag": "S182",
+      "passage": "QA016",
+      "start": 1734,
+      "end": 1809,
+      "text": "And if you look at the guide for this quarter, this quarter is also at 8%. ",
+      "p": 0.8362798815411312
+    },
+    {
+      "tag": "S183",
+      "passage": "QA016",
+      "start": 1809,
+      "end": 1971,
+      "text": "And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically 7.8%. ",
+      "p": 0.3067405430453854
+    },
+    {
+      "tag": "S184",
+      "passage": "QA016",
+      "start": 1971,
+      "end": 2031,
+      "text": "In Q3, we just delivered a growth rate of 8.2% organically. ",
+      "p": 0.06598544816683644
+    },
+    {
+      "tag": "S185",
+      "passage": "QA016",
+      "start": 2031,
+      "end": 2112,
+      "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. ",
+      "p": 0.550786955631168
+    },
+    {
+      "tag": "S186",
+      "passage": "QA016",
+      "start": 2112,
+      "end": 2189,
+      "text": "So really effectively right in line with the guide that we gave last quarter.",
+      "p": 0.48726214506440924
+    },
+    {
+      "tag": "S187",
+      "passage": "QA020",
+      "start": 0,
+      "end": 34,
+      "text": "Unknown [3112]: Great, thank you. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S188",
+      "passage": "QA020",
+      "start": 34,
+      "end": 245,
+      "text": "And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. ",
+      "p": 0.02365424935850592
+    },
+    {
+      "tag": "S189",
+      "passage": "QA020",
+      "start": 245,
+      "end": 376,
+      "text": "And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? ",
+      "p": 0.04274888272957678
+    },
+    {
+      "tag": "S190",
+      "passage": "QA020",
+      "start": 376,
+      "end": 497,
+      "text": "I see the implied kind of 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\n",
+      "p": 0.05997471950919985
+    },
+    {
+      "tag": "S191",
+      "passage": "QA020",
+      "start": 497,
+      "end": 561,
+      "text": "Todd Schneider [3142]: Yeah, thank you for the question, Faiza. ",
+      "p": 0.09167773885015042
+    },
+    {
+      "tag": "S192",
+      "passage": "QA020",
+      "start": 561,
+      "end": 638,
+      "text": "Yeah, our incrementals that we're guiding towards in Q4 are very attractive. ",
+      "p": 0.8064263102519672
+    },
+    {
+      "tag": "S193",
+      "passage": "QA020",
+      "start": 638,
+      "end": 687,
+      "text": "But that is not because of a change in approach. ",
+      "p": 0.1101246079029603
+    },
+    {
+      "tag": "S194",
+      "passage": "QA020",
+      "start": 687,
+      "end": 760,
+      "text": "That's simply what we've been predicting and timing around for the year. ",
+      "p": 0.13768468181708388
+    },
+    {
+      "tag": "S195",
+      "passage": "QA020",
+      "start": 760,
+      "end": 837,
+      "text": "And I wouldn't see a change in our approach in general as you speak to that. ",
+      "p": 0.1101246079029603
+    },
+    {
+      "tag": "S196",
+      "passage": "QA020",
+      "start": 837,
+      "end": 882,
+      "text": "You know, we're investing for the long term. ",
+      "p": 0.05191330026445425
+    },
+    {
+      "tag": "S197",
+      "passage": "QA020",
+      "start": 882,
+      "end": 970,
+      "text": "and we'll take our normal prudent approach as we think about investing for our business.",
+      "p": 0.04071138259833601
+    },
+    {
+      "tag": "S198",
+      "passage": "QA022",
+      "start": 0,
+      "end": 20,
+      "text": "Unknown [3270]: Hi. ",
+      "p": 0.015859882628698987
+    },
+    {
+      "tag": "S199",
+      "passage": "QA022",
+      "start": 20,
+      "end": 40,
+      "text": "Good morning, guys. ",
+      "p": 0.004720640493696892
+    },
+    {
+      "tag": "S200",
+      "passage": "QA022",
+      "start": 40,
+      "end": 65,
+      "text": "Just a quick one for me. ",
+      "p": 0.0725520227325574
+    },
+    {
+      "tag": "S201",
+      "passage": "QA022",
+      "start": 65,
+      "end": 197,
+      "text": "Just on the FHIR ERP implementation, I think we had previously talked about like 100 basis points margin headwind next year for 27. ",
+      "p": 0.2099827527999878
+    },
+    {
+      "tag": "S202",
+      "passage": "QA022",
+      "start": 197,
+      "end": 337,
+      "text": "I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. ",
+      "p": 0.08353603569018814
+    },
+    {
+      "tag": "S203",
+      "passage": "QA022",
+      "start": 337,
+      "end": 348,
+      "text": "Thank you. ",
+      "p": 0.011730639635437865
+    },
+    {
+      "tag": "S204",
+      "passage": "QA022",
+      "start": 348,
+      "end": 381,
+      "text": "Just hard bits for this segment. ",
+      "p": 0.019376563160933447
+    },
+    {
+      "tag": "S205",
+      "passage": "QA022",
+      "start": 381,
+      "end": 392,
+      "text": "Thank you.\n",
+      "p": 0.007833724797701138
+    },
+    {
+      "tag": "S206",
+      "passage": "QA022",
+      "start": 392,
+      "end": 434,
+      "text": "Scott Garula [3296]: Yeah, this is Scott. ",
+      "p": 0.010605961400448125
+    },
+    {
+      "tag": "S207",
+      "passage": "QA022",
+      "start": 434,
+      "end": 459,
+      "text": "Thanks for the question. ",
+      "p": 0.004054091558037985
+    },
+    {
+      "tag": "S208",
+      "passage": "QA022",
+      "start": 459,
+      "end": 620,
+      "text": "You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. ",
+      "p": 0.38730281591415405
+    },
+    {
+      "tag": "S209",
+      "passage": "QA022",
+      "start": 620,
+      "end": 661,
+      "text": "We're satisfied with our progress today. ",
+      "p": 0.06598544816683644
+    },
+    {
+      "tag": "S210",
+      "passage": "QA022",
+      "start": 661,
+      "end": 767,
+      "text": "Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. ",
+      "p": 0.1438476826020621
+    },
+    {
+      "tag": "S211",
+      "passage": "QA022",
+      "start": 767,
+      "end": 854,
+      "text": "If you looked at an entire year, it would be the 100 basis points that you referenced. ",
+      "p": 0.6365887739307419
+    },
+    {
+      "tag": "S212",
+      "passage": "QA022",
+      "start": 854,
+      "end": 1032,
+      "text": "And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+      "p": 0.5381478071212769
+    }
+  ],
+  "seconds": 343.4284215779044,
+  "usage": {
+    "input_tokens": 28172,
+    "output_tokens": 0,
+    "sequences": 1
+  }
+}

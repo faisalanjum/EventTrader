@@ -1,0 +1,39 @@
+{
+  "rows": [
+    {
+      "id": "F1",
+      "expected_present": false,
+      "p_yes": 0.006082337362652185,
+      "correct_at_0_5": true,
+      "quote": "We expect our revenue to be in the range of $11.21 billion to $11.24 billion, a total growth rate of 8.4% to 8.7%. "
+    },
+    {
+      "id": "F3",
+      "expected_present": false,
+      "p_yes": 0.005496176711873911,
+      "correct_at_0_5": true,
+      "quote": "We expect adjusted diluted EPS to be in the range of $4.86 to $4.90, a growth rate of 10.5% to 11.4%. "
+    },
+    {
+      "id": "V7",
+      "expected_present": true,
+      "p_yes": 0.9986059994344391,
+      "correct_at_0_5": true,
+      "quote": "Operating income grew to $659.9 million, an increase of 8.2% over the prior year. "
+    },
+    {
+      "id": "V10",
+      "expected_present": true,
+      "p_yes": 0.9975606788381215,
+      "correct_at_0_5": true,
+      "quote": "Diluted EPS of $1.24 grew 9.7% over the prior year. "
+    }
+  ],
+  "seconds": 182.9975215131417,
+  "usage": {
+    "input_tokens": 15677,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "limitations": "Selected quoted sentence evidence-presence only, with whole call visible. No basis identification, no complete record result and no calibration."
+}

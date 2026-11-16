@@ -1,0 +1,14 @@
+{
+  "name": "QA022",
+  "state": "Unknown [3270]: Hi. Good morning, guys. Just a quick one for me. Just on the FHIR ERP implementation, I think we had previously talked about like [M003] 100 basis points margin headwind next year for 27. I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. Thank you. Just hard bits for this segment. Thank you.\nScott Garula [3296]: Yeah, this is Scott. Thanks for the question. You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. We're satisfied with our progress today. Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. If you looked at an entire year, it would be the [M004] 100 basis points that you referenced. And then depending on when we actually go live with the entire business, It will be [V002] something less than that because we're not anticipating us to be fully rolled out by June 1st.",
+  "questions": {
+    "M003": {
+      "type": "noul",
+      "instructions": "Does the source phrase at [M003] name a financial or operating measure or business quantity, rather than merely state a number, unit, date or period? The phrase may include an amount, but it must also identify what is being measured."
+    },
+    "M004": {
+      "type": "noul",
+      "instructions": "Does the source phrase at [M004] name a financial or operating measure or business quantity, rather than merely state a number, unit, date or period? The phrase may include an amount, but it must also identify what is being measured."
+    }
+  }
+}

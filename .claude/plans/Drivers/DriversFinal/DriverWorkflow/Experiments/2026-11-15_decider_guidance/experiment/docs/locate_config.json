@@ -1,0 +1,36 @@
+{
+  "arithmetic": "bf16 autocast on CUDA; fp32 adapter and head tensors",
+  "base": {
+    "repo": "perplexity-ai/pplx-decider-v1.3",
+    "revision": "0d91316c97d0a11d9ec993e92f61a9c1ad7ec53b",
+    "sha256": {
+      "config.json": "687f20bf493b8ee787dadaf338cf6df644dad44e32bcd2c3677a47c6c213d8b3",
+      "decision_config.json": "4ee1c1e80044f6249c82e644b5334678670701b87f3972989c542ca86483e200",
+      "joint_config.json": "f7836e2e3fdaebaee8705e2ca25f5bb75bb146043ad530c84a6779a4af90801b",
+      "readout.safetensors": "46928c7cd0084289f6237a833720683c9d8ff91965706e746cc34b3ef0f12039",
+      "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523"
+    }
+  },
+  "format": "pplx-decider-locate-span-v1",
+  "head": {
+    "max_span": 128,
+    "name": "span",
+    "proposals": 128,
+    "recipe": "v3",
+    "width": 128
+  },
+  "lora": {
+    "alpha": 64,
+    "layers": 0,
+    "merged": false,
+    "rank": 64,
+    "targets": "every nn.Linear of backbone.language_model"
+  },
+  "marker": "<|locate|>",
+  "marker_id": 248077,
+  "prompt": "Question:\nLocate verbatim spans:\n{instructions}<|locate|>",
+  "prompt_format": "joint-v4-locate",
+  "thresholds": {
+    "default": 0.5
+  }
+}

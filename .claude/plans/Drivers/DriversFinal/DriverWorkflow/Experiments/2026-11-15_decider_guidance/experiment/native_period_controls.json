@@ -1,0 +1,116 @@
+{
+  "scope": "Native helper capability controls only; no source calendar discovery, graph queries/writes or full-model accuracy claim. Dates are independently specified test inputs, not generated from output. Never use month math for an unverified week-based calendar. Default lookup priority needs separate current-rule compatibility review.",
+  "module": "driver_reference/core/driver_period_resolver.py",
+  "module_sha256": "1f862d65a8a1e4e5717f5eaca44b6fd37400dab6abd576a3d2daa00009bd9ae4",
+  "cases": [
+    {
+      "case": "month_end_annual",
+      "input": {
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "fye": 5,
+      "expected_dates": [
+        "2025-06-01",
+        "2026-05-31"
+      ],
+      "result": {
+        "period_u_id": "gp_2025-06-01_2026-05-31",
+        "period_scope": "annual",
+        "time_type": "duration",
+        "gp_start_date": "2025-06-01",
+        "gp_end_date": "2026-05-31"
+      }
+    },
+    {
+      "case": "leap_year_month_end_quarter",
+      "input": {
+        "fiscal_year": 2028,
+        "fiscal_quarter": 3,
+        "time_type": "duration"
+      },
+      "fye": 5,
+      "expected_dates": [
+        "2027-12-01",
+        "2028-02-29"
+      ],
+      "result": {
+        "period_u_id": "gp_2027-12-01_2028-02-29",
+        "period_scope": "quarter",
+        "time_type": "duration",
+        "gp_start_date": "2027-12-01",
+        "gp_end_date": "2028-02-29"
+      }
+    },
+    {
+      "case": "explicit_week_based_quarter",
+      "input": {
+        "period_start_date": "2025-06-29",
+        "period_end_date": "2025-09-27",
+        "fiscal_year": 2025,
+        "fiscal_quarter": 4,
+        "time_type": "duration"
+      },
+      "fye": 9,
+      "expected_dates": [
+        "2025-06-29",
+        "2025-09-27"
+      ],
+      "result": {
+        "period_u_id": "gp_2025-06-29_2025-09-27",
+        "period_scope": "quarter",
+        "time_type": "duration",
+        "gp_start_date": "2025-06-29",
+        "gp_end_date": "2025-09-27"
+      }
+    },
+    {
+      "case": "explicit_instant",
+      "input": {
+        "period_end_date": "2025-09-27",
+        "time_type": "instant"
+      },
+      "fye": null,
+      "expected_dates": [
+        "2025-09-27",
+        "2025-09-27"
+      ],
+      "result": {
+        "period_u_id": "gp_2025-09-27_2025-09-27",
+        "period_scope": "exact_range",
+        "time_type": "instant",
+        "gp_start_date": "2025-09-27",
+        "gp_end_date": "2025-09-27"
+      }
+    },
+    {
+      "case": "missing_fye",
+      "input": {
+        "fiscal_year": 2026,
+        "time_type": "duration"
+      },
+      "fye": null,
+      "expected": "refuse",
+      "error": "fye_month required to compute a company fiscal period \u2014 never default December"
+    },
+    {
+      "case": "missing_duration_start",
+      "input": {
+        "period_end_date": "2026-05-31",
+        "time_type": "duration"
+      },
+      "fye": 5,
+      "expected": "refuse",
+      "error": "duration exact-date input needs period_start_date"
+    },
+    {
+      "case": "unknown_horizon_not_default",
+      "input": {
+        "time_type": "duration"
+      },
+      "fye": 5,
+      "expected": "refuse",
+      "error": "period fields do not resolve: {'period_start_date': None, 'period_end_date': None, 'fiscal_year': None, 'fiscal_quarter': None, 'half': None, 'month': None, 'long_range_start_year': None, 'long_range_end_year': None, 'sentinel_class': None, 'time_type': 'duration', 'period_scope': None}"
+    }
+  ]
+}

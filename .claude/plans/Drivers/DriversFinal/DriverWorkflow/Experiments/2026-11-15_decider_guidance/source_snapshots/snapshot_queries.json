@@ -1,0 +1,7 @@
+{
+  "meta": "MATCH (t:Transcript {id:$id}) RETURN t.id AS id,t.company_name AS company,t.conference_datetime AS date,t.fiscal_year AS fiscal_year,t.fiscal_quarter AS fiscal_quarter",
+  "prepared": "MATCH (t:Transcript {id:$id})-[:HAS_PREPARED_REMARKS]->(p:PreparedRemark) RETURN p.id AS id,p.content AS content",
+  "qa": "MATCH (t:Transcript {id:$id})-[:HAS_QA_EXCHANGE]->(q:QAExchange) RETURN q.id AS id,q.sequence AS sequence,q.questioner AS questioner,q.questioner_title AS questioner_title,q.responders AS responders,q.responder_title AS responder_title,q.exchanges AS exchanges ORDER BY toInteger(q.sequence)",
+  "guidance": "MATCH (u:GuidanceUpdate)-[:FROM_SOURCE]->(t:Transcript {id:$id}) MATCH (u)-[:UPDATES]->(g:Guidance) OPTIONAL MATCH (u)-[:HAS_PERIOD]->(gp:GuidancePeriod) RETURN properties(u) AS update,g.label AS label,g.id AS guidance_id,properties(gp) AS period ORDER BY g.label,u.id",
+  "prior_labels": "MATCH (t:Transcript {id:$id}) MATCH (u:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker:$ticker}) WHERE datetime(u.given_date)<datetime(t.conference_datetime) MATCH (u)-[:UPDATES]->(g:Guidance) RETURN DISTINCT g.id AS id,g.label AS label ORDER BY label"
+}

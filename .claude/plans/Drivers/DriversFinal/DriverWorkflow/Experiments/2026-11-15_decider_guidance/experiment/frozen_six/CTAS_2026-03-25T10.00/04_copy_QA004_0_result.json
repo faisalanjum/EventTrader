@@ -1,0 +1,42 @@
+{
+  "started_at": "2026-11-15T22:45:37.793796-05:00",
+  "request_sha256": "939966f534da42d7b2bbc9a6a88972924b2825a06c630df5382b07660068b68f",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V082_measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2078,
+            "end": 2092,
+            "text": "debt to EBITDA",
+            "score": 0.8832184672355652
+          }
+        ]
+      },
+      "V082_context": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 2051,
+            "end": 2061,
+            "text": "at closing",
+            "score": 0.9982595443725586
+          }
+        ]
+      },
+      "V082_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1209,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 15.08746757498011,
+  "finished_at": "2026-11-15T22:45:52.881363-05:00"
+}

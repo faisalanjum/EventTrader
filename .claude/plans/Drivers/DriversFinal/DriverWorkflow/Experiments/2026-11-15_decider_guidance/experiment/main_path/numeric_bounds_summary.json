@@ -1,0 +1,327 @@
+[
+  {
+    "tag": "V0",
+    "text": "[78]:",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.4421691389081264
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.6711265516634615
+    }
+  },
+  {
+    "tag": "V1",
+    "text": "8.9%",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9681266115738074
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9638367668443735
+    }
+  },
+  {
+    "tag": "V2",
+    "text": "$2.84",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9452774413114406
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9397048306014607
+    }
+  },
+  {
+    "tag": "V3",
+    "text": "8.2%.",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9351556822859404
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9306572946671513
+    }
+  },
+  {
+    "tag": "V4",
+    "text": "51%,",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9178836769798638
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9057766072874155
+    }
+  },
+  {
+    "tag": "V5",
+    "text": "40",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.899506960935895
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.8824172427784238
+    }
+  },
+  {
+    "tag": "V6",
+    "text": "$659.9",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9497911578601608
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9408056840588039
+    }
+  },
+  {
+    "tag": "V7",
+    "text": "8.2%",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9501441657694233
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9457620052404415
+    }
+  },
+  {
+    "tag": "V8",
+    "text": "11%.",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.7600925789963875
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.7735189501851887
+    }
+  },
+  {
+    "tag": "V9",
+    "text": "$1.24",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9667492026494726
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9622628272243949
+    }
+  },
+  {
+    "tag": "V10",
+    "text": "9.7%",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.9649426772647779
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.9581786163047138
+    }
+  },
+  {
+    "tag": "V11",
+    "text": "12.7%.",
+    "passage": "PR002",
+    "lower": {
+      "choice": "no_current_forecast",
+      "p": 0.885352837860175
+    },
+    "upper": {
+      "choice": "no_current_forecast",
+      "p": 0.8864714925259641
+    }
+  },
+  {
+    "tag": "V12",
+    "text": "2026",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V13",
+      "p": 0.6555590086571582
+    },
+    "upper": {
+      "choice": "V14",
+      "p": 0.36701873425506143
+    }
+  },
+  {
+    "tag": "V13",
+    "text": "$11.21",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V13",
+      "p": 0.9968712968530213
+    },
+    "upper": {
+      "choice": "V14",
+      "p": 0.9963548932249171
+    }
+  },
+  {
+    "tag": "V14",
+    "text": "$11.24",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V13",
+      "p": 0.9968448455064886
+    },
+    "upper": {
+      "choice": "V14",
+      "p": 0.9869102264056308
+    }
+  },
+  {
+    "tag": "V15",
+    "text": "8.4%",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V15",
+      "p": 0.9845749184594869
+    },
+    "upper": {
+      "choice": "V16",
+      "p": 0.9888276123319037
+    }
+  },
+  {
+    "tag": "V16",
+    "text": "8.7%.",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V15",
+      "p": 0.9902714663455908
+    },
+    "upper": {
+      "choice": "V16",
+      "p": 0.9636216103884278
+    }
+  },
+  {
+    "tag": "V17",
+    "text": "$4.86",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V17",
+      "p": 0.9977433219890306
+    },
+    "upper": {
+      "choice": "V18",
+      "p": 0.9976415532040841
+    }
+  },
+  {
+    "tag": "V18",
+    "text": "$4.90,",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V17",
+      "p": 0.9956179730736273
+    },
+    "upper": {
+      "choice": "V18",
+      "p": 0.9923542508445876
+    }
+  },
+  {
+    "tag": "V19",
+    "text": "10.5%",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V19",
+      "p": 0.9757712466308595
+    },
+    "upper": {
+      "choice": "V20",
+      "p": 0.99673316426905
+    }
+  },
+  {
+    "tag": "V20",
+    "text": "11.4%.",
+    "passage": "PR002",
+    "lower": {
+      "choice": "V19",
+      "p": 0.9869900893448097
+    },
+    "upper": {
+      "choice": "V20",
+      "p": 0.988530916677334
+    }
+  },
+  {
+    "tag": "V58",
+    "text": "2026",
+    "passage": "PR004",
+    "lower": {
+      "choice": "V59",
+      "p": 0.8195071733682129
+    },
+    "upper": {
+      "choice": "V59",
+      "p": 0.8597407975805226
+    }
+  },
+  {
+    "tag": "V59",
+    "text": "$101",
+    "passage": "PR004",
+    "lower": {
+      "choice": "V59",
+      "p": 0.9456826180707161
+    },
+    "upper": {
+      "choice": "V59",
+      "p": 0.9399430290208547
+    }
+  },
+  {
+    "tag": "V60",
+    "text": "2026",
+    "passage": "PR004",
+    "lower": {
+      "choice": "V61",
+      "p": 0.905799277914405
+    },
+    "upper": {
+      "choice": "V61",
+      "p": 0.9522996690021572
+    }
+  },
+  {
+    "tag": "V61",
+    "text": "20%,",
+    "passage": "PR004",
+    "lower": {
+      "choice": "V61",
+      "p": 0.979866502499532
+    },
+    "upper": {
+      "choice": "V61",
+      "p": 0.977410066767344
+    }
+  }
+]

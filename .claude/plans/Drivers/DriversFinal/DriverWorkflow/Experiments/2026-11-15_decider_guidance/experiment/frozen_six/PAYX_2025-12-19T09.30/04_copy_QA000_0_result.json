@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-11-15T21:41:45.068338-05:00",
+  "request_sha256": "70cd5bddeaf7b9a4be7fff775f275286865dc0d6791eaa2d8d27459aaea7c9a5",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V070_measure": {
+        "type": "locate",
+        "spans": []
+      },
+      "V070_context": {
+        "type": "locate",
+        "spans": []
+      },
+      "V070_qualifiers": {
+        "type": "locate",
+        "spans": []
+      }
+    },
+    "usage": {
+      "input_tokens": 1552,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 19.483302244218066,
+  "finished_at": "2026-11-15T21:42:04.551741-05:00"
+}

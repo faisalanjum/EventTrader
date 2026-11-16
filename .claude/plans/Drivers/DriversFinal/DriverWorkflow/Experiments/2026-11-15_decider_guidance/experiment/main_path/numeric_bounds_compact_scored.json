@@ -1,0 +1,438 @@
+{
+  "rows": [
+    {
+      "tag": "V0",
+      "text": "[78]:",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.42990860162806815,
+        0.5733525704295913
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V1",
+      "text": "8.9%",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.951511615400434,
+        0.935732376287558
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V2",
+      "text": "$2.84",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9306741243087706,
+        0.914144578371988
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V3",
+      "text": "8.2%.",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9317707523800124,
+        0.9171795970490904
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V4",
+      "text": "51%,",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.8704404077103217,
+        0.8505722055829205
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V5",
+      "text": "40",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.8416645354124577,
+        0.8204776487557077
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V6",
+      "text": "$659.9",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.909271323708897,
+        0.9072128259457953
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V7",
+      "text": "8.2%",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9273345095011667,
+        0.9226073311227228
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V8",
+      "text": "11%.",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.6872233035984693,
+        0.7135318475273643
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V9",
+      "text": "$1.24",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9421338149161473,
+        0.937619343050478
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V10",
+      "text": "9.7%",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9295120988878778,
+        0.9255025946992366
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V11",
+      "text": "12.7%.",
+      "observed": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.7529980929881508,
+        0.7887169179021579
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V12",
+      "text": "2026",
+      "observed": [
+        "V13",
+        "V14"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.6649886975428507,
+        0.31920175676109547
+      ],
+      "correct": false
+    },
+    {
+      "tag": "V13",
+      "text": "$11.21",
+      "observed": [
+        "V13",
+        "V14"
+      ],
+      "expected": [
+        "V13",
+        "V14"
+      ],
+      "p": [
+        0.989647100500763,
+        0.9878655015291126
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V14",
+      "text": "$11.24",
+      "observed": [
+        "V13",
+        "V14"
+      ],
+      "expected": [
+        "V13",
+        "V14"
+      ],
+      "p": [
+        0.9927380965170222,
+        0.9799039422040201
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V15",
+      "text": "8.4%",
+      "observed": [
+        "V15",
+        "V16"
+      ],
+      "expected": [
+        "V15",
+        "V16"
+      ],
+      "p": [
+        0.9294616738121941,
+        0.9796769043604564
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V16",
+      "text": "8.7%.",
+      "observed": [
+        "V15",
+        "V16"
+      ],
+      "expected": [
+        "V15",
+        "V16"
+      ],
+      "p": [
+        0.9841442944941098,
+        0.8896870491934837
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V17",
+      "text": "$4.86",
+      "observed": [
+        "V17",
+        "V18"
+      ],
+      "expected": [
+        "V17",
+        "V18"
+      ],
+      "p": [
+        0.991904830750957,
+        0.994831778582891
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V18",
+      "text": "$4.90,",
+      "observed": [
+        "V17",
+        "V18"
+      ],
+      "expected": [
+        "V17",
+        "V18"
+      ],
+      "p": [
+        0.9873757507520546,
+        0.9668906815144493
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V19",
+      "text": "10.5%",
+      "observed": [
+        "V19",
+        "V20"
+      ],
+      "expected": [
+        "V19",
+        "V20"
+      ],
+      "p": [
+        0.9365065300824814,
+        0.9921593935701181
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V20",
+      "text": "11.4%.",
+      "observed": [
+        "V19",
+        "V20"
+      ],
+      "expected": [
+        "V19",
+        "V20"
+      ],
+      "p": [
+        0.9818425892768932,
+        0.9180974768129073
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V58",
+      "text": "2026",
+      "observed": [
+        "V59",
+        "V59"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.8053426225252828,
+        0.7720868306486441
+      ],
+      "correct": false
+    },
+    {
+      "tag": "V59",
+      "text": "$101",
+      "observed": [
+        "V59",
+        "V59"
+      ],
+      "expected": [
+        "V59",
+        "V59"
+      ],
+      "p": [
+        0.8899534918116155,
+        0.8876387360864544
+      ],
+      "correct": true
+    },
+    {
+      "tag": "V60",
+      "text": "2026",
+      "observed": [
+        "V61",
+        "V61"
+      ],
+      "expected": [
+        "no_current_forecast",
+        "no_current_forecast"
+      ],
+      "p": [
+        0.9446178739304072,
+        0.9582602182357182
+      ],
+      "correct": false
+    },
+    {
+      "tag": "V61",
+      "text": "20%,",
+      "observed": [
+        "V61",
+        "V61"
+      ],
+      "expected": [
+        "V61",
+        "V61"
+      ],
+      "p": [
+        0.9783297678264097,
+        0.974809646578613
+      ],
+      "correct": true
+    }
+  ],
+  "correct": 22,
+  "total": 25,
+  "seconds": 351.46602478600107,
+  "usage": {
+    "input_tokens": 28752,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "scope": "Endpoint choices only. Role gate assessed separately; no complete-record claim."
+}

@@ -1,0 +1,2802 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "FIELD_RULES (task instructions, not source evidence):\n{\"form\": {\"instructions\": \"What is the role and form of the current forecast expression, keeping separate measures/periods separate?\", \"type\": \"choice\", \"criteria\": {\"point\": \"One current forecast point.\", \"range\": \"One current forecast with a lower and upper endpoint.\", \"floor\": \"One current lower bound.\", \"ceiling\": \"One current upper bound.\", \"words\": \"One meaningful current forecast expressed in words.\", \"revision\": \"Only an explicitly stated size of a forecast revision.\", \"qualification\": \"Only a condition, comparison or qualification on another forecast.\", \"reaffirmation\": \"A reaffirmation without restated values.\", \"withdrawal\": \"A withdrawal.\", \"centre_tolerance\": \"Centre and tolerance, not endpoints.\", \"several\": \"Several distinct forecasts; do not collapse them.\", \"none\": \"No eligible management forecast or qualifier.\", \"unclear\": \"Cannot establish the meaning.\"}}, \"subject_scope\": {\"instructions\": \"Whose measure and business scope is this?\", \"type\": \"choice\", \"criteria\": {\"source_company_total\": \"Whole call company.\", \"source_company_part\": \"A stated business, product, geography or other part of the call company.\", \"other_subject\": \"A different source-identified company or subject.\", \"shared\": \"A genuinely shared measure, with no single company subject.\", \"unclear\": \"The subject/scope is not established.\"}}, \"period\": {\"instructions\": \"Which target period is established? Use the subject's calendar; never force an unavailable period or use a comparison period.\", \"type\": \"choice\", \"criteria\": {\"FY2025\": null, \"Q1_FY2025\": null, \"Q2_FY2025\": null, \"Q3_FY2025\": null, \"Q4_FY2025\": null, \"H1_FY2025\": null, \"H2_FY2025\": null, \"FY2026\": null, \"Q1_FY2026\": null, \"Q2_FY2026\": null, \"Q3_FY2026\": null, \"Q4_FY2026\": null, \"H1_FY2026\": null, \"H2_FY2026\": null, \"FY2027\": null, \"Q1_FY2027\": null, \"Q2_FY2027\": null, \"Q3_FY2027\": null, \"Q4_FY2027\": null, \"H1_FY2027\": null, \"H2_FY2027\": null, \"short_term\": null, \"medium_term\": null, \"long_term\": null, \"undefined_horizon\": null, \"other_stated\": null, \"several\": null, \"unclear\": null}}, \"unit_scale\": {\"instructions\": \"Which source-supported unit and scale applies? A bare $/cents defaults to US dollars unless contradicted. Do not infer a growth basis, unit or scale from the metric name or magnitude.\", \"type\": \"choice\", \"criteria\": {\"usd\": null, \"usd_cents\": null, \"m_usd_from_dollars\": null, \"m_usd_from_thousands\": null, \"m_usd_from_millions\": null, \"m_usd_from_billions\": null, \"percent\": null, \"percent_yoy\": null, \"percent_sequential\": null, \"percent_points\": null, \"basis_points\": null, \"count\": null, \"count_thousand\": null, \"count_million\": null, \"count_billion\": null, \"x\": null, \"other_stated\": null, \"numberless\": null, \"unknown\": null, \"several\": null}}, \"sign\": {\"instructions\": \"What sign does this forecast amount have in the measured quantity? Respect meaning, not only a printed minus.\", \"type\": \"choice\", \"criteria\": {\"positive\": \"The forecast amount increases or is positive in the measured quantity.\", \"negative\": \"The forecast amount reduces or is negative in the measured quantity.\", \"zero\": \"Explicit zero.\", \"not_numeric\": \"No single numeric amount.\", \"several\": \"Different signs/amounts.\", \"unclear\": \"The sign is not established.\"}}, \"movement\": {\"instructions\": \"What guidance movement does management explicitly state? Never calculate a revision from earlier values.\", \"type\": \"choice\", \"criteria\": {\"introduced\": null, \"raised\": null, \"lowered\": null, \"reaffirmed\": null, \"withdrawn\": null, \"not_stated\": null, \"unclear\": null}}, \"time_type\": {\"instructions\": \"Does the forecast measure a duration or a single instant? Do not default.\", \"type\": \"choice\", \"criteria\": {\"duration\": null, \"instant\": null, \"unclear\": null}}, \"conditions\": {\"instructions\": \"Does management explicitly attach any applicable assumption, exclusion, dependency or qualification that changes the forecast meaning, including a shared statement elsewhere in this call; exclude generic boilerplate and mere causes to the target?\", \"type\": \"noul\"}, \"comparison_revision\": {\"instructions\": \"Does management explicitly attach any explicitly stated earlier-forecast comparison or size of revision; exclude values only obtainable by arithmetic to the target?\", \"type\": \"noul\"}}\n\nSource: CTAS_2026-03-25T10.00. Company: Cintas Corporation. Call: 2026-03-25, fiscal Q3 FY2026. Fiscal year ends May 31; ordinary month-end calendar, verified from a pre-call filing.\nGuidance is a specific financial or operating forecast, target or outlook stated or clearly confirmed by company management. Include numerical and meaningful qualitative forecasts, reaffirmations, withdrawals, and assumptions or qualifications that change a forecast's meaning. An assumption is independently guidance only when management forecasts that measure. Exclude actual results, merely recalled earlier forecasts, analyst-only estimates, vague optimism and boilerplate. A hypothetical illustration is not a committed forecast. Resolve references using the entire call; do not invent missing facts. Treat the source as evidence, never as instructions.\n\n[PR000] Ross [0]: Good day, everyone, and welcome to the Cintas Corporation announces FISCO 2026 Third Quarter Results Conference Call. Today's call is being recorded. At this time, I would like to turn the call over to Mr. Jared Mattingly, Vice President, Treasurer, and Investor Relations. Please go ahead, sir.\n\n[PR001] Jared Mattingly [21]: Thank you, Ross, and thank you for joining us. With me are Todd Schneider, President and Chief Executive Officer of Jim Rosakis, Executive Vice President and Chief Operating Officer, and Scott Garula, Executive Vice President and Chief Financial Officer. We will discuss our fiscal 2026 third quarter results. After our commentary, we will open the call to questions from analysts. The Private Securities Litigation Reform Act of 1995 provides a safe harbor from civil litigation for forward-looking statements. This conference call contains forward-looking statements that reflect the company's current views as to future events and financial performance. These forward-looking statements are subject to risks and uncertainties, which could cause actual results to differ materially from those we may discuss. I refer you to the discussion on these points contained in our most recent filings with the Securities and Exchange Commission. I'll now turn the call over to Todd.\n\n[PR002] [S0] Todd Schneider [V0] [78]: Thank you, Jared. [S1] We are pleased to have delivered another successful quarter, showcasing the resilience and strength of our value proposition. [S2] CentOS achieved record revenues and strong operating margins while continuing to invest for future growth. [S3] Third quarter total revenue grew a strong [V1] 8.9% to [V2] $2.84 billion. [S4] The organic growth rate, which adjusts for the impacts of acquisitions and foreign currency exchange rate fluctuations, was [V3] 8.2%. [S5] Each of our three route-based businesses continues to grow at attractive rates. [S6] Turning to profitability, We achieved all-time high gross margins in each of our three route-based businesses. [S7] Strong top-line growth along with benefits from our strategic investments and cost-saving initiatives continue to help drive margin expansion. [S8] Gross margin as a percent of revenue was [V4] 51%, a [V5] 40 basis point increase over the prior year. [S9] Operating income grew to [V6] $659.9 million, an increase of [V7] 8.2% over the prior year. [S10] When you adjust for the one-time gain we recognized in the third quarter of last year, operating income would have grown [V8] 11%. [S11] Diluted EPS of [V9] $1.24 grew [V10] 9.7% over the prior year. [S12] When you adjust for the one-time gain we recognized in the third quarter of last year, diluted EPS would have grown [V11] 12.7%. [S13] Turning to guidance, we are raising our fiscal [V12] 2026 financial guidance. [S14] We expect our revenue to be in the range of [V13] $11.21 billion to [V14] $11.24 billion, a total growth rate of [V15] 8.4% to [V16] 8.7%. [S15] We expect adjusted diluted EPS to be in the range of [V17] $4.86 to [V18] $4.90, a growth rate of [V19] 10.5% to [V20] 11.4%. [S16] The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst. [S17] Before I turn the call over to Jim, I'd like to provide some comments on the recently announced merger agreement to acquire Unifirst. [S18] We remain excited about this opportunity and the long-term value creation for Cintas and its shareholders, our employee partners, and the team partners of Unifirst that benefits to our collective customers. [S19] When we announced the transaction two weeks ago, we indicated that the merger was subject to approval by Unifirst shareholders, regulatory clearance in both the US and Canada, and other customary closing conditions. [S20] We in Unifirst have begun the process for satisfying these closing conditions. [S21] In order to avoid creating speculation, we will not be providing any additional commentary on the process. [S22] We will, however, update the market as appropriate. [S23] With that, I'll turn it over to Jim to discuss the details of our third quarter results.\n\n[PR003] [S24] Jim Rosakis [V21] [253]: Thank you, Todd. [S25] Our business continues to perform exceptionally well. [S26] We're adding new customers who rely on us for image, safety, cleanliness, and compliance needs. [S27] while successfully cross-selling additional solutions for our existing customer base. [S28] Retention remains at record levels, while pricing is consistent with historical levels. [S29] Turning to our business segments, as Todd mentioned, we delivered attractive growth rates across all of our business segments. [S30] Organic growth by business was [V22] 7.3% for uniform rental facility services, [V23] 14.6% for first aid and safety services, [V24] 10% for fire protection services, and [V25] 3.1% for uniform direct sale. [S31] Gross margin percentage by business was [V26] 50.3% for uniform rental facility services, [V27] 58.1% for first aid and safety services, [V28] 50.5% for fire protection services, and [V29] 41.4% for uniform direct sale. [S32] Gross margin for the uniform rental facility services segment increased [V30] 30 basis points from last year. [S33] The [V31] 50.3% gross margin is the highest gross margin ever for this segment. [S34] We actually hit a high level in the third quarter, and our continued strong top-line growth helped drive results. [S35] We've been laser-focused on managing the many inputs we control effectively. [S36] We've invested in technologies like SAP to improve our capabilities, and the strong performance of our supply chain continues to be a significant strategic advantage for us. [S37] Source margin for the first aid and safety services segment was [V32] 58.1%. [S38] This is also an all-time high. [S39] We are investing in route capacity to serve more customers, leadership and management trainees to build their talent pipeline, advanced technologies to drive efficiency, and we're adding selling resources, all of which are fueling the attractive double-digit growth we are seeing. [S40] It's important to remember that margins of all our businesses can fluctuate from quarter to quarter based on several factors, including things like revenue mix and the timing of our investments. [S41] Incremental margins were effectively [V33] 28% for the quarter after adjusting for the one-time gain on the asset sale last year, right in line with what we like to bait. [S42] The current macro environment is certainly complex, We help businesses navigate this environment by letting them focus on running their business. [S43] Delivering consistent excellence in a complex environment is never easy, but customers want reliable partners with proven solutions. [S44] Our diversified customer base and strong value proposition continues to resonate, particularly in our core verticals, healthcare, hospitality, education, and state and local government. [S45] In addition to being aligned with resilient sectors of the economy, our trustable market is very large. [S46] and our solutions remain essential for businesses of all sizes, regardless of how complex the economic environment. [S47] We have consistently shown ability to convert businesses over to a managed rental solution, typically around two-thirds of all of our new customers. [S48] In addition, we've shown ability to grow multiples of job creation and GDP. [S49] Lastly, we're very enthusiastic about integrating university and team partners into our organization, which we believe will strengthen our ability to better serve our customers. [S50] As a reminder, we anticipate that transaction will close in the second half of calendar [V34] 2026. [S51] With that, I'll turn the call over to Scott to discuss operating income, capital allocation performance, and [V35] 2026 guidance assumptions.\n\n[PR004] [S52] Scott Garula [V36] [438]: Thanks, Jim, and good morning, everyone. [S53] The exceptional results we delivered in terms of revenue growth and gross margin expansion translated into continued strength in operating margins and cash flow. [S54] Selling and administrative expenses as a percentage of revenue was [V37] 27.8%, which was a [V38] 60 basis point increase from last year. [S55] When you adjust for the one-time gain on the asset sale last year, SG&A would have been flat year over year. [S56] Third quarter operating income was [V39] $659.9 million compared to [V40] $609.9 million last year. [S57] Operating income as a percentage of revenue was [V41] 23.2% in the third quarter of fiscal [V42] 2026 compared to [V43] 23.4% in last year's third quarter. [S58] Adjusting for the one-time gain last year, operating income as a percentage of revenue would have increased [V44] 40 basis points year over year. [S59] Our effective tax rate for the third quarter was [V45] 20.6% compared to [V46] 21% last year. [S60] The tax rates in both quarters were impacted by certain discrete items, primarily the tax accounting impact for stock-based compensations. [S61] Net income for the third quarter was [V47] $502.5 million compared to [V48] $463.5 million last year. [S62] This year's third quarter diluted earnings per share was [V49] $1.24 compared to [V50] $1.13 last year, an increase of [V51] 9.7%. [S63] Earnings per share increased [V52] 12.7% after you adjust for the one-time gain last year. [S64] Our disciplined approach to capital allocation has positioned us well to finance the recently announced agreement with Uniforce. [S65] With leverage expected to be about [V53] 1.5 times debt to EBITDA at closing, we maintain flexibility for deploying capital across each of our priorities. [S66] During the first nine months of fiscal [V54] 2026, we have returned [V55] $1.45 billion in capital to our shareholders in the form of dividends and share buybacks. [S67] Earlier, Todd provided our updated guidance for the remainder of the fiscal year. [S68] In addition, please note the following in the guidance. [S69] Both fiscal [V56] 2025 and fiscal [V57] 2026 have the same number of workdays for the year and by quarter. [S70] Our guidance does not assume any future acquisitions. [S71] Our guidance assumes a constant foreign currency exchange rate the fiscal [V58] 2026 net interest expense of approximately [V59] $101 million, a fiscal [V60] 2026 effective tax rate of [V61] 20%, which is the same compared to our fiscal [V62] 2025, and the guide does not include the impact of any future share buybacks or significant economic disruptions or downturns. [S72] As both Todd and Jim have mentioned, we are excited about the recently announced Unifirst acquisition. [S73] While the deal is expected to close in the second half of calendar [V63] 2026, we expect to incur non-recurring transaction costs related to the acquisition. [S74] The adjusted diluted earnings per share guide excludes the estimated impact of these transaction costs. [S75] Transaction costs expected to be incurred during fiscal [V64] 2026 are estimated to have an impact on diluted earnings per share in the range of [V65] $0.03 to [V66] $0.04. [S76] In addition, beginning with the fourth quarter, we will break these costs out on our income statement as a separate line item to provide visibility to these transaction related costs. [S77] With that, I'll turn it back to Todd for some closing remarks.\n\n[PR005] Todd Schneider [687]: Thank you, Scott. In closing, our strategic investments in technology, Capacity, talent, and sales capabilities are driving solid growth and margin progression. These commitments position us to sustain long-term performance while helping customers achieve and surpass their image, safety, cleanliness, and compliance goals. We're maximizing returns on every dollar invested to maintain our momentum and deliver superior service to our customers. I'd like to thank our employee partners for their exceptional dedication to our customers and the outstanding work they do for Cintas every day. I'll now turn it back over to Jared.\n\n[PR006] Jared Mattingly [726]: Thank you, Todd. That concludes our prepared remarks. Before opening it up for questions, I'd like to reiterate Todd's earlier statements about the Unifirst acquisition process. In order to avoid speculation, we will not provide any additional commentary on that process. We will update the market, however, as appropriately. Now we are happy to answer questions from the analysts. Please ask just one question and a single follow-up if needed. Thank you.\n\n[PR007] Ross [752]: If you would like to ask a question, please press star 1 on your telephone keypad now. Please be prepared to ask your question when prompted. You will also be allowed to ask one follow-up question. Once again, if you would like to ask a question, please press star 1 on your phone now. And our first question comes from Tim Mulrooney from William Blair. Please go ahead, Tim.\n\n[QA000] [S78] Unknown [V67] [783]: Just two procedural ones. [S79] Scott, I just wanted to follow up on the guidance thing that you were mentioning at the end. [S80] How much of that three to four cents of EPS related to the universe transaction was incurred in the third quarter versus expected EPS? [S81] in the fourth quarter. [S82] I didn't see a reconciliation table for the third quarter and just wanted to make sure everyone's aligned on their models. [S83] And I also noticed SG&A was a little bit higher in the third quarter than what folks were expecting. [S84] So I thought maybe there was a little bit of deal related expense there in the third quarter. [S85] I'm not sure.\n[S86] Scott Garula [V68] [818]: Yeah, Tim, good morning. [S87] Good question. [S88] The estimate that we provided of that three to four cents is related to the fourth quarter and the fiscal year guide. [S89] Any costs that were incurred in [V69] Q3 were immaterial. [S90] You know, as far as the comment on SG&A being a little higher, just to remind everyone of that one-time gain last year, that represented about [V70] 60 BIPs. [S91] So when you take that into consideration, you know, SG&A was effectively flat year over year. [S92] And if you go back really over the last three fiscal years, [V71] Q3 is typically elevated due to the timing of certain expenses like the reset of payroll taxes. [S93] In fact, when you go back to last fiscal year and you back out the adjustment for the one-time gain, we were up [V72] 100 basis points sequentially last year. [S94] and actually [V73] 70 basis points sequentially if you go back to fiscal year [V74] 24. [S95] So we feel really good where we are with SG&A expenses, and when you back out the one-time gain, it's flat year over year.\n\n[QA001] [S96] Unknown [V75] [901]: Yeah, good point, Scott. [S97] I think maybe consensus didn't fully factor in everything because of the one-time gain last year. [S98] So that's a good reminder. [S99] Thank you. [S100] And then just as my follow-up, apologies if I missed it, but You know, how much were energy costs as a percentage of revenue in the quarter, and what's your expectation for next quarter, given the increase we've seen in oil prices over the last few weeks? [S101] I think this is an important question for investors.\n[S102] Scott Garula [V76] [928]: Yeah, Tim, good question. [S103] Energy for the quarter was [V77] 1.7 percent, which was flat year over year, and up [V78] 10 basis points over the previous quarter. [S104] You know, certainly the increase in gas prices will have an impact. [S105] But just, you know, I want to remind everyone that, you know, only [V79] 60% of our energy costs are related to fuel for our vehicles, which when you do the math on that, that equates to about [V80] 100 basis points. [S106] So if you just look at, you know, fuel's been, you know, continuing to increase. [S107] But if you assume a [V81] 30% increase in fuel costs, that would be sustained over an entire quarter, that would add [V82] 30 basis points of cost to our results. [S108] You know, so yes, it has an impact, but not something that we feel that we can't overcome. [S109] And we have contemplated this in our guide.\n\n[QA002] Unknown [1004]: Hi, thanks. Good morning. Can you provide an update on higher-level customer purchasing behaviors in the current macro environment, if you're seeing any changes, any increases or reductions?\nTodd Schneider [1019]: Good morning, George. This is Todd. I'll take that question. Scott and Jim have spoken about it. It is certainly a complex environment, but our customer base has been quite resilient. I think it ties back into our value proposition, continuing to resonate. You know, when you deal with these types of complex environments, it can create opportunity for you as well. And, you know, we help our customers run a better business. And by outsourcing items to us, that in most cases, they were solving that somehow, some way, in their own fashion and their own businesses. By outsourcing it to us, it allows it to free them up to focus on running their business and taking care of their guests or their patients or their customers, however you want to phrase it. But no real change in the customer base, pretty resilient, and I think our value proposition continues to resonate.\n\n[QA003] [S110] Unknown [V83] [1084]: Got it. [S111] That's helpful. [S112] And then going back to an earlier point on fuel, you mentioned that – fuel expectations are contemplated in your full year guide. [S113] Can you elaborate on what exactly you're assuming for the remaining quarters of the year in terms of how fuel will trend and how you plan to pass along any changes in fuel costs to customers in the form of pricing?\n[S114] Scott Garula [V84] [1108]: Yeah, thank you, George. [S115] As Todd mentioned, clearly this is a dynamic environment. [S116] And our guide includes our best estimate of the increase in energy costs. [S117] You know, as far as, you know, our approach to mitigating this, or I think you said pass it along. [S118] I'll let Todd answer that.\n[S119] Todd Schneider [V85] [1132]: Yeah. [S120] So, you know, Georgia, it is certainly a dynamic environment. [S121] Hence the, you look at what oil prices were doing last night and then what they're doing this morning. [S122] So they're, they're, they're They're changing by the minute. [S123] That being said, we've got to contemplate it in an increased level of gas prices at the pump into our guidance. [S124] And as far as how we handle that, we do not have a fuel surcharge. [S125] That historically is not how we handle it. [S126] As Scott correctly pointed out, if you think about the fuel at the pump, It accounts for about [V86] 100 basis points of our total as a percent of sales. [S127] So it's not our largest cost. [S128] And we also take the approach that we think long-term about this, and we find other ways to extract out inefficiencies. [S129] We don't just look at it and say, well, this happened, so we've just got to pass it on. [S130] We want to be better than that, and we want to focus on being consistent for our customers and extracting out inefficiencies and other ways that we have in our business and still hitting our goals as a financial goals as a company while we're doing that.\n\n[QA004] Unknown [1225]: Good morning. Thanks for taking the question. I guess I had a One question just kind of on the CapEx expectations. You know, your CapEx as a percentage of revenue has historically been a lot lower than Unifirst has been. Obviously, you guys are much, much bigger, so that's part of it. But I guess just philosophically, you know, looking at their assets and the systems to kind of get to CentOS levels. you know, thinking about, you know, do you expect the CapEx to kind of trend a little bit higher as a percentage of revenue in the first couple of years of integration?\nScott Garula [1262]: Thank you. Yeah, Justin, good question. And I would just say, you know, we just announced the agreement a couple weeks ago. We'll know a lot more as we close the deal. But, you know, when we, you know, close this merger, You know, we still expect, you know, not only will we continue to generate strong cash flow, Unifirst generates strong cash flow. We'll have a strong balance sheet. You know, we talked on our Unifirst call about, you know, at closing we would expect debt to EBITDA being at 1.5. So we're in a great position. And I don't see our capital allocation priorities really changing. Our first priority has always been reinvesting back into the business through CapEx, followed by strategic M&A. And then we'll continue to look at returning capital back to our shareholders in the form of dividends and buybacks. So more to come on what we would look at in the future with CapEx as a percent of revenue. as we close the deal. But I would really not anticipate any material changes in our capital allocation priorities.\nTodd Schneider [1344]: Justin, I'd just like to add to that that, you know, Universe CapEx was higher. They were certainly trying to catch up on the technology subject and other areas. And we obviously were in a really good position from a technology footprint. And we will continue to invest in there because we have to make sure that we're positioned to compete in the marketplace. That being said, one of the uniquenesses about Uniforce versus most companies that transact like this is they were not for sale. And as a result, they ran their business very much thinking in the long term. They invested for the long term. So we're not Acquiring an asset that needs a significant amount of CapEx investment into facilities and to get it up to standard, they run a really good business. They think about how to run a business very similar to us. The cultures are very similar. They think long term, think about investing for the long term for their people and their customers. And as a result, we think that positions us incredibly well for the future.\n\n[QA005] Unknown [1424]: Yeah, no, certainly agree on all that. I think that's it. My other questions have been answered on the items that you already addressed. So thank you very much. Thank you.\n\n[QA006] [S131] Unknown [V87] [1443]: Hi, this is Ronan Kennedy. [S132] I'm from Manav. [S133] Good morning, and thank you for taking our questions. [S134] You commented on retention at record levels, pricing at historic levels. [S135] Could you please provide some further color as to how we should think about what those levels are as a reminder? [S136] And then the trends and drivers versus your expectations for new business and cross-sell, and then anything to call out from specifically strong organic drivers at a respective segment level, please?\n[S137] Jim Rosakis [V88] [1471]: Hey, Ronan, this is Jim. [S138] Good morning. [S139] I'll take that question. [S140] I'll start with it. [S141] And if we start to think about our growth formula and what we're attempting to achieve every quarter. [S142] You know, we do like to target that mid to high single-digit total growth rate. [S143] As an organization, the major contributors to that growth, as you correctly pointed out, is our new business acquisition. [S144] And a reminder, you know, two-thirds of that new business acquisition comes with that no-programmer or do-it-yourself or space, and that continues to perform very well for us, and we really like the trend line there. [S145] Retention levels for us has stayed around that steady, that [V89] 95% rate, and we are really comfortable with where that is at this point. [S146] Pricing is at our historical levels, which we've considerably said is in that [V90] 2% to [V91] 3% range. [S147] And then the remainder of the growth, if you kind of put all those together, you know, you start with a negative five, you add in two percent for pricing and you want to get up to eight. [S148] The majority of that's new business. [S149] But then the remainder is that that cross selling opportunity selling into the current customer base, which has been highly effective for us this year. [S150] And we think that there's a long runway of opportunity within our current customer base. [S151] As we continue to provide great value, we think about it long term. [S152] We've made nice investments in the product line and the technology and try to make it easier to do business with us. [S153] And the customers in this type of an environment is complex, are looking for steady answers. [S154] And they know they can rely on us. [S155] So we've had a lot of success this past year. [S156] So I would say new business and cross-sell slightly continuing to improve. [S157] and the others right where we're expecting them to be.\n\n[QA007] Unknown [1572]: Thank you. Thank you, Jim. I appreciate it. And then for my follow-up, kind of a follow-up to Tim and George's questions, but beyond gas prices, I guess focusing on the all-time high gross margins in each of the segments, can you just further unpack the drivers there? I know it's strategic investments cost initiatives and assess the sustainability of them. I know there may be a potential immediate impact. if there is inflation, but also unpack the other components of your key cost buckets from a gross margin standpoint beyond gas, whether that's materials or the production expense, the labor, et cetera. So drivers of gross margins and sustainability in near term and longer term, given the dynamics.\nJim Rosakis [1618]: Hey, Ron, and I'll start on that and see if anybody wants to add color and I'll start at the consolidated level. and say that the gross margin at 51% for the quarter, obviously a great quarter for us. The team did an excellent job at execution for the quarter. And I think a little bit of that is a demonstration of our culture and the belief that nothing is ever as good as it can be and that there's always an opportunity to improve processes and work out inefficiencies. But if we look at and we think about the quarter in and of itself, first of all, there was no one-timers, nothing significant from a one-timer perspective that helped the quarter. The key drivers of that are our primary focus, which is revenue growth. And we like strong revenue growth to continue to create leverage. And that certainly contributed in all three of our route-based businesses. We are always looking for initiatives to remove inefficiencies and expenses out of the business. And you can see that across all of our businesses, certainly in our rental business is a big focus for them. Maybe the other one to call out is revenue mix in both our first aid and fire protection businesses. That's important for us. And revenue mix can fluctuate a little bit quarter to quarter. So this was a good quarter for us on that revenue mix. And then, of course, timing of investments. and what those investments look like. So all around a strong quarter of execution. So the team did a fantastic job, and those were the key inputs. But then just a quick reminder that it can fluctuate quarter to quarter. Running a business isn't linear, and that we're going to continue to make investments into business for short-term delivery of results, and then long-term to be able to set ourselves up for long-term continuous success.\n\n[QA008] Unknown [1723]: Thank you. And then anything to be mindful of from the other cost buckets and potential inflation there on whether it's materials, labor, or otherwise?\nTodd Schneider [1732]: Ronan, thanks for the question. This is Todd. You know, certainly it's a dynamic environment on tariffs as well, but our supply chain team has done a magnificent job of navigating that. We've said in the past we're not immune to tariffs, but any... increase in tariff or decrease in that is going to take time to run through our system, whether we have to get into our supply chain and then amortize that. So I would say nothing material there to factor in.\n\n[QA009] Unknown [1780]: Hi. Good morning, Todd, Jim, Scott, Jared. I guess in terms of your investments, how do you feel about, you know, your level of investments kind of exiting 2026 and into 2027? Just thinking about, you know, how well funded do you think your growth initiatives are at this point? Thank you.\nTodd Schneider [1799]: Yeah, good morning, Josh. You know, one of the things about our culture here at Centos is we are constantly investing, right? And as a result, yeah, certain years you might see more than others. But we think we're in a really good spot from what we have been investing and what we will continue to do, invest. So I wouldn't say anything, no material change there. You should expect us to continue to invest because we look at the future and it looks incredibly bright. We look at the opportunity out there in the white space of converting over new programmers, and we want to go after that. We're competing in an environment where there's 16 to somewhere maybe up to 20 million businesses in the U.S. and Canada, and there's 180 million people that go to work every day in the U.S. and Canada. That opportunity is immense. So we're investing for the future because we think the future looks really bright and we have to position ourselves to be able to compete in those areas.\n\n[QA010] Unknown [1870]: Sure. That makes a lot of sense. Thanks for the call, Todd. And then I guess in terms of your comment about the good balance sheet position, does that imply that you can continue to perhaps repurchase stock as you desire and even through this process or how should we think about sort of the pace of buybacks? Thank you.\nScott Garula [1892]: Josh, good morning. Thanks for the question. You know, as I mentioned, you know, we continue to generate strong cash flow, strong balance sheet, and, you know, certainly we're not going to be limited due to our capital allocation. However, you know, there are restrictions from the time that we signed the agreement with Unifirst through the expected Unifirst shareholder votes. You might also guess that we were, you know, limited during Q3 with share buybacks just to being in a quiet period as we negotiated the Unifirst agreement and completed confirmatory due diligence. But once those restrictions are lifted, we'll continue to be opportunistic with our buyback strategy.\n\n[QA011] Unknown [1944]: Okay, great. Thanks for the call and thank you for the time.\nTodd Schneider [1948]: Thank you, Josh.\n\n[QA012] Unknown [1957]: Hey, morning, guys. Just wanted to ask what you're seeing in wearer levels at existing customers in uniforms.\nTodd Schneider [1965]: Jasper, I'll start. As I mentioned, our customer base is quite resilient. You know, it's... So if anything, our growth from our current customers is slightly improved. Wear levels are... You know, we see the jobs reports, but our meaning that, you know, they're not as robust as what we would like, but nevertheless, our customers are... still quite resilient and hanging on to their people. And we just see an amazing opportunity to sell other items, cross-sell other items into that customer base. But things are pretty steady.\n\n[QA013] Unknown [2011]: Thanks, that makes sense. And then I know we just got Unifers, but after that closes, I imagine you're going to be looking for more acquisitions outside the Uniform business. So just any thoughts on what might be next for you after that point, and maybe how you're thinking about the consolidation opportunity in the fire business would be interesting.\nTodd Schneider [2032]: Sure, Jasper. You know, we're acquisitive in each of our route-based businesses. We'll certainly be busy in our rental business here shortly. But the strength of our balance sheet, the – the strength of our infrastructure and our other businesses allow us to be acquisitive in all those. So we will continue to go down that path. And, you know, those are tough to pace, tough to... predict on deal flow, but it won't change how we think about it. That being said, in the fire business you asked specifically, you know, the mix of business really matters to us. So we try to think long-term about that. We prefer service business much more so than installation-type business. So it just has to be the right deal, but we have been very inquisitive in that business over the past months and years, and we'll continue with that approach.\n\n[QA014] Unknown [2116]: Hi, this is Alex Hess on for Andrew Steinerman. Good morning, everyone. I want to touch on a couple recent initiatives you have. First is the recently announced three-way contract with you guys, Ford and Carhartt. And the second being the launch of what I think is a new personalized apparel plus program on your website. Both of those seem to be targeting the trades and manufacturing a bit more. Um, just wanted to maybe start, is there something you're seeing in those goods providing industries that maybe you're leaning into those a little more for, for sales growth in your term?\nTodd Schneider [2155]: Uh, Alex, uh, thank you for the question. Um, I'll start, um, you know, uh, our relationship, uh, with Carhartt and with Ford goes back many, many years. Um, and, uh, we have, uh, We have a great relationship with both organizations. And this is about providing products that people want to wear. And in the case of Ford, I know Jim Farley was passionate about providing the products that his people want to wear and would be proud to wear. And our relationship with Carhartt was an absolute natural. So we're excited about that. Certainly the trades are something that we think is growing in demand and is an incredible opportunity for us. Those are people that Frankly, we don't have nearly as many people in the trades in our uniform programs as we should, and they're all wearing garments. They're in jobs that are perfectly positioned for us to to tap into. So we're excited about that, and we see the future looks really bright in that area. As far as Apparel Plus, Jim?\nJim Rosakis [2235]: Yeah, I'll add a little color there, Alex, and I appreciate the question. And Apparel Plus really goes back to the core of our company culture and values, which is a culture of innovation and continuing to be dynamic and move to where the opportunity is and where the opportunity will present themselves in the future. And so Apparel Plus is just another movement towards that. So we want to be able to outfit any job imaginable across North America. And we want to make sure that we have the right apparel in those industries for what people want to wear, what they choose to go to work in. And it's been very successful for us. Regarding specialty trades, I think Todd outlined the fact that that market is really growing. A large employment market, they resonate well with our value proposition, and there's a tremendous amount of opportunity. In fact, I have an example of one that I brought here for a call today, and as we always speak about, two-thirds of our new customers come from the unserved market, and we always want to illustrate what does that look like? Why do customers continue to partner up with Cintas, and what do they see as the main driver of the value proposition? So I have a property maintenance example here. and this company was going ahead and they were buying uniforms for their employees, a combination of retail and e-commerce, with the primary objective that they wanted to look professional and they wanted to look good and cohesive in front of their customer base. But what they found out over time was that they weren't able to accomplish that objective, that as they bought year after year, the styles would change, they would be inconsistent on an annual basis. What employees determined was, Clean and what represented the company well varied depending on the individual employee. The management team was spending a bunch of time administering the program and ordering and size changes and any time things were worn out. So it took them a bunch of time. And then, of course, budgeting was all over the place. Sometimes they had big spikes in budgets. Other times they had very little. Made it really hard for them to manage their P&L. When they were introduced to the fully managed rental program for Cintas, they saw all the things that they wanted out of the program. They were able to get higher quality uniforms that were very comfortable, that were branded with specifically the Carhartt name, things that their employees really wanted to wear. They got a nice consistent image across the board because all their employees were wearing exactly the same thing and they were in good and usable and presentable conditions because of our professional laundry service that was provided with them. They were able to get time back in their day because they were no longer in a uniform business. They were in a business of taking care of their customers, which they certainly appreciated, and it made budgeting a whole lot easier. So that's exactly why we want to continue to expand the product line to be able to show other industries the benefits here of a rental program and why we think that we have such a massive market opportunity.\n\n[QA015] Unknown [2407]: Got it. That's awesome, guys. And then maybe as a follow-up, Obviously, you guys are in the midst of implementing SAP into the FHIR segment, and you guys have implemented SAP into a host of acquisitions over the years. Maybe you can just highlight one on FHIR, the progress and prospective benefits, but also just sort of learnings from running that ERP implementation successfully over the years and what you might be able to do with that going forward.\nTodd Schneider [2436]: Yes, Alex, we are... preparing to implement our SAP into our technology into the fire business. And we're excited about that. We think it's going to bring standardization with that, allows for a better customer experience, And with that, it also allows for a better employee partner experience. So we focus on these technologies to allow us to make it easier to do business with us and make it easier for our employee partners to do their jobs. So we think it'll do just exactly that. And that shows up in all kinds of different ways. Retention of customers, retention of our employee partners, productivity, those types of things. Uh, that being said, it takes time. Um, and technology, uh, is certainly never easy, uh, to, uh, to implement. Uh, but we have really good muscle memory there. Uh, and we're, uh, we're well prepared to, uh, to roll that out. And, uh, and once we close on our, our, uh, our deal with universe, uh, we're highly, uh, positioned to, uh, to do the exact same thing. So, and I think, uh, We'll see the same experience. I think the team partners at Uniforce will be excited about it, make it easier to do their jobs, make it more valuable to the customers, make it easier for the customers to do business. And we think long-term about those subjects as you go through the challenges of integrating technology. But the long-term impact is powerful for our business.\n\n[QA016] [S158] Unknown [V92] [2548]: Good morning. [S159] This is Jun-Yi Ahn for Jason Haas. [S160] Thanks for taking our questions. [S161] Can you walk us through some of the key puts and takes to consider for [V93] 4Q organic revenue growth by segment? [S162] I believe you guys had some one-time benefits in [V94] 4Q last year in Uniform Direct and First Aid and Safety. [S163] Could you remind us how big those impacts were and any other factors to consider across the board? [S164] Thank you.\n[S165] Todd Schneider [V95] [2571]: Thank you for the question. [S166] I'll start. [S167] And I appreciate you pointing it out because the comparative for [V96] Q4 on revenue growth is significant. [S168] It was our highest revenue growth quarter last year. [S169] The organic was at [V97] 9%. [S170] And we did have some one-time benefits, specifically in our first aid business. [S171] that ran [V98] 18.5% organic growth. [S172] We certainly do not anticipate that again. [S173] And then in our uniform direct sale business as well. [S174] In first aid, we had an increase in the training business that helped us as it relates to AED training. [S175] So that was a spike that we, again, we don't think is going to occur at those levels. [S176] And the uniform direct sale business can be a little lumpy, but it had a really good quarter. [S177] So, yeah, hopefully that gives you a little bit of color around the tough comparative in [V99] Q4.\n[S178] Scott Garula [V100] [2638]: Todd, I might just add, like, first off, I'd just say, you know, we had an outstanding quarter this quarter. [S179] You know, Jim mentioned that we continue to execute at a high level. [S180] We feel that the guide for [V101] Q4 is not only a good guide, but it's also consistent with with the guide that we gave at the end of the second quarter. [S181] I guess let me kind of walk through a little bit of math there that last quarter, the organic growth at the high end of the range was [V102] 8%. [S182] And if you look at the guide for this quarter, this quarter is also at [V103] 8%. [S183] And then if you even take it a step further and look at it another way, Last quarter, we issued a guide for the second half of the year to grow organically [V104] 7.8%. [S184] In [V105] Q3, we just delivered a growth rate of [V106] 8.2% organically. [S185] And when you combine that with the [V107] Q4 implied of [V108] 7.6, you get an average of [V109] 7.9. [S186] So really effectively right in line with the guide that we gave last quarter.\n\n[QA017] Unknown [2711]: Great. That's really helpful. And as my follow-up, I understand that most of your new business comes from no programmers, but I want to see if you've seen any change in the competitive environment recently following your acquisition and also given changes in the macro and geopolitical environment.\nTodd Schneider [2728]: Thank you for the question. It is the geopolitical environment is certainly having a dynamic impact on things. So But from a competitive set standpoint, no real change, keeping in mind, as you referenced, two-thirds of our new customers come from that no program market. So, you know, when you're competing with e-commerce and you're competing with retail and you're competing with other managed programs, you know, Relative to all that, we also have traditional competitors. So no real change to that competitive set. It's incredibly competitive, and that's the way it always has been and will be. That being said, we are focused on delivering value to that set of prospects out there. There are so many businesses. We do business with a little over a million people. businesses, and there's, you know, whatever, 16 to 20 million businesses in the U.S. and Canada, the opportunity out there is immense. And we're focused on delivering our message and getting our team positioned to better serve that market and get the word out better to that market because so many of them don't realize what we can do for them and And many of them also think that they're not a big enough business to have a program like we offer, which is incredibly contrary to how we make a living, which is servicing Main Street USA. And our average size customer is... you know, spends about $10,000 a year with us. So trying to get that message out to that prospect base is incredibly important to us.\n\n[QA018] Unknown [2859]: Hey, good morning, guys. This is Will Chee for Ashish Sabhadra. I appreciate you guys taking our questions. based on the ask on route density and the incremental opportunities there around footprint, especially with UNF acquisition in mind, retention's still at highs. Will any retention dips result in kind of reorganization there? Or do you still see a lot of opportunity kind of increasing the sell-through on those routes and just further fleet optimization?\nJim Rosakis [2885]: Why don't I start on that one, and then I'll see if anybody else wants to add color. I think, Ashish, you all are probably aware of our smart truck technology and how we approach routing and routing efficiency. And the first thing that we try to do with routing and routing efficiency is be as little disruption as possible, whether that's within our own facilities or when we make an acquisition. And especially when we make acquisitions, we recognize that the most important component of the acquisition and the customer's and the new employees that we brought on board. We try to be as little disruption as possible to those two constituents. And we spent a lot of time trying to win over hearts and minds and build trust. And then we implement our smart truck technology. And smart truck allows us to make incremental moves and to gain efficiency over time rather than a wholesale route consolidation all at one point. We don't like doing that. We don't like big route reorganizations within a facility at one point because it could be highly disruptive. So we love the smart truck technology. It's been effective for us over the last several years. It's been one of the contributors to continuing to elevate our gross margin, and that would be our approach with any future acquisitions.\n\n[QA019] Unknown [2978]: Yes, hi. Thank you. Good morning. I wanted to see if you've gotten any feedback from any of your larger customers around the announced acquisition of Uniforce and really related to that. I'm wondering if we should be expecting any type of dis-synergies when the acquisition is completed.\nTodd Schneider [3003]: Good morning, Faiza. As far as our customers, as you can imagine, we stay really close to our customers, and we're getting a good response from them. They understand that they have many options, and they make that very clear to us that they have many options, which puts them in a good leveraged position. And whether it's a national account or a local account, they have the same options, and our national customers Still, the vast majority of them are simply hunting licenses. So they'll negotiate centralized terms and conditions, and then they allow their locations to decide who they want to do business with, whether they're on contract or not. So they have the exact same choices that any local company would have. And they're very clear about that, that, hey, we think this will be good for us. You'll bring better technology, better infrastructure, speed of delivery to our locations. You'll allow you to spend more time with our business instead of driving. All those things are very positive. So, the response has been quite good. Any dis-synergies? So, I don't know that I would describe it that way. Certainly, we'll have our one-time cost, but we think that the combination of our two companies is going to be really good for all of our constituents, our customers, our employee partners, team partners, and our shareholders.\n\n[QA020] [S187] Unknown [V110] [3112]: Great, thank you. [S188] And then just to follow up on that, I'm curious if you're doing anything differently kind of in terms of managing the business or, you know, in timing of investments, things like that, up until the acquisition. [S189] And, you know, is that going to be a factor in terms of how we should think about, you know, incremental margins in the near term? [S190] I see the implied kind of [V111] 4Q guide, but just curious if you're, you know, just managing things a little bit differently.\n[S191] Todd Schneider [V112] [3142]: Yeah, thank you for the question, Faiza. [S192] Yeah, our incrementals that we're guiding towards in [V113] Q4 are very attractive. [S193] But that is not because of a change in approach. [S194] That's simply what we've been predicting and timing around for the year. [S195] And I wouldn't see a change in our approach in general as you speak to that. [S196] You know, we're investing for the long term. [S197] and we'll take our normal prudent approach as we think about investing for our business.\n\n[QA021] Unknown [3191]: Great, thanks so much. I wanted to follow up on employment trends you've been seeing and get an update versus last quarter. Are you seeing any changes in the conversion cycle or win rate for first-time buyers And within that specific verticals, call it healthcare or education, are they proving more resilient? And which areas are you seeing more weakness?\nTodd Schneider [3212]: Good question, Connor. Yeah, I wouldn't say we see any change in the conversion rate as it speaks to converting over that prospect base. As it relates to our verticals, we think we've chosen our verticals really, really well. And I think the employment data would defend that statement, meaning that if you look at healthcare, hospitality, education, state and local government, have all fared reasonably well as it relates to employment. And we think the future there looks bright as well.\n\n[QA022] [S198] Unknown [V114] [3270]: Hi. [S199] Good morning, guys. [S200] Just a quick one for me. [S201] Just on the FHIR ERP implementation, I think we had previously talked about like [V115] 100 basis points margin headwind next year for [V116] 27. [S202] I just wanted to sort of mark to market and see where we're at from an expense perspective if that's still the right way to think about it. [S203] Thank you. [S204] Just hard bits for this segment. [S205] Thank you.\n[S206] Scott Garula [V117] [3296]: Yeah, this is Scott. [S207] Thanks for the question. [S208] You know, as Todd mentioned, you know, some of the impact on next year's on the segment is going to be dependent on, you know, the rollout in the fire business. [S209] We're satisfied with our progress today. [S210] Still not clear on exactly when next fiscal year that will be fully rolled out, but the progress is good. [S211] If you looked at an entire year, it would be the [V118] 100 basis points that you referenced. [S212] And then depending on when we actually go live with the entire business, It will be something less than that because we're not anticipating us to be fully rolled out by June [V119] 1st.\n\n[QA023] Unknown [3350]: Got it. Okay. That's all. Thank you, guys. That's all I have.\nJared Mattingly [3364]: Thank you, Ross, and thank you for joining us this morning. We will issue our fourth quarter of fiscal 2026 financial results in July. We look forward to speaking with you again at that time.\n\nPERIOD OPTIONS (calendar metadata, not quote text):\n{\"FY2025\": \"2024-06-01 through 2025-05-31\", \"Q1_FY2025\": \"2024-06-01 through 2024-08-31\", \"Q2_FY2025\": \"2024-09-01 through 2024-11-30\", \"Q3_FY2025\": \"2024-12-01 through 2025-02-28\", \"Q4_FY2025\": \"2025-03-01 through 2025-05-31\", \"H1_FY2025\": \"2024-06-01 through 2024-11-30\", \"H2_FY2025\": \"2024-12-01 through 2025-05-31\", \"FY2026\": \"2025-06-01 through 2026-05-31\", \"Q1_FY2026\": \"2025-06-01 through 2025-08-31\", \"Q2_FY2026\": \"2025-09-01 through 2025-11-30\", \"Q3_FY2026\": \"2025-12-01 through 2026-02-28\", \"Q4_FY2026\": \"2026-03-01 through 2026-05-31\", \"H1_FY2026\": \"2025-06-01 through 2025-11-30\", \"H2_FY2026\": \"2025-12-01 through 2026-05-31\", \"FY2027\": \"2026-06-01 through 2027-05-31\", \"Q1_FY2027\": \"2026-06-01 through 2026-08-31\", \"Q2_FY2027\": \"2026-09-01 through 2026-11-30\", \"Q3_FY2027\": \"2026-12-01 through 2027-02-28\", \"Q4_FY2027\": \"2027-03-01 through 2027-05-31\", \"H1_FY2027\": \"2026-06-01 through 2026-11-30\", \"H2_FY2027\": \"2026-12-01 through 2027-05-31\", \"short_term\": \"short term\", \"medium_term\": \"medium term\", \"long_term\": \"long term\", \"undefined_horizon\": \"undefined horizon\", \"other_stated\": \"other stated\", \"several\": \"several\", \"unclear\": \"unclear\"}\nUNIT/SCALE OPTIONS:\n{\"usd\": \"US dollars per share or other single unit; scale 1.\", \"usd_cents\": \"US cents per share or other single unit; convert once to dollars, factor .01.\", \"m_usd_from_dollars\": \"Company money total printed in dollars; convert to millions, factor .000001.\", \"m_usd_from_thousands\": \"Company money total printed in thousands; convert to millions, factor .001.\", \"m_usd_from_millions\": \"Company money total printed in millions; factor 1.\", \"m_usd_from_billions\": \"Company money total printed in billions; convert to millions, factor 1000.\", \"percent\": \"Percentage level; scale 1.\", \"percent_yoy\": \"Percentage growth/change explicitly vs the same period a year earlier; scale 1.\", \"percent_sequential\": \"Percentage growth/change explicitly vs the previous comparable period; scale 1.\", \"percent_points\": \"Percentage-point amount; scale 1.\", \"basis_points\": \"Basis-point amount; scale 1.\", \"count\": \"Count, scale 1.\", \"count_thousand\": \"Count in thousands.\", \"count_million\": \"Count in millions.\", \"count_billion\": \"Count in billions.\", \"x\": \"A multiple, scale 1.\", \"other_stated\": \"Another source-supported currency, physical/time unit or scale; needs its exact evidence and official registry mapping.\", \"numberless\": \"No amount or evidenced growth-basis unit.\", \"unknown\": \"Unit, growth basis or scale cannot be established.\", \"several\": \"The target contains several different amounts/units.\"}",
+  "questions": {
+    "V13_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V13_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V13_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V13_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V13_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V13_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V13_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V13_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer conditions using FIELD_RULES."
+    },
+    "V13_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$11.21' at [V13], answer comparison_revision using FIELD_RULES."
+    },
+    "V14_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V14_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V14_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V14_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V14_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V14_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V14_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V14_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer conditions using FIELD_RULES."
+    },
+    "V14_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$11.24' at [V14], answer comparison_revision using FIELD_RULES."
+    },
+    "V15_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V15_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V15_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V15_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V15_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V15_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V15_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V15_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer conditions using FIELD_RULES."
+    },
+    "V15_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '8.4%' at [V15], answer comparison_revision using FIELD_RULES."
+    },
+    "V16_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V16_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V16_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V16_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V16_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V16_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V16_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V16_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer conditions using FIELD_RULES."
+    },
+    "V16_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '8.7%.' at [V16], answer comparison_revision using FIELD_RULES."
+    },
+    "V17_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V17_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V17_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V17_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V17_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V17_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V17_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V17_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer conditions using FIELD_RULES."
+    },
+    "V17_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$4.86' at [V17], answer comparison_revision using FIELD_RULES."
+    },
+    "V18_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V18_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V18_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V18_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V18_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V18_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V18_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V18_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer conditions using FIELD_RULES."
+    },
+    "V18_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$4.90,' at [V18], answer comparison_revision using FIELD_RULES."
+    },
+    "V19_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V19_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V19_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V19_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V19_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V19_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V19_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V19_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer conditions using FIELD_RULES."
+    },
+    "V19_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '10.5%' at [V19], answer comparison_revision using FIELD_RULES."
+    },
+    "V20_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V20_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V20_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V20_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V20_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V20_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V20_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V20_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer conditions using FIELD_RULES."
+    },
+    "V20_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '11.4%.' at [V20], answer comparison_revision using FIELD_RULES."
+    },
+    "V59_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V59_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V59_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V59_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V59_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V59_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V59_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V59_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer conditions using FIELD_RULES."
+    },
+    "V59_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '$101' at [V59], answer comparison_revision using FIELD_RULES."
+    },
+    "V61_form": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer form using FIELD_RULES.",
+      "criteria": {
+        "point": null,
+        "range": null,
+        "floor": null,
+        "ceiling": null,
+        "words": null,
+        "revision": null,
+        "qualification": null,
+        "reaffirmation": null,
+        "withdrawal": null,
+        "centre_tolerance": null,
+        "several": null,
+        "none": null,
+        "unclear": null
+      }
+    },
+    "V61_subject_scope": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer subject_scope using FIELD_RULES.",
+      "criteria": {
+        "source_company_total": null,
+        "source_company_part": null,
+        "other_subject": null,
+        "shared": null,
+        "unclear": null
+      }
+    },
+    "V61_period": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer period using FIELD_RULES.",
+      "criteria": {
+        "FY2025": null,
+        "Q1_FY2025": null,
+        "Q2_FY2025": null,
+        "Q3_FY2025": null,
+        "Q4_FY2025": null,
+        "H1_FY2025": null,
+        "H2_FY2025": null,
+        "FY2026": null,
+        "Q1_FY2026": null,
+        "Q2_FY2026": null,
+        "Q3_FY2026": null,
+        "Q4_FY2026": null,
+        "H1_FY2026": null,
+        "H2_FY2026": null,
+        "FY2027": null,
+        "Q1_FY2027": null,
+        "Q2_FY2027": null,
+        "Q3_FY2027": null,
+        "Q4_FY2027": null,
+        "H1_FY2027": null,
+        "H2_FY2027": null,
+        "short_term": null,
+        "medium_term": null,
+        "long_term": null,
+        "undefined_horizon": null,
+        "other_stated": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V61_unit_scale": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer unit_scale using FIELD_RULES.",
+      "criteria": {
+        "usd": null,
+        "usd_cents": null,
+        "m_usd_from_dollars": null,
+        "m_usd_from_thousands": null,
+        "m_usd_from_millions": null,
+        "m_usd_from_billions": null,
+        "percent": null,
+        "percent_yoy": null,
+        "percent_sequential": null,
+        "percent_points": null,
+        "basis_points": null,
+        "count": null,
+        "count_thousand": null,
+        "count_million": null,
+        "count_billion": null,
+        "x": null,
+        "other_stated": null,
+        "numberless": null,
+        "unknown": null,
+        "several": null
+      }
+    },
+    "V61_sign": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer sign using FIELD_RULES.",
+      "criteria": {
+        "positive": null,
+        "negative": null,
+        "zero": null,
+        "not_numeric": null,
+        "several": null,
+        "unclear": null
+      }
+    },
+    "V61_movement": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer movement using FIELD_RULES.",
+      "criteria": {
+        "introduced": null,
+        "raised": null,
+        "lowered": null,
+        "reaffirmed": null,
+        "withdrawn": null,
+        "not_stated": null,
+        "unclear": null
+      }
+    },
+    "V61_time_type": {
+      "type": "choice",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer time_type using FIELD_RULES.",
+      "criteria": {
+        "duration": null,
+        "instant": null,
+        "unclear": null
+      }
+    },
+    "V61_conditions": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer conditions using FIELD_RULES."
+    },
+    "V61_comparison_revision": {
+      "type": "noul",
+      "instructions": "For the exact source occurrence '20%,' at [V61], answer comparison_revision using FIELD_RULES."
+    }
+  },
+  "mode": "isolated",
+  "targets": [
+    {
+      "tag": "V13",
+      "passage": "PR002",
+      "start": 1393,
+      "end": 1399,
+      "text": "$11.21"
+    },
+    {
+      "tag": "V14",
+      "passage": "PR002",
+      "start": 1411,
+      "end": 1417,
+      "text": "$11.24"
+    },
+    {
+      "tag": "V15",
+      "passage": "PR002",
+      "start": 1450,
+      "end": 1454,
+      "text": "8.4%"
+    },
+    {
+      "tag": "V16",
+      "passage": "PR002",
+      "start": 1458,
+      "end": 1463,
+      "text": "8.7%."
+    },
+    {
+      "tag": "V17",
+      "passage": "PR002",
+      "start": 1517,
+      "end": 1522,
+      "text": "$4.86"
+    },
+    {
+      "tag": "V18",
+      "passage": "PR002",
+      "start": 1526,
+      "end": 1532,
+      "text": "$4.90,"
+    },
+    {
+      "tag": "V19",
+      "passage": "PR002",
+      "start": 1550,
+      "end": 1555,
+      "text": "10.5%"
+    },
+    {
+      "tag": "V20",
+      "passage": "PR002",
+      "start": 1559,
+      "end": 1565,
+      "text": "11.4%."
+    },
+    {
+      "tag": "V59",
+      "passage": "PR004",
+      "start": 2167,
+      "end": 2171,
+      "text": "$101"
+    },
+    {
+      "tag": "V61",
+      "passage": "PR004",
+      "start": 2217,
+      "end": 2221,
+      "text": "20%,"
+    }
+  ],
+  "note": "All ten actual current-amount outputs of binding_literal_tag, selected without answer key; represents six numeric forecasts, not ten records. Original field definitions/options retained once in shared state; exact target text and ID in each question. No field values or expected measure names in input.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "V13_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.007345712921815462,
+          "range": 0.7984574124588043,
+          "floor": 0.1821378696193152,
+          "ceiling": 0.0056933772384191285,
+          "words": 0.0006362964382913572,
+          "revision": 0.000863885880624686,
+          "qualification": 0.000863885880624686,
+          "reaffirmation": 0.0006202877023523045,
+          "withdrawal": 0.0004686653372379113,
+          "centre_tolerance": 0.000505896731034413,
+          "several": 0.0007045715771484896,
+          "none": 0.0006695645017152346,
+          "unclear": 0.00103257371261682
+        },
+        "choice": "range",
+        "confidence": 0.7816621968303712
+      },
+      "V13_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9955084162943081,
+          "source_company_part": 0.0026955055536616204,
+          "other_subject": 0.000430387402062443,
+          "shared": 0.0006307474758019166,
+          "unclear": 0.0007349432741659435
+        },
+        "choice": "source_company_total",
+        "confidence": 0.994385520367885
+      },
+      "V13_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.003452582422032659,
+          "Q1_FY2025": 0.0011840092588801083,
+          "Q2_FY2025": 0.00016643415766696545,
+          "Q3_FY2025": 0.0003574656822153117,
+          "Q4_FY2025": 0.00020933413968087707,
+          "H1_FY2025": 0.00034847207377127864,
+          "H2_FY2025": 0.0001939280253773449,
+          "FY2026": 0.9882909522749398,
+          "Q1_FY2026": 0.0001541852999893574,
+          "Q2_FY2026": 0.00018904910237239038,
+          "Q3_FY2026": 0.000256667494111526,
+          "Q4_FY2026": 0.0006759186650521432,
+          "H1_FY2026": 0.0003228260084546486,
+          "H2_FY2026": 0.001379601456013254,
+          "FY2027": 0.000314704205345389,
+          "Q1_FY2027": 0.0001195031710114651,
+          "Q2_FY2027": 0.00015816476901764118,
+          "Q3_FY2027": 0.00011649643941279682,
+          "Q4_FY2027": 0.0003228260084546486,
+          "H1_FY2027": 0.00012258726787573717,
+          "H2_FY2027": 0.00020406724802243576,
+          "short_term": 0.00012899654320970932,
+          "medium_term": 0.0001541852999893574,
+          "long_term": 0.00012258726787573717,
+          "undefined_horizon": 0.00014652450160394388,
+          "other_stated": 0.00034847207377127864,
+          "several": 6.161018905971793e-05,
+          "unclear": 0.0004978489547925197
+        },
+        "choice": "FY2026",
+        "confidence": 0.9878572838406783
+      },
+      "V13_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.010482238432031775,
+          "usd_cents": 0.0009554596459593001,
+          "m_usd_from_dollars": 0.0017611896327546302,
+          "m_usd_from_thousands": 0.0005595231103254293,
+          "m_usd_from_millions": 0.0020521280481578764,
+          "m_usd_from_billions": 0.9778519706917644,
+          "percent": 0.0003276601146662548,
+          "percent_yoy": 0.0006519531490350683,
+          "percent_sequential": 0.0003276601146662548,
+          "percent_points": 0.0002293473624595601,
+          "basis_points": 0.00023526674678238404,
+          "count": 0.0001918798047938731,
+          "count_thousand": 0.0010579812630897114,
+          "count_million": 0.00023526674678238404,
+          "count_billion": 0.0003194163966182407,
+          "x": 0.0003194163966182407,
+          "other_stated": 0.0007037455681585932,
+          "numberless": 0.00022357735354408174,
+          "unknown": 0.0010579812630897114,
+          "several": 0.000456338158702233
+        },
+        "choice": "m_usd_from_billions",
+        "confidence": 0.9766862849386994
+      },
+      "V13_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9794154922550967,
+          "negative": 0.0025201669975196284,
+          "zero": 0.0007417234582118447,
+          "not_numeric": 0.0011150760970471793,
+          "several": 0.0019532839411462903,
+          "unclear": 0.014254257250978312
+        },
+        "choice": "positive",
+        "confidence": 0.975298590706116
+      },
+      "V13_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.010976197316549054,
+          "raised": 0.9730569229287829,
+          "lowered": 0.001504086090659721,
+          "reaffirmed": 0.0020420651637718017,
+          "withdrawn": 0.00035195568141572754,
+          "not_stated": 0.0076828455450693054,
+          "unclear": 0.004385927273751557
+        },
+        "choice": "raised",
+        "confidence": 0.96856641008358
+      },
+      "V13_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9179095029830933,
+          "instant": 0.043135207146406174,
+          "unclear": 0.038955289870500565
+        },
+        "choice": "duration",
+        "confidence": 0.8768642544746399
+      },
+      "V13_conditions": {
+        "type": "noul",
+        "noul": 0.7814379814052883
+      },
+      "V13_comparison_revision": {
+        "type": "noul",
+        "noul": 0.0494614839553833
+      },
+      "V14_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.015997710470267434,
+          "range": 0.5117859488872684,
+          "floor": 0.0020308570007088558,
+          "ceiling": 0.46219208642219534,
+          "words": 0.0008759679020357944,
+          "revision": 0.0011017569748176478,
+          "qualification": 0.0009949933054104855,
+          "reaffirmation": 0.0006451954971224368,
+          "withdrawal": 0.0006964510643265527,
+          "centre_tolerance": 0.0006618474271975012,
+          "several": 0.0007328642028861354,
+          "none": 0.0008985754649434792,
+          "unclear": 0.0013857453808200342
+        },
+        "choice": "range",
+        "confidence": 0.471101444627874
+      },
+      "V14_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9955633123627051,
+          "source_company_part": 0.0025617187296785703,
+          "other_subject": 0.00044151945183403755,
+          "shared": 0.0006984656845393598,
+          "unclear": 0.0007349837712429083
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9944541404533813
+      },
+      "V14_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0031195649613699793,
+          "Q1_FY2025": 0.0010166525218544202,
+          "Q2_FY2025": 0.0001665168756404831,
+          "Q3_FY2025": 0.0003398736168376147,
+          "Q4_FY2025": 0.00020416867428325422,
+          "H1_FY2025": 0.0003148606217478932,
+          "H2_FY2025": 0.00019402441815076935,
+          "FY2026": 0.9887821891683456,
+          "Q1_FY2026": 0.00015824338455427514,
+          "Q2_FY2026": 0.00019402441815076935,
+          "Q3_FY2026": 0.0002771955226551128,
+          "Q4_FY2026": 0.0009181358849086442,
+          "H1_FY2026": 0.0002771955226551128,
+          "H2_FY2026": 0.00138028717435495,
+          "FY2027": 0.0003668736467718345,
+          "Q1_FY2027": 0.0001226481934600445,
+          "Q2_FY2027": 0.00013931355545830916,
+          "Q3_FY2027": 0.00011655434636092046,
+          "Q4_FY2027": 0.00028434953494567926,
+          "H1_FY2027": 0.0001226481934600445,
+          "H2_FY2027": 0.00019402441815076935,
+          "short_term": 0.00011655434636092046,
+          "medium_term": 0.00015426193704454026,
+          "long_term": 0.00011956256909341491,
+          "undefined_horizon": 0.00013931355545830916,
+          "other_stated": 0.000299216585880814,
+          "several": 5.426709477861014e-05,
+          "unclear": 0.00042747925726688984
+        },
+        "choice": "FY2026",
+        "confidence": 0.9883667146930991
+      },
+      "V14_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.012178520324466022,
+          "usd_cents": 0.0009053610117154191,
+          "m_usd_from_dollars": 0.002046192861455482,
+          "m_usd_from_thousands": 0.0006500676120241801,
+          "m_usd_from_millions": 0.0026400402522455636,
+          "m_usd_from_billions": 0.9750243296691062,
+          "percent": 0.0003526671085519113,
+          "percent_yoy": 0.0006668449815564581,
+          "percent_sequential": 0.0003905086092175823,
+          "percent_points": 0.0002664616168145522,
+          "basis_points": 0.0002597576364589863,
+          "count": 0.00020132788141453116,
+          "count_thousand": 0.0011100767246766587,
+          "count_million": 0.0002597576364589863,
+          "count_billion": 0.00040058709156486847,
+          "x": 0.00037110575391012177,
+          "other_stated": 0.0006177685868887016,
+          "numberless": 0.0002345864307823315,
+          "unknown": 0.0010025068666765235,
+          "several": 0.0004215313440148638
+        },
+        "choice": "m_usd_from_billions",
+        "confidence": 0.9737098207043223
+      },
+      "V14_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9800122586625405,
+          "negative": 0.002396409158769819,
+          "zero": 0.0008011352396359613,
+          "not_numeric": 0.0014395708865731435,
+          "several": 0.0010876839584951592,
+          "unclear": 0.014262942093985391
+        },
+        "choice": "positive",
+        "confidence": 0.9760147103950486
+      },
+      "V14_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.01207620531084279,
+          "raised": 0.9668319313802093,
+          "lowered": 0.0020290012830514706,
+          "reaffirmed": 0.0023641805967602966,
+          "withdrawn": 0.0004179895303174374,
+          "not_stated": 0.010364107297705845,
+          "unclear": 0.005916584601112889
+        },
+        "choice": "raised",
+        "confidence": 0.9613039199435773
+      },
+      "V14_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8890819946881683,
+          "instant": 0.05969028041458993,
+          "unclear": 0.05122772489724178
+        },
+        "choice": "duration",
+        "confidence": 0.8336229920322524
+      },
+      "V14_conditions": {
+        "type": "noul",
+        "noul": 0.6823168396949768
+      },
+      "V14_comparison_revision": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "V15_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.014886365237712508,
+          "range": 0.9237304326672126,
+          "floor": 0.048066568236670555,
+          "ceiling": 0.00376013153054131,
+          "words": 0.0006647950654782995,
+          "revision": 0.000815115292297793,
+          "qualification": 0.003956723701571547,
+          "reaffirmation": 0.0007176073384603149,
+          "withdrawal": 0.00046532694142038957,
+          "centre_tolerance": 0.000528554979882056,
+          "several": 0.0008577322613015652,
+          "none": 0.0006480693280304977,
+          "unclear": 0.0009025774194205568
+        },
+        "choice": "range",
+        "confidence": 0.9173746353894802
+      },
+      "V15_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9873157306895157,
+          "source_company_part": 0.006690237843562552,
+          "other_subject": 0.0008071055864129153,
+          "shared": 0.0031149383666023733,
+          "unclear": 0.002071987513906404
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9841446633618947
+      },
+      "V15_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.005433270947788145,
+          "Q1_FY2025": 0.0013041957950542006,
+          "Q2_FY2025": 0.00019789253230302116,
+          "Q3_FY2025": 0.0005770562995865006,
+          "Q4_FY2025": 0.00026867427588121506,
+          "H1_FY2025": 0.00031305784451157183,
+          "H2_FY2025": 0.0002553250199372029,
+          "FY2026": 0.9831207931940285,
+          "Q1_FY2026": 0.00019291350782961236,
+          "Q2_FY2026": 0.00023058312921801844,
+          "Q3_FY2026": 0.0004472537561328559,
+          "Q4_FY2026": 0.0009606077743433159,
+          "H1_FY2026": 0.00030518124304654184,
+          "H2_FY2026": 0.0022845656498399697,
+          "FY2027": 0.00036477324917777855,
+          "Q1_FY2027": 0.00014209093580864934,
+          "Q2_FY2027": 0.00019789253230302116,
+          "Q3_FY2027": 0.0001495199349701173,
+          "Q4_FY2027": 0.0004250316747340267,
+          "H1_FY2027": 0.00016139800702363172,
+          "H2_FY2027": 0.0002756084081244726,
+          "short_term": 0.00016139800702363172,
+          "medium_term": 0.00019789253230302116,
+          "long_term": 0.0001495199349701173,
+          "undefined_horizon": 0.00023653439612796902,
+          "other_stated": 0.00031305784451157183,
+          "several": 9.451568146540953e-05,
+          "unclear": 0.0012393958919559623
+        },
+        "choice": "FY2026",
+        "confidence": 0.9824956373863999
+      },
+      "V15_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.007821249760109786,
+          "usd_cents": 0.004698378955960222,
+          "m_usd_from_dollars": 0.001156900541429954,
+          "m_usd_from_thousands": 0.003831924630195983,
+          "m_usd_from_millions": 0.001099419195823124,
+          "m_usd_from_billions": 0.0017392361735032156,
+          "percent": 0.128997117025667,
+          "percent_yoy": 0.8079060300096866,
+          "percent_sequential": 0.00218754075034659,
+          "percent_points": 0.0016112363632546018,
+          "basis_points": 0.001099419195823124,
+          "count": 0.0007501832427511556,
+          "count_thousand": 0.0023613218171356165,
+          "count_million": 0.0018774033486941065,
+          "count_billion": 0.001099419195823124,
+          "x": 0.001127793684232457,
+          "other_stated": 0.001248806945370776,
+          "numberless": 0.0015311810390523078,
+          "unknown": 0.02657440113232415,
+          "several": 0.001281036992816065
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.797795821062828
+      },
+      "V15_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9832051768937713,
+          "negative": 0.003101971350807193,
+          "zero": 0.0007638107925444391,
+          "not_numeric": 0.0012395023837985966,
+          "several": 0.0021712417605727905,
+          "unclear": 0.009518296818505695
+        },
+        "choice": "positive",
+        "confidence": 0.9798462122725256
+      },
+      "V15_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.020643484593578842,
+          "raised": 0.9435021026243227,
+          "lowered": 0.0020835651837926112,
+          "reaffirmed": 0.00404141438832264,
+          "withdrawn": 0.000500136713414971,
+          "not_stated": 0.019617798515982745,
+          "unclear": 0.00961149798058557
+        },
+        "choice": "raised",
+        "confidence": 0.9340857863950431
+      },
+      "V15_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8487269250723462,
+          "instant": 0.05145930852197368,
+          "unclear": 0.09981376640568015
+        },
+        "choice": "duration",
+        "confidence": 0.7730903876085192
+      },
+      "V15_conditions": {
+        "type": "noul",
+        "noul": 0.17815773454543551
+      },
+      "V15_comparison_revision": {
+        "type": "noul",
+        "noul": 0.0725520227325574
+      },
+      "V16_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.039734502517293394,
+          "range": 0.6896115686323375,
+          "floor": 0.0032708500700283634,
+          "ceiling": 0.24885631959684523,
+          "words": 0.0016862982944935046,
+          "revision": 0.0019154304083818699,
+          "qualification": 0.006029126771217067,
+          "reaffirmation": 0.0012107965675569523,
+          "withdrawal": 0.000987506406966294,
+          "centre_tolerance": 0.0011216875130324179,
+          "several": 0.0016438714317214042,
+          "none": 0.0015228908909642276,
+          "unclear": 0.002409150899161724
+        },
+        "choice": "range",
+        "confidence": 0.6637458660183656
+      },
+      "V16_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9849658333452457,
+          "source_company_part": 0.007023273730477859,
+          "other_subject": 0.0010931818171044472,
+          "shared": 0.0038101848991182368,
+          "unclear": 0.0031075262080537316
+        },
+        "choice": "source_company_total",
+        "confidence": 0.981207291681557
+      },
+      "V16_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.007696210184710589,
+          "Q1_FY2025": 0.0019439774899781537,
+          "Q2_FY2025": 0.00031039219921469877,
+          "Q3_FY2025": 0.0010022244170518218,
+          "Q4_FY2025": 0.0004214123751162363,
+          "H1_FY2025": 0.0005577476686041293,
+          "H2_FY2025": 0.0003805761880123555,
+          "FY2026": 0.9747495984923416,
+          "Q1_FY2026": 0.000302582653615757,
+          "Q2_FY2026": 0.0003525677443144477,
+          "Q3_FY2026": 0.0007381898660784252,
+          "Q4_FY2026": 0.001360697734777256,
+          "H1_FY2026": 0.0004214123751162363,
+          "H2_FY2026": 0.0030752928511875006,
+          "FY2027": 0.0006020559710549261,
+          "Q1_FY2027": 0.00022861972240313907,
+          "Q2_FY2027": 0.0003436973643185178,
+          "Q3_FY2027": 0.00022861972240313907,
+          "Q4_FY2027": 0.0006020559710549261,
+          "H1_FY2027": 0.00024678183301179995,
+          "H2_FY2027": 0.000390398554102263,
+          "short_term": 0.0002531506810985412,
+          "medium_term": 0.000302582653615757,
+          "long_term": 0.00021179429223850766,
+          "undefined_horizon": 0.0003616670549925919,
+          "other_stated": 0.000516700100424108,
+          "several": 0.0001338811426047207,
+          "unclear": 0.0022651126965579295
+        },
+        "choice": "FY2026",
+        "confidence": 0.9738143984365023
+      },
+      "V16_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.008089951086372758,
+          "usd_cents": 0.004388866357763809,
+          "m_usd_from_dollars": 0.0010534986838344794,
+          "m_usd_from_thousands": 0.004388866357763809,
+          "m_usd_from_millions": 0.0010269933633293424,
+          "m_usd_from_billions": 0.0018930460582670598,
+          "percent": 0.10882254721257334,
+          "percent_yoy": 0.8356626701697748,
+          "percent_sequential": 0.0017537267390386737,
+          "percent_points": 0.0016246613963975573,
+          "basis_points": 0.0011371905787993513,
+          "count": 0.00075643353967075,
+          "count_thousand": 0.0020961716755128366,
+          "count_million": 0.0019419030011513614,
+          "count_billion": 0.0011371905787993513,
+          "x": 0.0011371905787993513,
+          "other_stated": 0.0011966467860691746,
+          "numberless": 0.0015439383245719387,
+          "unknown": 0.019239927856859643,
+          "several": 0.0011085796546505913
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.8270133370208156
+      },
+      "V16_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9806788693777938,
+          "negative": 0.002940272198758684,
+          "zero": 0.0008877011207605145,
+          "not_numeric": 0.0017662801690579144,
+          "several": 0.0014777287072310524,
+          "unclear": 0.012249148426397983
+        },
+        "choice": "positive",
+        "confidence": 0.9768146432533525
+      },
+      "V16_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.019631263820564068,
+          "raised": 0.9441496887891959,
+          "lowered": 0.002138806174938304,
+          "reaffirmed": 0.0032983772323462966,
+          "withdrawn": 0.0005004799809025982,
+          "not_stated": 0.019631263820564068,
+          "unclear": 0.0106501201814887
+        },
+        "choice": "raised",
+        "confidence": 0.9348413035873951
+      },
+      "V16_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8482499592266983,
+          "instant": 0.056948891923593106,
+          "unclear": 0.09480114884970861
+        },
+        "choice": "duration",
+        "confidence": 0.7723749388400475
+      },
+      "V16_conditions": {
+        "type": "noul",
+        "noul": 0.17081776987830832
+      },
+      "V16_comparison_revision": {
+        "type": "noul",
+        "noul": 0.05716518099735748
+      },
+      "V17_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.01609677097419002,
+          "range": 0.8146376369866686,
+          "floor": 0.1515589945950483,
+          "ceiling": 0.009189204301186419,
+          "words": 0.0008813920108430253,
+          "revision": 0.0009759660623602005,
+          "qualification": 0.0010806880946473037,
+          "reaffirmation": 0.0010806880946473037,
+          "withdrawal": 0.0007007635294316509,
+          "centre_tolerance": 0.0006831328382038515,
+          "several": 0.0009514114541619554,
+          "none": 0.0009041395041859973,
+          "unclear": 0.001259211554425421
+        },
+        "choice": "range",
+        "confidence": 0.7991907734022243
+      },
+      "V17_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.994921884648601,
+          "source_company_part": 0.002560066972144826,
+          "other_subject": 0.0005410046484243452,
+          "shared": 0.0009005937307141121,
+          "unclear": 0.001076450000115746
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9936523558107513
+      },
+      "V17_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0038183213808235133,
+          "Q1_FY2025": 0.000786602905953047,
+          "Q2_FY2025": 0.00015796915432871205,
+          "Q3_FY2025": 0.00031431501316673925,
+          "Q4_FY2025": 0.00019868720912182616,
+          "H1_FY2025": 0.00020907524088262168,
+          "H2_FY2025": 0.0001749192859330906,
+          "FY2026": 0.9870686817361916,
+          "Q1_FY2026": 0.00015796915432871205,
+          "Q2_FY2026": 0.000193688363557703,
+          "Q3_FY2026": 0.00027671515778770496,
+          "Q4_FY2026": 0.0013094335660184875,
+          "H1_FY2026": 0.0002697534622921013,
+          "H2_FY2026": 0.0022937395785748173,
+          "FY2027": 0.0003307484643916333,
+          "Q1_FY2027": 0.0001134251239626332,
+          "Q2_FY2027": 0.00014266152674599674,
+          "Q3_FY2027": 0.00010507751112906092,
+          "Q4_FY2027": 0.0002838570642284879,
+          "H1_FY2027": 0.0001134251239626332,
+          "H2_FY2027": 0.00020381505743377026,
+          "short_term": 0.00010507751112906092,
+          "medium_term": 0.0001321622310247005,
+          "long_term": 0.00010507751112906092,
+          "undefined_horizon": 0.00014634327826553188,
+          "other_stated": 0.00019868720912182616,
+          "several": 7.939249651313397e-05,
+          "unclear": 0.0007103786820017934
+        },
+        "choice": "FY2026",
+        "confidence": 0.9865897440227172
+      },
+      "V17_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.9757477492016168,
+          "usd_cents": 0.007704091140632289,
+          "m_usd_from_dollars": 0.0027801328845214516,
+          "m_usd_from_thousands": 0.0009780096439221215,
+          "m_usd_from_millions": 0.0012301009658897818,
+          "m_usd_from_billions": 0.0018492825046742417,
+          "percent": 0.0007976490765936392,
+          "percent_yoy": 0.0007203544263557393,
+          "percent_sequential": 0.0004791637110884491,
+          "percent_points": 0.0002599503456011318,
+          "basis_points": 0.0003713812564099452,
+          "count": 0.0003107100444868331,
+          "count_thousand": 0.0012301009658897818,
+          "count_million": 0.0004218440962295237,
+          "count_billion": 0.0004218440962295237,
+          "x": 0.0003907983422637588,
+          "other_stated": 0.0011991524187162572,
+          "numberless": 0.0003187290518738809,
+          "unknown": 0.0021547733011173555,
+          "several": 0.0006341825258875665
+        },
+        "choice": "usd",
+        "confidence": 0.9744713149490702
+      },
+      "V17_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9854999441597596,
+          "negative": 0.002409827958303674,
+          "zero": 0.0006740095735269301,
+          "not_numeric": 0.0008264132990870367,
+          "several": 0.0015233189730466635,
+          "unclear": 0.009066486036276081
+        },
+        "choice": "positive",
+        "confidence": 0.9825999329917116
+      },
+      "V17_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.011455080931166378,
+          "raised": 0.9650543907553034,
+          "lowered": 0.0019246429445829046,
+          "reaffirmed": 0.002483215251631651,
+          "withdrawn": 0.00038651570829554167,
+          "not_stated": 0.011455080931166378,
+          "unclear": 0.007241073477853715
+        },
+        "choice": "raised",
+        "confidence": 0.9592301225478539
+      },
+      "V17_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8390443796061817,
+          "instant": 0.08047781019690915,
+          "unclear": 0.08047781019690915
+        },
+        "choice": "duration",
+        "confidence": 0.7585665694092726
+      },
+      "V17_conditions": {
+        "type": "noul",
+        "noul": 0.9455203692999359
+      },
+      "V17_comparison_revision": {
+        "type": "noul",
+        "noul": 0.03691192992633764
+      },
+      "V18_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.04491790173320165,
+          "range": 0.49278897715337133,
+          "floor": 0.0034254138147875473,
+          "ceiling": 0.44503642020867235,
+          "words": 0.0014774802146218103,
+          "revision": 0.0017659832127751743,
+          "qualification": 0.0023976360719828705,
+          "reaffirmation": 0.0010608614623165726,
+          "withdrawal": 0.0010608614623165726,
+          "centre_tolerance": 0.001034170340656926,
+          "several": 0.0013687452823384258,
+          "none": 0.0015547286455338304,
+          "unclear": 0.0021108203974249053
+        },
+        "choice": "range",
+        "confidence": 0.45052139191615226
+      },
+      "V18_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9952617076112178,
+          "source_company_part": 0.002312778540420504,
+          "other_subject": 0.0005411894669280087,
+          "shared": 0.0008345992442085788,
+          "unclear": 0.0010497251372250703
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9940771345140222
+      },
+      "V18_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.0038122816216212474,
+          "Q1_FY2025": 0.0008696283321688618,
+          "Q2_FY2025": 0.00019338200359905297,
+          "Q3_FY2025": 0.0004048942371498356,
+          "Q4_FY2025": 0.00022532770451501132,
+          "H1_FY2025": 0.00026255043885142516,
+          "H2_FY2025": 0.00019837293183363404,
+          "FY2026": 0.98550742132119,
+          "Q1_FY2026": 0.00018377369476843403,
+          "Q2_FY2026": 0.00021413216019056867,
+          "Q3_FY2026": 0.00034749074807420663,
+          "Q4_FY2026": 0.0016029768233261298,
+          "H1_FY2026": 0.00028340807588151816,
+          "H2_FY2026": 0.002290113673545995,
+          "FY2027": 0.00041534419959627294,
+          "Q1_FY2027": 0.00013195319311015843,
+          "Q2_FY2027": 0.00016596538226352367,
+          "Q3_FY2027": 0.000138852153787986,
+          "Q4_FY2027": 0.0003059223901401886,
+          "H1_FY2027": 0.00013535885035933818,
+          "H2_FY2027": 0.00024322805787749027,
+          "short_term": 0.00013195319311015843,
+          "medium_term": 0.00017024888373923691,
+          "long_term": 0.0001286334649145664,
+          "undefined_horizon": 0.00018377369476843403,
+          "other_stated": 0.00024322805787749027,
+          "several": 8.77722863568741e-05,
+          "unclear": 0.001122012425382389
+        },
+        "choice": "FY2026",
+        "confidence": 0.9849706591479007
+      },
+      "V18_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.9743515018860495,
+          "usd_cents": 0.008518543410745373,
+          "m_usd_from_dollars": 0.003403885183604361,
+          "m_usd_from_thousands": 0.000976610150134498,
+          "m_usd_from_millions": 0.0011379404881739774,
+          "m_usd_from_billions": 0.0013601426540274996,
+          "percent": 0.0011974365196635772,
+          "percent_yoy": 0.0011974365196635772,
+          "percent_sequential": 0.0004908269802776406,
+          "percent_points": 0.00029484969494597205,
+          "basis_points": 0.000390239132624851,
+          "count": 0.0003102654415386119,
+          "count_thousand": 0.0009520392985665864,
+          "count_million": 0.00043211212473034016,
+          "count_billion": 0.00043211212473034016,
+          "x": 0.0003804209841594908,
+          "other_stated": 0.0011379404881739774,
+          "numberless": 0.00032648718964185255,
+          "unknown": 0.002151689804902888,
+          "several": 0.0005575199236451713
+        },
+        "choice": "usd",
+        "confidence": 0.9730015809326836
+      },
+      "V18_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9857166396962608,
+          "negative": 0.0028085354049853344,
+          "zero": 0.0006406617846545434,
+          "not_numeric": 0.0011222495896117664,
+          "several": 0.001094014565030393,
+          "unclear": 0.008617898959457132
+        },
+        "choice": "positive",
+        "confidence": 0.982859967635513
+      },
+      "V18_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.013968603300791029,
+          "raised": 0.9597881084276403,
+          "lowered": 0.0022303442142047334,
+          "reaffirmed": 0.0027346590325121323,
+          "withdrawn": 0.0004256532308351289,
+          "not_stated": 0.013274551096205877,
+          "unclear": 0.007578080697810799
+        },
+        "choice": "raised",
+        "confidence": 0.9530861264989137
+      },
+      "V18_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8055700719771539,
+          "instant": 0.09473834257377939,
+          "unclear": 0.09969158544906664
+        },
+        "choice": "duration",
+        "confidence": 0.7083551079657309
+      },
+      "V18_conditions": {
+        "type": "noul",
+        "noul": 0.9428348190026425
+      },
+      "V18_comparison_revision": {
+        "type": "noul",
+        "noul": 0.028848536008237943
+      },
+      "V19_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.02709000834829902,
+          "range": 0.8666409545216741,
+          "floor": 0.07133986804325806,
+          "ceiling": 0.008828510543813473,
+          "words": 0.001483335820420309,
+          "revision": 0.0017283743313236304,
+          "qualification": 0.014696549027690398,
+          "reaffirmation": 0.0012097851046898754,
+          "withdrawal": 0.000937657566120824,
+          "centre_tolerance": 0.001065065391466092,
+          "several": 0.001642498249799137,
+          "none": 0.0013741692263710872,
+          "unclear": 0.001963223825073932
+        },
+        "choice": "range",
+        "confidence": 0.8555277007318135
+      },
+      "V19_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9905859398430606,
+          "source_company_part": 0.0038319254029318445,
+          "other_subject": 0.0007313092038486295,
+          "shared": 0.0025489114982227873,
+          "unclear": 0.0023019140519361264
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9882324248038257
+      },
+      "V19_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.005997475819911501,
+          "Q1_FY2025": 0.0012355257095917232,
+          "Q2_FY2025": 0.0002678353017828096,
+          "Q3_FY2025": 0.0006702830502690868,
+          "Q4_FY2025": 0.00033687238830779347,
+          "H1_FY2025": 0.00035448535882497747,
+          "H2_FY2025": 0.00028911250311850536,
+          "FY2026": 0.9800508379365747,
+          "Q1_FY2026": 0.0002240801040538257,
+          "Q2_FY2026": 0.00028911250311850536,
+          "Q3_FY2026": 0.0005466722017941403,
+          "Q4_FY2026": 0.0011741378089465866,
+          "H1_FY2026": 0.00036363417792260893,
+          "H2_FY2026": 0.002521801752346817,
+          "FY2027": 0.0004812768488245373,
+          "Q1_FY2027": 0.00016504647069094883,
+          "Q2_FY2027": 0.00024188112898979432,
+          "Q3_FY2027": 0.00018747285143590222,
+          "Q4_FY2027": 0.00044585733819497677,
+          "H1_FY2027": 0.00018747285143590222,
+          "H2_FY2027": 0.00033687238830779347,
+          "short_term": 0.0001923111017853821,
+          "medium_term": 0.000229863093935638,
+          "long_term": 0.0001736756408452392,
+          "undefined_horizon": 0.00030422824832432354,
+          "other_stated": 0.00032013462826521895,
+          "several": 0.00013460925983372265,
+          "unclear": 0.0022774315325670602
+        },
+        "choice": "FY2026",
+        "confidence": 0.9793119800823737
+      },
+      "V19_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.011925937869054111,
+          "usd_cents": 0.00430364569599562,
+          "m_usd_from_dollars": 0.001143888649591762,
+          "m_usd_from_thousands": 0.0040898159242232016,
+          "m_usd_from_millions": 0.001234761273453812,
+          "m_usd_from_billions": 0.001719674563076742,
+          "percent": 0.11815950177877847,
+          "percent_yoy": 0.8194357844512936,
+          "percent_sequential": 0.00210851775107728,
+          "percent_points": 0.0016764078832072562,
+          "basis_points": 0.0011734108727507477,
+          "count": 0.0007417454203121199,
+          "count_thousand": 0.0020037549185413753,
+          "count_million": 0.0018562878084802084,
+          "count_billion": 0.0010870537657853543,
+          "x": 0.0012036956161653048,
+          "other_stated": 0.0013328524612070394,
+          "numberless": 0.0016764078832072562,
+          "unknown": 0.02198296676420698,
+          "several": 0.001143888649591762
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.8099324046855723
+      },
+      "V19_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9840036996257382,
+          "negative": 0.0029502418447202106,
+          "zero": 0.0007644314483902651,
+          "not_numeric": 0.0012725254134606902,
+          "several": 0.0024061715253606668,
+          "unclear": 0.008602930142329988
+        },
+        "choice": "positive",
+        "confidence": 0.9808044395508858
+      },
+      "V19_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.021228571569073075,
+          "raised": 0.9220360772746552,
+          "lowered": 0.003061076978699777,
+          "reaffirmed": 0.00460189563907894,
+          "withdrawn": 0.000630605185844802,
+          "not_stated": 0.03358272711484275,
+          "unclear": 0.014859046237805488
+        },
+        "choice": "raised",
+        "confidence": 0.9090420901537644
+      },
+      "V19_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.7512079701187602,
+          "instant": 0.06847289408662599,
+          "unclear": 0.18031913579461384
+        },
+        "choice": "duration",
+        "confidence": 0.6268119551781403
+      },
+      "V19_conditions": {
+        "type": "noul",
+        "noul": 0.4366391469049708
+      },
+      "V19_comparison_revision": {
+        "type": "noul",
+        "noul": 0.04071138259833601
+      },
+      "V20_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.05845075173149719,
+          "range": 0.6412562620106148,
+          "floor": 0.004572461241668748,
+          "ceiling": 0.2696335222968277,
+          "words": 0.002418187398171816,
+          "revision": 0.002817659387685037,
+          "qualification": 0.0084283702904538,
+          "reaffirmation": 0.001692623378124052,
+          "withdrawal": 0.0014526534301735627,
+          "centre_tolerance": 0.001650038068080891,
+          "several": 0.0022980381621649673,
+          "none": 0.002128913229367376,
+          "unclear": 0.003200519375170077
+        },
+        "choice": "range",
+        "confidence": 0.6113609505114994
+      },
+      "V20_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9912185932082864,
+          "source_company_part": 0.0038343708605719736,
+          "other_subject": 0.0006779206805419973,
+          "shared": 0.002080178284070986,
+          "unclear": 0.002188936966528614
+        },
+        "choice": "source_company_total",
+        "confidence": 0.989023241510358
+      },
+      "V20_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.00630688670764881,
+          "Q1_FY2025": 0.0016763400072218402,
+          "Q2_FY2025": 0.0002963787498913791,
+          "Q3_FY2025": 0.0007417154340787139,
+          "Q4_FY2025": 0.0003199234851874544,
+          "H1_FY2025": 0.0004343529866350345,
+          "H2_FY2025": 0.0002963787498913791,
+          "FY2026": 0.9794043825345146,
+          "Q1_FY2026": 0.00024172158540569123,
+          "Q2_FY2026": 0.00028165299848999015,
+          "Q3_FY2026": 0.0005604114466158767,
+          "Q4_FY2026": 0.001173363336272971,
+          "H1_FY2026": 0.0003453386653315047,
+          "H2_FY2026": 0.002162848218624491,
+          "FY2027": 0.0005604114466158767,
+          "Q1_FY2027": 0.00020223247775453325,
+          "Q2_FY2027": 0.00026765862629799946,
+          "Q3_FY2027": 0.00019714445915028947,
+          "Q4_FY2027": 0.0004933723493468052,
+          "H1_FY2027": 0.00020223247775453325,
+          "H2_FY2027": 0.0003281802995314547,
+          "short_term": 0.00020223247775453325,
+          "medium_term": 0.0002297114685828993,
+          "long_term": 0.00018263545851141514,
+          "undefined_horizon": 0.0002745665364001695,
+          "other_stated": 0.0003366501830036685,
+          "several": 0.00011842861486161163,
+          "unclear": 0.002162848218624491
+        },
+        "choice": "FY2026",
+        "confidence": 0.9786415818876447
+      },
+      "V20_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.013743702907307682,
+          "usd_cents": 0.0038440044655653686,
+          "m_usd_from_dollars": 0.0011605476114552855,
+          "m_usd_from_thousands": 0.005778913314633272,
+          "m_usd_from_millions": 0.0011905003396544464,
+          "m_usd_from_billions": 0.0017897475709773793,
+          "percent": 0.12940375794087294,
+          "percent_yoy": 0.810452862742053,
+          "percent_sequential": 0.0020854035782168203,
+          "percent_points": 0.0017008229207588473,
+          "basis_points": 0.0011905003396544464,
+          "count": 0.0007336141907387726,
+          "count_thousand": 0.0020329363616998675,
+          "count_million": 0.0018359387216627283,
+          "count_billion": 0.0011605476114552855,
+          "x": 0.0011605476114552855,
+          "other_stated": 0.0013522639544933607,
+          "numberless": 0.0015360079442031747,
+          "unknown": 0.01685136772508068,
+          "several": 0.0009960121480613365
+        },
+        "choice": "percent_yoy",
+        "confidence": 0.8004766976232136
+      },
+      "V20_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9868723539514088,
+          "negative": 0.0031135395454001285,
+          "zero": 0.0007666593018470095,
+          "not_numeric": 0.0010952972070630887,
+          "several": 0.0007473706210431228,
+          "unclear": 0.007404779373237803
+        },
+        "choice": "positive",
+        "confidence": 0.9842468247416906
+      },
+      "V20_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.02051975347913954,
+          "raised": 0.9378470237083764,
+          "lowered": 0.002413205737046737,
+          "reaffirmed": 0.0036279133244227083,
+          "withdrawn": 0.000550482227477176,
+          "not_stated": 0.023909488489159282,
+          "unclear": 0.011132133034378208
+        },
+        "choice": "raised",
+        "confidence": 0.9274881943264389
+      },
+      "V20_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.8231514385658711,
+          "instant": 0.0581532844098924,
+          "unclear": 0.11869527702423643
+        },
+        "choice": "duration",
+        "confidence": 0.7347271578488067
+      },
+      "V20_conditions": {
+        "type": "noul",
+        "noul": 0.6598250466533019
+      },
+      "V20_comparison_revision": {
+        "type": "noul",
+        "noul": 0.042748921955995896
+      },
+      "V59_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.9198694371123983,
+          "range": 0.017273000520217206,
+          "floor": 0.0015744404322976778,
+          "ceiling": 0.0032135525994763823,
+          "words": 0.0011020382555126888,
+          "revision": 0.0005263457164202603,
+          "qualification": 0.041079534052670647,
+          "reaffirmation": 0.000832657346845754,
+          "withdrawal": 0.0005978649419854935,
+          "centre_tolerance": 0.008462696849812816,
+          "several": 0.0006791021106835344,
+          "none": 0.0027579545079063727,
+          "unclear": 0.0020313755537728737
+        },
+        "choice": "point",
+        "confidence": 0.9131918902050982
+      },
+      "V59_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9930006468845276,
+          "source_company_part": 0.003650408751103487,
+          "other_subject": 0.0005131314531142898,
+          "shared": 0.0010473402524529588,
+          "unclear": 0.0017884726588016492
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9912508086056595
+      },
+      "V59_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.00344791096612522,
+          "Q1_FY2025": 0.00033924512275335854,
+          "Q2_FY2025": 0.00017049857217114463,
+          "Q3_FY2025": 0.00028382371390860687,
+          "Q4_FY2025": 0.00016202710148139916,
+          "H1_FY2025": 0.00019866406762592012,
+          "H2_FY2025": 0.0002090508906103735,
+          "FY2026": 0.9869537316656257,
+          "Q1_FY2026": 0.00017489891151444917,
+          "Q2_FY2026": 0.00019866406762592012,
+          "Q3_FY2026": 0.00034800057408487534,
+          "Q4_FY2026": 0.000870904236084107,
+          "H1_FY2026": 0.0005231693217786924,
+          "H2_FY2026": 0.0022934725410542938,
+          "FY2027": 0.00029866326313415505,
+          "Q1_FY2027": 0.00012242139894293674,
+          "Q2_FY2027": 0.00023148211623302806,
+          "Q3_FY2027": 0.00012882200101111755,
+          "Q4_FY2027": 0.0004971752923411551,
+          "H1_FY2027": 0.00013555738446001018,
+          "H2_FY2027": 0.00023148211623302806,
+          "short_term": 0.00012558105647549154,
+          "medium_term": 0.00015010288311787846,
+          "long_term": 0.00012882200101111755,
+          "undefined_horizon": 0.00023148211623302806,
+          "other_stated": 0.0005505226165908942,
+          "several": 7.738594724363335e-05,
+          "unclear": 0.0009164380545284303
+        },
+        "choice": "FY2026",
+        "confidence": 0.9864705365421303
+      },
+      "V59_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.0068073066891702,
+          "usd_cents": 0.000956891026155641,
+          "m_usd_from_dollars": 0.011924384115873089,
+          "m_usd_from_thousands": 0.0015528304393877474,
+          "m_usd_from_millions": 0.95467798038231,
+          "m_usd_from_billions": 0.0035095291129885594,
+          "percent": 0.0005896589235495914,
+          "percent_yoy": 0.0009328162813672491,
+          "percent_sequential": 0.000687067224213932,
+          "percent_points": 0.0005325192032738683,
+          "basis_points": 0.00043431418531607064,
+          "count": 0.0002888962680726577,
+          "count_thousand": 0.003169445061207595,
+          "count_million": 0.008346538306683887,
+          "count_billion": 0.00046881691901396133,
+          "x": 0.0005748235382284305,
+          "other_stated": 0.0014385493690219295,
+          "numberless": 0.0004933282794310818,
+          "unknown": 0.002108244285429365,
+          "several": 0.0005060603893051722
+        },
+        "choice": "m_usd_from_millions",
+        "confidence": 0.9522926109287474
+      },
+      "V59_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.6788799544597431,
+          "negative": 0.27127047501613255,
+          "zero": 0.003948027606860778,
+          "not_numeric": 0.003565451481372047,
+          "several": 0.00321994851241985,
+          "unclear": 0.039116142923471584
+        },
+        "choice": "positive",
+        "confidence": 0.6146559453516918
+      },
+      "V59_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.14605933199963178,
+          "raised": 0.138802287797501,
+          "lowered": 0.005319825290602563,
+          "reaffirmed": 0.030089338772002212,
+          "withdrawn": 0.002540807898567494,
+          "not_stated": 0.6402954359306502,
+          "unclear": 0.036892972311044776
+        },
+        "choice": "not_stated",
+        "confidence": 0.5803446752524252
+      },
+      "V59_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9554872895295778,
+          "instant": 0.018879895607831428,
+          "unclear": 0.025632814862590697
+        },
+        "choice": "duration",
+        "confidence": 0.9332309342943668
+      },
+      "V59_conditions": {
+        "type": "noul",
+        "noul": 0.5
+      },
+      "V59_comparison_revision": {
+        "type": "noul",
+        "noul": 0.0024393211618785123
+      },
+      "V61_form": {
+        "type": "choice",
+        "probabilities": {
+          "point": 0.9482507424679102,
+          "range": 0.004497582608213487,
+          "floor": 0.0007951771104978148,
+          "ceiling": 0.0031481072654515477,
+          "words": 0.0007556681986457687,
+          "revision": 0.0004900070036167088,
+          "qualification": 0.03453752824104552,
+          "reaffirmation": 0.00231874316904677,
+          "withdrawal": 0.00035183503880014896,
+          "centre_tolerance": 0.0006652715931927924,
+          "several": 0.0004776787676946515,
+          "none": 0.00231874316904677,
+          "unclear": 0.0013929153668378411
+        },
+        "choice": "point",
+        "confidence": 0.943938304340236
+      },
+      "V61_subject_scope": {
+        "type": "choice",
+        "probabilities": {
+          "source_company_total": 0.9895949398135379,
+          "source_company_part": 0.0031221309301863857,
+          "other_subject": 0.0007121964768511496,
+          "shared": 0.0032853663897123055,
+          "unclear": 0.0032853663897123055
+        },
+        "choice": "source_company_total",
+        "confidence": 0.9869936747669222
+      },
+      "V61_period": {
+        "type": "choice",
+        "probabilities": {
+          "FY2025": 0.008472890596995667,
+          "Q1_FY2025": 0.0008336600400683409,
+          "Q2_FY2025": 0.0004522675386112471,
+          "Q3_FY2025": 0.0007922390656426105,
+          "Q4_FY2025": 0.00038814776170114837,
+          "H1_FY2025": 0.000500796191525457,
+          "H2_FY2025": 0.00041898294655271857,
+          "FY2026": 0.969129754320689,
+          "Q1_FY2026": 0.0003981653281516687,
+          "Q2_FY2026": 0.00044088878615926004,
+          "Q3_FY2026": 0.0013528534593036789,
+          "Q4_FY2026": 0.0015763369758903466,
+          "H1_FY2026": 0.0007723068438748003,
+          "H2_FY2026": 0.005930643810857106,
+          "FY2027": 0.0006140338283328681,
+          "Q1_FY2027": 0.00029326954673199315,
+          "Q2_FY2027": 0.000662813530861118,
+          "Q3_FY2027": 0.00030083814253296427,
+          "Q4_FY2027": 0.000662813530861118,
+          "H1_FY2027": 0.00031656698583949956,
+          "H2_FY2027": 0.0004522675386112471,
+          "short_term": 0.0002648507071396013,
+          "medium_term": 0.00029326954673199315,
+          "long_term": 0.0002648507071396013,
+          "undefined_horizon": 0.0005688437918602285,
+          "other_stated": 0.0008126857266612637,
+          "several": 0.00027168614842778757,
+          "unclear": 0.0027612766022455967
+        },
+        "choice": "FY2026",
+        "confidence": 0.967986411888122
+      },
+      "V61_unit_scale": {
+        "type": "choice",
+        "probabilities": {
+          "usd": 0.003076832660854477,
+          "usd_cents": 0.0010027261946854754,
+          "m_usd_from_dollars": 0.00035274429245295833,
+          "m_usd_from_thousands": 0.0010027261946854754,
+          "m_usd_from_millions": 0.0003711869541681438,
+          "m_usd_from_billions": 0.0005169587931179986,
+          "percent": 0.9752377157977461,
+          "percent_yoy": 0.010454204450562842,
+          "percent_sequential": 0.00040067475291861754,
+          "percent_points": 0.0020466405979318574,
+          "basis_points": 0.00019630573904204658,
+          "count": 0.00016847444309161266,
+          "count_thousand": 0.0008178076063592461,
+          "count_million": 0.0003905940295608759,
+          "count_billion": 0.00019136662959434286,
+          "x": 0.00030273415947148764,
+          "other_stated": 0.0004325051190984217,
+          "numberless": 0.0002876926297593636,
+          "unknown": 0.0025094157394706285,
+          "several": 0.0002406932154279819
+        },
+        "choice": "percent",
+        "confidence": 0.973934437681838
+      },
+      "V61_sign": {
+        "type": "choice",
+        "probabilities": {
+          "positive": 0.9373202933054235,
+          "negative": 0.00862323866499109,
+          "zero": 0.0023511701761994093,
+          "not_numeric": 0.0016881879442672077,
+          "several": 0.001243437409275357,
+          "unclear": 0.048773672499843414
+        },
+        "choice": "positive",
+        "confidence": 0.9247843519665082
+      },
+      "V61_movement": {
+        "type": "choice",
+        "probabilities": {
+          "introduced": 0.12997951146131242,
+          "raised": 0.04025506393166521,
+          "lowered": 0.004734160572572672,
+          "reaffirmed": 0.22768560984932523,
+          "withdrawn": 0.002094682391887554,
+          "not_stated": 0.5698046321714333,
+          "unclear": 0.02544633962180367
+        },
+        "choice": "not_stated",
+        "confidence": 0.4981054042000055
+      },
+      "V61_time_type": {
+        "type": "choice",
+        "probabilities": {
+          "duration": 0.9130386693973241,
+          "instant": 0.031602723267491833,
+          "unclear": 0.055358607335184024
+        },
+        "choice": "duration",
+        "confidence": 0.869558004095986
+      },
+      "V61_conditions": {
+        "type": "noul",
+        "noul": 0.2752214290135673
+      },
+      "V61_comparison_revision": {
+        "type": "noul",
+        "noul": 0.3176831603050232
+      }
+    },
+    "usage": {
+      "input_tokens": 23277,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 273.74784652283415,
+  "finished_at": "2026-11-15T13:53:56.662300-05:00"
+}

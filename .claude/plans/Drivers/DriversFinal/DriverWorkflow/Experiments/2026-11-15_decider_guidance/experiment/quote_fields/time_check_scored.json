@@ -1,0 +1,350 @@
+{
+  "correct": 48,
+  "total": 48,
+  "rows": [
+    {
+      "id": "F0_form",
+      "expected": "range",
+      "actual": "range",
+      "correct": true,
+      "p": 0.9957286945564136
+    },
+    {
+      "id": "F0_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9974544131994337
+    },
+    {
+      "id": "F0_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.992372687934175
+    },
+    {
+      "id": "F0_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.9784214014232318
+    },
+    {
+      "id": "F0_movement",
+      "expected": "raised",
+      "actual": "raised",
+      "correct": true,
+      "p": 0.9861411209711701
+    },
+    {
+      "id": "F0_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.9827943548408972
+    },
+    {
+      "id": "F1_form",
+      "expected": "range",
+      "actual": "range",
+      "correct": true,
+      "p": 0.9820717843870134
+    },
+    {
+      "id": "F1_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9925962682992379
+    },
+    {
+      "id": "F1_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.9427106523955494
+    },
+    {
+      "id": "F1_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.967171084234657
+    },
+    {
+      "id": "F1_movement",
+      "expected": "raised",
+      "actual": "raised",
+      "correct": true,
+      "p": 0.9032040594166462
+    },
+    {
+      "id": "F1_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.8560241895293056
+    },
+    {
+      "id": "F2_form",
+      "expected": "range",
+      "actual": "range",
+      "correct": true,
+      "p": 0.9959571946934881
+    },
+    {
+      "id": "F2_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9934082685001719
+    },
+    {
+      "id": "F2_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.9864870148732696
+    },
+    {
+      "id": "F2_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.9655458122036046
+    },
+    {
+      "id": "F2_movement",
+      "expected": "raised",
+      "actual": "raised",
+      "correct": true,
+      "p": 0.9718338940598528
+    },
+    {
+      "id": "F2_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.899326741695404
+    },
+    {
+      "id": "F3_form",
+      "expected": "range",
+      "actual": "range",
+      "correct": true,
+      "p": 0.975187521912238
+    },
+    {
+      "id": "F3_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9880585703612349
+    },
+    {
+      "id": "F3_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.9410228882029902
+    },
+    {
+      "id": "F3_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.9761893877085888
+    },
+    {
+      "id": "F3_movement",
+      "expected": "raised",
+      "actual": "raised",
+      "correct": true,
+      "p": 0.8979974328249316
+    },
+    {
+      "id": "F3_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.7800855883917694
+    },
+    {
+      "id": "F4_form",
+      "expected": "point",
+      "actual": "point",
+      "correct": true,
+      "p": 0.9759368520992124
+    },
+    {
+      "id": "F4_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9916252064131569
+    },
+    {
+      "id": "F4_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.9913175385616062
+    },
+    {
+      "id": "F4_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.711376448314124
+    },
+    {
+      "id": "F4_movement",
+      "expected": "not_stated",
+      "actual": "not_stated",
+      "correct": true,
+      "p": 0.8025222669205306
+    },
+    {
+      "id": "F4_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.9427470370687234
+    },
+    {
+      "id": "F5_form",
+      "expected": "point",
+      "actual": "point",
+      "correct": true,
+      "p": 0.9795900756846664
+    },
+    {
+      "id": "F5_subject_scope",
+      "expected": "source_company_total",
+      "actual": "source_company_total",
+      "correct": true,
+      "p": 0.9922200035327337
+    },
+    {
+      "id": "F5_period",
+      "expected": "FY2026",
+      "actual": "FY2026",
+      "correct": true,
+      "p": 0.9915676001473409
+    },
+    {
+      "id": "F5_sign",
+      "expected": "positive",
+      "actual": "positive",
+      "correct": true,
+      "p": 0.9301856863571825
+    },
+    {
+      "id": "F5_movement",
+      "expected": "not_stated",
+      "actual": "not_stated",
+      "correct": true,
+      "p": 0.6899763356963718
+    },
+    {
+      "id": "F5_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.8022567317688426
+    },
+    {
+      "id": "F0_unit_scale",
+      "expected": "m_usd_from_billions",
+      "actual": "m_usd_from_billions",
+      "correct": true,
+      "p": 0.9823165824324365
+    },
+    {
+      "id": "F1_unit_scale",
+      "expected": "unknown",
+      "actual": "unknown",
+      "correct": true,
+      "p": 0.6509357474416971
+    },
+    {
+      "id": "F2_unit_scale",
+      "expected": "usd",
+      "actual": "usd",
+      "correct": true,
+      "p": 0.9739910847430377
+    },
+    {
+      "id": "F3_unit_scale",
+      "expected": "unknown",
+      "actual": "unknown",
+      "correct": true,
+      "p": 0.6340827559917233
+    },
+    {
+      "id": "F4_unit_scale",
+      "expected": "m_usd_from_millions",
+      "actual": "m_usd_from_millions",
+      "correct": true,
+      "p": 0.9906438066164205
+    },
+    {
+      "id": "F5_unit_scale",
+      "expected": "percent",
+      "actual": "percent",
+      "correct": true,
+      "p": 0.9872440546331203
+    },
+    {
+      "id": "CONTROL_cash_flow_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.9913303743599617
+    },
+    {
+      "id": "CONTROL_cash_balance_time_type",
+      "expected": "instant",
+      "actual": "instant",
+      "correct": true,
+      "p": 0.9947469379564329
+    },
+    {
+      "id": "CONTROL_openings_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.9727765068060326
+    },
+    {
+      "id": "CONTROL_stores_time_type",
+      "expected": "instant",
+      "actual": "instant",
+      "correct": true,
+      "p": 0.9883696498986613
+    },
+    {
+      "id": "CONTROL_growth_time_type",
+      "expected": "duration",
+      "actual": "duration",
+      "correct": true,
+      "p": 0.9685108304634104
+    },
+    {
+      "id": "CONTROL_unspecified_time_type",
+      "expected": "unclear",
+      "actual": "unclear",
+      "correct": true,
+      "p": 0.9836548282245772
+    }
+  ],
+  "seconds": 119.8146400609985,
+  "usage": {
+    "input_tokens": 10084,
+    "output_tokens": 0,
+    "sequences": 1
+  },
+  "error": null,
+  "limits": "42 prior development-field controls plus six semantic controls; reviewed evidence, no automatic record score."
+}

@@ -1,0 +1,132 @@
+{
+  "V009_measure": [
+    {
+      "start": 2461,
+      "end": 2475,
+      "text": "cost synergies",
+      "score": 0.9913598895072937
+    }
+  ],
+  "V009_context": [],
+  "V009_qualifiers": [],
+  "V046_measure": [
+    {
+      "start": 11592,
+      "end": 11627,
+      "text": "adjusted diluted earnings per share",
+      "score": 0.9999656677246094
+    }
+  ],
+  "V046_context": [],
+  "V046_qualifiers": [],
+  "V050_measure": [
+    {
+      "start": 11736,
+      "end": 11761,
+      "text": "effective income tax rate",
+      "score": 0.7213596105575562
+    }
+  ],
+  "V050_context": [],
+  "V050_qualifiers": [
+    {
+      "start": 11793,
+      "end": 11806,
+      "text": "approximately",
+      "score": 0.9701167345046997
+    }
+  ],
+  "V051_measure": [
+    {
+      "start": 11996,
+      "end": 12016,
+      "text": "total revenue growth",
+      "score": 0.9968475103378296
+    }
+  ],
+  "V051_context": [
+    {
+      "start": 11876,
+      "end": 11889,
+      "text": "third quarter",
+      "score": 0.7839596271514893
+    }
+  ],
+  "V051_qualifiers": [],
+  "V052_measure": [
+    {
+      "start": 12046,
+      "end": 12071,
+      "text": "adjusted operating margin",
+      "score": 0.9996774196624756
+    }
+  ],
+  "V052_context": [],
+  "V052_qualifiers": [],
+  "V070_measure": [],
+  "V070_context": [],
+  "V070_qualifiers": [],
+  "V143_measure": [
+    {
+      "start": 50648,
+      "end": 50668,
+      "text": "total revenue growth",
+      "score": 0.9996388554573059
+    }
+  ],
+  "V143_context": [
+    {
+      "start": 50623,
+      "end": 50625,
+      "text": "3Q",
+      "score": 0.782798707485199
+    }
+  ],
+  "V143_qualifiers": [
+    {
+      "start": 50648,
+      "end": 50668,
+      "text": "total revenue growth",
+      "score": 0.7375484108924866
+    }
+  ],
+  "V152_measure": [
+    {
+      "start": 53552,
+      "end": 53595,
+      "text": "organic growth rate in management solutions",
+      "score": 0.9999998807907104
+    }
+  ],
+  "V152_context": [
+    {
+      "start": 53646,
+      "end": 53651,
+      "text": "range",
+      "score": 0.5379480719566345
+    },
+    {
+      "start": 53652,
+      "end": 53661,
+      "text": "over time",
+      "score": 0.9006571173667908
+    }
+  ],
+  "V152_qualifiers": [
+    {
+      "start": 53646,
+      "end": 53651,
+      "text": "range",
+      "score": 0.9033324122428894
+    }
+  ],
+  "V046_comparison_revision": [],
+  "V070_comparison_revision": [
+    {
+      "start": 15044,
+      "end": 15055,
+      "text": "$80 million",
+      "score": 0.9937155246734619
+    }
+  ]
+}

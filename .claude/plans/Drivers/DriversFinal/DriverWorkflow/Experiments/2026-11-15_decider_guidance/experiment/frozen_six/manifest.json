@@ -1,0 +1,58 @@
+{
+  "frozen_at": "2026-11-15T19:51:51.959975-05:00",
+  "inputs": [
+    {
+      "source_id": "CTAS_2025-09-24T10.00",
+      "sha256": "b3dd330409f80754be16d0ba9570b358eb803f5f029e6fe99fdd428346846037",
+      "sentences": 540,
+      "numbers": 164
+    },
+    {
+      "source_id": "CTAS_2025-12-18T10.00",
+      "sha256": "a548de5d2235baaa3e15e60aca14ec57d0115cdfc7bfa228138d3a41bb3169a8",
+      "sentences": 545,
+      "numbers": 171
+    },
+    {
+      "source_id": "PAYX_2025-09-30T09.30",
+      "sha256": "c74b0213edd9029191e45f4b98f9be274b5d376482d6cb11a48fd38d4cfdcb74",
+      "sentences": 482,
+      "numbers": 152
+    },
+    {
+      "source_id": "PAYX_2025-12-19T09.30",
+      "sha256": "c65148bdad9e098e746a83e23618c94160aa508d8f0b7e2c82ea1252c91a0651",
+      "sentences": 575,
+      "numbers": 163
+    },
+    {
+      "source_id": "PAYX_2026-03-25T09.30",
+      "sha256": "b30b72dea1c911d77e96f9a985ef909972c551b3a17dbd94d4ea6ab1b36f15b9",
+      "sentences": 673,
+      "numbers": 223
+    },
+    {
+      "source_id": "CTAS_2026-03-25T10.00",
+      "sha256": "15fffea6428610664e0a443797a9da238b9224f773e07403fec688415b0ccba6",
+      "sentences": 523,
+      "numbers": 118
+    }
+  ],
+  "configuration_sha256": "fe2b3406050b6a179c29911a4f81cec8a6faec36b4d8153a1f205e928747ebcd",
+  "code_sha256": {
+    "/tmp/decider_claude_review_20261115/frozen_six_run.py": "eb4604a51aac946dfd09173ad0a5f15d98241bc5fa1023cd35afd773ed4b0f96",
+    "/tmp/decider_claude_review_20261115/metadata_candidates.py": "576f80107e88b9b4f49d2da925b28c3f4b88ffcad2fc18209b7c2795865ed5c5",
+    "/tmp/decider_claude_review_20261115/proposal_numbers.py": "18dec5bdfbdcb8da02076e9a3b3775a787b211f7f49d8da51b341adcc8bacbf4",
+    "/home/faisal/EventMarketDB/config/local_llm.py": "adfe07d605d647545682b4a984b7298ee466080aff5a059851a082923e6fb5e3",
+    "/home/faisal/EventMarketDB/driver_reference/core/driver_period_resolver.py": "1f862d65a8a1e4e5717f5eaca44b6fd37400dab6abd576a3d2daa00009bd9ae4"
+  },
+  "reference_sha256": {
+    "CTAS_2025-09-24T10.00.json": "70aa39457c6daffaf1016276669eedf08bdd4d2a90b90b07ffa8f333fc59691a",
+    "CTAS_2025-12-18T10.00.json": "c650b5c4d3acf6eb59c851453715bfe114fff62e26eed962015cd0f40f1ef251",
+    "CTAS_2026-03-25T10.00.json": "d37b564ac458d9e8bab5e9fdf0bc9e78d5b7dd68d873883a52c77639f6a8a374",
+    "PAYX_2025-09-30T09.30.json": "91e1bb4639f3844bd9b24b888403c7f58e2960382e2d5cc9ada60674c45aa8de",
+    "PAYX_2025-12-19T09.30.json": "e2535a775b8fc274818a25f693b816ec342b8791f0aca20edfd96cd2923cd8c0",
+    "PAYX_2026-03-25T09.30.json": "17e2248b46a3f513fc27d2cf5f51c38fc9df9936e89ec955628906f20ac749fe"
+  },
+  "contract": "One new run per source; no prompt or code edits after freeze, no repair calls, reference excluded from inference, no production writes. Separate post-run source review determines record counts."
+}

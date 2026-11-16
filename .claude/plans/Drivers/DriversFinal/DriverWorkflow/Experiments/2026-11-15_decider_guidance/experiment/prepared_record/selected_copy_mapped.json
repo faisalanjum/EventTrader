@@ -1,0 +1,79 @@
+{
+  "F0_modifiers": [],
+  "F0_conditions": [
+    {
+      "returned": {
+        "start": 852,
+        "end": 914,
+        "text": "Our guidance assumes a constant foreign currency exchange rate",
+        "score": 0.9354435205459595
+      },
+      "contiguous_source": true,
+      "source_start": 9388,
+      "source_end": 9450,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate"
+    }
+  ],
+  "F1_modifiers": [],
+  "F1_conditions": [
+    {
+      "returned": {
+        "start": 852,
+        "end": 914,
+        "text": "Our guidance assumes a constant foreign currency exchange rate",
+        "score": 0.9365983009338379
+      },
+      "contiguous_source": true,
+      "source_start": 9388,
+      "source_end": 9450,
+      "source_text": "Our guidance assumes a constant foreign currency exchange rate"
+    }
+  ],
+  "F2_modifiers": [],
+  "F2_conditions": [
+    {
+      "returned": {
+        "start": 572,
+        "end": 681,
+        "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+        "score": 0.9819855690002441
+      },
+      "contiguous_source": true,
+      "source_start": 2872,
+      "source_end": 2981,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst."
+    }
+  ],
+  "F3_modifiers": [],
+  "F3_conditions": [
+    {
+      "returned": {
+        "start": 572,
+        "end": 681,
+        "text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst.",
+        "score": 0.9930936098098755
+      },
+      "contiguous_source": true,
+      "source_start": 2872,
+      "source_end": 2981,
+      "source_text": "The adjusted EPS guide does not include the impact of non-recurring transaction expenses related to Unifirst."
+    }
+  ],
+  "F4_modifiers": [
+    {
+      "returned": {
+        "start": 955,
+        "end": 968,
+        "text": "approximately",
+        "score": 0.9976112246513367
+      },
+      "contiguous_source": true,
+      "source_start": 9491,
+      "source_end": 9504,
+      "source_text": "approximately"
+    }
+  ],
+  "F4_conditions": [],
+  "F5_modifiers": [],
+  "F5_conditions": []
+}

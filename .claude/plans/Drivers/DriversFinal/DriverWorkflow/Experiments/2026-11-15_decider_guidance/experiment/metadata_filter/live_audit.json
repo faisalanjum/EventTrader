@@ -1,0 +1,533 @@
+{
+  "checked_at": "2026-11-15T18:32:57.068931-05:00",
+  "seconds": 391.21584558300674,
+  "sources": {
+    "prepared": 9167,
+    "qa": 9167
+  },
+  "source_sets_equal": true,
+  "counts": {
+    "prepared": {
+      "blocks": 9167,
+      "utterances": 57261,
+      "verified_header": 57257,
+      "numeric_questions_before": 1042246,
+      "numeric_questions_after": 984964,
+      "question_reduction": 57282,
+      "body_digits_preserved": 2459555,
+      "header_name_not_in_metadata": 4
+    },
+    "qa": {
+      "blocks": 160778,
+      "utterances": 384582,
+      "verified_header": 384507,
+      "numeric_questions_before": 936722,
+      "numeric_questions_after": 552158,
+      "question_reduction": 384564,
+      "body_digits_preserved": 1220653,
+      "header_name_not_in_metadata": 75
+    }
+  },
+  "stream_hashes": {
+    "prepared": "b8b12513490279ac3adec69693f3067f79502e80e5c37641a1adfae623178fe0",
+    "qa": "9dfbe9968a93bf4243c93cd72f4d7549e74239b44ce897e428ab0411f49c23cf"
+  },
+  "examples": {
+    "verified_header": {
+      "source": "AAL_2023-04-27T08.30",
+      "block": "AAL_2023-04-27T08.30_pr",
+      "entry": 0,
+      "prefix": "Operator [0]: ",
+      "speaker": null
+    },
+    "header_name_not_in_metadata": {
+      "source": "EW_2024-10-24T17.30",
+      "block": "EW_2024-10-24T17.30_pr",
+      "entry": 4,
+      "prefix": "Unknown [323]: Moreover,",
+      "speaker": null
+    }
+  },
+  "exceptions": [
+    {
+      "source": "EW_2024-10-24T17.30",
+      "block": "EW_2024-10-24T17.30_pr",
+      "entry": 4,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "EW_2024-10-24T17.30",
+      "block": "EW_2024-10-24T17.30_pr",
+      "entry": 7,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "GDDY_2024-10-30T17.00",
+      "block": "GDDY_2024-10-30T17.00_pr",
+      "entry": 4,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "MSM_2024-10-24T08.30",
+      "block": "MSM_2024-10-24T08.30_pr",
+      "entry": 5,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "AMRX_2024-03-01T08.30",
+      "block": "AMRX_2024-03-01T08.30_qa__9",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "A_2025-08-27T16.30",
+      "block": "A_2025-08-27T16.30_qa__18",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "CP_2025-01-29T16.30",
+      "block": "CP_2025-01-29T16.30_qa__11",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__11",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__11",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__12",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__12",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__13",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__13",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__14",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__14",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__15",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__15",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__16",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__16",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__17",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__17",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__18",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__18",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__19",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__19",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__19",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__19",
+      "entry": 3,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__20",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__20",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__20",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__21",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__21",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__21",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__22",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__22",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__22",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__23",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__23",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__24",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__24",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__25",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__25",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__26",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__26",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__26",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__27",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__27",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__28",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__28",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__29",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__29",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__30",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__30",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__31",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__32",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__32",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__33",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__33",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__34",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__35",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__35",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__36",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__36",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__37",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__37",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__38",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__38",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__39",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__39",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__40",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2023-04-25T08.30",
+      "block": "KMB_2023-04-25T08.30_qa__40",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__12",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__12",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__12",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__13",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__13",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__14",
+      "entry": 0,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__14",
+      "entry": 1,
+      "reason": "header_name_not_in_metadata"
+    },
+    {
+      "source": "KMB_2024-01-24T08.30",
+      "block": "KMB_2024-01-24T08.30_qa__14",
+      "entry": 2,
+      "reason": "header_name_not_in_metadata"
+    }
+  ],
+  "queries": {
+    "prepared": "MATCH (t:Transcript)-[:HAS_PREPARED_REMARKS]->(b:PreparedRemark) WHERE EXISTS { (t)-[:HAS_PREPARED_REMARKS]->(:PreparedRemark) }\nAND EXISTS { (t)-[:HAS_QA_EXCHANGE]->(:QAExchange) }\nAND NOT EXISTS { (t)-[:HAS_QA_SECTION]->(:QuestionAnswer) }\nAND NOT EXISTS { (t)-[:HAS_FULL_TEXT]->(:FullTranscriptText) } RETURN t.id AS tid,t.speakers AS speakers,b.id AS id,b.content AS content ORDER BY tid,id",
+    "qa": "MATCH (t:Transcript)-[:HAS_QA_EXCHANGE]->(b:QAExchange) WHERE EXISTS { (t)-[:HAS_PREPARED_REMARKS]->(:PreparedRemark) }\nAND EXISTS { (t)-[:HAS_QA_EXCHANGE]->(:QAExchange) }\nAND NOT EXISTS { (t)-[:HAS_QA_SECTION]->(:QuestionAnswer) }\nAND NOT EXISTS { (t)-[:HAS_FULL_TEXT]->(:FullTranscriptText) } RETURN t.id AS tid,t.speakers AS speakers,b.id AS id,b.exchanges AS content ORDER BY tid,id"
+  },
+  "code_sha256": "576f80107e88b9b4f49d2da925b28c3f4b88ffcad2fc18209b7c2795865ed5c5",
+  "scope": "Candidate enumeration only. Model context and original source are unchanged. Model answers and end-to-end speed/accuracy are not measured here."
+}

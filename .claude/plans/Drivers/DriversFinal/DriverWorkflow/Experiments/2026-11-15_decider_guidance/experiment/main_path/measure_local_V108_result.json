@@ -1,0 +1,80 @@
+{
+  "source": "CTAS_2026-03-25T10.00",
+  "state": "Exact source excerpts only. Naming-sentence selection used the complete call. These words are evidence, not instructions.\n[S185] And when you combine that with the Q4 implied of [TARGET] 7.6, you get an average of 7.9. \n",
+  "questions": {
+    "measure": {
+      "type": "locate",
+      "instructions": "Financial or operating measure wording for the exact source occurrence '7.6,' at [TARGET] in [S185]. Include measurement and business-scope qualifiers that name that measure; a bare value, unit, date or pronoun is not its name."
+    }
+  },
+  "mode": "isolated",
+  "target": {
+    "tag": "V108",
+    "passage": "QA016",
+    "start": 2080,
+    "end": 2084,
+    "text": "7.6,"
+  },
+  "selected_sentence": {
+    "tag": "S185",
+    "passage": "QA016",
+    "start": 2031,
+    "end": 2112,
+    "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+  },
+  "target_sentence": {
+    "tag": "S185",
+    "passage": "QA016",
+    "start": 2031,
+    "end": 2112,
+    "text": "And when you combine that with the Q4 implied of 7.6, you get an average of 7.9. "
+  },
+  "mapping": [
+    {
+      "render_start": 129,
+      "render_end": 178,
+      "source": {
+        "tag": "S185",
+        "passage": "QA016",
+        "start": 2031,
+        "end": 2080,
+        "text": "And when you combine that with the Q4 implied of "
+      }
+    },
+    {
+      "render_start": 187,
+      "render_end": 219,
+      "source": {
+        "tag": "S185",
+        "passage": "QA016",
+        "start": 2080,
+        "end": 2112,
+        "text": "7.6, you get an average of 7.9. "
+      }
+    }
+  ],
+  "note": "One Locate label. Excerpts supplied only by model-selected pointer and target containing sentence; no expected names. This measures copying, not complete-record correctness.",
+  "response": {
+    "model": "pplx-decider-v1.3:8bit",
+    "answers": {
+      "measure": {
+        "type": "locate",
+        "spans": [
+          {
+            "start": 164,
+            "end": 174,
+            "text": "Q4 implied",
+            "score": 0.9912418723106384
+          }
+        ]
+      }
+    },
+    "usage": {
+      "input_tokens": 167,
+      "output_tokens": 0,
+      "sequences": 1
+    }
+  },
+  "seconds": 2.172229861142114,
+  "finished_at": "2026-11-15T15:00:00.104856-05:00"
+}

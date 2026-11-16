@@ -1,0 +1,215 @@
+{
+  "before": {
+    "cases": 52,
+    "hits": 45,
+    "expected": 60,
+    "extra": 3,
+    "incorrect_offsets": 0,
+    "numeric_hits": 19,
+    "numeric_expected": 30,
+    "misses": [
+      {
+        "text": "Acme Tools expects its operating margin for the current year to be 18.5%.",
+        "expected": [
+          [
+            "18.5%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "Revenue rose 12%, while costs fell 3%.",
+        "expected": [
+          [
+            "12%"
+          ],
+          [
+            "3%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "Gross margin was 41.2% (up from 39.8%).",
+        "expected": [
+          [
+            "41.2%"
+          ],
+          [
+            "39.8%"
+          ]
+        ],
+        "found": [
+          "41.2%"
+        ]
+      },
+      {
+        "text": "Margin improved to 18.5%; costs fell.",
+        "expected": [
+          [
+            "18.5%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "Same-store sales declined -2.5%.",
+        "expected": [
+          [
+            "-2.5%",
+            "2.5%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "\"Margins of 30%\" were cited by the CFO.",
+        "expected": [
+          [
+            "30%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "Return on equity reached **15.2%** in 2026.",
+        "expected": [
+          [
+            "15.2%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "Interest rates rose 0.25%.\nThe bank kept its outlook.",
+        "expected": [
+          [
+            "0.25%"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "The company recorded a loss ($3.1 million) in the quarter.",
+        "expected": [
+          [
+            "$3.1 million"
+          ]
+        ],
+        "found": [
+          "($3.1 million)"
+        ]
+      },
+      {
+        "text": "\"$50 million\" was the figure quoted.",
+        "expected": [
+          [
+            "$50 million"
+          ]
+        ],
+        "found": [
+          "\"$50 million"
+        ]
+      },
+      {
+        "text": "Dr. Alan Wu; Ms. Priya Patel.",
+        "expected": [
+          [
+            "Alan Wu",
+            "Dr. Alan Wu"
+          ],
+          [
+            "Priya Patel",
+            "Ms. Priya Patel"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "\"Contoso\" agreed to buy Fabrikam, Inc.",
+        "expected": [
+          [
+            "Contoso"
+          ],
+          [
+            "Fabrikam, Inc.",
+            "Fabrikam, Inc",
+            "Fabrikam"
+          ]
+        ],
+        "found": [
+          "Fabrikam, Inc."
+        ]
+      },
+      {
+        "text": "Offices in “Toronto” and Paris.",
+        "expected": [
+          [
+            "Toronto"
+          ],
+          [
+            "Paris"
+          ]
+        ],
+        "found": [
+          "Paris"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "cases": 52,
+    "hits": 56,
+    "expected": 60,
+    "extra": 1,
+    "incorrect_offsets": 0,
+    "numeric_hits": 30,
+    "numeric_expected": 30,
+    "misses": [
+      {
+        "text": "Dr. Alan Wu; Ms. Priya Patel.",
+        "expected": [
+          [
+            "Alan Wu",
+            "Dr. Alan Wu"
+          ],
+          [
+            "Priya Patel",
+            "Ms. Priya Patel"
+          ]
+        ],
+        "found": []
+      },
+      {
+        "text": "\"Contoso\" agreed to buy Fabrikam, Inc.",
+        "expected": [
+          [
+            "Contoso"
+          ],
+          [
+            "Fabrikam, Inc.",
+            "Fabrikam, Inc",
+            "Fabrikam"
+          ]
+        ],
+        "found": [
+          "Fabrikam, Inc."
+        ]
+      },
+      {
+        "text": "Offices in “Toronto” and Paris.",
+        "expected": [
+          [
+            "Toronto"
+          ],
+          [
+            "Paris"
+          ]
+        ],
+        "found": [
+          "Paris"
+        ]
+      }
+    ]
+  }
+}

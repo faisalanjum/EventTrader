@@ -1,0 +1,175 @@
+{
+  "checked_at": "2026-11-15T19:37:11.704313-05:00",
+  "query": "MATCH (c:Company) WHERE c.ticker IN $tickers\nCALL (c) { MATCH (r:Report)-[:PRIMARY_FILER]->(c)\n WHERE r.formType = '10-K' AND r.periodOfReport IS NOT NULL\n RETURN r.accessionNo AS accession,r.periodOfReport AS period,r.created AS created\n ORDER BY period DESC LIMIT 3 }\nRETURN c.ticker AS ticker,c.fiscal_year_end_month AS stored_fye,accession,period,created\nORDER BY ticker,period DESC",
+  "rows": [
+    {
+      "ticker": "AAPL",
+      "stored_fye": "9",
+      "accession": "0000320193-25-000079",
+      "period": "2025-09-27",
+      "created": "2025-10-31T06:01:26-04:00"
+    },
+    {
+      "ticker": "AAPL",
+      "stored_fye": "9",
+      "accession": "0000320193-24-000123",
+      "period": "2024-09-28",
+      "created": "2024-11-01T06:01:36-04:00"
+    },
+    {
+      "ticker": "AAPL",
+      "stored_fye": "9",
+      "accession": "0000320193-23-000106",
+      "period": "2023-09-30",
+      "created": "2023-11-02T18:08:27-04:00"
+    },
+    {
+      "ticker": "COST",
+      "stored_fye": "11",
+      "accession": "0000909832-25-000101",
+      "period": "2025-08-31",
+      "created": "2025-10-07T21:16:06-04:00"
+    },
+    {
+      "ticker": "COST",
+      "stored_fye": "11",
+      "accession": "0000909832-24-000049",
+      "period": "2024-09-01",
+      "created": "2024-10-08T18:40:07-04:00"
+    },
+    {
+      "ticker": "COST",
+      "stored_fye": "11",
+      "accession": "0000909832-23-000042",
+      "period": "2023-09-03",
+      "created": "2023-10-10T19:13:15-04:00"
+    },
+    {
+      "ticker": "CTAS",
+      "stored_fye": "5",
+      "accession": "0000723254-25-000017",
+      "period": "2025-05-31",
+      "created": "2025-07-28T16:17:28-04:00"
+    },
+    {
+      "ticker": "CTAS",
+      "stored_fye": "5",
+      "accession": "0000723254-24-000036",
+      "period": "2024-05-31",
+      "created": "2024-07-25T14:01:02-04:00"
+    },
+    {
+      "ticker": "CTAS",
+      "stored_fye": "5",
+      "accession": "0000723254-23-000025",
+      "period": "2023-05-31",
+      "created": "2023-07-27T13:14:03-04:00"
+    },
+    {
+      "ticker": "DRI",
+      "stored_fye": "5",
+      "accession": "0000940944-25-000038",
+      "period": "2025-05-25",
+      "created": "2025-07-18T16:34:57-04:00"
+    },
+    {
+      "ticker": "DRI",
+      "stored_fye": "5",
+      "accession": "0000940944-24-000035",
+      "period": "2024-05-26",
+      "created": "2024-07-19T16:20:34-04:00"
+    },
+    {
+      "ticker": "DRI",
+      "stored_fye": "5",
+      "accession": "0000940944-23-000037",
+      "period": "2023-05-28",
+      "created": "2023-07-21T15:47:14-04:00"
+    },
+    {
+      "ticker": "KR",
+      "stored_fye": "2",
+      "accession": "0001104659-26-037723",
+      "period": "2026-01-31",
+      "created": "2026-03-31T16:08:52-04:00"
+    },
+    {
+      "ticker": "KR",
+      "stored_fye": "2",
+      "accession": "0001558370-25-004267",
+      "period": "2025-02-01",
+      "created": "2025-04-01T16:18:45-04:00"
+    },
+    {
+      "ticker": "KR",
+      "stored_fye": "2",
+      "accession": "0001558370-24-004603",
+      "period": "2024-02-03",
+      "created": "2024-04-02T16:15:17-04:00"
+    },
+    {
+      "ticker": "MU",
+      "stored_fye": "8",
+      "accession": "0000723125-25-000028",
+      "period": "2025-08-28",
+      "created": "2025-10-03T14:42:25-04:00"
+    },
+    {
+      "ticker": "MU",
+      "stored_fye": "8",
+      "accession": "0000723125-24-000027",
+      "period": "2024-08-29",
+      "created": "2024-10-04T16:12:50-04:00"
+    },
+    {
+      "ticker": "MU",
+      "stored_fye": "8",
+      "accession": "0000723125-23-000054",
+      "period": "2023-08-31",
+      "created": "2023-10-06T16:01:37-04:00"
+    },
+    {
+      "ticker": "PAYX",
+      "stored_fye": "5",
+      "accession": "0000950170-25-095300",
+      "period": "2025-05-31",
+      "created": "2025-07-11T16:19:29-04:00"
+    },
+    {
+      "ticker": "PAYX",
+      "stored_fye": "5",
+      "accession": "0000950170-24-082958",
+      "period": "2024-05-31",
+      "created": "2024-07-11T16:03:59-04:00"
+    },
+    {
+      "ticker": "PAYX",
+      "stored_fye": "5",
+      "accession": "0000950170-23-032988",
+      "period": "2023-05-31",
+      "created": "2023-07-14T16:02:30-04:00"
+    },
+    {
+      "ticker": "WMT",
+      "stored_fye": "4",
+      "accession": "0000104169-26-000055",
+      "period": "2026-01-31",
+      "created": "2026-03-13T16:06:24-04:00"
+    },
+    {
+      "ticker": "WMT",
+      "stored_fye": "4",
+      "accession": "0000104169-25-000021",
+      "period": "2025-01-31",
+      "created": "2025-03-14T16:40:52-04:00"
+    },
+    {
+      "ticker": "WMT",
+      "stored_fye": "4",
+      "accession": "0000104169-24-000056",
+      "period": "2024-01-31",
+      "created": "2024-03-15T16:54:48-04:00"
+    }
+  ],
+  "limits": "Read-only stored annual filing metadata; not yet verified against original source content. Company month is not exact window proof."
+}
