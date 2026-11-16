@@ -1,6 +1,8 @@
 # Driver Workflow
 
-> ⚠️ Living checklist: tick [x] when done · owner approves every other edit · fewest words.
+> ⚠️ Living checklist: tick [x] when done · owner approves every other edit · fewest words · max 2 levels, no drop-downs.
+
+**Now:** internalize the rulebook ([DRIVER_RULES.md](../DRIVER_RULES.md)).
 
 **Goal:** turn unstructured text into Neo4j nodes/edges, stage by stage, until we trade company signals automatically. [Driver rules](../DRIVER_RULES_Categorized.md) apply. Updated 16 Nov 2026.
 
@@ -14,16 +16,18 @@
 
 Build a company's context → keep it updated → trigger trade signals.
 
-1. **Company context:** read the company's history; save its facts as Drivers and DriverUpdates, covering all 4 rulebook fact types (`metric`, `guidance`, `surprise`, `action_event`).
-   - [ ] Organize `DRIVER_RULES_Categorized.md`.
-   - [ ] Run the [Decider](DeciderExtraction.md) on every source type.
-   - [ ] Do 1 company, then 2, then 10, logging each run, until first-context creation is automatic.
-   - [ ] Check the finished context with [Perplexity Finance](https://www.perplexity.ai/hub/solutions/finance) for anything missing (catalysts, earnings analysis; data: Benzinga, EDGAR, Fiscal.ai, FMP, MT Newswires, Quartr …). Notes: [perplexity.md](../perplexity.md).
-   - [ ] Pick the plan: which plans include this data isn't published, so test 1 month of individual Pro ($20) on one company; Enterprise Pro ($40) only for no-training protection.
-2. **Update + trigger** (proposed: the [Decider](DeciderExtraction.md)): does a new report, news story or call update an existing Driver? If yes, send it through fact creation. Is the change worth evaluating as a trade?
-3. **Quarterly review:** at each quarterly report, look deeper for new Drivers, missing updates and changes; feed them into the same history.
+1. **Build the creator:** text → Drivers + DriverUpdates (4 fact types: `metric`, `guidance`, `surprise`, `action_event`).
+   - [ ] Internalize the rulebook; fix what doesn't make sense ([DRIVER_RULES.md](../DRIVER_RULES.md)).
+   - [ ] Rough pass, in order: fact? → which type? → about what? → fields → Driver name → check.
+   - [ ] Try it on one small fixed set (transcript, 8-K, news; hand-checked); keep what works, change the rest, repeat.
+   - [ ] Later: fix the interface ([shared creator](SharedCreator.md)) and sort every rule in order, until any asset runs through unchanged.
+2. **Company context:** run the creator on each company's history.
+   - [ ] Do 1 company, then 2, then 10, logging each run, until automatic.
+   - [ ] Check each context for gaps with [Perplexity Finance](https://www.perplexity.ai/hub/solutions/finance) (Benzinga, Quartr …; [notes](../perplexity.md)). Tier data access unpublished: try individual Pro ($20) first; Enterprise ($40) adds data privacy.
+3. **Update + trigger** (proposed: the [Decider](DeciderExtraction.md)): does a new report, news story or call update an existing Driver? If yes, send it through fact creation. Is the change worth evaluating as a trade?
+4. **Quarterly review:** at each quarterly report, look deeper for new Drivers, missing updates and changes; feed them into the same history.
 
-All three would use one shared creator (below).
+Steps 2–4 use the creator from step 1.
 
 ## Base + copies → [details](BaseAndCopies.md)
 
@@ -32,3 +36,12 @@ Several readers share one document: Claude loads it once, and copies reuse it. T
 ## Shared creator → [details](SharedCreator.md)
 
 Idea, not vetted: one shared creator, a single interface every caller uses to turn a document into checked Driver updates, so creation rules never split into versions.
+
+## Ideas to test
+
+- Big filings (10-K, 10-Q) → [base + copies](BaseAndCopies.md) (Claude); news, 8-Ks, transcripts → [Decider](DeciderExtraction.md).
+
+## Confirmed decisions
+
+- Driver names: always Sonnet 5.5 (high/xhigh/max); the system's integrity depends on it.
+- Workers: [Decider](DeciderExtraction.md) first → small generic code → Sonnet 5.5 only where the Decider fails.
