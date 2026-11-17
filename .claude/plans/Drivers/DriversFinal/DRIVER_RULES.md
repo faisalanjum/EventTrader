@@ -2,15 +2,18 @@
 
 **Target state: everything is ON.** There is only one version, so anything marked "off" or "later release" below is ON, unless the owner agrees otherwise.
 
+This file wins over every older document. For fact subjects, News and daily explanations, use EXPLAINED_BY.md/NewsMultipleSymbols.md; FINAL_DESIGN.md is unmaintained background for this revision. For other unresolved conflicts between older documents, use [`Archive/DRIVER_RULES.md`](Archive/DRIVER_RULES.md) Part C4, “Which source wins”.
+
 ### Final check before building
 
   1. 🟡 EXPLAINED_BY: current design in [EXPLAINED_BY.md](EXPLAINED_BY.md), also drawing on [NewsMultipleSymbols.md](NewsMultipleSymbols.md) (added when news restarts, via Massive). Resolved: daily explanations start from Date, with the affected company on the EXPLAINED_BY link; one fact may explain several companies/days (A2); no DailyCompanyMoveEvent. Open: final owner check (at S5) and [§7–8](EXPLAINED_BY.md).
   2. 🟡 SAME_AS: same-meaning link between Driver names; the rules still mark it off (1.19, 6.20, 9.9).
 
-### To be decided
+### 🔴 To be decided
 
-  1. 🔴 (:ContinuationClaim) † (the rename note for a slice label or measurement tag, 6.13): link it to its company with an edge (e.g. `FOR_COMPANY` → (:Company)) and drop its company property (`company_cik` in the older design). Alternative: link it to its source filing and reach the company through that.
-  2. 🔴 Spreading a withdrawal to the earlier forecasts it covers (4.18–4.21).
+  1. (:ContinuationClaim) † (the rename note for a slice label or measurement tag, 6.13): link it to its company with an edge (e.g. `FOR_COMPANY` → (:Company)) and drop its company property (`company_cik` in the older design). Alternative: link it to its source filing and reach the company through that.
+  2. Spreading a withdrawal to the earlier forecasts it covers (4.18–4.21).
+  
 
 # Driver rules
 
@@ -52,6 +55,8 @@
 
 | Word | Meaning |
 |---|---|
+| **Driver** | One reusable cause or standing thing that can matter to a company or market. Stored as a name, a permanent fact type and its frozen defining evidence (2.1); it has no status. |
+| **Fact = DriverUpdate** | One real, source-backed occurrence of a Driver in one source event (the `(:DriverUpdate)` node), e.g. "revenue rose 5% to $2.1B" in one earnings release. |
 | **Fail closed** | When required proof is missing: don't create, link, merge or write. |
 | 🔴 **Core** | The central system that decides meaning and identity and writes facts. Sources only supply evidence. |
 
@@ -62,123 +67,308 @@
 - 1.1 The same name is reused for the same cause across companies and over time. *Why:* then scattered mentions line up into one clean history per cause, and that history is what gets acted on.
 - 1.2 A Driver (the name) is separate from its facts. Each fact is added under an existing or new Driver and tagged with its source and event. A Driver can have facts from many events; one event can have facts for many Drivers.
 
-**How the pieces connect, as Neo4j holds them.** Three pictures (each prints on one landscape page) and two tables. `(:Label)` = node · `CAPITALS` = relationship name · solid = stored · dotted = no stored relationship · grey = already in the database · yellow = Driver · white = new · † = the name comes from the older design (`FinalDesign/FINAL_DESIGN.md`) or the driver code, not from this file; where this file is silent the older documents decide (see the top of this file), and the pictures approve the presentation, not those choices · "off" and "release 2" as the rules say · (n.n) = the rule · existing nodes show only the links the design uses.
+**The Driver system, in pictures**
 
-**Picture A — a fact and its Driver**
+These show the target design; the opening overrides old “off/release 2” labels. **OPEN** remains undecided: see the [open questions](DRIVER_RULES_Discrepancies.md). Full explanations stay in the numbered rules below.
+
+**Key:** `(:Label)` = node; grey = existing, blue = planned record, yellow = Driver. Solid named arrows are stored links; dotted arrows are worked out. Process/time arrows show steps. `1` = exactly one; `0..1` = optional; `0..many` = any number. † marks an older design/code name, not independent approval.
+
+#### Picture A · From source to saved facts
+
+Process view. Full rules: [creation](#3--creating-a-driver), [saving](#u2a--saving), [processing](#s3--processing-timing--retries), [testing](#s4--ai-use--testing).
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 30, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":36,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
 flowchart LR
-    DU["<b>(:DriverUpdate)</b> = one fact<br/>id = source event + Driver + scope (3.1)<br/>25 properties (3.3)"]
-    HF["<b>(:DriverUpdate)</b> = one fact<br/>its home fact (4.14)"]
-    CF["<b>(:DriverUpdate)</b> = another fact<br/>same source event (3.53)"]
-    DP["<b>(:DriverPeriod)</b><br/>id · start_date · end_date (3.36)"]
-    DR["<b>(:Driver)</b><br/>name · fact_type (2.38)<br/>birth evidence as properties (2.1)"]
-    DR2["<b>(:Driver)</b><br/>another Driver"]
-    CC["<b>(:ContinuationClaim)</b> † release 2<br/>a renamed slice label or measurement tag (6.13)<br/>matched by value, no edge"]
-    RP["<b>(:Report)</b> = one filing<br/>8-K · 10-Q · 10-K · created = public time · isAmendment (5.7)"]
-    TR["<b>(:Transcript)</b> = one call<br/>conference_datetime = call start;<br/>not full-transcript availability"]
-    NW["<b>(:News)</b> = one story<br/>publication/version times · tags"]
-    OG["<b>Old Guidance nodes</b><br/>evidence only; never bridged into Driver facts (8.11)"]
-    CN["<b>(:Concept)</b> = official line item<br/>picture C"]
-    MB["<b>(:Member)</b> = one breakdown value<br/>picture C"]
-
-    DU -->|"OF_DRIVER · 1 (3.9)"| DR
-    DU -->|"FROM_SOURCE · 1 in total,<br/>to one of these three (3.9)"| RP
-    DU -->|"FROM_SOURCE"| TR
-    DU -->|"FROM_SOURCE (A2.8)"| NW
-    DU -->|"HAS_PERIOD · 0..1 (3.10)"| DP
-    DU -->|"MAPS_TO_CONCEPT † · 0..1 (3.11)"| CN
-    DU -->|"MAPS_TO_MEMBER † · 0..n (3.11)"| MB
-    DU -->|"CAUSED_BY · OFFSET_BY (quote) · 0..n (3.53)"| CF
-    DR -->|"SAME_AS · off: none for now (1.19, 6.20)"| DR2
-    DR -->|"CONTINUES_AS · per company, release 2 (6.13–6.19, 9.10)"| DR2
-    DR -.->|"family: by name, no edge (1.18)"| DR2
-    DR -.->|"birth fact: properties, no edge (2.1)"| DU
-    DU -.->|"home fact: matched, no edge (4.14)"| HF
-    DR ~~~ CC
-    DR ~~~ OG
-
-    classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
-    classDef driver fill:#fff6d6,stroke:#3c4043,stroke-width:2px,color:#3c4043
-    classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
-    class DU,HF,CF,DP,CC fact
-    class DR,DR2 driver
-    class RP,TR,NW,OG,CN,MB old
+    source["1 · Read source<br/>original + full context"]
+    propose["2 · AI proposes<br/>facts, types, fields, names"]
+    match["3 · Find Driver<br/>reuse or propose new"]
+    check["4 · Separate AI call<br/>checks Driver choice"]
+    source --> propose --> match --> check
+    classDef step fill:#eff6ff,stroke:#6b829d,color:#172b42
+    class source,propose,match,check step
 ```
 
-**Picture B — companies, prices and verdicts**
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":36,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    code["5 · Mechanical checks<br/>source, numbers, units<br/>dates, IDs and links"]
+    save["6 · Save together<br/>job's facts + required links<br/>or nothing"]
+    read["7 · Shared read views<br/>see G"]
+    outcome["No accepted fact<br/>record reason and outcome<br/>under 8.14–8.15"]
+    code -->|"valid at save time"| save --> read
+    code -->|"required proof<br/>missing or invalid"| outcome
+    classDef step fill:#eff6ff,stroke:#6b829d,color:#172b42
+    classDef stop fill:#fff8ed,stroke:#b77824,color:#573a16
+    class code,save,read step
+    class outcome stop
+```
+
+#### Picture B · One fact and its record
+
+Company-specific facts need one proven subject; genuinely shared facts have none. The subject and affected stock may differ. [Fields and links](#u1a--record--evidence).
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 8, "rankSpacing": 24, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "14px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
 flowchart TB
-    RP["<b>(:Report)</b> = one filing"]
-    TR["<b>(:Transcript)</b> = one call"]
-    NW["<b>(:News)</b> = one story"]
-    CO["<b>(:Company)</b><br/>id · cik · ticker<br/>fiscal year end (3.41)"]
-    IN["<b>(:Industry)</b>"]
-    SC["<b>(:Sector)</b>"]
-    MI["<b>(:MarketIndex)</b>"]
-    DT["<b>(:Date)</b> = one day"]
-    DU["<b>(:DriverUpdate)</b> = one fact<br/>EXPLAINED_BY = a judgment<br/>from Date for company_id (A2.2)<br/>properties: table below (A2.3)"]
-
-    RP -->|"PRIMARY_FILER · the owner (3.9)<br/>price returns on it:<br/>daily_stock … (1.14, A2.5)"| CO
-    RP -->|"REFERENCED_IN<br/>companies named in it,<br/>not owners"| CO
-    CO -->|"HAS_TRANSCRIPT (3.9)"| TR
-    TR -->|"INFLUENCES · price returns"| CO
-    NW -->|"INFLUENCES or MENTIONS (9.5)<br/>price returns; tags,<br/>not fact ownership"| CO
-    CO -->|"BELONGS_TO (1.20, 2.42)"| IN
-    IN -->|"BELONGS_TO"| SC
-    SC -->|"BELONGS_TO"| MI
-    DT -->|"HAS_PRICE<br/>open, close, daily_return …<br/>(A2.7)"| CO
-    DT -->|"HAS_PRICE"| MI
-    DT -->|"NEXT"| DT
-    DU -->|"FOR_COMPANY · subject (3.9),<br/>may differ from company_id"| CO
-    DT -->|"EXPLAINED_BY · company_id (A2.2)"| DU
-
-    classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
-    classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
-    class DU fact
-    class CO,IN,SC,MI,RP,TR,NW,DT old
+    day["(:Date)<br/>a trading day"]
+    fact["(:DriverUpdate)<br/>one source-backed fact"]
+    driver["(:Driver)<br/>reusable meaning"]
+    source["One source node<br/>(:Report), (:Transcript) or (:News)"]
+    company["(:Company)<br/>whose fact this is"]
+    period["(:DriverPeriod) †<br/>id · start_date · end_date"]
+    day -->|"EXPLAINED_BY · optional; see E"| fact
+    fact -->|"OF_DRIVER · 1"| driver
+    fact -->|"FROM_SOURCE · 1 total"| source
+    fact -->|"FOR_COMPANY · 1 or none"| company
+    fact -->|"HAS_PERIOD · 0..1"| period
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    classDef fact fill:#eff6ff,stroke:#5277a6,color:#172b42
+    classDef driver fill:#fff3cc,stroke:#ac8735,color:#493b17
+    class day,source,company existing
+    class fact,period fact
+    class driver driver
 ```
 
-**Picture C — where the two filing-data links land (tagged filing data)**
+Stated business causes/offsets are separate from stock-price explanations (3.53).
 
 ```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "linear", "nodeSpacing": 12, "rankSpacing": 30, "padding": 6, "htmlLabels": true}, "themeVariables": {"fontFamily": "Arial", "fontSize": "13px", "lineColor": "#8a919c"}}}%%
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
 flowchart LR
-    DU["<b>(:DriverUpdate)</b> = one fact"]
-    RP["<b>(:Report)</b> = one filing<br/>10-Q or 10-K here (6.7)"]
-    CO["<b>(:Company)</b>"]
-    XN["<b>(:XBRLNode)</b> = one filing's tagged data<br/>10-Q and 10-K only, never an 8-K (6.7)"]
-    XF["<b>(:Fact)</b> = one tagged figure<br/>value · decimals · qname"]
-    CN["<b>(:Concept)</b> = official line item<br/>qname (6.1)"]
-    MB["<b>(:Member)</b> = one breakdown value<br/>qname · label (6.9)"]
-    DM["<b>(:Dimension)</b> = one axis<br/>slice or not: decided offline (3.16)"]
-    XP["<b>(:Period)</b><br/>start_date · end_date"]
-    CX["<b>(:Context)</b>"]
-    UN["<b>(:Unit)</b>"]
+    result["(:DriverUpdate)<br/>business result"]
+    cause["(:DriverUpdate)<br/>stated cause or offset<br/>same source event"]
+    result -->|"CAUSED_BY or OFFSET_BY<br/>quote on each link"| cause
+    classDef fact fill:#eff6ff,stroke:#5277a6,color:#172b42
+    class result,cause fact
+```
 
-    DU -->|"MAPS_TO_CONCEPT † · 0..1, metric facts only,<br/>= xbrl_qname (3.11, 6.1–6.8)"| CN
-    DU -.->|"guidance and surprise facts: inherited<br/>from the base metric Driver when read (6.2)"| CN
-    DU -->|"MAPS_TO_MEMBER † · slice_part, axis<br/>0..n, any fact type (3.11, 6.9)"| MB
-    MB -.->|"slice values offered when reading: the company's<br/>earlier members plus values already used (3.17, 3.19)"| DU
-    RP -->|"HAS_XBRL"| XN
-    RP -->|"PRIMARY_FILER"| CO
-    XF -->|"REPORTS"| XN
-    XF -->|"HAS_CONCEPT"| CN
-    XF -->|"FACT_MEMBER"| MB
-    XF -->|"FACT_DIMENSION"| DM
-    XF -->|"HAS_PERIOD"| XP
-    XF -->|"IN_CONTEXT"| CX
-    XF -->|"HAS_UNIT"| UN
-    CX -->|"FOR_COMPANY"| CO
-    CX -->|"HAS_PERIOD"| XP
+Legacy roles: `(:Guidance)` → guidance-type Driver; `(:GuidanceUpdate)` → DriverUpdate; `(:GuidancePeriod)` → DriverPeriod. These are successor roles only: old `UPDATES` links stay separate, with no conversion, replay, bridge or fallback (8.11).
 
-    classDef fact fill:#ffffff,stroke:#3c4043,stroke-width:2px,color:#3c4043
-    classDef old fill:#eceff1,stroke:#7a8290,stroke-width:1.5px,color:#3c4043
-    class DU fact
-    class RP,CO,XN,XF,CN,MB,DM,XP,CX,UN old
+#### Picture C · Types, families and renames
+
+Same company, slice and period. The forecast is earlier; result and surprise share a later source. The surprise comparison must be stated there (4.14–4.16).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    guidance["(:Driver)<br/>revenue_guidance"]
+    metric["(:Driver)<br/>revenue"]
+    surprise["(:Driver)<br/>revenue_surprise"]
+    forecast["(:DriverUpdate)<br/>forecast: 100 m_usd"]
+    actual["(:DriverUpdate)<br/>result: 110 m_usd"]
+    gap["(:DriverUpdate)<br/>110 vs 105 m_usd<br/>actual_vs_consensus"]
+    forecast -->|"OF_DRIVER"| guidance
+    actual -->|"OF_DRIVER"| metric
+    gap -->|"OF_DRIVER"| surprise
+    guidance -.->|"family by final suffix"| metric
+    surprise -.->|"family by final suffix"| metric
+    gap -.->|"home fact · same event"| actual
+    classDef driver fill:#fff3cc,stroke:#ac8735,color:#493b17
+    classDef fact fill:#eff6ff,stroke:#5277a6,color:#172b42
+    class guidance,metric,surprise driver
+    class forecast,actual,gap fact
+```
+
+Family comes from the name; SAME_AS means equal meaning; CONTINUES_AS means a declared rename (1.19, 6.13–6.19).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":30,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    synonymA["(:Driver)<br/>one name"]
+    synonymB["(:Driver)<br/>same meaning, another name"]
+    oldName["(:Driver)<br/>old label"]
+    newName["(:Driver)<br/>declared new label"]
+    claim["(:ContinuationClaim) †<br/>slice/tag rename note<br/>OPEN: company link"]
+    synonymA -->|"SAME_AS · OPEN process"| synonymB
+    oldName -->|"CONTINUES_AS<br/>per company · OPEN state"| newName
+    classDef driver fill:#fff3cc,stroke:#ac8735,color:#493b17
+    classDef pending fill:#fff8ed,stroke:#b77824,stroke-dasharray:5 4,color:#573a16
+    class synonymA,synonymB,oldName,newName driver
+    class claim pending
+```
+
+ContinuationClaim records slice/tag renames, matched by old/new labels without a label-to-label edge. Its record and company link remain OPEN.
+
+#### Picture D · Sources, companies and market groups
+
+These are source links, not fact ownership or proof of a price effect (3.9, A2). Boxes show roles; reuse the same Company when roles coincide. Company carries `id`, `cik`, `ticker` and fiscal year-end; `Report.isAmendment` marks amendments.
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":28,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    report["(:Report)<br/>one filing, all sections/exhibits"]
+    owner["(:Company)<br/>filing owner"]
+    referenced["(:Company)<br/>other company named"]
+    callCompany["(:Company)<br/>call company"]
+    tracked["(:Company)<br/>tracked news company"]
+    transcript["(:Transcript)<br/>one company call"]
+    news["(:News)<br/>one story; full ticker list"]
+    report -->|"PRIMARY_FILER · 1 owner"| owner
+    report -->|"REFERENCED_IN"| referenced
+    callCompany -->|"HAS_TRANSCRIPT"| transcript
+    transcript -->|"INFLUENCES · measured returns"| callCompany
+    news -->|"INFLUENCES or MENTIONS<br/>ticker rule below"| tracked
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    class report,owner,referenced,callCompany,tracked,transcript,news existing
+```
+
+News: count distinct tickers before filtering. One total, tracked → INFLUENCES; 2+ total with any tracked → MENTIONS per tracked company. None tracked → skip new ordinary feed stories; save selected original research. [Full News rules](NewsMultipleSymbols.md).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    company["(:Company)"]
+    industry["(:Industry)"]
+    sector["(:Sector)"]
+    market["(:MarketIndex)"]
+    company -->|"BELONGS_TO"| industry -->|"BELONGS_TO"| sector -->|"BELONGS_TO"| market
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    class company,industry,sector,market existing
+```
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":36,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    sources["Report / Transcript /<br/>News: 1 total ticker, tracked<br/>drawing group, not a node"]
+    industry["(:Industry)"]
+    sector["(:Sector)"]
+    market["(:MarketIndex)"]
+    day["(:Date)"]
+    sources -->|"INFLUENCES"| industry
+    sources -->|"INFLUENCES"| sector
+    sources -->|"INFLUENCES"| market
+    day -->|"HAS_PRICE"| market
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    classDef group fill:#ffffff,stroke:#8793a1,stroke-dasharray:4 4,color:#243347
+    class industry,sector,market,day existing
+    class sources group
+```
+
+Sector/industry prices are optional context. NEXT means next calendar day. Report `created` is public time; Transcript `conference_datetime` is call start, not full-transcript availability. Past membership and source-version/availability proof remain OPEN.
+
+#### Picture E · A fact explains a company's daily move
+
+Source owner, fact subject and affected company may differ; the affected company need not be named. [EXPLAINED_BY §6](EXPLAINED_BY.md#6-source-and-company-examples-simple-retrieval).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":28,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    date["(:Date)<br/>day whose move is explained"]
+    fact["(:DriverUpdate)<br/>a fact about Company A"]
+    affected["(:Company) B<br/>whose stock moved"]
+    subject["(:Company) A<br/>whose fact it is"]
+    report["(:Report)<br/>source evidence"]
+    owner["(:Company) S<br/>filing owner"]
+    driver["(:Driver)<br/>reusable meaning"]
+    date -->|"EXPLAINED_BY<br/>company_id = B.id"| fact
+    date -->|"HAS_PRICE<br/>B's daily result"| affected
+    fact -->|"FOR_COMPANY"| subject
+    fact -->|"FROM_SOURCE"| report
+    report -->|"PRIMARY_FILER"| owner
+    fact -->|"OF_DRIVER"| driver
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    classDef fact fill:#eff6ff,stroke:#5277a6,color:#172b42
+    classDef driver fill:#fff3cc,stroke:#ac8735,color:#493b17
+    class date,affected,subject,report,owner existing
+    class fact fact
+    class driver driver
+```
+
+**Time example:**
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    prior["Previous trading close<br/>100"]
+    overnight["Overnight price<br/>110"]
+    current["This trading close<br/>108"]
+    prior --> overnight --> current
+    classDef example fill:#f5f7fa,stroke:#a5b3c3,color:#243347
+    class prior,overnight,current example
+```
+
+Using split-adjusted closes, daily return is **+8%** (100 → 108), with no added overnight return. Display times in America/Toronto (EST/EDT). Full [daily explanation rules](#s5--price-move-explanations-active-in-release-1).
+
+#### Picture F · Proof from tagged filing data
+
+Concept/Member links are optional. The filing’s `(:Fact)` and our `(:DriverUpdate)` are different nodes (3.11, 6.1–6.10).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":28,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    update["(:DriverUpdate)<br/>one source-backed fact"]
+    concept["(:Concept)<br/>official line item · qname"]
+    member["(:Member)<br/>breakdown value · qname / label"]
+    update -->|"MAPS_TO_CONCEPT †<br/>0..1 · metric only"| concept
+    update -->|"MAPS_TO_MEMBER †<br/>0..many · axis + slice_part"| member
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    classDef fact fill:#eff6ff,stroke:#5277a6,color:#172b42
+    class concept,member existing
+    class update fact
+```
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    report["(:Report)<br/>10-Q / 10-K<br/>including amendments"]
+    tagged["(:XBRLNode)<br/>this filing's tagged data"]
+    figure["(:Fact)<br/>tagged figure<br/>value · decimals · qname"]
+    concept["(:Concept)<br/>official line item"]
+    context["(:Context)<br/>reporting context"]
+    company["(:Company)"]
+    period["(:Period)<br/>start_date · end_date"]
+    unit["(:Unit)"]
+    report -->|"HAS_XBRL"| tagged
+    figure -->|"REPORTS"| tagged
+    figure -->|"HAS_CONCEPT"| concept
+    figure -->|"IN_CONTEXT"| context
+    figure -->|"HAS_PERIOD"| period
+    figure -->|"HAS_UNIT"| unit
+    report -->|"PRIMARY_FILER"| company
+    context -->|"FOR_COMPANY"| company
+    context -->|"HAS_PERIOD"| period
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    class report,tagged,figure,concept,context,company,period,unit existing
+```
+
+Member proof needs the complete Context’s axis/member pairs, including checked “none”; sparse FACT_DIMENSION edges are insufficient (6.9–6.10).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":28,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    figure["(:Fact)<br/>the same tagged figure"]
+    context["(:Context)<br/>paired dimension_u_ids<br/>and member_u_ids"]
+    axis["(:Dimension)<br/>breakdown axis"]
+    domain["(:Domain)<br/>allowed member tree"]
+    member["(:Member)<br/>one breakdown value"]
+    figure -->|"IN_CONTEXT"| context
+    figure -->|"FACT_MEMBER"| member
+    figure -->|"FACT_DIMENSION · sparse"| axis
+    axis -->|"HAS_DOMAIN"| domain -->|"HAS_MEMBER"| member
+    context -.->|"resolve paired axis IDs"| axis
+    context -.->|"resolve paired member IDs"| member
+    classDef existing fill:#eef1f4,stroke:#8793a1,color:#243347
+    class figure,context,axis,domain,member existing
+```
+
+Other paths include deeper HAS_MEMBER/PARENT_OF and direct Dimension-to-Member links; members may span axes. Bare qnames are not unique across filing namespaces. The matcher accounts for XBRL’s exclusive-end dates.
+
+[Filing links and Part A1](#u2b--links-to-filing-data). Its required subtotal check concerns existing CALCULATION_EDGE structure, not a Driver link. Tagged-fact origin/upgrade records remain OPEN (review item 8).
+
+#### Picture G · Read history without rewriting it
+
+Process view: reading changes the display, never stored facts. Full [read rules](#u2c--reading--comparing), [period rules](#u1b--period) and [past-information limits](#s3--processing-timing--retries).
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    saved["Saved facts<br/>original identity + source"]
+    cutoff["Time mode<br/>history: public before cutoff<br/>live: everything current"]
+    series["Exact series<br/>company / scope / unit"]
+    view["Choose view<br/>raw / current / history<br/>reconciled / comparison"]
+    saved --> cutoff --> series --> view
+    classDef step fill:#eff6ff,stroke:#6b829d,color:#172b42
+    class saved,cutoff,series,view step
 ```
 
 **Stored relationships** (the 25 properties of a fact are the table in 3.3)
@@ -252,7 +442,6 @@ flowchart LR
 
 | Word | Meaning |
 |---|---|
-| **Driver** | One reusable cause or standing thing that can matter to a company or market. Stored as a name, a permanent fact type and its frozen defining evidence (2.1); it has no status. |
 | **Synonym link** (`SAME_AS`) | A reversible link saying two Driver names mean the same thing; none is created for now (6.20). |
 | **Birth fact** | The fact a Driver was saved with. Its ID, its exact quote and the context needed to read it are frozen on the Driver and set what it means (2.1). |
 | **Link** | A connection between two Drivers (a synonym link, none created for now, or a company rename link from release 2), or from a fact to its official filing line item. Links are never deleted; after saving, only release 2's rename checks switch one off (6.18). |
@@ -528,7 +717,6 @@ flowchart LR
 
 | Word | Meaning |
 |---|---|
-| **DriverUpdate** (a "fact") | One real, source-backed occurrence of a Driver in one source event, e.g. "revenue rose 5% to $2.1B" in one earnings release. |
 | **Source event** | The one whole document a fact comes from: one SEC filing (all its sections and exhibits), one earnings-call transcript, or one news story. Every fact has exactly one. |
 | **Quote** | The exact words in the source that state the fact. |
 
@@ -1143,7 +1331,6 @@ Everything already decided about Drivers and their facts, in plain words: the st
 - One small fold in §1 holds the exact locked wording of the four fact types (the meaning authority); everything else in §1–§10 is open to read.
 - To print everything, expand the two folds first (the exact wording in §1, and Part A).
 - *Why* lines give reasons; ⚠ lines mark known risks. History, sources and rejected ideas are kept outside this file, in `DRIVER_RULES.md` (version 1.1) and `WORKFLOW_SCRATCHPAD.md` (section “Archived: approved no-stages proposal — 2026-09-28”).
-- This file wins over every older document. For fact subjects, News and daily explanations, use EXPLAINED_BY.md/NewsMultipleSymbols.md; FINAL_DESIGN.md is unmaintained background for this revision. For other unresolved conflicts between older documents, use `DRIVER_RULES.md` Part C4, “Which source wins”.
 
 ### Start here
 
