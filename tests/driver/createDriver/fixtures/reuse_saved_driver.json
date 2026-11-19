@@ -1,0 +1,20 @@
+{
+  "original_evidence": {
+    "filing_accession": "0001306830-24-000098",
+    "heading": "Consolidated Results",
+    "quotes": {
+      "filing": "Operating profit decreased $41\u00a0million, or 16%, for the three months ended March\u00a031,\u00a02024 compared to the same period in 2023",
+      "synthetic_forecast": "We expect operating profit to decrease $41\u00a0million, or 16%, for the three months ending March\u00a031,\u00a02024 compared to the same period in 2023"
+    }
+  },
+  "incoming_evidence": {
+    "accession": "0001306830-25-000105",
+    "heading": "Consolidated Results",
+    "quote": "Operating profit decreased $42\u00a0million, or 20%, for the three months ended March\u00a031,\u00a02025 compared to the same period in 2024"
+  },
+  "cases": [
+    {"saved_name": "gross_profit", "saved_fact_type": "metric", "original_quote": "filing", "expected_reuse": false},
+    {"saved_name": "operating_profit", "saved_fact_type": "metric", "original_quote": "synthetic_forecast", "expected_reuse": false},
+    {"saved_name": "operating_profit", "saved_fact_type": "metric", "original_quote": "filing", "expected_reuse": true}
+  ]
+}

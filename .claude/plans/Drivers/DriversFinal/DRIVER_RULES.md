@@ -178,14 +178,14 @@ flowchart LR
     newName["(:Driver)<br/>declared new label"]
     claim["(:ContinuationClaim) †<br/>slice/tag rename note<br/>OPEN: company link"]
     synonymA -->|"SAME_AS · inactive (5.6)"| synonymB
-    oldName -->|"CONTINUES_AS<br/>per company · OPEN state"| newName
+    oldName -->|"CONTINUES_AS<br/>per company · active or off"| newName
     classDef driver fill:#fff3cc,stroke:#ac8735,color:#493b17
     classDef pending fill:#fff8ed,stroke:#b77824,stroke-dasharray:5 4,color:#573a16
     class synonymA,synonymB,oldName,newName driver
     class claim pending
 ```
 
-ContinuationClaim records slice/tag renames, matched by old/new labels without a label-to-label edge. Its record and company link remain OPEN.
+ContinuationClaim records slice/tag renames, matched by old/new labels without a label-to-label edge. Its company link and remaining fields are OPEN.
 
 #### Picture D · Sources, companies and market groups
 
@@ -242,7 +242,7 @@ flowchart TB
     class sources group
 ```
 
-Sector/industry prices are optional context. NEXT means next calendar day. Report `created` is public time; Transcript `conference_datetime` is call start, not full-transcript availability. Past membership and proof of earlier source versions remain OPEN. Publication-time evidence follows 7.6.
+Sector/industry prices are optional context. NEXT means next calendar day. Report `created` is public time; Transcript `conference_datetime` is call start, not full-transcript availability. Publication-time evidence follows 7.6.
 
 #### Picture E · A fact explains a company's daily move
 
@@ -380,8 +380,8 @@ flowchart LR
 | `MAPS_TO_CONCEPT` † | (:DriverUpdate) → (:Concept) | 0 or 1, metric facts only, = `xbrl_qname` | new, not built yet | 3.11, 6.1–6.8 |
 | `CAUSED_BY` · `OFFSET_BY` (quote) | (:DriverUpdate) → (:DriverUpdate): result → what drove it (or a stated share of it) · what pushed against it | 0 to many; both facts from the same source event | new | 3.53 |
 | `SAME_AS` | (:Driver) → (:Driver) | none for now | off | 1.19, 5.6, 6.20, 9.9 |
-| `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
-| `(:ContinuationClaim)` † (kind, old, new …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13 |
+| `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created, active) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
+| `(:ContinuationClaim)` † (kind, old, new, active, …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13–6.19, 9.10 |
 | `EXPLAINED_BY` (company_id, reason, stock_impact, weightage, confidence, llm_producer, produced_mode, created) | (:Date) → (:DriverUpdate) | 1 latest judgment per Date + affected Company ID + DriverUpdate ID + producer | planned, not built yet | 3.12, A2.1–A2.8 |
 | `FOR_COMPANY` | (:DriverUpdate) → (:Company) | exactly 1 for a company-specific fact; 0 for a shared fact | planned, not built yet | 3.9 |
 | `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner; the price returns sit on it (daily_stock, session_stock …) | exists | 3.9, 1.14, A2.5 |
@@ -417,24 +417,24 @@ flowchart LR
 - 5.6 **Synonyms (activation deferred, 6.20).** Once enabled, ordinary matching (2.43) may nominate a pair of already-saved Drivers. Independently check both frozen definitions, type and identity under 2.1 and 2.40. The incoming fact still needs its own checked match under 2.40–2.47. With any number of candidates, check only proposed pairs. Link only directly approved pairs and never bypass a refusal through another name. Reuse every verdict under 2.46–2.47. Each approved pair gets one reversible link. Models may propose combinations but never delete, re-key or move facts or bypass approval.
 
 <details>
-<summary>Folded: Declared renames (&ldquo;continues as&rdquo;), from release 2</summary>
+<summary>Folded: Declared renames (&ldquo;continues as&rdquo;), 9.10</summary>
 
 - 6.13 When a company explicitly states that an old label continues as a new one with the same composition and method, a dated, one-way "continues as" link (old → new) is recorded for that company. It can join two Drivers, two slice labels or two measurement tags. *Why:* declared renames are the only way to join old and new labels, including for the ~57% of facts with no XBRL member link, while identity stays split.
-- 6.14 Wording like "recast", "recomposed" or "reclassified" refuses it. It needs independent confirmation of the explicit statement, the unchanged composition and both exact ends; otherwise it is refused.
-- 6.15 The link is read-only and reversible, and never spreads to a Driver's family (1.18). Reads use it only if it was public before the as-of date, checked at each hop. A switched-off link is ignored in every view, including views of the past, however late the mistake was found. *Why:* ignoring a link can only split a history, which is safe.
+- 6.14 Only new proposals go to the independent checker (8.2). The company's own words in context must establish both exact names, unchanged composition and unchanged measurement method. Refuse insufficient evidence or a recast, recomposition or reclassification of the item being renamed.
+- 6.15 For either kind of rename record, code sets `active=true` on first approval and `active=false` only under 6.18. The link affects reads only, is reversible and never spreads to a Driver's family (1.18). Only a requested reconciled view (7.10) follows active links. Each declaration must have been public strictly before the cutoff. A switched-off link is ignored in every view, including views of the past. *Why:* ignoring a link can only split a history, which is safe.
 - 6.16 Safety: at most one active link from the same old label (a second is refused); two old labels into one new label switch both off; a loop is refused.
-- 6.17 A rename proposal never counts as a fact, and repeating the same proposal never creates a second link. A refused proposal never invalidates the other facts from the same source.
+- 6.17 A rename proposal never counts as a fact. Repeating the same declaration, even in a later filing, never adds a second link or resets its proven public time or `active` state. A refused proposal never invalidates the other facts from the same source.
 
-- 6.19 If a rename link's two ends have XBRL data, a mechanical check across the change switches the link off automatically when the official line item splits or the direction reverses.
+- 6.19 If a rename link's two ends have XBRL data, a mechanical check across the change switches the link off automatically when the official line item splits or the direction reverses. A changed division tag alone leaves the link's state intact. Define and test the exact filing evidence for each trigger before enabling this check.
 
 </details>
 
 - 9.6 **No financial-classification field** on Drivers for now; facts carry exact data instead (company-specific XBRL links, money units). Revisit only if a named user and a testable definition exist.
 
 - 9.9 **No instant linking.** A newly created Driver is never linked on the spot as a synonym of an existing one. If this is ever switched on, it needs strong independent confirmation and its own safety design.
-- 9.10 **No company renames in release 1; on in release 2.** Declared renames (6.13–6.19) and the reconciled view (7.10) are switched on in release 2. Release 1 never changes a stored label (3.22) and keeps every source document, so release 2 can re-read past filings for rename statements (8.16) and add the links without changing any stored fact.
+- 9.10 **Company-declared renames.** Flag explicit company rename statements during the ordinary filing read (6.13–6.14). Saving rename records and joining histories on request (7.10) are planned for release 2. Keep every source document (news edits follow 7.6) and original label (3.22). Past filings read under 8.16 can supply rename evidence without rewriting facts.
 
-- 10.2 **Fixing a Driver that was mis-named or mis-typed after it already has facts.** Renaming or re-typing such a Driver is forbidden (2.38), and no approved fix exists; it was left for the design of live Driver creation. *Affects:* live Driver creation. *Decide when:* you design live creation.
+- 10.2 **Wrong saved name or fact type.** Earlier facts stay visible under the normal read rules (2.38, 6.20, 7.11). If the saved Driver’s own evidence clearly contradicts its name or type, refuse that match. Record its unique name and cite the contradicting evidence in the run log (8.12). Handle the incoming fact under 2.47.
 
 **Words used here** (from the original Word list)
 
@@ -578,7 +578,7 @@ flowchart LR
   - There are no empty Drivers. A base with no metric fact simply doesn't exist yet.
 
 - 2.32 A family's base must be a metric. A bare Driver `X` joins a family only if its own birth fact proves it is a metric (2.30, or a fixed default in 1.8) and the family check (2.26) passes. Admitting a suffixed name (2.23) does not prove `X`'s type on its behalf. So `buyback_guidance` can never share a family with an action named `buyback`.
-- ⚠ **A wrong `action_event` type can block a real metric's name and family: that metric's facts must take a more specific name (2.47), and there is no approved fix yet (10.2).** Accepted as better than a false metric. When the type is set directly, with no metric check, a wrong action type isn't counted by the warning; its symptom is facts on that name being renamed or skipped.
+- ⚠ **A wrong `action_event` type can block a real metric's name and family. Use a more specific name for the metric or skip it (2.47, 10.2).** Accepted as better than a false metric. When the type is set directly, with no metric check, a wrong action type isn't counted by the warning; its symptom is facts on that name being renamed or skipped.
 
 - 2.40 **The identity test:** same object, same business scope, same mechanism, decided by meaning from the evidence.
 
@@ -587,7 +587,7 @@ flowchart LR
   2. the same business population and ownership scope;
   3. the same causal mechanism and position;
   4. no equally plausible competing Driver;
-  5. the existing Driver's frozen evidence (2.1) describes one coherent mechanism.
+  5. the existing Driver's frozen evidence (2.1) describes one coherent mechanism. Check the saved name and fact type against that evidence (10.2).
 
   A detail that only one side mentions is not a conflict, but it is not proof of a match either: each check above still needs its evidence.
 
@@ -784,7 +784,7 @@ flowchart LR
 
   Ambiguous prose must not guess. The AI may pick an existing value or create a new one, but never merges two existing values; only fixed rules delete (from a fixed list) or merge values, and only on an exact match. *Why:* an extra split can miss a grouping; a wrong match can blend different businesses.
 
-- 3.19 A slice from an unknown XBRL axis is stored as an `unknown` value that records the exact axis, so it can be reused later.
+- 3.19 For an unknown XBRL axis, store the member value and exact axis under the slice kind `unknown` for later reuse (3.17).
 - 3.20 Within one company, a breakdown member joins an existing value only when the whole `kind:value` matches exactly after formatting is tidied. Never a fuzzy match, never word or suffix stripping (`EuropeSegment` ≠ `europe`). The same words under different kinds are different values and never join (`geography:international` ≠ `segment:international`). *Why:* this really happens: the same label appears on both the geography and segment axes at some companies (e.g. `international` at 5 companies).
 - 3.21 **Eliminations** (both lists below apply only to segment-type breakdowns). A short, hand-checked list of pure eliminations actually seen on segment axes is always excluded; names never seen are not pre-listed.
   - Blended "Corporate/Other/Eliminations" and reconciling leftovers are kept as provisional slices: stored and never deleted, but kept out of cross-company use.
@@ -792,7 +792,7 @@ flowchart LR
   - Every exclusion is logged.
   - Mistakes are fixed only offline, by moving an item from the excluded list to the provisional list; nothing is demoted automatically.
   - *Why a fixed list, not a word pattern:* a pattern caught real businesses about 20% of the time (e.g. `GlobalPestElimination`, a real Ecolab business).
-- 3.22 A stored slice value never changes after it is first written. There is no alias layer and no "confident alias" merging. The only grouping of drifting labels happens at read time, within one company, and only when every linked fact for both labels shares the same exact XBRL axis and member. Drift seen only in prose stays split. *Why:* never changing a stored value keeps identity stable, so re-runs land on the same record.
+- 3.22 A stored slice value never changes after it is first written. There is no alias layer and no "confident alias" merging. In ordinary views, drifting labels group only within one company when every linked fact for both labels shares the same exact XBRL axis and member (7.9). Prose drift alone stays split. Only a requested reconciled view follows approved renames (7.10). *Why:* never changing a stored value keeps identity stable, so re-runs land on the same record.
 - 3.23 There is no cross-company rule that equates slice values; provisional slices stay out of cross-company analysis. Reads group by the full series (7.1), never by Driver or slice alone. *Why:* grouping by Driver alone would blur, say, Taco Bell, China and the company total into one line.
 - ⚠ **The one place a mistake merges instead of splits:** an XBRL axis wrongly marked "not a slice" silently folds real segment data into the whole-company total, with no automatic repair. Only offline review of the logged skips protects it.
 - ⚠ **Unreviewed XBRL axes can hold real business data:** for example, 246 real Agilent end-market facts sat on an axis marked "not a slice".
@@ -1075,12 +1075,13 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 7.4 Display order: value → signed change → comparison → `value_text` → the trimmed quote (last resort). Within one claim (5.2), duplicates are judged by the stated value or range and its unit, or by the applicable `value_text` (4.7). Blank values or matching quotes alone never establish a duplicate. Preserve 5.9’s distinctions. A citation is the Driver name, plus the scope when needed.
 - 7.5 Apply 4.18–4.21, 9.2, 9.11 and 10.5 before ranking. If choosing the current forecast depends on unproven decision order, show the candidates without a winner. Otherwise choose the latest eligible day for the company and series, keeping earlier facts as history. Break same-day ties by source: `8k` > `transcript` > `10q` > `10k` > `news`; then the later timestamp, then the source ID. "Day" means US Eastern time. The same number stated in different sources (e.g. an 8-K, then a 10-Q) is stored as separate facts on separate events; only reads pick one.
 - 7.6 Historical views require proof the cited version was public strictly before the cutoff. A dated receipt showing public access to that exact copy proves availability by then, even if the original publication time is unknown. Keep otherwise supported facts for ordinary research and hindsight explanations (A2.5), leaving unknown publication time blank. Any lookup depending on which event came first requires proof of that order. A later download or save alone proves neither decision order nor publication before an earlier move.
+  - For news, keep the quote and its version reference (3.3) without a separate article archive. If the cited version is unavailable after an edit, the saved quote remains usable for ordinary research. The current article alone cannot verify the earlier wording or when it was public.
 
 - 7.8 A direction plus basis points or percentage points, without "to X", is a change, not a level (3.50). "Narrowed" is worked out when read from consecutive closed ranges, never stored.
 - *See also:* Guidance movement is worked out when read: 4.4.
 - 7.9 Labels are grouped by XBRL member only within one company and slice part, only when they share one exact axis-and-member pair, and only when each label has at least one linked fact and all their linked facts agree. A conflict is logged as a warning and the system carries on; it never waits for a person. Facts without links follow their own label. The group is keyed by the pair, not a label, and only the display grouping changes.
-- 7.10 Every read result is labeled `raw` or `reconciled`, and a reconciled result is returned only when asked for. Reconciled views arrive with company renames in release 2 (9.10); they can be switched off, and use only time-aware rename links (6.13–6.16): followed hop by hop, public before the as-of date, with no model calls. Rename chains are the only reconciled view. A second view (grouping by unknown XBRL axis) was reviewed and deferred; don't rebuild it without a fresh owner decision.
-- 7.11 **Views the reads must offer:** raw (every stored fact, unchanged); current (the winner per series when 7.5 can select one, with conflicts still visible); history (earlier facts before a cutoff); point-in-time (any of these, using only what was public before a given time); reconciled (7.10, from release 2); and cross-company or industry comparisons (the same Driver, with companies grouped by the official industry data as of that time, 2.42 and 9.3). Every program reads facts only through these views, never straight from storage. *Why:* then how facts are read changes in one place.
+- 7.10 Every read result is labeled `raw` or `reconciled`, and a reconciled result is returned only when asked for. Reconciled views arrive with company renames in release 2 (9.10); they can be switched off, and use only time-aware rename links (6.13–6.16): followed hop by hop, public before the as-of date, with no model calls. Rename chains are the only reconciled view. An XBRL slice saved as `unknown` stays `unknown` in every read, even after its axis is classified (3.19, 7.9).
+- 7.11 **Views the reads must offer:** raw (every stored fact, unchanged); current (the winner per series when 7.5 can select one, with conflicts still visible); history (earlier facts before a cutoff); point-in-time (any of these, using only what was public before a given time); reconciled (7.10, from release 2); and cross-company or industry comparisons (the same Driver, 2.42 and 9.3). Industry comparisons use today’s official groups, even for past dates. Every program reads facts only through these views, never straight from storage. *Why:* then how facts are read changes in one place.
 
 ### U3 · Forecasts & surprises
 
@@ -1110,7 +1111,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 9.11 **Outside forecasts.** Record the credited forecaster separately from the publisher and subject. A firm keeps its history across signers. Keep relevant signers in the quote. A personal estimate belongs to the individual. Leave an unnamed forecaster blank. For reported consensus, put the source’s aggregate label in `forecaster`, including its credited provider if named. Blank names or generic labels alone establish no common history. Keep individual estimates distinct from consensus. Never calculate consensus or invent a surprise.
   - Leave `forecast_date` blank unless the source dates that decision. Keep its time of day only if stated. Keep a clear price target without a deadline. If a total needs a measurement period, check the full source, including headings. If still unclear, skip and log that numeric forecast.
   - States describe the same forecaster’s estimate of the same subject, target and basis. Use `introduced` only for a stated first estimate, `raised` or `lowered` for a proven increase or cut, `reaffirmed` for explicit reaffirmation, and `withdrawn` for retraction without replacement. Otherwise use `unknown`, including a bare figure or a prediction that the measure will rise. A withdrawal has no current amount. For words alone, quote the exact wording with its negation and conditions and leave the amount blank.
-  - A decision mentioned only as background stays in the quote. Save separately evidenced decisions and conditional alternatives by original clause or cell, even at equal values (5.2, 5.9). Show each applicable alternative. Save explicit reaffirmations and withdrawals even without a prior fact or unit. Leave unstated amounts blank. On read, use evidence public before the cutoff to identify the target and decision order. Leave an unclear match or order unresolved. A numberless reaffirmation retains the amount proven current for that forecast when reaffirmed. A withdrawal ends only its matched forecast. A recap cannot displace a newer decision. Inferring revisions from history is deferred.
+  - A decision mentioned only as background stays in the quote. Save separately evidenced decisions and conditional alternatives by original clause or cell, even at equal values (5.2, 5.9). Show each applicable alternative. Save explicit reaffirmations and withdrawals even without a prior fact or unit. Leave unstated amounts blank. On read, use evidence public before the cutoff to identify the target and decision order. Leave an unclear match or order unresolved. A numberless reaffirmation retains the amount proven current for that forecast when reaffirmed. A withdrawal ends only its matched forecast. A recap cannot displace a newer decision. Never infer revisions from stored history.
 
 - 9.8 **Metric wording and action conditions:** 4.7–4.8. At implementation, count numberless metrics whose words add meaning beyond their state and actions with stated caveats.
 
@@ -1354,7 +1355,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 | In scope | Excluded or deferred |
 |---|---|
-| Reports, Transcripts and News via certified channels · daily price explanations · US dollars and other currencies (kept as stated, never exchanged) · company-attributed guidance and outside forecasts · metric text and action conditions · tagged filing data once proven (A1) | comparing slices across companies (9.3) · 8-K item-based decisions (9.4) · a financial-classification field (9.6) · instant linking of new names (9.9) · declared company renames (on in release 2) |
+| Reports, Transcripts and News via certified channels · daily price explanations · US dollars and other currencies (kept as stated, never exchanged) · company-attributed guidance and outside forecasts · metric text and action conditions · tagged filing data once proven (A1) · detecting declared renames during filing reads (9.10) | comparing slices across companies (9.3) · 8-K item-based decisions (9.4) · a financial-classification field (9.6) · instant linking of new names (9.9) · saving rename records and joining their histories (release 2) |
 
 **Your design map** (the topics below, in order; "yours to decide" is where your design freedom is)
 
@@ -1365,7 +1366,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 | 3 | What is on each fact? | fields grouped by meaning (3.3); allowed states per type; slices, tags, units, signs, periods and number shapes | how facts are stored |
 | 4 | How do forecasts and surprises work? | Stated revisions are saved. Confirmed guidance movement may be worked out when read (4.4). A surprise needs its accepted home fact. Read withdrawals in scope before choosing current guidance | — |
 | 5 | What happens when facts repeat, conflict or change? | Combine only when unambiguous; keep conflicting values; identity never changes; stored values are frozen except for A1’s precision upgrade; a blank never erases | how batches run |
-| 6 | How are facts linked, and what happens after saving? | The exact official line item or nothing; renames only when declared (from release 2); no audit or repair process runs after saving | — |
+| 6 | How are facts linked, and what happens after saving? | The exact official line item or nothing. Filing reads flag declared renames (9.10). No audit or repair process runs after saving. | — |
 | 7 | How are facts read back? | Exact series match; a same-day source rank; point-in-time views; reconciled views only on request | query and storage design |
 | 8 | What must every build respect? | AI judges meaning and code checks structure; fail closed; fewer than 1% wrong, measured at launch; five outcomes; retry only on an exact trigger | components, models, schedules |
 | 9 | What is off for now? | The list above, each with its reopen condition | when to reopen one |
@@ -1383,7 +1384,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 *Answers: what may change after a fact is saved, and what happens with repeats, conflicting values, corrections and amendments.*
 
-*Answers: how facts link to official filing data, how declared renames work, and what happens after saving: no audit or repair, only normal saving and, from release 2, the rename checks.*
+*Answers: how facts link to official filing data, how declared renames work, and what happens after saving: no audit or repair, only normal saving and, from release 2, the checks on saved rename links (6.18).*
 
 *Answers: which facts form one history line, which fact wins, and which views the reads must offer.*
 
