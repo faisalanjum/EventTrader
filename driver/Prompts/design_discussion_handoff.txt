@@ -150,7 +150,8 @@ Progress for the five original decisions and all 25 numbered discrepancies
   one company and slice part.
   Entry 9 is agreed. Synonym links stay inactive pending entry 10.
   Entry 11 is closed for design. Both forms of company rename use the
-  same active flag (6.15). Filing reads flag declared renames (9.10).
+  same active flag (6.15). This build detects declared renames, saves
+  approved links and joins histories on request (9.10, 7.10).
   Entry 10 covers switch-offs beyond 6.18. Entry 12 covers how to record
   the company, source evidence and public time for a division or tag rename.
   Entry 14 is closed for design (November 19, 2026 EST). Earlier facts
@@ -282,8 +283,9 @@ Agreed decisions and earlier clarifications
   check each proposed pair. The incoming fact needs its own match. A pair's
   recorded verdict, including a refusal, stands until a rule-defined change.
   See AGREED SAME_AS CREATION (entry 9).
-- [x] Flag company-declared renames during the normal filing read. Both
-  rename record types use one active flag each. See COMPANY-DECLARED RENAMES.
+- [x] Flag company-declared renames during the normal filing read, save
+  each approved rename once and join histories on request. Either kind of
+  rename record uses one active flag. See COMPANY-DECLARED RENAMES.
 - [x] Postpone deciding when to switch off a mistaken SAME_AS link. Keep
   synonym links inactive until that decision. See POSTPONED SYNONYM REVERSAL.
 - [x] Record the exact model ID and call start time once per reader or
@@ -485,7 +487,8 @@ COMPANY-DECLARED RENAMES — ENTRY 11 CLOSED, ENTRIES 10 AND 12 OPEN
   on first approval. Only the checks in 6.18 can set active=false. No manual
   review, switch-off date or reason field. Other switch-offs belong to entry 10.
   Entry 12 still needs the company connection, evidence and public time.
-  Rule 9.10 schedules saving rename records and joining histories for release 2.
+  The owner confirmed one build. It includes detecting renames, saving each
+  approved rename once and joining histories on request (9.10, 7.10).
   Facts keep their filed labels. Only a requested joined history follows active
   renames public before its cutoff. Ordinary name matching (2.40–2.43) and
   grouping by identical filing tags (7.9) keep their existing rules.

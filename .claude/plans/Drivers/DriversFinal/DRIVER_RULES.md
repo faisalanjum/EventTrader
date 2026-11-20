@@ -1,6 +1,6 @@
 > Working copy of [`DRIVER_RULES_Categorized.md`](DRIVER_RULES_Categorized.md) (older, itself built from [`DRIVER_RULES_Simplified.md`](Archive/DRIVER_RULES_Simplified.md)), copied 2026-11-16. Rule numbers are unchanged across all three. The two may diverge; this one is kept up to date.
 
-**Target state.** Features marked “off” or “later release” are in scope unless the owner excludes or defers them (see “Target scope” in the [Overview](#overview)). Honor all proof gates and the limits in 9.3, 9.4, 9.6 and 9.9.
+**Target state.** One build covers everything in this rulebook except what the owner excludes or keeps off. See “Target scope” in the [Overview](#overview). Honor all proof gates and the limits in 9.3, 9.4, 9.6 and 9.9.
 
 This file wins over every older document. For fact subjects, News and daily explanations, use EXPLAINED_BY.md/NewsMultipleSymbols.md; FINAL_DESIGN.md is unmaintained background for this revision. For other unresolved conflicts between older documents, use [`Archive/DRIVER_RULES.md`](Archive/DRIVER_RULES.md) Part C4, “Which source wins”.
 
@@ -17,7 +17,7 @@ This file wins over every older document. For fact subjects, News and daily expl
 
 **Owner-approved edits:** Oct 1 (evidence, reads, `source_location`), Oct 2 (expectation type, cause links, quotes, currencies), Nov 14 (synced with EXPLAINED_BY and News). Rule-by-rule detail: git history.
 
-**Index** (read in this order): [S1 ground rules](#s1--ground-rules-read-first) — [Driver](#driver): [1](#1--driver-record--relationships) · [2a](#2a--fact-type) · [2b](#2b--name) · [2c](#2c--which-name--family) · [3](#3--creating-a-driver) — [DriverUpdate](#driverupdate): [U1a](#u1a--record--evidence) · [U1b](#u1b--period) · [U1c](#u1c--slices--measurement-tags) · [U1d](#u1d--states--amounts) · [U2a](#u2a--saving) · [U2b](#u2b--links-to-filing-data) · [U2c](#u2c--reading--comparing) · [U3a](#u3a--forecasts) · [U3b](#u3b--surprises) — [System](#system): [S2](#s2--purpose-sources--companies) · [S3](#s3--processing-timing--retries) · [S4](#s4--ai-use--testing) · [S5](#s5--price-move-explanations-active-in-release-1) — [Overview](#overview)
+**Index** (read in this order): [S1 ground rules](#s1--ground-rules-read-first) — [Driver](#driver): [1](#1--driver-record--relationships) · [2a](#2a--fact-type) · [2b](#2b--name) · [2c](#2c--which-name--family) · [3](#3--creating-a-driver) — [DriverUpdate](#driverupdate): [U1a](#u1a--record--evidence) · [U1b](#u1b--period) · [U1c](#u1c--slices--measurement-tags) · [U1d](#u1d--states--amounts) · [U2a](#u2a--saving) · [U2b](#u2b--links-to-filing-data) · [U2c](#u2c--reading--comparing) · [U3a](#u3a--forecasts) · [U3b](#u3b--surprises) — [System](#system): [S2](#s2--purpose-sources--companies) · [S3](#s3--processing-timing--retries) · [S4](#s4--ai-use--testing) · [S5](#s5--price-move-explanations) — [Overview](#overview)
 
 **Overlaps to review** (both kept for now): 1.7 / 7.7 · 2.19 / 4.2 · 2.2 / 2.38 · 2.34 / 6.11 · 3.50 / 7.8 · 3.35 / 7.2 · 1.14 / 7.6.
 
@@ -32,8 +32,8 @@ This file wins over every older document. For fact subjects, News and daily expl
 **Never delete; no repair after saving**
 
 - 1.15 **History is add-only.** Never delete, re-key (give a new ID) or move (reassign to another Driver or label) a saved Driver or fact, not even to make history look cleaner. True duplicates are never merged: at most they get a reversible synonym link (`SAME_AS`).
-- 🔴 6.18 **Links after saving.** Nothing switches a link off after saving, except, from release 2, the mechanical rename checks (6.16, 6.19). A link is never deleted. Exceptions: latest EXPLAINED_BY judgments may be replaced or explicitly withdrawn (A2.2), and newer News versions remove obsolete source links under NewsMultipleSymbols.md. Neither exception deletes or re-keys Driver facts.
-- 🔴 6.20 **No audit or repair after saving.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links between Drivers. Keep synonym links inactive until reversal of a mistaken link is settled (5.6, 9.9). Normal saving still follows the existing rules (5.1). A Driver's name, type and frozen defining evidence never change (2.1, 2.2). Apart from release 2's rename checks (6.18), all protection comes from the checks before saving (sections 1–5) and the launch test (8.17). A mistake that slips through stays, so the checks before saving must be strict, and when unsure they keep things separate (1.12).
+- 🔴 6.18 **Links after saving.** Only the mechanical rename checks (6.16, 6.19) may switch off a saved link. A link is never deleted. Exceptions: latest EXPLAINED_BY judgments may be replaced or explicitly withdrawn (A2.2), and newer News versions remove obsolete source links under NewsMultipleSymbols.md. Neither exception deletes or re-keys Driver facts.
+- 🔴 6.20 **No audit or repair after saving.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links between Drivers. Keep synonym links inactive until reversal of a mistaken link is settled (5.6, 9.9). Normal saving still follows the existing rules (5.1). A Driver's name, type and frozen defining evidence never change (2.1, 2.2). Apart from the rename checks (6.18), all protection comes from the checks before saving (sections 1–5) and the launch test (8.17). A mistake that slips through stays, so the checks before saving must be strict, and when unsure they keep things separate (1.12).
 - 🔴 ⚠ **Wrong merges are the biggest known risk.** No automatic check detects them, even with XBRL. The rename checks (6.16, 6.19) detect only their specific errors.
 
 **AI vs code**
@@ -285,7 +285,7 @@ flowchart LR
     class prior,overnight,current example
 ```
 
-Using split-adjusted closes, daily return is **+8%** (100 → 108), with no added overnight return. Display times in America/Toronto (EST/EDT). Full [daily explanation rules](#s5--price-move-explanations-active-in-release-1).
+Using split-adjusted closes, daily return is **+8%** (100 → 108), with no added overnight return. Display times in America/Toronto (EST/EDT). Full [daily explanation rules](#s5--price-move-explanations).
 
 #### Picture F · Proof from tagged filing data
 
@@ -380,8 +380,8 @@ flowchart LR
 | `MAPS_TO_CONCEPT` † | (:DriverUpdate) → (:Concept) | 0 or 1, metric facts only, = `xbrl_qname` | new, not built yet | 3.11, 6.1–6.8 |
 | `CAUSED_BY` · `OFFSET_BY` (quote) | (:DriverUpdate) → (:DriverUpdate): result → what drove it (or a stated share of it) · what pushed against it | 0 to many; both facts from the same source event | new | 3.53 |
 | `SAME_AS` | (:Driver) → (:Driver) | none for now | off | 1.19, 5.6, 6.20, 9.9 |
-| `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created, active) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | release 2 | 6.13–6.19, 9.10 |
-| `(:ContinuationClaim)` † (kind, old, new, active, …), a node | a renamed slice label or measurement tag | one per declared rename | release 2 | 6.13–6.19, 9.10 |
+| `CONTINUES_AS` (company_cik, source_event_id, evidence_quote, declared_at, created, active) | (:Driver) → (:Driver), old → new | at most 1 active per old label, per company | this build | 6.13–6.19, 9.10 |
+| `(:ContinuationClaim)` † (kind, old, new, active, …), a node | a renamed slice label or measurement tag | one per declared rename | this build | 6.13–6.19, 9.10 |
 | `EXPLAINED_BY` (company_id, reason, stock_impact, weightage, confidence, llm_producer, produced_mode, created) | (:Date) → (:DriverUpdate) | 1 latest judgment per Date + affected Company ID + DriverUpdate ID + producer | planned, not built yet | 3.12, A2.1–A2.8 |
 | `FOR_COMPANY` | (:DriverUpdate) → (:Company) | exactly 1 for a company-specific fact; 0 for a shared fact | planned, not built yet | 3.9 |
 | `PRIMARY_FILER` | (:Report) → (:Company) | exactly 1 owner; the price returns sit on it (daily_stock, session_stock …) | exists | 3.9, 1.14, A2.5 |
@@ -405,7 +405,7 @@ flowchart LR
 | 8-K pairing | an earnings 8-K ⇢ its 10-Q or 10-K | routing only | 3.44 |
 | read-time grouping | two labels with the same axis and member, all their linked facts agreeing ⇢ one display group | within one company and slice part | 7.9 |
 | never | action fact → line item · old Guidance data → Driver facts · a day's move as a source |  | 3.9, 6.2, 8.11, A2.8 |
-`SAME_AS` = same meaning (reversible; none created for now, 6.20) · `CONTINUES_AS` = a company's declared rename (dated; from release 2) · Family: read from the name (`revenue_guidance` belongs to `revenue`), not stored.
+`SAME_AS` = same meaning (reversible; none created for now, 6.20) · `CONTINUES_AS` = a company's dated rename (6.13) · Family: read from the name (`revenue_guidance` belongs to `revenue`), not stored.
 
 - 1.19 Synonym link = same meaning, reversible; none is created for now (6.20). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
 
@@ -432,7 +432,7 @@ flowchart LR
 - 9.6 **No financial-classification field** on Drivers for now; facts carry exact data instead (company-specific XBRL links, money units). Revisit only if a named user and a testable definition exist.
 
 - 9.9 **No instant linking.** A newly created Driver is never linked on the spot as a synonym of an existing one. If this is ever switched on, it needs strong independent confirmation and its own safety design.
-- 9.10 **Company-declared renames.** Flag explicit company rename statements during the ordinary filing read (6.13–6.14). Saving rename records and joining histories on request (7.10) are planned for release 2. Keep every source document (news edits follow 7.6) and original label (3.22). Past filings read under 8.16 can supply rename evidence without rewriting facts.
+- 9.10 **Company-declared renames.** Flag explicit company renames during the ordinary filing read. Save each independently approved rename once (6.13–6.17). Join histories only on request (7.10). Keep every source document (news edits follow 7.6) and original label (3.22). Past filings read under 8.16 can supply rename evidence without rewriting facts.
 
 - 10.2 **Wrong saved name or fact type.** Earlier facts stay visible under the normal read rules (2.38, 6.20, 7.11). If the saved Driver’s own evidence clearly contradicts its name or type, refuse that match. Record its unique name and cite the contradicting evidence in the run log (8.12). Handle the incoming fact under 2.47.
 
@@ -442,7 +442,7 @@ flowchart LR
 |---|---|
 | **Synonym link** (`SAME_AS`) | A reversible link saying two Driver names mean the same thing; none is created for now (6.20). |
 | **Birth fact** | The fact a Driver was saved with. Its ID, its exact quote and the context needed to read it are frozen on the Driver and set what it means (2.1). |
-| **Link** | A connection between two Drivers (a synonym link, none created for now, or a company rename link from release 2), or from a fact to its official filing line item. Links are never deleted; after saving, only release 2's rename checks switch one off (6.18). |
+| **Link** | A connection between two Drivers (a synonym link, none created for now, or a declared company rename link), or from a fact to its official filing line item. Links are never deleted; after saving, only the rename checks switch one off (6.18). |
 
 ### 2 · Naming rules & fact types
 
@@ -1080,8 +1080,8 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 7.8 A direction plus basis points or percentage points, without "to X", is a change, not a level (3.50). "Narrowed" is worked out when read from consecutive closed ranges, never stored.
 - *See also:* Guidance movement is worked out when read: 4.4.
 - 7.9 Labels are grouped by XBRL member only within one company and slice part, only when they share one exact axis-and-member pair, and only when each label has at least one linked fact and all their linked facts agree. A conflict is logged as a warning and the system carries on; it never waits for a person. Facts without links follow their own label. The group is keyed by the pair, not a label, and only the display grouping changes.
-- 7.10 Every read result is labeled `raw` or `reconciled`, and a reconciled result is returned only when asked for. Reconciled views arrive with company renames in release 2 (9.10); they can be switched off, and use only time-aware rename links (6.13–6.16): followed hop by hop, public before the as-of date, with no model calls. Rename chains are the only reconciled view. An XBRL slice saved as `unknown` stays `unknown` in every read, even after its axis is classified (3.19, 7.9).
-- 7.11 **Views the reads must offer:** raw (every stored fact, unchanged); current (the winner per series when 7.5 can select one, with conflicts still visible); history (earlier facts before a cutoff); point-in-time (any of these, using only what was public before a given time); reconciled (7.10, from release 2); and cross-company or industry comparisons (the same Driver, 2.42 and 9.3). Industry comparisons use today’s official groups, even for past dates. Every program reads facts only through these views, never straight from storage. *Why:* then how facts are read changes in one place.
+- 7.10 Every read result is labeled `raw` or `reconciled`, and a reconciled result is returned only when asked for. Reconciled views can be switched off. They follow active rename links (6.13–6.16, 9.10) one hop at a time, using only declarations public before the cutoff, without model calls. Rename chains are the only reconciled view. An XBRL slice saved as `unknown` stays `unknown` in every read, even after its axis is classified (3.19, 7.9).
+- 7.11 **Views the reads must offer:** raw (every stored fact, unchanged); current (the winner per series when 7.5 can select one, with conflicts still visible); history (earlier facts before a cutoff); point-in-time (any of these, using only what was public before a given time); reconciled on request (7.10); and cross-company or industry comparisons (the same Driver, 2.42 and 9.3). Industry comparisons use today’s official groups, even for past dates. Every program reads facts only through these views, never straight from storage. *Why:* then how facts are read changes in one place.
 
 ### U3 · Forecasts & surprises
 
@@ -1271,7 +1271,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 | **Wrong fact** | A fact with any material claim that is incorrect or unsupported by its own source; it counts once (8.17). |
 | **Certification** | Before a source or an AI task goes live, it must pass an independent test on examples it hasn't seen, meeting the quality bar in 8.17 (fewer than 1% wrong, with honest error bounds). Not the same as a "certified upgrade" (8.14), which is a tested change to how evidence is found. |
 
-### S5 · Price-move explanations (active in release 1)
+### S5 · Price-move explanations
 
 
 - 9.7 **Daily price explanations are in this target version.** AI supplies judgments and code validates/saves them under A2.1–A2.8. Approval of this design does not certify or activate a producer.
@@ -1353,9 +1353,9 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 **Target scope** (details in §9)
 
-| In scope | Excluded or deferred |
+| In scope | Outside this build |
 |---|---|
-| Reports, Transcripts and News via certified channels · daily price explanations · US dollars and other currencies (kept as stated, never exchanged) · company-attributed guidance and outside forecasts · metric text and action conditions · tagged filing data once proven (A1) · detecting declared renames during filing reads (9.10) | comparing slices across companies (9.3) · 8-K item-based decisions (9.4) · a financial-classification field (9.6) · instant linking of new names (9.9) · saving rename records and joining their histories (release 2) |
+| Reports, Transcripts and News via certified channels · daily price explanations · US dollars and other currencies (kept as stated, never exchanged) · company-attributed guidance and outside forecasts · metric text and action conditions · tagged filing data once proven (A1) · company-declared renames and joined histories on request (9.10, 7.10) | comparing slices across companies (9.3) · 8-K item-based decisions (9.4) · a financial-classification field (9.6) · instant linking of new names (9.9) |
 
 **Your design map** (the topics below, in order; "yours to decide" is where your design freedom is)
 
@@ -1366,7 +1366,7 @@ Everything already decided about Drivers and their facts, in plain words: the st
 | 3 | What is on each fact? | fields grouped by meaning (3.3); allowed states per type; slices, tags, units, signs, periods and number shapes | how facts are stored |
 | 4 | How do forecasts and surprises work? | Stated revisions are saved. Confirmed guidance movement may be worked out when read (4.4). A surprise needs its accepted home fact. Read withdrawals in scope before choosing current guidance | — |
 | 5 | What happens when facts repeat, conflict or change? | Combine only when unambiguous; keep conflicting values; identity never changes; stored values are frozen except for A1’s precision upgrade; a blank never erases | how batches run |
-| 6 | How are facts linked, and what happens after saving? | The exact official line item or nothing. Filing reads flag declared renames (9.10). No audit or repair process runs after saving. | — |
+| 6 | How are facts linked, and what happens after saving? | The exact official line item or nothing. Save each approved company rename once (9.10). No audit or repair process runs after saving. | — |
 | 7 | How are facts read back? | Exact series match; a same-day source rank; point-in-time views; reconciled views only on request | query and storage design |
 | 8 | What must every build respect? | AI judges meaning and code checks structure; fail closed; fewer than 1% wrong, measured at launch; five outcomes; retry only on an exact trigger | components, models, schedules |
 | 9 | What is off for now? | The list above, each with its reopen condition | when to reopen one |
@@ -1384,13 +1384,13 @@ Everything already decided about Drivers and their facts, in plain words: the st
 
 *Answers: what may change after a fact is saved, and what happens with repeats, conflicting values, corrections and amendments.*
 
-*Answers: how facts link to official filing data, how declared renames work, and what happens after saving: no audit or repair, only normal saving and, from release 2, the checks on saved rename links (6.18).*
+*Answers: how facts link to official filing data, how declared renames work, and what happens after saving: no audit or repair, only normal saving and the checks on saved rename links (6.18).*
 
 *Answers: which facts form one history line, which fact wins, and which views the reads must offer.*
 
 *Answers: the rules any new build must respect, whatever its design.*
 
-*Answers: what the first release leaves out, and what it takes to reopen each. These are the decisions that can wait.*
+*Answers: what the owner excludes and the conditions for reconsidering it.*
 
 *Answers: the undecided questions about what the system must do (newer ones: Parking list, at the end). Each says what it affects and when to decide. These come up when you design live Driver creation, plan how the system runs, and design the reader. None blocks designing basic facts. One rule where this file had to choose between two written versions is flagged where it applies: 3.50.*
 
@@ -1408,6 +1408,8 @@ Everything already decided about Drivers and their facts, in plain words: the st
 **Notes** (drafts and options recorded only here)
 
 ### Original outline and layout markup (verbatim, in order)
+
+Historical reference. The [Overview](#overview) gives the current scope.
 
 ```text
 # Driver rules
