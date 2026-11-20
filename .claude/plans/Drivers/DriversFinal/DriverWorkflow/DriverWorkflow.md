@@ -43,8 +43,8 @@ Idea, not vetted: one shared creator, a single interface every caller uses to tu
 
 ## Confirmed decisions
 
-- Driver names: always Sonnet 5.5 (high/xhigh/max); the system's integrity depends on it.
-- Workers: [Decider](DeciderExtraction.md) first → small generic code → Sonnet 5.5 only where the Decider fails.
+- For each AI task, including Driver naming, use the cheapest model that passes its tests (8.13, 8.17).
+- Test the [Decider](DeciderExtraction.md) first for worker tasks. Use small, generic code for mechanical steps (8.4).
 
 ## Preliminary implementation order
 
@@ -62,7 +62,7 @@ Build these core components in this order. They cover the main system; **“90% 
 | **6** | **Build reliable history reads** | Read raw facts, current facts and facts available at a past time. Compare only comparable facts; calculate permitted comparisons when reading. Supply earlier guidance only where the rules allow it. |
 | **7** | **Check and save safely** | Complete dependent checks; save facts and required links together. Preserve permanent meanings, conflicting evidence and history; make unchanged reruns harmless. |
 | **8** | **Explain price moves** | Set research limits, verify prices, judge supported explanations and research missing evidence through the same fact-creation steps. Keep later explanations out of earlier trading decisions. |
-| **9** | **Build initial company context** | Agree company/source coverage and history limits. Process history oldest first using the shared steps, fill newly discovered metric histories, assemble the company picture and check gaps. |
+| **9** | **Build initial company context** | Agree company/source coverage and history limits. Process history oldest first using the shared steps, assemble the company picture and check gaps. |
 | **10** | **Keep context updated and trigger work** | Handle new, edited and late sources; discover new Drivers; run quarterly reviews; evaluate information and price triggers. Valid facts never depend on a price move or trade signal. |
 
 **In every step:** check correctness against independent answers; measure missed facts, refusals, cost and time. Choose the implementation through experiments, within the confirmed decisions above. These are components, not ten mandatory AI calls.
@@ -160,8 +160,8 @@ These steps produce **proposals**. They do not yet authorize saving.
 | **32** | Match metric facts to official filing line items, with independent meaning checks and exact mechanical refusal checks. | 3.11; 6.1–6.8 |
 | **33** | Attach filing breakdown members only when one complete reporting context proves the exact combination. | 6.9–6.10 |
 | **34 ★** | Add eligible tagged numeric facts only after their metric Driver and company-specific line-item link exist. Resolve text/tagged conflicts, upgrades and record requirements first. | 6.11–6.12; **Part A1** |
-| **35 ★** | Implement `SAME_AS` after agreeing its creation and reversal process. Preserve separate stored identities. | 1.19; 5.6; 9.9 |
-| **36 ★** | Implement declared renames, complete rename records, company ownership, dates, disabling rules and structural checks. | 6.13–6.19; 9.10 |
+| **35** | Implement and test synonym links, warnings, owner corrections and grouping before enabling them. Keep each fact under its original Driver. | 1.19, 5.6, 6.18, 7.1, 9.9 |
+| **36** | Implement declared renames, complete rename records, company ownership, dates, disabling rules and structural checks. | 6.13–6.18; 9.10 |
 | **37 ★** | Finish reconciled histories, permitted label grouping and cross-company views. Resolve cross-company slice matching, unknown-axis views and historical industry membership. | 7.9–7.11; 9.3 |
 
 **38–42. Build the operating and explanation capabilities that company workflows will call.**
@@ -178,7 +178,7 @@ These steps produce **proposals**. They do not yet authorize saving.
 
 | Step | Implement and test | Governing area |
 |---|---|---|
-| **43** | **Initial context generation:** process the agreed historical sources oldest first. Fill newly discovered metric histories through the same creator. | 8.16; company workflow step 2 |
+| **43** | **Initial context generation:** process the agreed historical sources oldest first. The 8.16 look-back starts only after initial context is complete. | 8.16; company workflow step 2 |
 | **44** | Check initial company context for missing information; research gaps within limits and add supported facts/explanations. Test one company, then two, then ten. | Company workflow step 2; shared reads and coverage rules |
 | **45** | **Information updates:** handle new publications, edits and late arrivals. Update known Drivers while retaining discovery of new ones. | 8.14–8.16; [News rules](../NewsMultipleSymbols.md); company workflow step 3 |
 | **46 ★** | Compare the updated context with its prior state and test what warrants **trade evaluation**. This decision must not suppress otherwise valid facts. | 1.25, 2.33; company workflow step 3 |

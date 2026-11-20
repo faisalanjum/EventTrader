@@ -1,5 +1,5 @@
 DRIVER DESIGN DISCUSSION — OWNER DECISIONS AND HANDOFF
-Updated: November 19, 2026 (EST)
+Updated: November 20, 2026 (EST)
 
 PURPOSE AND STATUS
 
@@ -15,7 +15,7 @@ check the reasoning and the affected rules before editing them.
 BEFORE AND AFTER — RULEBOOK WORDING FOR OWNER APPROVAL
 
 This section and the diff record the original amendment (commit 4d7439934).
-The consolidated checklist gives the current decisions and counts.
+The consolidated checklist gives the current decisions and counts. For the applied November 20 patch, see the NOVEMBER 20 OWNER APPROVAL SHEET near the end.
 
 The owner approved #2, #8 and #6 on November 18, 2026 (EST). All five original
 decisions are agreed. Of the 25 discrepancies, 18 are addressed for design and
@@ -32,8 +32,8 @@ Scope for this amendment, confirmed November 19, 2026 (EST)
   Entries 7, 10–12, 14, 18 and 21 and the nine implementation/data tasks
   remain in the separate queues below. Entry 6 keeps its agreed evidence
   rule while its implementation discussion is on hold.
-  Earlier agreements on system-calculated returns, extracting both actual
-  periods and model cost preferences remain recorded for their own work.
+  This amendment reserved system-calculated returns, separately reported actual
+  periods and model cost for later review. The November 20 amendment includes them.
   The same-filing rule in entry 8 still keeps different periods separate.
   This patch includes only changes needed for the 18 entries and five
   decisions, including their necessary definitions, tables and references.
@@ -126,7 +126,7 @@ the eventual before-and-after wording for the owner's review.
 
 Progress for the five original decisions and all 25 numbered discrepancies
   Original five    [#####]                     5 of 5 agreed
-  Discrepancies    [#########################] 25 of 25 reviewed, 23 addressed for design, 2 remaining for owner decision
+  Discrepancies    [#########################] 25 of 25 addressed for design
   Entry 1's outside-forecast fact format is settled. A bank's forecasts
   stay in its history across signer changes. Rule 9.11 also settles the
   parked question about reading revisions. See AGREED EXPECTATION STATES.
@@ -148,12 +148,12 @@ Progress for the five original decisions and all 25 numbered discrepancies
   is recognized as a segment in 2025 (7.10). This needs no rewrite or extra
   lookup when reading. Rule 7.9 still groups proven label variants within
   one company and slice part.
-  Entry 9 is agreed. Synonym links stay inactive pending entry 10.
-  Entry 11 is closed for design. Both forms of company rename use the
-  same active flag (6.15). This build detects declared renames, saves
-  approved links and joins histories on request (9.10, 7.10).
-  Entry 10 covers switch-offs beyond 6.18. Entry 12 covers how to record
-  the company, source evidence and public time for a division or tag rename.
+  Entries 9 and 10 are closed for design. Test synonym checking and grouping
+  before enabling links. See AGREED JOIN CORRECTIONS.
+  Entries 11 and 12 are closed for design. Save one company-scoped
+  ContinuationClaim note per approved rename, with checked company and source
+  IDs and one active flag. Joined histories follow active notes on request
+  (6.13–6.19, 7.10, 9.10). Entry 10 covers owner corrections under 6.18.
   Entry 14 is closed for design (November 19, 2026 EST). Earlier facts
   remain visible under normal read rules. On a new proposed reuse, the
   independent checker compares the saved name and type with the Driver's
@@ -193,16 +193,14 @@ Progress for the five original decisions and all 25 numbered discrepancies
   dates priority. The reference code can still choose an older saved period.
 
 The November 17 deletion review below gives the evidence and rules for each
-entry. The owner jointly approved 2, 8 and 6. Among the 23 addressed,
-1, 2, 3, 6, 8, 9, 11, 15, 16, 17 and 20 are agreed, 4 and 5 are excluded,
+entry. The owner jointly approved 2, 8 and 6. Among the 25 addressed,
+1, 2, 3, 6, 8, 9, 10, 11, 12, 15, 16, 17 and 20 are agreed, 4 and 5 are excluded,
 7 keeps the saved breakdown kind, 14 keeps earlier facts visible, 18 uses the
 saved quote, 19 follows original issue 5, 21 uses today's groups, 22 and 23 follow existing rules,
 24 is already corrected, and 13 and 25 supply wording corrections.
 
-Two remaining design entries for the owner's review
-  10. Switch off a mistaken synonym or rename link outside the cases in 6.18.
-  12. Identify the company, evidence and public time for a division or measurement label rename.
-Review the delayed use of synonym links (entry 9) with entry 10.
+Rule 6.19 still needs its exact filing triggers defined and tested before use.
+That is separate from the 25 numbered entries.
 Original issue 2 settled the unnumbered withdrawal item.
 Count each numbered discrepancy once.
 Close each remaining entry when the owner settles it.
@@ -279,15 +277,15 @@ Agreed decisions and earlier clarifications
   claim on one fact. Use the more precise figure when the source supports
   the rounding. The owner approved this rule strictly within the existing
   process, with zero additional machinery, including code. See entry 8.
-- [x] Agreed design, deferred activation: when normal name matching finds possible synonyms among saved Drivers,
-  check each proposed pair. The incoming fact needs its own match. A pair's
-  recorded verdict, including a refusal, stands until a rule-defined change.
+- [x] When normal matching finds possible synonyms among saved Drivers,
+  independently check each proposed pair that still needs a link. The incoming
+  fact needs its own match. A pair's verdict stands until a rule-defined change.
   See AGREED SAME_AS CREATION (entry 9).
 - [x] Flag company-declared renames during the normal filing read, save
-  each approved rename once and join histories on request. Either kind of
-  rename record uses one active flag. See COMPANY-DECLARED RENAMES.
-- [x] Postpone deciding when to switch off a mistaken SAME_AS link. Keep
-  synonym links inactive until that decision. See POSTPONED SYNONYM REVERSAL.
+  each approved rename once as a ContinuationClaim and join histories only
+  on request. See COMPANY-DECLARED RENAMES (entries 11 and 12).
+- [x] The owner may switch off a proven wrong synonym link or rename note and
+  restore it on proof the switch-off was mistaken. See AGREED JOIN CORRECTIONS.
 - [x] Record the exact model ID and call start time once per reader or
   checker call in the run log. Use its matching items to trace the saved
   facts. See AGREED MODEL CALL LOG (entry 16).
@@ -458,8 +456,8 @@ AGREED SAME_AS CREATION — ENTRY 9
   proven, link only B–C. A name with a different or unclear meaning stays
   separate. Returning several candidates does not trigger an all-pairs scan.
 
-  On direct approval, record one reversible link from that
-  decision. A repeat adds nothing. Shared reads may follow active links
+  For a new pair allowed by 7.1, record one reversible link on direct
+  approval. A repeat adds nothing. Shared reads may follow active links
   where 1.19 and 7.1 permit, retaining each original fact and Driver and
   the normal cutoff under 1.14/7.6. A family or company-declared rename
   has its own meaning. Raw records and past recorded predictions stay
@@ -472,53 +470,71 @@ AGREED SAME_AS CREATION — ENTRY 9
   on the read-only check, so frequency, cost and coverage are unmeasured.
   Task-specific qualification under 8.13 still applies.
 
-  For the owner's wording review, align 1.19, 5.6 and 6.20 with this
-  trigger. Retain 9.9's bar on linking a newly created name. Workflow step
-  35 also requires settling when a link may be switched off (entry 10).
+  Workflow step 35 implements and tests entries 9 and 10. Rule 9.9 still
+  bars linking a newly created name on the spot.
 
-COMPANY-DECLARED RENAMES — ENTRY 11 CLOSED, ENTRIES 10 AND 12 OPEN
+COMPANY-DECLARED RENAMES — ENTRIES 11 AND 12 CLOSED
 - [x] Applied to DRIVER_RULES.md on November 19, 2026 (EST). The normal
   filing read flags a company's rename statement. An independent checker
   reviews each new proposal. The company's own words must give both exact
   names and show that what it counted and how it measured it stayed the
   same. The checker can use the surrounding passage (6.13–6.14).
-  CONTINUES_AS links two Drivers for that company. ContinuationClaim records
-  a renamed division label or measurement tag. Either starts with active=true
-  on first approval. Only the checks in 6.18 can set active=false. No manual
-  review, switch-off date or reason field. Other switch-offs belong to entry 10.
-  Entry 12 still needs the company connection, evidence and public time.
-  The owner confirmed one build. It includes detecting renames, saving each
-  approved rename once and joining histories on request (9.10, 7.10).
-  Facts keep their filed labels. Only a requested joined history follows active
-  renames public before its cutoff. Ordinary name matching (2.40–2.43) and
-  grouping by identical filing tags (7.9) keep their existing rules.
+  Final decision for entry 12. One ContinuationClaim node covers all three
+  kinds. Store kind, old, new, company_id, source_event_id, evidence_quote,
+  declared_at, created and active. Store the subject Company's verified id
+  and the cited source's verified id directly on the note. Refuse if either
+  record is missing. The source identifies the proof. The company identifies
+  whose history may be joined. This needs no rename edge or links from the note.
+  For all three kinds the checker must identify the exact old and new values
+  already used on this company's facts. A Driver uses its unique name, a
+  slice its full kind:value, and a measurement tag its stored form. If those
+  values cannot identify the proven rename unambiguously, save no note.
+  An early announcement stays in its filing and can be used when both names
+  are in use. It creates neither a Driver nor a pending note.
+  Enforce one note per (company_id, kind, old, new) in the database. The
+  cited source's public time is declared_at. The first save time is created.
+  A repeat in any filing preserves the original source, quote, publication
+  and save times, and current on/off state. Within one company and kind,
+  enforce 6.16's competing-target, merger and loop checks.
+  On first approval active=true. State changes follow 6.18, including owner
+  corrections (entry 10). Only a requested joined history follows active notes
+  whose declarations were public strictly before its cutoff. Ordinary name
+  matching (2.40–2.43) and filing-tag grouping (7.9) keep their own rules.
+
+  West example checked against the stored Company and Reports. The quarterly
+  filing's financial statements name Contract-Manufactured Products and West Vantage. For that
+  filing, company_id is 0000105770, source_event_id is 0000105770-26-000049
+  and declared_at is April 23, 2026 at 4:12:02 PM EDT. Use the exact slice
+  values from West's facts once available. The same day's 8-K, accession
+  0000105770-26-000047, was public at 7:11:01 AM EDT and contains the same
+  declaration in Exhibit 99.1. Each time belongs to its own filing.
 
   Future 6.19 test. West's 2025 annual filing and March 2026 quarterly
   filing use the same revenue line with different division tags for
   Contract-Manufactured Products and West Vantage. That tag change alone
-  must leave the approved rename link active. The filings were checked.
+  must leave the approved rename note active. The filings were checked.
   Before enabling automatic switch-off under 6.19, define and test the
   filing evidence that proves a line-item split or direction reversal.
 
   Future 7.10 test. After West's rename is public, request the same figures
   twice. As filed, each figure keeps its original division name. When a
-  joined history is requested, the approved active link joins the two names.
+  joined history is requested, the approved active note joins the two names.
 
   Future 6.15 test. Suppose Retail became Consumer on April 1 and the
   company first announced it on May 10. A joined history as of May 5
-  ignores that link. As of May 11 it may follow the approved, active link.
+  ignores that note. As of May 11 it may follow the approved, active note.
 
   Future 6.17 test. An August filing repeats that same May 10 announcement.
-  Keep one link with its proven May 10 public date and its existing on/off
-  state. Repeating a declaration cannot reactivate a switched-off link.
+  Keep one note with its proven May 10 public date and its existing on/off
+  state. Repeating a declaration cannot reactivate a switched-off note.
 
   Future 6.14 refusal test. Ares renamed its Special Opportunities strategy
   Opportunistic Credit, moved it from Private Equity to Credit, and revised
-  the presentation of prior results. Refuse the rename link for that move.
+  the presentation of prior results. Refuse the rename note for that move.
   Source: Ares Q1 2024 Form 10-Q, Note 13 (accession 0001628280-24-021890).
 
   Future 6.13 refusal tests. Give the checker each rename passage alone.
-  In each test, refuse the link because the passage leaves the measurement
+  In each test, refuse the note because the passage leaves the measurement
   method unconfirmed.
   - EQT says Production became Upstream with the same segment composition
     (FY 2025 Form 10-K, Note 2, 0000033213-26-000018).
@@ -528,39 +544,45 @@ COMPANY-DECLARED RENAMES — ENTRY 11 CLOSED, ENTRIES 10 AND 12 OPEN
 
   Future 6.13 approval test. Cushman & Wakefield says its Property,
   facilities and project management service line became Services and that
-  only the name changed. Approve the link (FY 2024 Form 10-K, Note 5,
-  0001628369-25-000005).
+  only the name changed. Approve the note once both stored labels are
+  identified (FY 2024 Form 10-K, Note 5, 0001628369-25-000005).
 
-POSTPONED SYNONYM REVERSAL — REMAINDER OF ENTRY 10
-- [x] The owner may revisit this after the system is built. Ordinary name
-  reuse continues. Do not create or follow SAME_AS links or add a manual
-  review queue. Each fact keeps its evidence. A lookup under one name can
-  miss facts under another.
+AGREED JOIN CORRECTIONS — ENTRY 10 CLOSED
+- [x] Approved November 20, 2026 (EST). A same-meaning link applies across
+  companies. A rename note applies only to the declaring company. The owner
+  may switch either off if evidence shows it was wrong when made. For example,
+  proof that Consumer combined Retail and Wholesale from day one disproves a
+  Retail-only rename. Adding Wholesale later does not disprove it.
+
+  Keep the approved record and change only its active flag. Only the owner
+  may restore it, on proof the switch-off was mistaken. Reruns never restore
+  it. An off synonym link blocks its pair while off. A genuine checker refusal
+  remains a separate verdict under 2.47. Restoration changes no verdict.
+  Renames must still pass 6.16 and, once enabled, 6.19. Keep all facts,
+  evidence and recorded predictions. Routine work never waits for the owner.
+
+  During an ordinary check, keep earlier verdicts and group membership hidden
+  (8.2). If both original definitions already in hand clearly differ, the
+  checker names both Drivers, explains why and cites both. For example, one
+  workforce count includes contractors and the other excludes them. Only after
+  the check, if a direct or indirect join is already known, record the names,
+  reason and citations on the same run-log item. The warning is never stored
+  as a pair verdict or refusal. A failed incoming match alone proves nothing
+  about the join. Repeated warnings are fine. No extra search, call or queue.
+
+  Test before enabling (5.6, 7.1, 8.13). Skip redundant synonym pair checks.
+  A new or restored link cannot connect a blocked pair, even through other
+  names. If bookings–revenue is off but both still link to net_sales, all
+  three read separately, including at past dates. Once the wrong
+  bookings–net_sales link is also off, revenue and net_sales read together
+  again. A warning alone leaves an otherwise valid group joined. Test that an
+  owner can restore a mistakenly disabled link when its checks pass, and that
+  a genuine pair refusal still blocks restoration. Previously filed facts never move.
+
   The November 18 read-only count found 42,633 Reports, zero Drivers, zero
-  DriverUpdate facts, zero SAME_AS or CONTINUES_AS links between Drivers,
-  and zero ContinuationClaim records. The frequency of missed comparisons
-  is unmeasured. Rule 8.17's 1% threshold concerns errors in accepted facts.
-  The earlier proposal below is an option for later review.
-  Rules 6.16 and 6.19 specify automatic
-  checks for particular company renames. Rule 6.18 has no path for a
-  proven error outside those cases or for an incorrect SAME_AS link.
-  The proposal was one rule for both kinds of link. If ordinary work brings
-  specific source evidence that the link was wrong when made, independently check
-  its original evidence against the new proof. On confirmation, switch
-  off that link and keep the decision, evidence and original facts.
-  An uncertain challenge leaves the existing decision in force.
-  In the postponed rename example, the company described Retail becoming
-  Consumer as a rename.
-  A correction shows Consumer combined Retail and a separate Wholesale
-  division on day one. This disproves the original match. If Wholesale
-  joined only later, the original rename can still be valid.
-  Apply 6.15's existing reading rule to a proven error: once switched off,
-  the link is ignored even in a fresh view of an earlier date. Previously
-  recorded predictions and their source facts stay intact. For SAME_AS,
-  entry 9's safeguard also prevents bypassing the refusal through another
-  name. This proposal requires flagging the exact link, an independent
-  check and a way to record a confirmed mistake. An error that never
-  resurfaces can remain undetected. Rule 6.20 bars background reviews.
+  DriverUpdate facts, zero synonym links and zero rename records. The
+  frequency of missed comparisons is unmeasured. Rule 8.17's 1% threshold
+  concerns errors in accepted facts.
 
 AGREED MODEL CALL LOG — ENTRY 16
 - [x] The runner records the exact model ID and start date/time once per
@@ -4086,3 +4108,493 @@ Proposed SHA c1e3abf54862ef168d5429d8044373377cea6a0068b6770e6b6c05010b47ecfb
  
  **Notes** (drafts and options recorded only here)
 ----- END UNIFIED DIFF -----
+
+FACT PLACEMENT AND SYNONYM LINKS — REVISED DRAFT FOR FABLE AND OWNER REVIEW
+November 20, 2026 (EST). This replaces the earlier review draft in /tmp.
+The owner decided that “We had 500 workers” is a fact about workers even
+when their employment status is unstated. This revision is for Fable's
+check and the owner's review. The single synonym trigger remains separate.
+
+1. File the fact. A Driver is a saved name with a fixed meaning. The reader
+   proposes from the source, then matching searches the full current catalog.
+   Propose one destination per check. Show the independent checker the source
+   in context and the types and frozen definitions of the proposal and other
+   relevant candidates already found. Hide links, prior verdicts, scores and
+   the proposer's reasoning (8.2).
+   If the object, scope and mechanism match and the usual checks pass, save once
+   under the proposed Driver. Another fitting name, a group head, or a missing,
+   refused, disabled or suspect synonym link has no say in that decision.
+
+   For fact placement, change 2.40 check 4 to read “Refuse when
+   the source leaves open a different meaning that would change whether the
+   fact fits the proposed Driver. Another fitting name alone never blocks a
+   proven match.” A rival can expose a mismatch in object or scope. A closer
+   wording or higher rank cannot settle it. Log a refused match. That
+   decision is final for that destination.
+
+   Under 2.20, judge clarity at the level the source actually states. Use
+   every supported qualifier (2.6). An unstated detail can leave a more
+   specific match unproved while the source's own claim is clear. If the
+   source and its context do not identify what the value or statement refers to,
+   skip it and log why.
+
+   Reuse a saved Driver when its meaning is proven to match. If the full
+   catalog search completes with no proven fit for a clear source claim,
+   keep the source-grounded name and create the Driver with this first
+   fact through the normal naming, admission and family checks (2.5–2.8,
+   2.20, 2.26, 2.34–2.37, 2.43). Narrower names elsewhere in the catalog
+   do not disqualify that fact. A failed or incomplete search is no proof
+   of absence (8.14–8.15). A proven exact-name collision permits one
+   source-supported, more specific proposal under 2.47. If no safe name
+   exists, skip and log the collision. Record the fact's final outcome
+   once, even when an earlier proposed match was refused.
+
+2. Check the names separately (#9, 5.6). Search supplies candidates. Only
+   the fact checker's normal reply can flag a specific pair of saved Drivers
+   already shown to it, when their original definitions suggest the same
+   meaning. This can happen even if the incoming fact is too vague to save.
+   A shared number or a vague statement alone gives no reason to flag a pair.
+   Flagging uses the existing call. One separate AI call checks each new
+   eligible pair using only its two defining quotes, types and original context.
+   Reuse unchanged verdicts, skip already-connected pairs, and respect off
+   switches and blocked paths (2.46–2.47, 6.18, 7.1). The pair verdict only
+   governs joining histories. Filing never waits for it. Distinct names may
+   therefore keep separate histories until an approved link joins them.
+
+   Under 5.6, if definitions already shown clearly contradict a
+   join already known to the run, log both names, citations and the reason.
+   A warning changes neither the link nor the fact verdict. No additional
+   lookup or AI call is needed for the warning.
+
+3. Track completed reading by source ID and exact version, original unit and
+   reading task or fact type. Include the company when jobs are split by company.
+   Identify each unit before making AI reading batches, using its saved source
+   unit ID or original passage range or table-cell address within that version.
+   Moving a passage from batch 2 to batch 5 changes nothing. If a new split
+   cannot be mapped to the same original material, do not claim it was covered.
+   Record only completed tasks, including a valid no-fact result. Seeing text
+   as context is insufficient. A held or failed task remains unfinished. A
+   required reread retains full job context (8.10, 8.14–8.15).
+
+Cases for the review and tests
+  - Show two unlinked Drivers, gross profit and operating income. Offer
+    “Gross profit was $2 billion” to operating income. Refuse the proposal
+    because the source names gross profit. “Adjusted operating income was
+    $2 billion” belongs under operating income with the measurement tag
+    adjusted (2.17, 3.24–3.26).
+    The reference ID code keeps that fact distinct from an untagged one.
+    Neither case warrants a wrong-link warning.
+  - “500 employees, excluding contractors” fits the proposed employee count.
+    Save there once whether its twin is linked, unlinked, refused or off, even
+    if a third name is the head. A new eligible pair gets one separate check.
+    Even a pending or failed pair check leaves the fact decision intact. If
+    the head expressly includes contractors and the contradicting definitions
+    and join were already seen, also warn.
+  - “We had 500 workers.” Save one reported count of 500 under the workers
+    measure with its exact quote. Contractor coverage stays unstated. With
+    an empty catalog, create it under the normal naming rules. If the only
+    saved Driver counts payroll employees, refuse that narrower match and
+    create the workers Driver. If a saved Driver means the same worker
+    count, reuse it. These cases assume the usual admission checks pass
+    and the name is available for creation when needed.
+  - In that example, show two unlinked, unreviewed saved Drivers whose
+    definitions both count payroll employees only. Flag those two saved
+    names for one pair check. With one definition expressly including
+    contractors instead, even equal values warrant no pair check. If those
+    conflicting definitions are already known to be joined, log the existing
+    warning. The workers fact is saved once in each case. A general workers
+    Driver may remain separate from a more precise Driver indefinitely.
+  - “The total was 500.” If no heading or other source context establishes
+    what was counted, skip and log. A nearby mention of workers does not
+    tie 500 to them. Create no Driver. If a normal check already sees two
+    synonymous definitions, it can still flag the pair on that evidence.
+  - Exact name already taken. If the saved definition counts payroll
+    employees only and the source expressly counts agency workers off the
+    payroll, try one more specific, source-grounded name under 2.47. Save
+    there if that name is available and the independent check passes.
+    “Workers” alone proves neither contractor inclusion nor exclusion.
+    If the exact name is occupied and no safe distinct name is supported,
+    skip and log the collision. The saved definition stays fixed.
+  - If the saved headcount definition and the source's “number of employees”
+    count the same population on the same basis, reuse headcount. Rule 2.20
+    allows creation only when no saved Driver has that meaning. Rule 2.4's
+    exact-word restriction concerns reordered names. Rule 2.45's exclusions
+    still apply. Twins can arise if search misses one or both are created at
+    once (2.39). Rule 9.9 forbids an immediate link to a newly created Driver.
+    Two search questions come last (2.43, workflow step 23). How does search
+    find differently worded candidates? If two twins are found and the source
+    uses neither name, which single Driver is proposed?
+  - Of five fact types requested on one source unit, four completed types
+    leave one due. Changing the batch boundaries cannot restart those four.
+    One unit can prove several distinct facts.
+  - A repeat claim can occur in two passages on the first read or on an
+    allowed reread. Keep a recognized claim on its original Driver when the
+    match still holds (3.1, 5.2, 5.4–5.5). Unit completion cannot identify a
+    claim across Drivers. In an in-memory test, the reference writer planned
+    one new fact for a prose/table repeat with the same Driver and two when
+    the same claim reached it under two Driver names in the first batch.
+    Replaying a saved claim under its original name planned no write.
+    Replaying it under its twin planned a new fact. A repeated claim under
+    two names may appear twice in a joined history. That display is untested.
+    Test both routes end to end before activation. Equal amounts alone cannot
+    justify merging distinct claims.
+
+A mistaken fact assignment stays on its Driver (1.15). JEV.md records the
+old competing-name check as untested. Its safety benefit is unmeasured.
+Test the revised check with several names shown under 8.13 and 8.17.
+
+After owner approval, review what filing figures can disprove a rename,
+whether a quarterly or annual filing waits for its tagged figures, and
+whether history search starts with the first accepted fact for each company
+and measure. Then address the two catalog search questions together.
+
+Trigger 1 of 3 — owner chose B after reviewing the HPE example (6.19)
+Choose B. Equal figures cannot prove a pure rename. Different figures for
+the same period can come from a later reorganization. HPE reported that
+renaming Intelligent Edge to Networking in fiscal Q3 2025 left its
+composition unchanged and required no recast. A separate November 1, 2025
+transfer moved Telco and Instant On out of Networking. HPE then revised
+the segment's January 2025 quarterly net revenue from $1,147m to $1,076m.
+That revision does not disprove the earlier rename. B drops the numerical
+switch-off. The declaration and independent check (6.14), two old names
+leading to one new name (6.16), and owner correction (6.18) still apply.
+HPE Forms 10-Q, Note 2 in each:
+Original figure https://www.sec.gov/Archives/edgar/data/1645590/000164559025000039/hpe-20250131.htm
+Rename https://www.sec.gov/Archives/edgar/data/1645590/000164559025000101/hpe-20250731.htm
+Transfer and revised figure https://www.sec.gov/Archives/edgar/data/1645590/000164559026000032/hpe-20260131.htm
+
+November 20 owner replies and independent review of Fable's six items
+This records the review before any rulebook edit. Fable's paste alone is
+not approval. Only the owner replies identified below settle a choice.
+
+1. Renames. The owner answered “yes b is fine” to dropping the numbers
+   check. The database confirms the two quarterly amounts above. FY2023
+   and FY2024 segment revenues matched under both names. Keep 6.14, 6.16,
+   6.18 and the rule that a tag change alone leaves a note alone. When
+   applying B, also update the risk warning, picture, schema and step 36.
+
+2. Filing links. The owner accepted waiting for a quarterly or annual
+   filing's own tagged figures to attach its optional links. An otherwise
+   ready fact saves immediately. Its direct metric link names the official
+   line item. It does not certify the amount (3.11, 6.1–6.10). Include
+   amendments. After loading finishes or reaches its retry limit, attach
+   only what the evidence permits. For other sources use eligible data
+   already available. A later filing cannot prove an earlier claim. Batch
+   by source version, giving each newly accepted eligible fact its one
+   chance, including facts found later in a permitted read. A missing
+   optional link alone starts no search. Other required holds still apply.
+
+3. Earlier history. The owner asked for one search of the company's
+   covered documents for that measure, after initial context is built.
+   A metric discovered then starts the search even if other companies
+   already report it. Complete it once, oldest source first. No chain
+   from facts it finds. An interrupted search is still unfinished. Keep
+   the existing public-time, source coverage and pilot budget rules (8.16).
+   The owner confirmed 12 months. Count back from when the source of
+   this company's first accepted fact for this measure became public.
+   Reuse a recognized claim on its original Driver. The reference writer
+   skips an identical replay there but creates a record under a twin name.
+   A blanket guarantee against duplicates would require more than this design.
+
+4. Placement and reading. The owner accepted the source-level meaning
+   and separate link check described above. Reuse or create the Driver
+   for what the source actually identifies. Only the normal fact checker's
+   reply can flag two shown definitions for an independent synonym check.
+   A completed reading is specific to version, original unit, task and,
+   when split by company, company. Required rereads and failed jobs remain
+   distinct from completed work.
+   The owner confirmed the existing rule for saved facts (1.17, 5.1–5.5).
+   Fill compatible details of the same claim from its original source
+   version. Save a later publication's clarification as a new fact at
+   that publication's own public time (7.6). This preserves what readers
+   could have known before the clarification.
+
+5. Other wording. The owner approved the 2.37 change below. The other
+   items are review findings.
+   - 6.14. Count accepted facts from the same source. Keep no pending
+     rename when a name is unused. Reuse a refusal on unchanged evidence.
+     An ordinary permitted history read can still find the declaration
+     (9.10). A later declaration with materially different proof is its
+     own evidence. An approved note keeps its original date on repeats.
+   - 3.44. A periodic filing's arrival can prompt an exact check of a held
+     earnings 8-K. Only the matching company and quarter justify reopening
+     that job. Filing order alone never pairs them.
+   - 2.37. Owner approved replacing the hold. If the first fact for a new
+     bare name still has unknown state after reading the full source,
+     record a final skip and its reason in the usual item result (8.14).
+     A later clear report supplies its own fact at its own public time.
+     This avoids a dedicated retry and may leave the early mention out
+     of the fact history. The existing suffix exception still applies.
+   - 8.14–8.15. Select unfinished work, including a hold whose named
+     trigger happened. A recorded hold is an outcome. A late or edited
+     source has its own work. Check expected sources before declaring a
+     search complete. A last-seen time cannot establish coverage.
+   - 8.3. Catalog and list reviews take place outside routine fact
+     processing. The rules do not assign every review to the owner.
+   - Missed claims. Keep the required whole-source reread for a surprise
+     missing its supporting fact (4.15), allowed retries and quarterly
+     review. A weaker reread cannot erase a saved fact (5.5). There is
+     no general second pass for every document.
+
+6. Earlier search proposal. The later owner approval sheet records the choice of search method. Test exact names and allowed variants plus
+   the database's word search over names and defining evidence. Try a few
+   temporary search terms from the existing naming call if they improve
+   recall. They cost tokens and cannot supply evidence or stored aliases.
+   The live graph has working filing, news and call text indexes but no
+   saved Drivers or Driver text index. Test candidate coverage against
+   known answers, including incomplete families (2.43), before setting a
+   limit. A failed or visibly truncated search cannot prove absence (2.20,
+   8.14). A missed twin can split comparisons or duplicate a claim. No
+   additional model or paid service is needed for this first test (8.12).
+   If normal matching has two equally suitable proposals and the wording
+   favors neither, the proposed tie-break is earlier birth-fact creation,
+   then name. This selects one proposal only, independently of links and
+   group head. Its own check decides. Refusal never automatically files the
+   fact under the runner-up. The existing source-supported exact-name
+   collision rule still applies (2.47). History search can reuse word
+   search over that company's covered sources. A shortlist of passages
+   cannot establish that every eligible document was searched or that no
+   fact exists. Every historical fact needs its own source.
+
+NOVEMBER 20, 2026 — OWNER APPROVAL SHEET FOR TODAY'S DRIVER DECISIONS
+The owner approved this amendment, including all six search points, the tie-break and the three earlier clarifications. It was applied to DRIVER_RULES.md on November 20. Earlier drafts are historical.
+
+Approved decisions
+1. Place the fact. The reader proposes from the source before seeing saved names. An independent checker sees one proposal, the shortlist and any ties already found in the full search. Save once there if the evidence proves the fit. Another fitting name or its link status cannot block it. After the full catalog and family search, a clear fact with no proven match keeps its own available, source-backed name if it passes 2.20, even when another name may mean the same thing. A failed search proves nothing. A refused destination stays refused. A proven exact-name collision permits one more specific name under 2.47.
+2. Check names separately. Only the normal fact checker's reply can flag two shown, already saved names whose own definitions suggest the same meaning. A new eligible pair gets one independent check. Reuse its verdict and skip already joined pairs. The fact never waits. If the definitions instead clearly contradict a join already known to the run, log both names, citations and reason. The warning changes neither decision.
+3. Read work once. Track source ID and version, original passage or cells, and the requested task. Include company for company-specific jobs. Moving text to a different batch changes nothing. Four completed fact types out of five leave one due. Context alone does not complete work. A failed or held job remains unfinished. The separate 12-month task may revisit a completed unit. Only a rule-authorized reread repeats the same finished task.
+4. An unclear first mention. A new metric or action with a plain name needs a clear first state. If the full source still leaves it unknown, skip it and record why. There is no special retry. Types with an allowed name ending keep their existing exception (2.37). A later clear publication can supply its own fact.
+5. Link to official filing figures. Save otherwise-ready facts immediately. Each newly accepted eligible fact gets one chance to attach its optional link. Only that step waits for a quarterly or annual filing's own tags, including amendments, until loading finishes or reaches its retry limit. For other sources, use eligible data already loaded. A blank link alone starts no later search.
+6. Look back 12 months. After building initial company context, the first accepted fact for a new measure at that company starts one search of its covered history for that metric. Count the 12 months back from the source's proven public time and stay within the history window. If that time is unknown, save the fact without starting the search. Work oldest first. Record completion per company and metric Driver. Facts found this way start no further search. Each needs its own source evidence.
+7. Company renames. Drop the numerical switch-off in 6.19. A later restatement can change figures across a genuine rename. Keep the independent check of the company's declaration, the rule switching both notes off when two old names lead to one new name, and the owner's correction. A division tag changing alone leaves the note alone.
+
+Already covered by the rulebook
+• Same source version and same claim. Fill compatible missing details with their own evidence. Saved numbers are frozen except for the existing narrow same-filing precision rule. A later publication's clarification is a separate fact at its own public time. An earlier view keeps the evidence available then (1.14, 5.1–5.5, 7.6).
+• Use the existing run log. The reference writer saves one JSON file per run in the chosen audit directory. An item records its index, fact ID if available, decision, reason codes and detail. The rules already call for linking each reader/checker call's step, exact model and start time to its items. That wiring and read-once selection still need implementation checks (8.12, 8.14, handoff entry 16).
+
+Related rules
+• 6.14. An approved fact from the declaration's own source can establish that a name is in use. An unused name alone is a logged skip, with no pending note or refusal. A later permitted read may judge the declaration once both names are in use. Reuse a refusal on unchanged evidence. An approved repeat keeps its original date (6.17).
+• 3.44. An earnings 8-K that genuinely needs its quarterly filing can reopen only on proof of the same company and quarter. A filing arriving next is insufficient.
+• Two warnings. Select unfinished work even if the source arrived late. A permitted later read may find missed facts. Current whole-source rereads, conditional retries, regular reviews and the ban on erasing saved facts still apply. Rule 8.3 already keeps offline list reviews outside routine fact processing.
+
+Examples to test before use
+• “We had 500 workers” supports a worker count. Reuse a proven match. After a complete search, if workforce_count may mean the same but the checks cannot establish it, save the 500 once under its own available worker-count name. Leave payroll coverage unstated. “The total was 500” with no identifiable subject is skipped and logged.
+• Two saved names have the same payroll-only definition. A clear matching fact saves under its proposed name whether their link is on, off, refused or unchecked. They can be flagged even on an unrelated or unclear fact if both definitions were already shown. A shared number alone never warrants a pair check. A wrong proposal still fails.
+• A filing's text and table can complete one claim from that filing. If a later report supplies the missing detail, it supplies a new dated fact. A later filing’s tags cannot prove the earlier figure.
+• A first company metric after initial context gets one 12-month search. A second company gets its own search. A fact found during that search starts none. The same claim reaching the writer under twin names can produce two records. It may display twice in a joined history. That display and the multi-name checker still need end-to-end tests (8.13, 8.17).
+
+Approved search decisions — finding candidate names
+1. Agreed. Use meaning search (embeddings) from day one to find differently worded Drivers across the full catalog, using their names and defining quotes (2.43). Search suggests candidates. The independent checker confirms a match from the evidence. A short list alone cannot prove absence. The owner approved paid embeddings for this name search. Other paid services still need separate approval under 8.12. For the separate 12-month history search, word hits can locate evidence. Only the original passages prove the facts, and a short list of hits cannot certify coverage of all expected sources.
+2. Agreed (A). Before creating a Driver, the AI must compare the source with every eligible saved definition under 2.43. An independently confirmed match from the shortlist ends the search for a home. If the search would propose creation, read the remaining eligible definitions in batches. A similarity score alone does not count as reading a definition. This pass can uncover a match the shortlist missed. Any match still needs independent approval. Only a complete search with no proven match permits creation under 2.20. Completion establishes coverage. Meaning judgments still need testing (8.13, 8.17).
+3. Agreed (A). For one fact on unchanged evidence, submit at most one saved name from the quick search and one from the full search for independent approval. The second must be a different name supported by the source. Never retry a refused name on the same evidence (2.47). After the full search, if only the match is uncertain, save the independently clear fact once under its own available, source-backed name if all creation checks pass (2.20). Two refusals alone do not justify creation. If the fact itself is unclear or no safe name is available under 2.47, skip and log why. A permanent split is accepted. Later facts still need their own checks, and any later synonym link follows 5.6 and 9.9.
+4. Agreed. For reuse, search every saved Driver of the same fact type across all companies. Before creation, follow 2.43 for measure families missing that type. Use a shared base only when the underlying measure is proved the same (2.26), as with revenue and revenue_guidance. Check the exact proposed name across all types. An existing name with the same meaning can be reused after approval. A different meaning follows the collision rule (2.47).
+5. Agreed. Before creating a Driver, cover every Driver of the same fact type saved since the search started, across all companies. Compare any additions the search has not already checked. Point 3 governs placement. If a change invalidates the approved save, hold the write under 5.8. Point 4's exact-name and family checks and 2.39's simultaneous-creation rule still apply.
+6. Agreed. Choose how many definitions to show together by testing a known match in every position, including the final slot of the last group (8.13). Show all assigned definitions and withhold only the expected answer. Also test that a complete search with no match allows an otherwise valid new Driver and that a missing group blocks creation.
+Agreed tie-break (2.41). Only when eligible saved names fit equally and the source wording favors none, propose the name with the most facts saved directly under it for this fact's subject company. This is the only use of a count to rank Driver proposals. With equal highest counts (including zero), use the earliest birth fact's creation time, then alphabetical Driver name. A shared fact has no subject company and uses the time/name tie-break directly. Links, the group head and other companies' counts do not participate. The usual independent checker decides and sees no tie-break counts.
+Example and reason. If the company has 12 facts under headcount and 2 under employee_count, a tie favors headcount. A better source-supported fit wins regardless of count. Equal counts go to the first-created Driver even if the other has a fact for an earlier year. Count the directly filed facts as they stand when choosing a proposal. Later additions can change a future proposal. Earlier facts keep their Drivers.
+
+Three earlier agreements included in this review
+• 1.14. Withhold our calculated stock returns from extraction. The source's own words about a price rise or fall stay readable. No return detector or redaction of article text is required for extraction. Prediction rule 1.25 and historical-explanation rule A2.5 keep their existing roles.
+• 8.14. The owner confirmed one candidate per explicitly stated actual period value, in prose or tables, so either year is searchable. “2025 revenue was $100M versus $90M in 2024” gives a 2025 candidate with $100M and a $90M comparison, and a 2024 candidate with $90M. Both use the cited source version’s public time (7.6). Keep each period, exact quote, locations and comparison context, including any necessary table cells and headings. “2025 revenue was $100M, up 11%” gives one candidate with its stated change.
+• 8.12–8.13. In development, choose the cheapest model that passes the exact task's tests. A valid refusal stays final for that decision. The cost choice adds no runtime cascade.
+
+Independent review of Fable’s November 20 patch and follow-up
+Compared all 34 places where Fable’s proposed text differed from the previous owner-review draft (52353ede). Both patches used the same working rulebook. The decisions below explain the revised patch.
+
+• Search and placement (1.19, 2.40–2.47, 8.2, 8.13). Use hits from either word or meaning search and keep exact names and permitted variants. Test the shortlist size and include differently worded matches. The rule needs no minimum embedding score or identical quota for the two searches. Show the checker the shortlist, the saved proposal and any names already found tied with it in the full search, in alphabetical order. Showing just the proposal from a full search could hide the very twin the checker can flag. Company counts break a tie only after meaning and wording tie. The group head remains a display label.
+• Creation and saving (2.20, 2.37, 2.43, 2.45, 2.47, 5.2, 5.5, 5.8). Keep full-source proof before discarding an unclear first state and complete catalog coverage before creation, including additions during the search. Check unseen definitions once. An exact-name collision needs a proved difference for a more specific name. A surprise still follows the search checks and uses its supporting fact’s base. The existing test for names that merely share words stays in force. A later publication keeps its own date. A recognized repeat stays on its original Driver when it still fits. A claim filed under twins may display twice.
+• Synonyms and renames (5.6, 6.14, 6.16–6.18). The pair checker gets the two names, types and frozen evidence. Only the normal fact checker can flag the pair. The fact never waits for it. An unused rename label alone is a logged skip with no pending note or refusal. An allowed later read may find the declaration when both names are in use. A real refusal stands on unchanged evidence. A tag change alone never switches off a rename.
+• Filing links and dates (3.11, 3.44, 5.1, 6.1, 6.8). The save table now points to the one post-save attempt already defined in 6.8. That attempt may attach several supported breakdown links. A blank starts no search. An earnings 8-K reopens only for a proven company and quarter match.
+• Reading and cost (1.14, 8.12–8.16). A completed passage can be read for the distinct 12-month company/metric Driver task. Unknown public time leaves the fact saved and the search unstarted. Failed or held jobs stay unfinished, and search hits alone cannot prove coverage. The full-search test includes a known no-match and an unread batch. Keep source-reported returns, two separately reported actual periods in prose or tables, and the cheapest model qualified for the task.
+• The owner directly confirmed paid meaning search on November 20 at 4:20 PM EST in the conversation with Fable. Rule 8.12 records approval only for embeddings that suggest names under 2.43. Other paid services still need separate approval.
+
+Exact before-and-after patch for the settled decisions and the related wording above
+The patch covers DRIVER_RULES.md against its working copy, including pre-existing edits. DriverWorkflow.md now reflects the model choice, rename rules and timing of the 12-month search. The batch size, model accuracy and costs still need measurement.
+Before SHA-256   49a69c943711a4ad4611e00e6509daee56da66323bd93ce2db8803ad1e80baf2
+Applied SHA-256  5237f06187808f1ad1ea5d2b9ba2654aad95090580bb6d34f64c8043163403ad
+----- BEGIN NOVEMBER 20 OWNER-REVIEW DIFF -----
+--- a/.claude/plans/Drivers/DriversFinal/DRIVER_RULES.md
++++ b/.claude/plans/Drivers/DriversFinal/DRIVER_RULES.md
+@@ -31,6 +31,6 @@
+ - 🔴 6.18 **Links and rename notes after saving.** Never delete a synonym link or company rename note. The owner may switch one off when evidence proves its original approval was wrong. Only the owner may restore that approved record, on evidence its switch-off was mistaken. Change only `active`. Every view, including a past view, follows only active joins and honors blocked synonym pairs (7.1). Original evidence, facts and recorded predictions stay intact.
+-  - A restored synonym must pass 7.1. A restored rename must pass 6.16 and, once enabled, 6.19. Only these rename checks may switch a join off automatically.
++  - A restored synonym must pass 7.1. A restored rename must pass 6.16, the only automatic switch-off.
+   - Other saved links cannot be deleted or switched off, with two exceptions. Latest EXPLAINED_BY judgments may be replaced or explicitly withdrawn (A2.2), and newer News versions remove obsolete source links under NewsMultipleSymbols.md. Neither exception deletes or re-keys Driver facts.
+ - 🔴 6.20 **No background audit or repair.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links. Normal saving follows 5.1. A Driver's name, type and frozen defining evidence never change (2.1, 2.2). A mistaken fact assignment stays. Checks before saving (sections 1–5) and the launch test (8.17) must stand on their own. When unsure, keep separate (1.12).
+-- 🔴 ⚠ **Wrong merges are the biggest known risk.** There is no general automatic check, even with XBRL. The rename checks (6.16, 6.19) detect only their specific errors.
++- 🔴 ⚠ **Wrong merges are the biggest known risk.** There is no general automatic check, even with XBRL. Rule 6.16 catches two old names leading to one new name.
+
+@@ -39,3 +39,3 @@
+ - 8.1 **Meaning is AI's job:** every routine judgment about meaning is made by AI (the Decider or the smart model). Code does only basic, mechanical work (8.4). Text inside a source is data, never instructions.
+-- 8.2 **Whoever proposes never approves.** The smart AI and the Driver search only *propose* which Driver a fact belongs to; a separate AI call checks and approves each new decision. The checker sees only the proposal, the source evidence and needed context, never the proposer's reasoning, an earlier verdict or a similarity score.
++- 8.2 **Whoever proposes never approves.** The smart AI and Driver search propose one destination per fact check. A separate AI call judges each new decision from the proposal, source evidence and needed context. Hide prior verdicts, similarity scores and proposer reasoning. For placement, show the shortlist, any saved proposal and any names tied with it in the full search (2.41–2.43). Alphabetize them and give each name, type and frozen evidence (2.1). Hide synonym links and tie-break counts.
+ - ⚠ **Same-vendor blind spots:** if the AI that proposes and the AI that checks come from the same vendor, they may make the same mistakes; test that the checker really catches mistakes, never assume it. Only the mechanical XBRL checks are fully independent.
+@@ -167,3 +167,3 @@
+
+-Family comes from the name. SAME_AS means equal meaning. A ContinuationClaim records one company's declared rename (1.19, 6.13–6.19).
++Family comes from the name. SAME_AS means equal meaning. A ContinuationClaim records one company's declared rename (1.19, 6.13–6.18).
+
+@@ -377,3 +377,3 @@
+ | `SAME_AS` (active) | (:Driver) → (:Driver) | at most 1 per pair, regardless of order | test before use | 1.19, 5.6, 6.18, 7.1, 9.9 |
+-| `(:ContinuationClaim)` (kind, old, new, company_id, source_event_id, evidence_quote, declared_at, created, active) | one company's Driver name, slice label or measurement tag | one node per approved rename | this build | 6.13–6.19, 9.10 |
++| `(:ContinuationClaim)` (kind, old, new, company_id, source_event_id, evidence_quote, declared_at, created, active) | one company's Driver name, slice label or measurement tag | one node per approved rename | this build | 6.13–6.18, 9.10 |
+ | `EXPLAINED_BY` (company_id, reason, stock_impact, weightage, confidence, llm_producer, produced_mode, created) | (:Date) → (:DriverUpdate) | 1 latest judgment per Date + affected Company ID + DriverUpdate ID + producer | planned, not built yet | 3.12, A2.1–A2.8 |
+@@ -403,3 +403,3 @@
+
+-- 1.19 A reversible synonym link records the same meaning (5.6, 6.18). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. In a synonym group joined under 7.1, one name is the current representative (the "head"): the earliest, then alphabetical order. Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
++- 1.19 A reversible synonym link records the same meaning (5.6, 6.18). Family = related flavors, read from the name (1.18). Never use one in place of the other; passing the family check (2.26) never creates or implies a synonym link. The head of a group joined under 7.1 is for display only. Use the earliest birth-fact `created`, then alphabetical Driver name (2.1, 3.3). Example chain: `net_sales_guidance` → (same family, by name) → `net_sales` → synonym → `revenue`. A missing synonym link costs a missed comparison, never a wrong merged number.
+
+@@ -410,3 +410,3 @@
+
+-- 5.6 **Synonyms.** Enable only after the checker and grouping pass their tests (7.1, 8.13). Ordinary matching (2.43) may nominate specific pairs of previously saved Drivers. Skip the link proposal and pair check if active links already connect the names. An indirect join supplies no direct verdict. Reuse the exact pair's verdict under 2.46–2.47. Independently check each new proposed pair's frozen definitions, types and identity (2.1, 2.40). On direct approval, save one link with `active=true` if 7.1 allows it. The incoming fact still needs its own checked match (2.40–2.47). Models may propose combinations but never delete, re-key or move facts or bypass approval.
++- 5.6 **Synonyms.** Enable only after the checker and grouping pass their tests (7.1, 8.13). Only the normal fact checker may flag two shown, saved Drivers whose frozen definitions suggest the same meaning, whatever the fact verdict. Skip the pair proposal and check if active links already connect the names. An indirect join supplies no direct verdict. Reuse the pair's recorded verdict (2.46–2.47). A separate call checks each eligible new pair using only the two names, types and frozen evidence (2.1, 2.40, 9.9). On direct approval, save one link with `active=true` if 7.1 allows it. Fact placement ignores links and never waits for this check. No model may delete, re-key or move facts or bypass approval.
+   - Hide join status from the checker (8.2). If two frozen definitions already in an ordinary check clearly mean different things, its answer names both Drivers, cites both definitions and explains the difference. After the verdict, code logs those names, citations and reason on the existing run-log item only for a direct or indirect synonym join already known to the run (8.12, 10.2). Never store this warning as a pair verdict or refusal. A failed fact match alone is insufficient. Warnings may repeat. They require no extra lookup or AI call, change no join and never hold a fact.
+@@ -418,8 +418,6 @@
+ - 6.14 Only new proposals go to the independent checker (8.2). Keep the company's exact words in `evidence_quote`, with enough context to prove both exact names and that composition and measurement method stayed the same. Refuse insufficient evidence or a recast, recomposition or reclassification of the item being renamed.
+-  - For `old` and `new`, use the unique `Driver.name` (2.35), whole slice `kind:value` (3.20), or exact stored measurement tag (3.24–3.25). Save no note until the checker finds both on this company's facts and the pair identifies exactly what the filing renamed. An early announcement stays in its filing for later use (9.10).
++  - For `old` and `new`, use the unique `Driver.name` (2.35), whole slice `kind:value` (3.20), or exact stored measurement tag (3.24–3.25). The checker must find both names on this company's accepted facts, including this source's, and identify exactly what was renamed. An unused name alone means skip and log, with no note, hold or refusal. Judge the declaration if a later permitted read finds it with both names in use (9.10). Reuse refusals on unchanged evidence (2.46–2.47).
+ - 6.15 Set `declared_at` to the cited source's proven public time (7.6), regardless of the rename's effective date. Code sets `created` to the first save time and `active=true` on first approval. Thereafter change `active` only under 6.18. A note affects only its company's requested joined history (7.10) and never spreads to a Driver's family (1.18).
+-- 6.16 Within one company and kind, allow at most one active note per old name. Refuse a competing target or a loop. If two old names lead to one new name, switch both notes off.
++- 6.16 Within one company and kind, allow at most one active note per old name. Refuse a competing target or a loop. If two old names lead to one new name, switch both notes off. A changed division tag alone never changes `active`.
+ - 6.17 Enforce database uniqueness on `(company_id, kind, old, new)`. A repeat leaves the entire note unchanged, even from another filing. A rename proposal never counts as a fact. Its refusal never invalidates other facts from the same source.
+-
+-- 6.19 If both names have XBRL data, a mechanical check across the rename switches the note off when the official line item splits or the direction reverses. A changed division tag alone never changes `active`. Define and test the exact filing evidence for each trigger before enabling this check.
+
+@@ -584,3 +582,3 @@
+   3. the same causal mechanism and position;
+-  4. no equally plausible competing Driver;
++  4. for placement, refuse if another plausible meaning of the source would change the fit. Another fitting name alone never blocks a proven match. Other identity checks still require no equally plausible competing Driver among their inputs.
+   5. the existing Driver's frozen evidence (2.1) describes one coherent mechanism. Check the saved name and fact type against that evidence (10.2).
+@@ -590,5 +588,8 @@
+   The identity check runs on every new fact, not only when a Driver is created. The family check (2.26), which runs once when a family member is admitted, applies these checks to the underlying measure (what is being measured), not to the flavor, since a forecast and a result are different kinds of fact by design.
+-- 2.41 Counts never decide identity. Company count, industry count, mention count, exact spelling or popularity may never create, merge, rank, confirm or pick a Driver. There is no "broad" label and no company-count threshold.
++- 2.41 Counts, spelling and popularity never prove identity. Only when saved Drivers fit equally and source wording favors none may counts rank proposals. Propose the name with the most facts saved directly under it for the subject company (3.9). Shared facts skip the count. Among names still tied, use earliest birth-fact `created`, then alphabetical Driver name. Ignore links. The checker decides (8.2). Driver popularity never ranks the shortlist. No “broad” label or company-count threshold.
+ - 2.42 Drivers are company-neutral. One is reused across companies only when identity proves the same cause. A cross-company calculation finds its companies from the facts when it runs; fewer than two means no comparison.
+-- 2.43 Matching searches the whole current catalog, whatever the source's date (1.14), never filtered by company or industry. Industry labels may be shown only as context. When a new metric, guidance, surprise or measure expectation matches no existing Driver of its own type, it is also compared with each family that has no Driver of that type yet, read from the names of existing Drivers (1.18). If the family check (2.26) finds it measures the same thing as one such family, it takes that family's base name with its own ending (a metric proposed as `staff_turnover` becomes `employee_churn` when only `employee_churn_guidance` exists). If unsure, or if more than one family fits, it keeps its own name. A surprise always takes the same base name as its home fact in that event (4.14), so the two never split.
++- 2.43 Search today's catalog for saved Drivers of the proposed type across all companies (1.14). Industry labels are context only.
++  - Search names and frozen defining quotes by both words and meaning (embeddings, 8.12). Combine both lists with exact names and permitted variants (2.4). Use no minimum embedding score. The proposer selects the best source-supported fit (ties under 2.41). Independent approval ends the search for a home (2.40, 2.45).
++  - Before creation, the AI compares the source with every same-type saved definition. Read the remaining definitions in tested batches (8.13). A score alone does not count. On unchanged evidence, submit at most one saved name from the shortlist and one different, source-supported name from the full search for approval (2.47). Incomplete coverage blocks creation (5.8, 8.14).
++  - Check the proposed new name across all types (2.47). When a new metric, guidance, surprise or measure expectation has no proven match of its own type, it is also compared with each family that has no Driver of that type yet, read from the names of existing Drivers (1.18). If the family check (2.26) finds it measures the same thing as one such family, it takes that family's base name with its own ending (a metric proposed as `staff_turnover` becomes `employee_churn` when only `employee_churn_guidance` exists). If unsure, or if more than one family fits, it keeps its own name. A surprise follows these checks and always uses its home fact’s base in the same event (4.14).
+ - 2.44 The rules state only the general identity test. Real industry-pair examples may be used only as hidden tests, never as rules.
+@@ -596,5 +597,5 @@
+ - 2.46 The same decision is reused when the exact same input comes back unchanged.
+-- 2.47 A fact joins an existing Driver only if it matches that Driver's meaning (2.1). A refusal is final for that decision: no retry, escalation or weaker check can turn it into a merge. The pair is looked at again only after an exact change in its evidence or state that a rule names in advance (8.15). If an exact-name match turns out to mean something different (one name, two meanings), coin a more specific name once; if no safe name exists, skip it.
++- 2.47 A fact joins an existing Driver only if it matches that Driver's meaning (2.1). A refusal is final for that decision: no retry, escalation or weaker check can turn it into a merge. The pair is looked at again only after an exact change in its evidence or state that a rule names in advance (8.15). For creation, an occupied exact name permits one more specific, source-backed name only for a proven difference. If no safe name exists, skip and log.
+ - ⚠ **Some wrong "same meaning" calls can't be avoided at first sight.** The promise is fewer than 1% wrong at launch, measured with honest upper bounds (8.17); never zero by construction. A mistaken fact assignment stays (6.20).
+-- ⚠ **"When unsure, keep separate" creates near-duplicates** (accepted splits, same-moment races, wrongly refused near-matches). No process repairs them, and none is planned (6.20); they stay split, the safe side (1.12).
++- ⚠ **"When unsure, keep separate" creates near-duplicates** (accepted splits, same-moment races, wrongly refused near-matches). The records stay separate (6.20). A claim saved under both names may appear twice in a joined history (5.6).
+ - ⚠ **A wrong merge of two flavors without a suffix is judged only once, when saved,** and nothing checks it again (6.20); only a suffix makes flavors distinguishable by name (1.18).
+@@ -611,3 +612,3 @@
+ - 2.20 **Create a new Driver only when all of these hold:**
+-  - no existing Driver has the same meaning;
++  - the search in 2.43 is complete and no saved Driver is proven to have the same meaning;
+   - every naming rule passes;
+@@ -618,3 +619,3 @@
+
+-  Vague evidence is skipped. *Why:* this keeps junk, one-off and made-up names out.
++  Judge clarity at the level stated. “500 workers” supports a worker count even when contractor coverage is unstated. If only the match is uncertain and these checks pass, save the clear fact under its own available, source-backed name (2.47). Skip and log “the total was 500” if context never identifies what was counted. *Why:* this keeps junk, one-off and made-up names out.
+
+@@ -629,3 +630,3 @@
+ - 2.36 A name on the catalog list is not yet a Driver; the Driver comes into being only with its first written fact (2.35).
+-- 2.37 A bare-named Driver's first fact must have a readable state, not `unknown`; otherwise it is held until such a fact arrives. A Driver with an admitted final type suffix (2.19) may start with an `unknown`-state fact. This applies only at creation.
++- 2.37 For a bare-named Driver, skip and log a first fact whose state stays `unknown` after reading the full source (8.14). A Driver with an admitted final type suffix (2.19) may start with an `unknown`-state fact. This applies only at creation.
+
+@@ -686,3 +687,3 @@
+ | `series_unit` | A grouping label that keeps one series together when read (3.35) | Set once, when written |
+-| `xbrl_qname` | The official XBRL line item this metric matches | Metric only; added later (§6) |
++| `xbrl_qname` | The official XBRL line item this metric matches | Metric only, set under 6.8 |
+
+@@ -738,3 +739,3 @@
+   - Before that filing exists, go ahead only when the quarter's identity is certain.
+-  - Missing or ambiguous → hold.
++  - If the quarter is missing or ambiguous, hold under 8.15. Reopen only when a 10-Q or 10-K proves the same company and quarter.
+   - These are the only two ways: never a third, and never pairing by fiscal label, projected date or filing order.
+@@ -979,3 +980,3 @@
+ | A later company confirmation of guidance | Becomes a new fact; history is never rewritten | 4.9 |
+-| A link or rename note | Changes after saving follow 6.18. Synonym links and rename notes are never deleted. | 6.18 |
++| A link or rename note | Optional filing links may be added after the fact is saved. Changes to saved links or notes follow 6.18. Synonym links and rename notes are never deleted. | 6.8, 6.18 |
+ | A saved fact | Never hidden or deleted; no audit or repair runs after saving | 6.20 |
+@@ -983,3 +984,3 @@
+
+-- 5.2 Before saving, combine compatible details of the same claim across passages in either order. One claim is one result, forecast decision or other occurrence within one source event, Driver and scope. Keep distinct decisions and conditional alternatives separate. Respect protected locations (5.9) and retain each detail’s exact evidence (1.24). For the same quantity, basis and unit, use the finer amount only when both agree at the stated rounding. Conflicts follow 5.3 or A1. After required checks, skip and log only arrivals whose match remains ambiguous unless 8.15 permits a specific retry. Use only the existing read, combine and save steps, without extra code or AI passes. If they cannot preserve the proof, retain any saved fact and flag the gap for review.
++- 5.2 Before saving, combine compatible details of the same claim across passages in either order. One claim is one result, forecast decision or other occurrence within one version of one source event, Driver and scope. Keep a recognized repeat on its original Driver if it still fits. Keep distinct decisions and conditional alternatives separate. Respect protected locations (5.9) and retain each detail’s exact evidence (1.24). For the same quantity, basis and unit, use the finer amount only when both agree at the stated rounding. Conflicts follow 5.3 or A1. After required checks, skip and log only arrivals whose match remains ambiguous unless 8.15 permits a specific retry. Use only the existing read, combine and save steps, without extra code or AI passes. If they cannot preserve the proof, retain any saved fact and flag the gap for review.
+ - 5.3 **Compare values within one claim** (5.2, 5.9). Decide from what was stored before the batch so input order cannot decide. For eligible same-filing text/tag conflicts, use the “no existing fact” row on first save and A1 if a value was already stored.
+@@ -1000,3 +1001,3 @@
+
+-- 5.5 Freeze saved values except for A1’s documented precision upgrade. Later sources add their own facts. Other fields take the last supported write within a claim, logged. If a reread of the same claim and source version misses confirmation, keep `company_confirmed=true` and its proof (4.9). Preserve the original `source_location` and proof of every retained detail. Never clear stored fields or re-key saved facts. Identical race duplicates read as one. At most one fact per group lacks a tie-breaker. Each pair differs on a shared filled value unless 5.9 protects distinct occurrences or locations.
++- 5.5 Freeze saved values except for A1’s documented precision upgrade. Later sources, including clarifications, add their own facts at their own public times (7.6). Other fields take the last supported write within a claim, logged. If a reread of the same claim and source version misses confirmation, keep `company_confirmed=true` and its proof (4.9). Preserve the original `source_location` and proof of every retained detail. Never clear stored fields or re-key saved facts. Identical race duplicates read as one. At most one fact per group lacks a tie-breaker. Each pair differs on a shared filled value unless 5.9 protects distinct occurrences or locations.
+
+@@ -1008,3 +1009,3 @@
+ - *See also:* A correction with no business-change wording never reads as a raise or a cut: 4.5.
+-- 5.8 A fact is saved only if everything its decision relied on still holds at that moment: the check and the write happen together, protected against conflicting changes (plain code). If a relevant change invalidates the approved save, nothing is saved and the assigned job is held (8.14). A test run uses the same checks.
++- 5.8 A fact is saved only if everything its decision relied on still holds at that moment: the check and the write happen together, protected against conflicting changes (plain code). Before creation, cover every same-type Driver saved since the search began, across companies. Compare only unchecked additions (2.43). The name and family checks must still hold at the write (2.26, 2.39). If a relevant change invalidates the approved save, nothing is saved and the assigned job is held (8.14). A test run uses the same checks.
+
+@@ -1020,3 +1021,3 @@
+
+-- 6.1 Attach the exact company-reported line item, or attach nothing. A wrong link does silent damage that nothing undoes after saving (6.18); a missing link fills itself in on a later run at no risk.
++- 6.1 Attach the exact company-reported line item, or attach nothing. A wrong link is permanent (6.18).
+ - 6.2 Only a base metric gets a direct link. Guidance and surprise facts inherit the line-item link of the metric Driver named by their base (1.18), only when that Driver has facts for the same subject company public before the read's date; actions never link; a non-GAAP measurement blocks inheritance. *Why:* a forecast or surprise has no XBRL line of its own; the line lives on the metric. Otherwise they get no link for now; a direct guidance or surprise link is never written to fill the gap.
+@@ -1033,3 +1034,3 @@
+ - 6.7 The candidates are the company's own consolidated numeric line items, cut at the fact's public time for history (live may use the latest). The chosen item must be exactly on that list. Only 10-K and 10-Q filings (and their amendments) carry XBRL; 8-Ks never do.
+-- 6.8 A line item missing from the database never blocks the fact; the link fills in later.
++- 6.8 Save otherwise-ready facts immediately. Try the optional links (3.11) once per newly accepted eligible fact, grouped by source version. For a 10-Q, 10-K or amendment to either, only linking waits until that filing's tags finish loading or exhaust their retries (8.15). For other sources, try immediately with eligible data already loaded (6.7). Leave unproved links blank. A blank alone triggers no later search.
+ - 6.9 A link to a breakdown member needs both its axis and its member. It's valid only when it matches one real tagged fact exactly: the subject company, line item, duration or instant, exact dates, and the complete set of breakdowns (including "none"). Two different breakdown sets are never combined; that would invent a combination no filing has.
+@@ -1137,3 +1138,3 @@
+ - *See also:* Which period a surprise uses: 3.38.
+-- ⚠ **Missed facts aren't caught when writing:** if a reader emits the metric but drops the surprise stated in the same sentence (or the second of two scenario forecasts), nothing flags it at write time. A later, fuller reading fills the gap, and a weaker re-run can't erase it.
++- ⚠ **Missed facts aren't caught when writing:** if a reader emits the metric but drops the surprise stated in the same sentence (or the second of two scenario forecasts), nothing flags it at write time. A permitted later read may recover it (4.15, 8.14–8.16). A weaker reread cannot erase a saved fact (5.5).
+
+@@ -1181,6 +1182,6 @@
+   - A new fact uses only its own source: it proves its own meaning and details (1.17), and a later source never fills a gap in it.
+-  - The order that prevents anchoring: when the reader proposes new facts and names, it reads the source without seeing any existing names; only then is each proposal checked independently against the whole current catalog, whatever the source's date (2.43); then it is saved. A targeted search for a known Driver's history or updates (8.16) may name that Driver, but each match is still proven from the source alone. Company slice lists (3.17) and filing line-item candidates (6.7) stay cut at the source's public time.
++  - Propose new facts and names from the source before showing the reader any saved names. Then search today's catalog and independently check the proposal before saving (2.43, 8.2). A targeted search for a known Driver's history or updates (8.16) may name that Driver, but each match is still proven from the source alone. Company slice lists (3.17) and filing line-item candidates (6.7) stay cut at the source's public time.
+   - In views, a Driver appears from the public time of its earliest fact.
+   - History reads use "strictly before the as-of date"; live use sees everything current.
+-  - Never show the realized stock return to whatever produces a fact. Historical explanations follow A2.5; predictions never see the outcome they predict (1.25).
++  - Withhold system-calculated stock returns from fact producers. Returns stated in the source remain readable evidence. Historical explanations follow A2.5. Predictions never see their outcome (1.25).
+   - Never assume which kind of source arrives first; process each at its real public time when known (7.6).
+@@ -1190,3 +1191,4 @@
+ - 8.14 **Every item ends in one of five recorded outcomes.** Nothing disappears silently.
+-  - One job may cover the whole source; separate company jobs are optional. If split, company must be in selection, lock, completion and saved-result keys. One company's work must not block, overwrite or falsely complete another's. A whole source is complete only when all required work has a recorded outcome; retain full-source coverage (8.10).
++  - Track each read by source ID and exact version, original unit ID or passage/cell range, and reading task (each requested fact type). Fix units before batching. Count only assigned work mapped to those units. Text shown as context does not count. Skip completed tasks, including a valid no-fact result, except for a rule-authorized reread (4.15, 8.15). The separate 8.16 look-back may revisit completed units. Held or failed work remains unfinished.
++  - One job may cover the whole source. If split by company, include company in selection, lock, completion and saved-result keys. One company's work cannot block, overwrite or complete another's. A source is complete only when all required work is finished (8.10).
+
+@@ -1201,3 +1203,3 @@
+ - "Not found" is a final skip only when every expected source was present and searched without errors; an incomplete search is held, not skipped. Such a skip reopens only on a new source, a repaired source collection, or a certified upgrade to how evidence is located.
+-- For each source item it reads, the AI reader returns either one or more facts or exactly one stated reason for returning none, never both and never neither; a rename proposal (6.13) counts as neither. The reader returns several facts only when the item states distinct facts, for example a result and its comparison with expectations (4.1).
++- For each source item it reads, the AI reader returns either one or more facts or exactly one stated reason for returning none, never both and never neither; a rename proposal (6.13) counts as neither. The reader returns several facts only for distinct claims, e.g. a result and its comparison with expectations (4.1). For each period whose actual value the source states in prose or a table, return a separate candidate with its period, exact quote, locations and comparison context (1.24). Never infer an unstated actual.
+ - If writing a job fails, nothing from that job is left half-written and nothing is reported as written; its facts are held.
+@@ -1212,8 +1214,9 @@
+ - 8.16 **Running rules already decided:**
+-  - When a metric Driver gets its first accepted fact, its subject company's earlier sources are searched for its history, oldest first. Relevant new sources update known Drivers and may introduce new ones, whether or not prices moved.
++  - After initial company context is complete, the first accepted fact for a metric Driver new to that company starts one search of its covered sources for that Driver’s measure. Search oldest first within the history window and the 12 months before the triggering source's proven public time (7.6). If that time is unknown, keep the fact and start no search. Record completion of this separate task once per company and metric Driver (8.14). Facts found this way start no further look-back.
++  - Relevant new sources update known Drivers and may introduce new ones, whether or not prices moved.
+   - Significant observed moves also trigger the same update process: reuse saved facts/evidence first, research gaps when needed, including moves with no useful publication, and save only supported daily judgments (A2). Initial company context and historical sources use this same process; source coverage, significance settings and research limits remain open (10.1, 10.3).
+-  - A fact found this way still needs its own source's evidence (1.17): a known value, period or official tag may only help find candidates, never prove anything. A value may help find the same period's figure in another document, never a different period's figure. At most one suggested Driver may come with it (several → fail closed); the core re-checks the match from the old source alone, and a mismatch never forces it.
++  - A fact found this way still needs its own source's evidence (1.17). Word hits, a known value, period or official tag may locate passages but cannot prove a fact or complete source coverage (8.14). A value may help find the same period's figure in another document, never a different period's figure. At most one suggested Driver may come with it (several → fail closed); the core re-checks the match from the old source alone, and a mismatch never forces it.
+   - An older source found late is processed as history at its own public time (7.6 if unknown), never dropped.
+   - History work never starves live work. Use time and cost measured in a one-company trial to set source coverage, history window and research budget before enabling routine searches (10.1, 10.3). A period outside that window remains unsearched.
+-- ⚠ **Late sources must never be silently missed:** a "last seen" marker isn't proof that everything arrived; late and backdated sources need their own check.
++- ⚠ **Late sources must never be silently missed:** select unfinished work within the agreed coverage and window (8.14–8.16). A last-seen date cannot prove coverage.
+ - ⚠ **Live arrival is untested:** the test data has no events after 2026-04-28.
+@@ -1243,3 +1246,3 @@
+
+-- 8.12 AI calls run on subscriptions only: no API billing, no switching providers, no silent fallback. Any pay-per-use service, such as paid embeddings used only to *suggest* match candidates (never to decide), needs its own separate owner approval.
++- 8.12 AI calls run on subscriptions only, with no provider switching or silent fallback. Paid embeddings to suggest names in 2.43 are the sole approved billing exception. Any other pay-per-use service needs separate owner approval.
+   - Technical failures or malformed/incomplete replies may be retried up to a limit fixed beforehand; every attempt is recorded. A valid answer is never repeated to obtain a different result; a valid "no" or "unsure" is an answer, not a failed call. Rereads allowed by 8.15 remain permitted.
+@@ -1247,3 +1250,5 @@
+ - 8.13 Passing a test qualifies an AI only for that exact task, model, program running it, connection and configuration, and kind of input; it never carries over.
+-- ⚠ **Every new "same meaning or not?" decision needs an independent check.** Which AI models to use is build work: one strong model per task for the build steps, with no cascades, votes or fallbacks (8.12–8.13).
++  - Test placement with several names shown across link states. Grade the fact decision, pair flags and warnings separately (2.40, 5.6).
++  - Test the shortlist size on known matches with different wording. Qualify the full-search batch size with known matches at every position, including the last slot of the last batch. Show all assigned definitions and hide the expected answer. A complete search with no match must propose no saved name and permit otherwise valid creation. An unread batch blocks creation. Measure full-search frequency and cost per batch in the company trial.
++- ⚠ **Every new "same meaning or not?" decision needs an independent check.** During development, choose the cheapest model that passes the task's tests (8.13, 8.17). Use one model per task, with no runtime cascades, votes or fallbacks (8.12).
+
+@@ -1361,3 +1366,3 @@
+ | 1 | What am I recording? | Drivers and facts; five fixed types; the evidence and history laws | — |
+-| 2 | What goes in a name, and when is a Driver new? | Name the reusable cause; a Driver is born with its first real fact, with no exceptions, and has no status; a measure forecast or a surprise belongs to the metric's family by name, checked before saving (2.26); every fact is matched against the whole current catalog after the reader proposes (1.14); sameness is judged by object, scope and mechanism, never by counts, and approved by an independent check; unsure → keep separate | how candidate Drivers are found and shown; which AI does the checking |
++| 2 | What goes in a name, and when is a Driver new? | Name the reusable cause; a Driver is born with its first real fact, with no exceptions, and has no status; a measure forecast or a surprise belongs to the metric's family by name, checked before saving (2.26); search the current catalog after the reader proposes (2.43). Only an independent check of object, scope and mechanism establishes identity (2.40). When unsure, keep separate | model and batch size, subject to 8.13 |
+ | 3 | What is on each fact? | fields grouped by meaning (3.3); allowed states per type; slices, tags, units, signs, periods and number shapes | how facts are stored |
+----- END NOVEMBER 20 OWNER-REVIEW DIFF -----
+
+Verified against the approved patch. It adds 43 lines and removes 38, a net increase of 5 lines and 586 words. Rule 6.19 is the only numbered rule removed. All 228 remaining rule numbers, 38 tables, 15 diagrams and Markdown link targets are preserved.
+Point 2 trial work. Measure how often searches need the full check, the time and AI usage per batch, and a suitable batch size. Growing from zero to 1,000, 5,000 or 20,000 distinct Drivers takes 499,500, 12,497,500 or 199,990,000 cumulative definition comparisons respectively if each new Driver must check every earlier one. Use the trial measurements to estimate cost at those sizes.
