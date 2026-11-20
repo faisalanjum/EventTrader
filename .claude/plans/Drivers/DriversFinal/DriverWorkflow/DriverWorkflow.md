@@ -4,7 +4,7 @@
 
 **Now:** internalize the rulebook ([DRIVER_RULES.md](../DRIVER_RULES.md)).
 
-**Goal:** turn unstructured text into Neo4j nodes/edges, stage by stage, until we trade company signals automatically. [Driver rules](../DRIVER_RULES_Categorized.md) apply. Updated 16 Nov 2026.
+**Goal:** turn unstructured text into Neo4j nodes/edges, stage by stage, until we trade company signals automatically.
 
 ## Stages
 
@@ -16,7 +16,7 @@
 
 Build a company's context → keep it updated → trigger trade signals.
 
-1. **Build the creator:** text → Drivers + DriverUpdates (4 fact types: `metric`, `guidance`, `surprise`, `action_event`).
+1. **Build the creator:** text → Drivers + DriverUpdates (`metric`, `guidance`, `surprise`, `action_event`, `expectation`).
    - [ ] Internalize the rulebook; fix what doesn't make sense ([DRIVER_RULES.md](../DRIVER_RULES.md)).
    - [ ] Rough pass, in order: fact? → which type? → about what? → fields → Driver name → check.
    - [ ] Try it on one small fixed set (transcript, 8-K, news; hand-checked); keep what works, change the rest, repeat.
@@ -77,9 +77,11 @@ Build these core components in this order. They cover the main system; **“90% 
 
 **Status:** practical to start implementing and testing; completing it reliably still requires resolving the marked decisions and proving each step works. This is a build-and-test sequence, not new rule authority or proof that the design is fully settled.
 
-All **231 numbered rules**, plus Part A1 and the company workflow, are mapped below. Rule numbers refer to [DRIVER_RULES_Categorized.md](../DRIVER_RULES_Categorized.md); use the original when in doubt and ask the owner about unresolved rules.
+Rule numbers follow the [current rulebook](../DRIVER_RULES.md). The [categorized original](../DRIVER_RULES_Categorized.md) preserves the earlier numbering.
 
-**★ means an unresolved design decision must be settled at that step.** Those features remain included; an ordering cannot supply their missing definitions. See the [open-points review](../DRIVER_RULES_Discrepancies.md).
+**★ marks an open workflow design choice.** See [processing and service targets (P6, 10.3)](../DRIVER_RULES.md#s3--processing-timing--retries) and [price triggers and research limits (10.1)](../DRIVER_RULES.md#s5--price-move-explanations).
+
+The [handoff](../../../../../driver/Prompts/design_discussion_handoff.txt) lists the implementation and data checks for the reviewed issues.
 
 The existing [extraction units](https://app.notion.com/p/416a0a3f3106818cb2e9c7a0341cfeb9) and [readback](https://app.notion.com/p/416a0a3f3106813bae2ad0b1470b3cfb) are the SEC starting point.
 
@@ -109,11 +111,11 @@ These boxes describe **implementation order**, not separate services or mandator
 
 | Step | Implement and test | Rules |
 |---|---|---|
-| **1** | Create independently checked examples and expected answers. Reserve unseen cases. Track wrong answers, misses and refusals separately. | 2.44; 8.4, 8.6–8.7, 8.13, 8.17–8.18 |
+| **1** | Create independently checked examples and expected answers. Reserve unseen cases. Track wrong answers, misses and refusals separately. | 2.44; 8.4, 8.7, 8.13, 8.17–8.18 |
 | **2** | Inspect existing code and native library functions. Establish which decisions require meaning and which operations are mechanical. | 8.1, 8.3; project reuse requirements |
-| **3 ★** | Establish source identity, original version, publication time, permitted source kind and required document ownership. Settle the intended use of 8-K item categories. | 1.4, 1.17; 8.8–8.9; 9.4–9.5 |
+| **3** | Establish source identity, version, publication time, kind and ownership. Keep 8-K item numbers as filing information. Cite the passage or exhibit that supports the fact. | 1.4, 1.17; 8.8–8.9; 9.4–9.5 |
 | **4** | Connect readable content to exact original passages/cells. Preserve headings, notes, speakers, images and complete filing context. | 1.11, 1.24; 8.10 |
-| **5 ★** | Account for every assigned item. Distinguish no fact, incomplete reading, rejection and technical failure; implement permitted retry conditions. Settle any outcome simplification. | 8.12, 8.14–8.15; P6 |
+| **5 ★** | Record the five outcomes and retry only as permitted. Revisit simplification when redesigning the save step. | 8.12, 8.14–8.15; P6 |
 
 **6–21. Understand facts before assigning permanent names.**
 
@@ -123,18 +125,18 @@ These steps produce **proposals**. They do not yet authorize saving.
 |---|---|---|
 | **6** | Find eligible facts and separate distinct claims. Preserve multiple facts per sentence, table row or passage; exclude unsupported promotion and bare mentions. | 2.33; 8.10 |
 | **7** | Establish who stated or confirmed each claim and whose fact it is. Distinguish the fact’s subject from the document owner and affected stock. | 1.26; 3.9 |
-| **8 ★** | Determine fact type and its boundaries. Settle outside forecasts and forecasts of another party’s decision before accepting those cases. | 1.5–1.10, 1.22–1.23; 2.27–2.31; 7.7; 9.11; 10.5 |
+| **8** | Classify each claim. An outside forecast is an expectation. A company predicting another party’s action gives an action forecast. | 1.5–1.10, 1.22–1.23; 2.27–2.31; 7.7; 9.11; 10.5 |
 | **9** | Separate the reusable cause, the company part being measured and the measurement version. | 2.12–2.14, 2.17; 3.13–3.15 |
 | **10** | Review filing breakdown axes and prepare the company’s permitted, source-time slice choices. Preserve unknown axes and log exclusions. | 3.16–3.17, 3.19, 3.21 |
 | **11** | Select or create exact slice values, including several simultaneous parts and genuinely whole-company facts. | 3.18, 3.20, 3.22–3.23 |
 | **12** | Preserve measurement qualifiers and meaning-changing wording without merging synonyms. | 3.24–3.27 |
-| **13 ★** | Identify source-stated quantities and their shapes: point, range, floor, ceiling or numberless. Settle table-dash interpretation. | 1.13; 3.48; 10.4 |
+| **13** | Identify points, ranges, floors, ceilings and numberless claims. Read a dash as zero only when the source explicitly defines it as zero for that cell. | 1.13; 3.48; 10.4 |
 | **14** | Establish each amount’s unit, currency, scale and growth basis from evidence. | 3.28–3.33, 3.54; 9.1 |
 | **15** | Resolve signed meaning, reverse bounds where necessary and perform exact rescaling without rounding. | 3.34; 3.29 |
 | **16** | Distinguish a level, change, forecast revision and comparison. Select only the permitted main comparison. | 3.49–3.52; 4.6 |
 | **17** | Resolve financial periods, fiscal calendars, exact dates, vague horizons and earnings-filing pairing. Source dates must outrank legacy defaults. | 3.36–3.47 |
 | **18** | Assign metric and action states using the completed meaning, signed amounts and source wording. | 3.5–3.6, 3.8 |
-| **19 ★** | Complete guidance-specific fields. Settle unconfirmed guidance, metric text values and action conditions before admitting those extensions. | 4.7–4.9; 9.2, 9.8 |
+| **19** | Record guidance confirmation, source wording for numberless measures and source-stated conditions on guidance and actions. | 4.7–4.9; 9.2, 9.8 |
 | **20** | Recognize source-stated surprises and propose their required result/forecast companion facts. Determine beat, miss, in-line or unknown. | 4.1–4.3, 4.10–4.17 |
 | **21** | Propose source-stated cause and offset links between facts, with their own exact evidence. | 3.53 |
 
@@ -146,23 +148,23 @@ These steps produce **proposals**. They do not yet authorize saving.
 | **23** | Search the whole current catalog, including incomplete families. Test wording variants, competing matches and reuse of unchanged decisions. | 2.4, 2.36, 2.41–2.43, 2.45–2.46 |
 | **24** | Qualify the independent identity checker against real positives and deliberately wrong proposals. Require evidence from both sides. | 1.12, 1.16; 2.40; 8.2, 8.5 |
 | **25** | Implement reuse versus creation, family admission and qualitative duplicate checks. Check companion facts against the resolved Driver choices. | 1.1–1.2, 1.18; 2.20, 2.26, 2.32, 2.34–2.35, 2.37–2.39, 2.47 |
-| **26 ★** | Finalize permanent records, frozen birth evidence and fact IDs. Resolve outstanding stored-field choices, financial classification and wrong-name/type handling before freezing the write contract. | 2.1–2.2; 3.1–3.4, 3.10; 9.6; 10.2; P1–P2 |
+| **26** | Save permanent Driver records, their original defining evidence and fact IDs. Omit financial classification. Test refusal when a saved name or type contradicts its own evidence. | 2.1–2.2; 3.1–3.4, 3.10; 9.6; 10.2 |
 | **27** | Combine compatible pieces, preserve conflicting values and protect distinct occurrences. Test all input orders and unchanged replays. | 5.2–5.4, 5.9 |
-| **28** | Save facts and required links together. Test stale approvals, concurrent arrivals, amendments, blank filling and permanent-field protection. | 1.15; 5.1, 5.5, 5.7–5.8; 6.20–6.21 |
+| **28** | Save facts and required links together. Test stale approvals, concurrent arrivals, amendments, blank filling and permanent-field protection. | 1.15; 5.1, 5.5, 5.7–5.8; 6.20 |
 | **29** | Build shared raw, current, history and point-in-time reads. Apply exact grouping, source priority, unknown-unit isolation and future-information exclusion. | 1.14–1.25 where applicable; 3.35; 7.1–7.6, 7.11 |
 | **30** | Calculate permitted forecast movements and comparisons when reading, without writing calculated results back. | 4.4–4.5; 7.8 |
-| **31 ★** | Add cases requiring earlier guidance: numberless reaffirmations, inherited series units and withdrawal expansion. Settle withdrawal rules first. | 3.7, 3.35; 4.18–4.21 |
+| **31** | Use earlier guidance for eligible numberless reaffirmations. Save each source-stated guidance withdrawal once as an action. Apply its scope when reading current guidance. | 3.7, 3.35; 4.18–4.21 |
 
 **32–37. Complete the additional graph relationships and their reading rules.**
 
 | Step | Implement and test | Rules |
 |---|---|---|
-| **32** | Match metric facts to official filing line items, with independent meaning checks and exact mechanical refusal checks. | 3.11; 6.1–6.8 |
+| **32** | After saving, try each eligible fact’s filing links once. Only linking for a 10-Q, 10-K or their amendments waits for that filing’s tags or retry limit. Test the meaning and mechanical checks. | 3.11; 6.1–6.8 |
 | **33** | Attach filing breakdown members only when one complete reporting context proves the exact combination. | 6.9–6.10 |
-| **34 ★** | Add eligible tagged numeric facts only after their metric Driver and company-specific line-item link exist. Resolve text/tagged conflicts, upgrades and record requirements first. | 6.11–6.12; **Part A1** |
+| **34** | Test conflicts, precision upgrades, evidence preservation and filing subtotals before enabling tagged numeric facts. Each fact needs an existing metric Driver and an approved company-specific line-item link. | 6.11–6.12; **Part A1** |
 | **35** | Implement and test synonym links, warnings, owner corrections and grouping before enabling them. Keep each fact under its original Driver. | 1.19, 5.6, 6.18, 7.1, 9.9 |
 | **36** | Implement declared renames, complete rename records, company ownership, dates, disabling rules and structural checks. | 6.13–6.18; 9.10 |
-| **37 ★** | Finish reconciled histories, permitted label grouping and cross-company views. Resolve cross-company slice matching, unknown-axis views and historical industry membership. | 7.9–7.11; 9.3 |
+| **37** | Join declared renames on request. Group proven label variants within one company. Keep unknown breakdowns under their saved kind. Industry comparisons use today’s official groups for all years. | 7.9–7.11; 9.3 |
 
 **38–42. Build the operating and explanation capabilities that company workflows will call.**
 
@@ -186,7 +188,7 @@ These steps produce **proposals**. They do not yet authorize saving.
 | **48** | **Quarterly review:** conduct the broader search for new Drivers, missed updates and changed circumstances through the same creator and views. | Company workflow step 4 |
 | **49** | Finalize the **common asset interface** for reports, transcripts, news and other admitted inputs. Keep one set of creation rules and outcomes. | 2.34; 8.9–8.10; 9.5 |
 | **50** | Measure batching, caching and other optimizations; freeze the actual configuration; run fresh, independent tests of the complete system and each source channel. | 8.12–8.13, 8.17–8.18; 9.5 |
-| **51** | Activate in measured stages. Move consumers to shared reads; retire old Guidance only under the preservation and history rules. | 8.11, 8.16; 10.3 |
+| **51** | Activate in measured stages and move consumers to shared reads. At old Guidance retirement, keep a restorable copy and choose whether to accept a measured gap or wait for fresh history. | 8.11, 8.16; 10.3 |
 
 **Key dependencies**
 

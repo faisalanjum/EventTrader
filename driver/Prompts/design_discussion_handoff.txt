@@ -12,16 +12,20 @@ Owner-approved decisions below override conflicting older wording. A proposal is
 not approved merely because it appears here. The next bot must independently
 check the reasoning and the affected rules before editing them.
 
+Current status, November 20. The rulebook and workflow cover all five original
+decisions, all 25 discrepancy entries and all 12 trigger cases. Both review
+lists were retired. IMPLEMENTATION AND DATA CHECKS lists the outstanding
+work, the four workflow choices and two rollout decisions.
+
 BEFORE AND AFTER — RULEBOOK WORDING FOR OWNER APPROVAL
 
 This section and the diff record the original amendment (commit 4d7439934).
 The consolidated checklist gives the current decisions and counts. For the applied November 20 patch, see the NOVEMBER 20 OWNER APPROVAL SHEET near the end.
 
-The owner approved #2, #8 and #6 on November 18, 2026 (EST). All five original
-decisions are agreed. Of the 25 discrepancies, 18 are addressed for design and
-seven are deferred. The lists overlap. The only proposed edit is to
-DriversFinal/DRIVER_RULES.md, in the unified diff at the end. Minus marks
-current text. Plus marks proposed text.
+The owner approved #2, #8 and #6 on November 18, 2026 (EST). The November 19
+amendment covered the five original decisions and 18 of the 25 discrepancies.
+The seven set aside then have since been reviewed. The unified diff below
+preserves the before-and-after wording for that amendment.
 
 Scope for this amendment, confirmed November 19, 2026 (EST)
   Original decisions 1–5 cover forecast attribution, guidance withdrawals,
@@ -29,9 +33,9 @@ Scope for this amendment, confirmed November 19, 2026 (EST)
   The 18 discrepancy entries are 1–6, 8–9, 13, 15–17, 19–20 and 22–25.
   Entries 22–23 already have governing rules and 24 was previously corrected.
   Entry 25 fixes references and counts only inside this rulebook.
-  Entries 7, 10–12, 14, 18 and 21 and the nine implementation/data tasks
-  remain in the separate queues below. Entry 6 keeps its agreed evidence
-  rule while its implementation discussion is on hold.
+  Entries 7, 10–12, 14, 18 and 21 and the original nine implementation/data
+  tasks were outside that amendment. Entry 6's evidence rule is settled.
+  Verifying that citations can be followed remains on the implementation list.
   This amendment reserved system-calculated returns, separately reported actual
   periods and model cost for later review. The November 20 amendment includes them.
   The same-filing rule in entry 8 still keeps different periods separate.
@@ -110,8 +114,7 @@ Scope and operations · 5.6, 6.20, 7.11, 8.16, 9.3–9.6
 The initial four passes covered decisions, word cuts, counterexamples and cross-references.
 The exact patch passed a dry run and reproduced the reviewed text on a temporary
 copy. Entries 22–23 follow existing rules, 24 was already corrected, and the
-reference fixes for 25 in this proposal cover only this rulebook. Once the owner
-approves the wording, apply it, then review code and data issues, then deferred items.
+reference fixes for 25 in this amendment cover only this rulebook.
 
 CONSOLIDATED CHECKLIST — FULL AGREED SCOPE
 
@@ -153,7 +156,7 @@ Progress for the five original decisions and all 25 numbered discrepancies
   Entries 11 and 12 are closed for design. Save one company-scoped
   ContinuationClaim note per approved rename, with checked company and source
   IDs and one active flag. Joined histories follow active notes on request
-  (6.13–6.19, 7.10, 9.10). Entry 10 covers owner corrections under 6.18.
+  (6.13–6.18, 7.10, 9.10). Entry 10 covers owner corrections under 6.18.
   Entry 14 is closed for design (November 19, 2026 EST). Earlier facts
   remain visible under normal read rules. On a new proposed reuse, the
   independent checker compares the saved name and type with the Driver's
@@ -199,17 +202,9 @@ entry. The owner jointly approved 2, 8 and 6. Among the 25 addressed,
 saved quote, 19 follows original issue 5, 21 uses today's groups, 22 and 23 follow existing rules,
 24 is already corrected, and 13 and 25 supply wording corrections.
 
-Rule 6.19 still needs its exact filing triggers defined and tested before use.
-That is separate from the 25 numbered entries.
-Original issue 2 settled the unnumbered withdrawal item.
-Count each numbered discrepancy once.
-Close each remaining entry when the owner settles it.
-With each answer, also report which part closed, what remains in that entry
-and what comes next.
-After approving and applying the rulebook wording, the owner wants the work
-in IMPLEMENTATION AND DATA CHECKS reviewed before the deferred items. When a rule is
-settled, close its design question and keep the outstanding fix or check
-there. When part of the rule is still open, keep that part in design review.
+Original issue 2 settled the unnumbered withdrawal item. The owner dropped
+the numerical rename check (former 6.19). The current checks and settings
+are listed under IMPLEMENTATION AND DATA CHECKS.
 
 Agreed decisions and earlier clarifications
 - [x] The five decisions below: forecast attribution/confirmation; withdrawal
@@ -277,9 +272,9 @@ Agreed decisions and earlier clarifications
   claim on one fact. Use the more precise figure when the source supports
   the rounding. The owner approved this rule strictly within the existing
   process, with zero additional machinery, including code. See entry 8.
-- [x] When normal matching finds possible synonyms among saved Drivers,
-  independently check each proposed pair that still needs a link. The incoming
-  fact needs its own match. A pair's verdict stands until a rule-defined change.
+- [x] Only the normal fact checker's reply may flag two shown saved names
+  whose definitions suggest the same meaning. Check an eligible new pair
+  independently. Reuse its verdict. The incoming fact never waits (5.6).
   See AGREED SAME_AS CREATION (entry 9).
 - [x] Flag company-declared renames during the normal filing read, save
   each approved rename once as a ContinuationClaim and join histories only
@@ -509,12 +504,10 @@ COMPANY-DECLARED RENAMES — ENTRIES 11 AND 12 CLOSED
   0000105770-26-000047, was public at 7:11:01 AM EDT and contains the same
   declaration in Exhibit 99.1. Each time belongs to its own filing.
 
-  Future 6.19 test. West's 2025 annual filing and March 2026 quarterly
+  Rule 6.16 test. West's 2025 annual filing and March 2026 quarterly
   filing use the same revenue line with different division tags for
   Contract-Manufactured Products and West Vantage. That tag change alone
   must leave the approved rename note active. The filings were checked.
-  Before enabling automatic switch-off under 6.19, define and test the
-  filing evidence that proves a line-item split or direction reversal.
 
   Future 7.10 test. After West's rename is public, request the same figures
   twice. As filed, each figure keeps its original division name. When a
@@ -558,7 +551,7 @@ AGREED JOIN CORRECTIONS — ENTRY 10 CLOSED
   may restore it, on proof the switch-off was mistaken. Reruns never restore
   it. An off synonym link blocks its pair while off. A genuine checker refusal
   remains a separate verdict under 2.47. Restoration changes no verdict.
-  Renames must still pass 6.16 and, once enabled, 6.19. Keep all facts,
+  Restored renames must still pass 6.16. Keep all facts,
   evidence and recorded predictions. Routine work never waits for the owner.
 
   During an ordinary check, keep earlier verdicts and group membership hidden
@@ -910,8 +903,9 @@ FINAL THREE — DESIGNS APPROVED TOGETHER
    including A1's rule to retain the written amount on a text/tag conflict.
    An amendment or another source has its own fact. Use the existing read
    and save steps. Where they cannot preserve the evidence or record the
-   refinement, retain the saved fact and flag the limitation for the end
-   review. The reference combiner still splits 10.0 and 10.04 in either order.
+   refinement, retain the saved fact and log the gap with the item's outcome
+   (5.2, 8.14). Entry 8's implementation check covers this limitation.
+   The reference combiner still splits 10.0 and 10.04 in either order.
 
 6. 8-K item numbers and evidence locations (2.34, 3.3, 3.9, 9.4).
    Keep item numbers as filing information. An item number may appear in
@@ -926,17 +920,10 @@ FINAL THREE — DESIGNS APPROVED TOGETHER
    numbers do not create, merge, type, rank or route facts. Check the
    location handoff during implementation.
 
-The owner approved all three designs. The patch at the end gives the exact
-wording for separate approval. The seven deferred entries keep their own review.
-
-Remaining order
-- [x] Record the joint decision on entries 2, 8 and 6.
-- [x] Prepare and verify one rulebook diff covering the agreed decisions.
-- [ ] Owner reviews the exact before-and-after wording, then authorizes application.
-- [ ] Apply the approved wording to DRIVER_RULES.md and verify it against this diff.
-- [ ] Review the non-design work under IMPLEMENTATION AND DATA CHECKS, including
-  separate owner review before any prompt edit.
-- [ ] Revisit the deferred list with the owner.
+The owner approved the wording for entries 2, 8 and 6. The amendment was
+applied and verified. All seven entries set aside in that review now have
+decisions. See IMPLEMENTATION AND DATA CHECKS for remaining work. Prompt
+edits still require separate owner review.
 
 Current discussion status:
   1. Confirmation versus outside forecasts: semantic rule APPROVED by owner.
@@ -1027,8 +1014,9 @@ FILES AND AUTHORITY
    EXPLAINED_BY.md/NewsMultipleSymbols.md authorities for their specified subjects.
 2. Older comparison copy:
    .claude/plans/Drivers/DriversFinal/DRIVER_RULES_Categorized.md
-3. Existing discrepancy inventory:
-   .claude/plans/Drivers/DriversFinal/DRIVER_RULES_Discrepancies.md
+3. Original discrepancy inventory (retired). See the consolidated checklist.
+   To recover the original from Git:
+   git show 3171d3de5:.claude/plans/Drivers/DriversFinal/DRIVER_RULES_Discrepancies.md
    First two entries concern expectation format and unconfirmed-guidance history.
    Entry 15 concerns the outside-decision prediction discussed under issue 4.
 4. Workflow and boundaries:
@@ -2474,7 +2462,7 @@ When the discussion is complete, this file should let the next bot distinguish:
 
 DELETION REVIEW OF DRIVER_RULES_Discrepancies.md — November 17, 2026 (EST)
 
-Keep the list for now. This review covers all 25 numbered entries (27 claims)
+At that date the list was still needed. This review covers all 25 numbered entries (27 claims)
 and the separate withdrawal item. The numbers below are the list's numbers.
 The five owner decisions above still stand. These findings grant no new approval.
 Rule numbers refer to DriversFinal/DRIVER_RULES.md. Its opening gives
@@ -2943,11 +2931,10 @@ source_location. The agreed design has the AI select the supporting passage or c
 verify and copy the supplied original locations.
 The shared creator plan still lists that integration as unbuilt.
 
-IMPLEMENTATION AND DATA CHECKS — REVISIT AFTER DESIGN
+IMPLEMENTATION AND DATA CHECKS
 
-Open work from this review. The original entries above retain the evidence
-and examples. Check off each task when its result is verified. The remaining
-design entries are listed separately in the consolidated checklist.
+The first nine tasks come from the original review. Check off work only after
+verifying the result. The November 20 tests and remaining choices follow.
 
 - [ ] Original five and entries 1–3, 15. After wording approval, test the
   agreed forecast, withdrawal, table-dash, action and retry behavior in the
@@ -2959,7 +2946,8 @@ design entries are listed separately in the consolidated checklist.
   cells in its source version, including an exhibit referenced by an 8-K item.
 - [ ] Entry 8. Check that the existing save step keeps compatible details of
   one source claim, including rounding and exact evidence, in either input
-  order. Preserve the owner's zero-extra-machinery condition.
+  order. If it cannot retain the proof, keep any saved fact and inspect the
+  gap recorded with the item's outcome (5.2, 8.14). Use the existing steps.
 - [ ] Entry 16. Connect each reader or checker call's model and start time
   to its matching items in the existing writer log. Trace a saved fact back.
 - [ ] Entry 17. Check saving and citing a supported fact with a blank public
@@ -2978,6 +2966,97 @@ design entries are listed separately in the consolidated checklist.
   chose the wrong dates for Darden FY2026 Q3 when both lookups had answers.
   Its filing-backed quarter was November 24, 2025 through February 22, 2026.
   The earlier reproduction is recorded under entry 23 in the deletion review.
+
+November 20 build and test work
+- [ ] Test the discovery prompt with common instructions plus one or all five
+  types and the required companion facts. Two stated actual periods give two
+  candidates in prose or a table. A growth rate alone supplies no prior amount.
+  Keep source-stated returns visible and withhold our calculated returns
+  (1.14, 8.14). Review the prompt wording with the owner before editing it.
+- [ ] Test word and meaning search across companies, exact names across types,
+  eligible families and coverage of every same-type definition before creation,
+  including concurrent additions. Test known matches in every batch position,
+  the last one included, a complete no-match, and an unread batch (2.43, 5.8,
+  8.13). Measure shortlist size, batch size, full-search frequency, time and
+  cost in the company trial. Estimate costs at 1,000, 5,000 and 20,000 names.
+- [ ] Test at most two distinct, source-supported saved-name proposals. Only
+  a tie on meaning and wording uses the subject company's direct fact counts,
+  then birth-fact creation time and alphabetical name. Shared facts skip the
+  count. Test a broad worker count, an unidentified total and an occupied name.
+  Grade placement, pair suggestions and warnings separately with several names
+  shown. Use the cheapest model that passes the exact task (2.20, 2.40–2.47,
+  8.2, 8.12–8.13). Test a permitted reread under twin names in the joined view.
+- [ ] Verify work tracking per source version, original passage or cells and
+  requested fact type, plus company when split. Rebatching and context shown
+  do not complete work. Distinguish a valid empty result from a failed write.
+  A recognized repeat keeps its Driver if it fits. A later publication gives
+  its own dated fact (5.2, 5.5, 8.14–8.16).
+
+The 12 cases in the triggers note — decisions to verify during implementation
+  1. Synonyms (5.6). Only the ordinary fact checker can flag two shown saved
+     definitions. Check each eligible new pair once. Reuse its recorded verdict,
+     skip pairs already joined and let the incoming fact proceed independently.
+  2. Wrong joins (5.6, 6.18, 7.1). Log a clear contradiction for a known
+     direct or indirect synonym join during normal matching. A warning changes
+     nothing. Only the owner can correct an originally mistaken approval or
+     restore it. A checker refusal stays distinct. Test the three-name case.
+  3. Renames (6.13–6.17, 7.10, 9.10). The ordinary filing read flags an explicit
+     declaration. Count both names on accepted company facts, including this
+     source's. An unused name alone is a logged skip. A permitted later read
+     may judge it. Test an approved May 10 filing followed by the same rename
+     from April 10. The note keeps May 10. A joined view as of April 30 cannot
+     use it. Join only on request after the cited declaration was public.
+  4. Rename numbers (6.16, 6.18). The owner dropped this check. Changing
+     numbers or a division tag alone leaves the note alone. Two old names
+     leading to one new name switch both notes off.
+  5. Filing links (6.7–6.8). Save ready facts first. Try each newly accepted
+     eligible fact once, grouped by source version. Only linking for a 10-Q,
+     10-K or amendment to either waits for its own tags or retry limit. Other
+     sources use eligible data already loaded. A blank starts no later search.
+  6. Held earnings 8-K (3.44, 8.15). Reopen only when a 10-Q or 10-K proves
+     the same company and quarter. The original source must still prove its facts.
+  7. Unclear first state (2.37). For a new plain-named Driver, read the full
+     source. If its first state remains unknown, skip and log. The allowed
+     name-ending exception stands. A later find is possible, never promised.
+  8. Missing proof when combining (5.2, A1). Keep any saved fact and log the
+     gap with the item's outcome. Entry 8 above tests this. Only 8.15 permits
+     a hold. No review job is created.
+  9. Late sources (7.6, 8.14–8.16). Select unfinished work within coverage
+     and process it at its own public time. Verify expected source coverage.
+     A last-seen date does not establish completion.
+  10. History (8.16). After initial context, the first accepted metric for a
+      company starts one 12-month search for that company and Driver within
+      its covered history. Unknown public time leaves the fact saved and
+      starts no search. Found facts start no further look-back.
+  11. Reviewed lists (1.21, 3.16, 3.21, 8.3). Company catalog and filing
+      breakdown lists are refreshed outside the live run. Routine work never
+      waits for a person.
+  12. Missed facts (4.15, 5.5, 8.14–8.16). There is no signal for a wholly
+      missed claim. A surprise missing its supporting fact requires a whole-
+      event reread. Permitted retries, targeted history and quarterly review
+      may also find misses. A weaker reread cannot erase an earlier fact.
+
+Other triggers already defined: a current-guidance read applies proven
+withdrawals (4.18–4.21). Normal reuse checks a saved name against its own
+evidence (10.2). Once Part A1 is enabled, a newly active filing-line link
+starts that company's eligible tagged-filing history. The ordinary optional
+link attempt in case 5 does not wait for that history.
+
+Choices outside those 12 cases
+  Workflow 5 (P6): use the five outcomes now. Decide whether to simplify
+  them when redesigning the save step.
+  Workflow 38 (10.1, 10.3): choose source coverage, overall history limits,
+  budgets, schedules, alerts and service targets using measured capacity.
+  Workflow 46: decide which changes in company information merit evaluating
+  a trade. Workflow 47 (10.1): choose the price benchmark, move size and
+  time window that start research, including when there is no publication.
+  Rollout: choose whether to run the filing subtotal check before full-scale
+  linking (mandatory before Part A1). At old Guidance retirement, choose
+  whether to accept a measured gap or wait for fresh history. Keep a complete
+  restorable copy and remove only explicitly approved parts (8.11).
+  EXPLAINED_BY.md §§7–8 lists the associated implementation checks, including
+  return checks R1–R8. Entry 25's companion-document cleanup covers obsolete
+  references in EXPLAINED_BY.md and NewsMultipleSymbols.md.
 
 BOT 1 REVIEW — REFINEMENTS TO THE PROPOSED WORDING
 
@@ -3171,7 +3250,7 @@ rule numbers remain in order. All 38 table blocks have consistent columns
 resolve. In memory, the reference writer still parks competing partial
 updates and treats 10.0 and 10.04 as conflicting; an exact match and a unique
 fill succeed. These are checks on the wording and known implementation gaps.
-The separate nine implementation/data tasks and seven deferrals retain their scope.
+The nine implementation/data tasks and seven entries then deferred were outside that patch.
 
 BOT 1 SHORTER DRAFT — INDEPENDENT WORDING REVIEW
 
