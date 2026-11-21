@@ -2940,6 +2940,8 @@ verifying the result. The November 20 tests and remaining choices follow.
   agreed forecast, withdrawal, table-dash, action and retry behavior in the
   prompt and the code that saves and reads facts. Include separate forecasters,
   source locations, numberless updates, action conditions and metric text.
+  Update driver_validators.py::_movement and test 4.4 with 90–110 revised to
+  95–105. “We raised guidance” gives raised. “We revised guidance” gives reaffirmed.
   Verify the same bank's comparable forecasts stay in one history across
   different signers, and that two banks quoting the same amount stay distinct.
 - [ ] Entry 6. Verify a saved citation resolves to the supporting passage or

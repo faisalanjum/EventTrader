@@ -43,7 +43,7 @@ This file wins over every older document. For fact subjects, News and daily expl
 
 **Build small and exact**
 
-- 8.4 **Hard rule: simplest, fully generic, no exceptions.** Build from first principles the most minimal, 100% reliable solution that works at scale. No hardcoded logic (string matching, parsing), no heuristics, no lists we maintain (official standard lists such as XBRL unit codes are fine), no overfitting, no speculative work (including handling errors that haven't happened), no overengineering.
+- 8.4 **Hard rule: simplest, fully generic, no exceptions.** Build from first principles the most minimal, 100% reliable solution that works at scale. No hardcoded logic (string matching, parsing), no heuristics, no lists we maintain (official standard lists such as XBRL unit codes, and the segment lists in 3.21, are fine), no overfitting, no speculative work (including handling errors that haven't happened), no overengineering.
 - 8.7 Fix the whole class of a problem, never just one example.
 - ⚠ **Copies of rules drift:** a copy served to the AI or written into code can change meaning (a "may" where the rule says "must"; an exclusion copied as a veto). Keep one copy of each rule and check every copy against the approved wording.
 
@@ -1086,7 +1086,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 #### U3a · Forecasts
 
 - 4.4 **Guidance movement: stored when stated, otherwise worked out when read.**
-  - Store a source-stated movement (`raised`, `lowered`, `reaffirmed`) as said. For a stated movement between closed ranges, midpoint up means `raised`, down `lowered`, and equal `reaffirmed`.
+  - Store a source-stated movement (`raised`, `lowered`, `reaffirmed`) as said. If the source revises one closed range to another without giving the overall direction, midpoint up means `raised`, down `lowered`, and equal `reaffirmed`.
   - A bare forecast stores `unknown`. At read time, compare confirmed guidance with the preceding winner in the same series (7.1, 7.5). Read `unknown` if a withdrawal ended the preceding forecast, the order is unclear or the values are incomparable (open or mixed shapes, unknown units or a numberless predecessor). Otherwise a genuinely first forecast in that series reads `introduced`. Compare two single figures directly or two closed ranges by midpoint. Up means `raised`, down `lowered`, and equal `reaffirmed`.
   - Recompute when late evidence arrives. Never write inferred movement back.
 - 4.5 A correction with no business-change wording (known from the source's details or explicit correction wording) gets its worked-out guidance movement forced to `unknown`, so a typo fix is never read as a raise or a cut.
@@ -1298,7 +1298,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
   - For newly public information, first consider the first regular close strictly after that version became public, using timezone-aware times and the existing calendar's actual closes. This is a candidate, not a publication-window filter.
   - A fact may explain several days or companies, including companies absent from the source; each link needs a supported reason for that company/day. Older facts and later reporting may support a day; a later event cannot cause an earlier move, and later evidence is not earlier trading knowledge. One analysis may support several dates; never copy unsupported links or require a separate investigation per day.
   - The judgment records pressure, not the entire daily return or profit after publication; its direction may oppose the net return. Publication itself cannot cause earlier movement. Call start selects the call’s hourly, session and daily return windows. These windows leave individual remarks untimed. Retain source hourly/session intervals; an intraday trigger or a window crossing a close does not automatically justify daily links.
-- A2.8 Every fact comes from a source event; news is the source for macro facts. Date is only a verdict target, never a source. A purely macro fact with no source is held.
+- A2.8 Every fact comes from a source event; news is the source for macro facts. Date is only a verdict target, never a source. If no source is found, apply 8.14–8.15.
 
 **Words used here** (from the original Word list)
 
