@@ -51,6 +51,6 @@ This saving exception replaces the former blanket skip rule, not the ordinary fe
 ## Not in this change
 - Broad automatic ingestion of new stories with no tracked tickers remains out of scope; the selected-research exception above is the only change to that skip rule.
 - Bulk downloading historical multi-company news; selectively retrieving an older article for research is allowed under the exception above.
-- Driver fact ownership (rules 3.9, P4): the cross-source design is agreed in EXPLAINED_BY.md §6.1; its rule/contract reconciliation and implementation remain pending.
+- Driver fact ownership (rules 3.2, 3.9): the cross-source design is agreed in EXPLAINED_BY.md §6.1; its rule/contract reconciliation and implementation remain pending.
 
 Evidence (in `~/.claude/projects/-home-faisal-EventMarketDB/backups/`): Fable `claude_news_links_review_20261003/FINDINGS.md`; Codex `codex_news_semantics_review_20261003/SEVEN_ADDITIONS_REVIEW.txt` and `NEWS_MULTIPLE_SYMBOLS_PLAN_REVIEW.txt`. Codex's older `NEWS_LINK_PROPOSAL.txt` is out of date on ticker counting.

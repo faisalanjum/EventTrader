@@ -199,9 +199,9 @@ The remaining design choices here are significant-move settings and the detailed
 | Operating algorithm | Agree the starting source set, ongoing source coverage, history limits and research budget. Reuse the same update process throughout; see the [old proposal below](#old-operating-algorithm-proposal--not-agreed-to-be-reviewed). |
 | Fact subject/ownership | Agreed in section 6.1: FOR_COMPANY for the subject, company in the fact ID, no stored subject property. Reconcile the named rules/contracts and verify implementation; no mandatory job count. |
 | Repeated reporting and explanation identity | Agreed in sections 5–6: separate source facts may coexist; the latest valid judgment replaces the same explanation key. Reconcile A2.2/A2.4 and remove live-over-backfill priority. Verify replacements, retries, withdrawals, delayed writes and decision-time filtering. |
-| Explanation versus prediction | Agreed below. Reconcile A2.5/1.14/7.6 and P7 with historical explanations seeing observed returns, while predictions use only information available at their decision time. |
+| Explanation versus prediction | Agreed below. Reconcile A2.5/1.14/7.6 with historical explanations seeing observed returns, while predictions use only information available at their decision time. |
 | Research-source admission | Saving rule settled in section 6.2 and NewsMultipleSymbols.md: selected original research evidence may have no tracked tickers; ordinary feed filtering remains. Implementation and validation are still required. |
-| Final graph and contract alignment | Replace source/DCM daily targets and A2.7 filing suppression; preserve A2.8's source-backed facts rule. Align 3.12, A2.3, P3 and the active verdict contract, including company, reason, identity and change detection. |
+| Final graph and contract alignment | Replace source/DCM daily targets and A2.7 filing suppression; preserve A2.8's source-backed facts rule. Align 3.12, A2.3, A2.7 and the active verdict contract, including company, reason, identity and change detection. |
 
 **Agreed replacement for A2.5:**
 

@@ -28,11 +28,11 @@ This file wins over every older document. For fact subjects, News and daily expl
 **Preserve saved Drivers and facts**
 
 - 1.15 **History is add-only.** Never delete, re-key (give a new ID) or move (reassign to another Driver or label) a saved Driver or fact, not even to make history look cleaner. True duplicates are never merged: at most they get a reversible synonym link (`SAME_AS`).
-- 🔴 6.18 **Links and rename notes after saving.** Never delete a synonym link or company rename note. The owner may switch one off when evidence proves its original approval was wrong. Only the owner may restore that approved record, on evidence its switch-off was mistaken. Change only `active`. Every view, including a past view, follows only active joins and honors blocked synonym pairs (7.1). Original evidence, facts and recorded predictions stay intact.
+- 6.18 **Links and rename notes after saving.** Never delete a synonym link or company rename note. The owner may switch one off when evidence proves its original approval was wrong. Only the owner may restore it, and only if evidence proves it was switched off by mistake. Change only `active`. Every view, including a past view, follows only active joins and honors blocked synonym pairs (7.1). Original evidence, facts and recorded predictions stay intact.
   - A restored synonym must pass 7.1. A restored rename must pass 6.16, the only automatic switch-off.
   - Other saved links cannot be deleted or switched off, with two exceptions. Latest EXPLAINED_BY judgments may be replaced or explicitly withdrawn (A2.2), and newer News versions remove obsolete source links under NewsMultipleSymbols.md. Neither exception deletes or re-keys Driver facts.
-- 🔴 6.20 **No background audit or repair.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links. Normal saving follows 5.1. A Driver's name, type and frozen defining evidence never change (2.1, 2.2). A mistaken fact assignment stays. Checks before saving (sections 1–5) and the launch test (8.17) must stand on their own. When unsure, keep separate (1.12).
-- 🔴 ⚠ **Wrong merges are the biggest known risk.** There is no general automatic check, even with XBRL. Rule 6.16 catches two old names leading to one new name.
+- 6.20 **No background audit or repair.** No background process reviews or hides saved facts or Drivers, or adds same-meaning links. Normal saving follows 5.1. A Driver's name, type and frozen defining evidence never change (2.1, 2.2). A fact saved under the wrong Driver stays there. Checks before saving (sections 1–5) and the launch test (8.17) must stand on their own. When unsure, keep separate (1.12).
+- ⚠ **Wrong merges are the biggest known risk.** There is no general automatic check, even with XBRL. If two old names lead to one new name within the same company and rename kind, rule 6.16 switches both rename notes off.
 
 **AI vs code**
 
@@ -54,7 +54,7 @@ This file wins over every older document. For fact subjects, News and daily expl
 | **Driver** | One reusable cause or standing thing that can matter to a company or market. Stored as a name, a permanent fact type and its frozen defining evidence (2.1); it has no status. |
 | **Fact = DriverUpdate** | One real, source-backed occurrence of a Driver in one source event (the `(:DriverUpdate)` node), e.g. "revenue rose 5% to $2.1B" in one earnings release. |
 | **Fail closed** | When required proof is missing: don't create, link, merge or write. |
-| 🔴 **Core** | The central system that decides meaning and identity and writes facts. Sources only supply evidence. |
+| **Core** | The central system that decides meaning and identity and writes facts. Sources only supply evidence. |
 
 ## Driver
 
