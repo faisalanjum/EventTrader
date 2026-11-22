@@ -9,8 +9,10 @@ reached at `localhost:11435` through the Mac's Ollama-compatible adapter (revers
 `LOCAL_LLM_MODEL=qwen3.8:27b-q4` (UD-Q4_K_XL); one model is loaded at a time. Re-run 12 Nov on q8: choice_v2 93/93,
 row_v3 93/93, qf01 19/19, identity 158/160 (wrong-SAME 0), reader either-recall 50.7% (q4: 39.5%; old
 q4_K_M 50.0%). The Ollama models (qwen3.8:27b-mlx, -mtp-q4_K_M) are being retired; earlier results do not
-transfer to the new runtime. Details: Mac `~/Developer/local-llm/AGENTS.md`. Previous clients: `~/local_llm.py.bak-2026-11-12`
-(original) and `~/local_llm.py.fast-2026-11-12`.
+transfer to the new runtime. Details: Mac `~/Developer/local-llm/AGENTS.md`. Previous client: git commit fa7711e0e
+(original).
+
+**Runtime update, 2026-11-14:** (1) Qwen speed: the Mac's adapter now uses Unsloth's separate MTP draft head (draft 15 tokens, p-min 0.8). Long JSON writing q8 ~23 -> ~38 tok/s, q4 ~27 -> ~33; answers byte-identical to the 12 Nov settings (AMG long answer, 40/40 short answers, q8 and q4). (2) New third model on the same adapter: `pplx-decider-v1.3:8bit` (Perplexity Decider, MLX 8-bit): classification and exact-span finding, not chat. Call `decide()` in `config/local_llm.py`; guide: Mac `~/Developer/local-llm/decider/USAGE.md`. Tested from here through the tunnel: README example in both modes, an error case, a 15,620-token text (170 s) and a 31,168-token text (391 s, past the old ~320 s LAN idle reset); the Qwen q8 answer was unchanged after switching back. One model is loaded at a time, so a Decider call unloads Qwen. Previous client: git commit 1c0a230c0.
 
 **Context size, 2026-11-12 (owner's test):** `qwen3.8:27b-fast` works at a 65K context. It read a
 60,605-token prompt and correctly found a fact hidden at the very top; nothing was truncated.
