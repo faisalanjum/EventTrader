@@ -22,14 +22,14 @@ class Unit:
 class Asset:
     source_id: str           # the document's id in the database
     source_type: str         # its kind: 8-K, 10-Q, transcript, news
-    date: datetime           # when it became public
+    date: datetime | None    # when this source version became public, if known
     units: tuple[Unit, ...]  # in reading order
 
     def __post_init__(self):
         object.__setattr__(self, 'units', tuple(self.units or ()))  # a fixed copy: it cannot change or run out later
         if not (isinstance(self.source_id, str) and self.source_id): raise ValueError('asset has no source_id')
         if not (isinstance(self.source_type, str) and self.source_type): raise ValueError('asset has no source_type')
-        if not (isinstance(self.date, datetime) and self.date.utcoffset() is not None):
+        if self.date is not None and (not isinstance(self.date, datetime) or self.date.utcoffset() is None):
             raise ValueError('asset has no date with a time zone')
         if not (self.units and all(isinstance(unit, Unit) for unit in self.units)):
             raise ValueError('asset has no units')

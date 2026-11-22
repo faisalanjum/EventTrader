@@ -19,6 +19,13 @@ class AssetTests(unittest.TestCase):
         for kind in ('8-K', '10-Q', '425', 'SCHEDULE 13D/A', 'transcript', 'news'):
             self.assertEqual(Asset(**{**ASSET, 'source_type': kind}).source_type, kind)
 
+    def test_unknown_publication_time_stays_blank(self):
+        for kind in ('8-K', 'transcript', 'news'):
+            with self.subTest(kind=kind):
+                asset = Asset(**{**ASSET, 'source_type': kind, 'date': None})
+                self.assertIsNone(asset.date)
+                self.assertEqual(asset.units, ASSET['units'])
+
     def test_accepted_units_cannot_change_or_run_out(self):
         units = [Unit(**UNIT)]
         from_list = Asset(**{**ASSET, 'units': units})
@@ -42,7 +49,7 @@ class AssetTests(unittest.TestCase):
                                ({'source_type': 5}, 'asset has no source_type'),
                                ({'units': None}, 'asset has no units'),
                                ({'units': iter(())}, 'asset has no units'),
-                               ({'date': None}, 'asset has no date with a time zone'),
+                               ({'date': ''}, 'asset has no date with a time zone'),
                                ({'date': '2023-08-31T17:18:57-04:00'}, 'asset has no date with a time zone'),
                                ({'date': PUBLIC.replace(tzinfo=None)}, 'asset has no date with a time zone'),
                                ({'units': ()}, 'asset has no units'),

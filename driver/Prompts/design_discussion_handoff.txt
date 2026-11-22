@@ -1,5 +1,5 @@
 DRIVER DESIGN DISCUSSION — OWNER DECISIONS AND HANDOFF
-Updated: November 20, 2026 (EST)
+Updated: November 21, 2026 (EST)
 
 PURPOSE AND STATUS
 
@@ -2946,6 +2946,11 @@ verifying the result. The November 20 tests and remaining choices follow.
   different signers, and that two banks quoting the same amount stay distinct.
 - [ ] Entry 6. Verify a saved citation resolves to the supporting passage or
   cells in its source version, including an exhibit referenced by an 8-K item.
+  November 21: AMG 8-K 0001004434-23-000015 points to amgq12023ex991.htm.
+  Reading the prepared units back from JSON recovered the cash-flow row
+  label, both quarter dates, the header and both amounts at their original locations.
+  The 2023 value (3.2) is at exhibit bytes [17066, 17071). Opening a citation
+  from a saved Driver fact is still unverified.
 - [ ] Entry 8. Check that the existing save step keeps compatible details of
   one source claim, including rounding and exact evidence, in either input
   order. If it cannot retain the proof, keep any saved fact and inspect the
@@ -2955,14 +2960,20 @@ verifying the result. The November 20 tests and remaining choices follow.
 - [ ] Entry 17. Check saving and citing a supported fact with a blank public
   time. Test a past prediction with and without proof the cited version was
   public before its cutoff. Keep the existing market-return windows.
+  November 21: the document input now accepts an unknown public time and
+  preserves it as blank. Known times still require a time zone. All 9,608
+  stored transcripts have created and updated times equal to call start.
+  The graph has zero DriverUpdate facts. Saving and historical reads still
+  need end-to-end tests, including receipts before, exactly at and after cutoff.
 - [ ] Entry 19. Check filing intake and lookup with short and padded SEC
   company numbers. Test the existing skip-and-log decision for a verified
   missing filer link. Padding alone accounted for two reproduced lookup failures.
 - [ ] Entry 20. Measure time and cost in the planned one-company test and
   set history limits before enabling routine searches of older sources.
-- [ ] Entry 22. Check the original pricing inputs for the 51 discrepancies
-  explained by split adjustments. Use consistently adjusted prices or exclude
-  an unverified return before using it for research triggers or evaluation.
+- [x] Entry 22. November 21, 2026. Checked all 51 flagged daily returns against
+  split-adjusted closing prices. 48 matched. Corrected Xerox on July 21, 2025
+  (+2.57% to +2.56%), July 23, 2025 (+14.06% to +14.07%) and February 9, 2026
+  (+35.54% to −9.64%). Read back all 51 and verified each return.
 - [ ] Entry 23. When integrating the quarter-date lookup, verify that filing
   evidence wins over an older saved period (3.43, 8.11). The reference helper
   chose the wrong dates for Darden FY2026 Q3 when both lookups had answers.
