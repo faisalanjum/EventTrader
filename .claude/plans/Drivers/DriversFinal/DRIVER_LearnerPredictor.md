@@ -2,6 +2,104 @@
 
 Keep Predictor calls, results, Learner reviews and their contents only in Neo4j. For both workflows, the fields and formats, how much input, analysis and feedback to keep, and whether to save written lessons are tentative.
 
+## The plan in pictures
+
+[C · Reviewing a call](#picture-c--what-does-the-learner-save-about-a-call) · [D · Using the review next time](#picture-d--how-does-this-help-the-next-prediction)
+
+### Picture A · How one prediction gets its result
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":20,"rankSpacing":34,"padding":12},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#586b7b","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    accTitle: The same prediction at two times
+    accDescr: The Predictor saves its call and picks one hour, session or daily. At the end of that window, code records the verified stock return on the original call.
+    before["`**Predictor saves its call**
+Buy, sell or no trade
+One hour, session or daily`"] -->|"chosen window ends"| after["`**Same call**
+Code adds the verified
+stock return once`"]
+    classDef default fill:#eff6ff,stroke:#5277a6,color:#172b42
+```
+
+Acme raises its sales forecast and reports a customer loss. The Predictor sees both and cites the forecast in a one-hour buy call. Verified prices of $100 at entry and $97 at the end give a stock return of **−3%**. The buy was wrong. [Grading](#grading)
+
+### Picture B · What explains the whole trading day?
+
+Suppose Acme fell 5% from close to close while the market was flat. The evidence supports a strong downward effect from the customer loss.
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":20,"rankSpacing":34,"padding":12},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#586b7b","edgeLabelBackground":"#ffffff"}}}%%
+flowchart TB
+    accTitle: The daily explanation and its supporting update
+    accDescr: The trading day links to the customer-loss update and to Acme’s daily price. The update points to its Driver, Acme and the earnings release.
+    day["Trading day"] -->|EXPLAINED_BY| loss["`**DriverUpdate**
+Acme lost a customer`"]
+    day -->|HAS_PRICE| company["Company · Acme"]
+    loss -->|FOR_COMPANY| company
+    loss -->|FROM_SOURCE| source["Earnings release"]
+    loss -->|OF_DRIVER| driver["Driver · Customer loss"]
+    classDef default fill:#eef1f4,stroke:#8793a1,color:#243347
+    style loss fill:#eff6ff,stroke:#5277a6,color:#172b42
+    style driver fill:#fff3cc,stroke:#ac8735,color:#493b17
+```
+
+The price link holds Acme’s daily return. The explanation link records what the Learner judged pushed the stock that day. [Source and company links](EXPLAINED_BY.md#2-what-links-to-what) · [Business cause and offset links](DRIVER_RULES.md#picture-b--one-fact-and-its-record)
+
+### Picture C · What does the Learner save about a call?
+
+Every live call gets a review when its chosen window ends. A later review of this qualifying day can link back to the same call.
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":20,"rankSpacing":34,"padding":12},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#586b7b","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    accTitle: A review points back to the call and the call points to the update it cited
+    accDescr: The review records that the customer loss was shown but uncited. It links to the original call. The call links to Acme and to the higher forecast it cited.
+    review["`**Learner review**
+Customer loss was
+shown but uncited`"] -->|reviews| paperCall["`**Original call**
+Buy for one hour`"]
+    paperCall -->|for| company["Acme"]
+    paperCall -->|cited| forecast["`**DriverUpdate**
+Higher sales forecast`"]
+    classDef default fill:#eff6ff,stroke:#5277a6,color:#172b42
+    style company fill:#eef1f4,stroke:#8793a1,color:#243347
+```
+
+**Was the customer loss shown?** Here its update ID is in the saved input. Its exact supporting passage from the cited source version would also prove it was shown. Other findings are *public but absent*, *first public later*, or *unknown* when the evidence cannot tell. A review can cover several calls or a move with no call. [Review schedule](#learner-reviews)
+
+### Picture D · How does this help the next prediction?
+
+```mermaid
+%%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":20,"rankSpacing":34,"padding":12},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#586b7b","edgeLabelBackground":"#ffffff"}}}%%
+flowchart LR
+    accTitle: What the next Acme prediction can learn from this example
+    accDescr: The briefing can include outcomes of calls citing a Driver, the Learner’s judgments about whole trading days, and feedback on earlier calls.
+    outcomes["`**Calls citing sales forecasts**
+0 wins in 1 live one-hour call`"] -.-> nextCall["`**Next Acme prediction**
+Reads the prepared briefing`"]
+    explanations["`**Days linked to customer loss**
+1 Acme day · strong downward effect`"] -.-> nextCall
+    feedback["`**Review feedback**
+The customer loss was shown but uncited`"] -.-> nextCall
+    classDef default fill:#f5f7fa,stroke:#8793a1,color:#243347
+    style nextCall fill:#eff6ff,stroke:#5277a6,color:#172b42
+```
+
+**What starts a call?** Earnings releases always do. The explanation for this qualifying daily drop puts customer loss on Acme’s watchlist. A new source version with another verified Acme customer-loss update then triggers a call. [Watchlist rules](#predictor)
+
+**What can it learn from?** The dotted arrows show what code can include by the call’s information cutoff. The two histories are calculated separately for a company, industry or sector. Call results are counted by horizon, with live and replay kept separate. [History counts](#driver-histories) · [Cutoff rules](#input-cutoff)
+
+<details>
+<summary>Fields on the prediction, review and daily explanation</summary>
+
+| Saved item | What it holds |
+|---|---|
+| Prediction | Company link, triggering source ID and version, live or replay, replay ID when applicable. Buy/sell/no trade, reason, model, input cutoff, save time, chosen hour/session/day and fixed end time. IDs of all updates shown, links to verified cited updates, and the verified stock return once available. A full input copy retrievable by fingerprint is tentative. |
+| Learner review | Company, event or price windows covered, feedback, links to any calls reviewed, save time, evidence cutoff and replay ID when applicable. |
+| Daily `EXPLAINED_BY` link | Affected company ID, reason, direction, strength, confidence, producer, live/backfill mode, save time and Learner evidence cutoff. [Explanation fields](EXPLAINED_BY.md#5-what-each-explanation-stores) |
+
+</details>
+
 ## Qualifying move
 
 A move qualifies when the absolute difference between stock and SPY (S&P 500) returns over the same hourly, session or daily window is **at least 2.2 percentage points**. Use this single threshold for all move checks. Hourly and session checks require a timed source event. Without one, check the daily close-to-close move. Verify prices and windows before using returns for triggers or grading. [Driver rule 10.1](DRIVER_RULES.md) · [Return checks](EXPLAINED_BY.md#8-return-measurements--open-checks-for-the-next-bot)
