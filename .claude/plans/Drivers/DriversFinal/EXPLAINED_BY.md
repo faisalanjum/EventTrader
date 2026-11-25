@@ -207,69 +207,6 @@ The remaining design choices here are significant-move settings and the detailed
 
 > Historical explanations may use observed returns and later evidence, but predictions must use only information available at the decision time, and later explanations must never be presented as earlier predictions.
 
-Section 8 below contains the return-measurement findings and required follow-up so the owner and next bot can find this work here. Those findings do not add automatic daily investigations to this design. Finish the remaining discussion, finalize this document, then reconcile DRIVER_RULES_Categorized.md before implementation.
-
-## 8. Return measurements — open checks for the next bot
-
-**Status: documented, not fixed or cleared for trading validation.** These findings concern existing calculation code and saved price data; they do not by themselves require a different graph design. Before using these returns to select significant moves or evaluate Drivers, recheck the current code and database, resolve the affected cases or explicitly exclude unverified measurements from that evaluation, and report whether any agreed rule above needs reconsideration. Do not change graph rules merely to accommodate a bad timestamp or price.
-
-The counts below come from the **November 13, 2026 read-only audit**, not a promise that the database is unchanged. During this handoff, all 12 previously reviewed Python files still matched their saved hashes, and a fresh local reproduction still failed the early-close case; ordinary-day daily checks passed. This handoff did **not** rerun the full database census or change runtime code/data. All example times below use `America/Toronto` with EST/EDT.
-
-### Findings, exact examples and required checks
-
-| Item | Finding and its limit | What the next bot must check |
-|---|---|---|
-| R1. Early-close error | **169 sources: 157 News + 12 Reports.** For November 24, 2023 at **3 PM EST**, the helper assigns a daily end of **1 PM EST that day**, before publication. Its hourly window is **4–5 AM EST** and session end **9:35 AM EST**, also before publication. | Reproduce in `MarketSessionClassifier` before fixing it. The agreed daily rule instead selects **November 24, 1 PM EST → November 27, 4 PM EST**. Inspect all regular/extended-session branches, including hardcoded 4 PM checks; use native calendar closes. An early regular close does not by itself establish the extended-hours closing time. Check daily, hourly and session paths together. |
-| R2. Inconsistent source dates | **12 News** have daily ends on earlier dates for reasons other than R1. Example: `bzNews_19018768` has `created` **January 5, 2022, 9 AM EST**, but daily end **January 5, 2021, 4 PM EST**. Which stored field is wrong is not established. | Check original publication/version evidence and the write path. Do not blindly recalculate from `created` until the timestamp is verified. Leave unverifiable earlier availability unknown. |
-| R3. Conflicting daily returns | TENX Report `0000950170-25-071382`, published **May 14, 2025, 4:09:24 PM EDT**, has daily end **May 15, 4 PM EDT** and `daily_stock = −1.37%`; that Date's Company price edge has `daily_return = +0.35%`. Stored closes **5.68 → 5.70** independently yield **+0.3521%**. The underlying price-input cause is not proven. | Compare the actual start/end prices, selected bar timestamps, adjustment settings, trade eligibility and data versions used by both calculation paths. Date summaries use grouped daily bars; source returns use second-aggregate endpoints, potentially with backward fallback. Matching intended windows does not establish identical valid inputs. Recalculate independently; do not assume either feed is correct merely because its arithmetic works. |
-| R4. Missing saved windows | **9,608 Transcripts + 9 Reports** have no saved daily schedule. **9,373** of those Transcripts have daily return values, so missing schedules do not mean missing returns. | Establish the actual source availability and reconstruct start/end windows from verified evidence and the relevant calculation path. Conference start does not establish when the full transcript or later Q&A became available. A reconstructed intended window alone does not prove which prices a historical calculation actually used. Unverified measurements remain unverified. |
-| R5. Edited News | **3 cases:** `bzNews_47218826`, `bzNews_50489449`, `bzNews_50957341`. Daily ends match later `updated` times rather than original `created` times. This may be valid for revised content. | Identify the source version measured and its availability; inspect how text, timestamps, schedules and return updates are written together. Do not attach today's edited text to an earlier trading decision or automatically replace a valid edited-version window with the original one. |
-| R6. Publication exactly at close | Report `0000016058-23-000183`, **December 27, 2023, 4 PM EST**, has a daily window ending at that instant. This is a boundary convention to reconcile, distinct from R1's clear before-publication error. | Apply section 3's agreed **strictly after publication** rule: the first daily window ends **December 28, 2023, 4 PM EST**. Check exact-close behavior on ordinary and early-closing days, including nearby timestamps. |
-| R7. Early-close price timestamps | **6,306 Company price edges** say 4 PM Eastern on days whose actual regular close was 1 PM Eastern. This establishes a timestamp mismatch, not that the closing-price values are wrong. | Inspect the Date-to-Company `HAS_PRICE` writer and provider timestamp meaning. Compare with Date's actual calendar close; distinguish period-end time, trade/bar time and when the data became available. Do not infer an earlier information leak or wrong price solely from a late timestamp. |
-| R8. Missing/unusable returns | The earlier full source-value inventory found **5 nonfinite daily returns: 1 News + 4 Reports**, plus **one list-valued Report hourly return**. Other returns are absent. Missing and invalid values are not zero. | Audit the full current population and each consumer's type/missing-value handling. Inspect and reuse existing normalization where appropriate; check its actual handling of lists, NaN and infinity rather than assuming every case is covered. Report unusable values separately and exclude them from numerical comparisons and significance tests until resolved. |
-
-### Audit baselines to reproduce
-
-Compare saved daily ends with the native exchange calendar's first regular close strictly after the **stored source time**, while separately checking whether that time really belongs to the cited content version. A timestamp match alone does not verify publication history.
-
-| Source | Matched stored source time/calendar | Needs review | No saved daily schedule | Total |
-|---|---:|---:|---:|---:|
-| News | 348,498 | 172 | 0 | 348,670 |
-| Report | 42,611 | 13 | 9 | 42,633 |
-| Transcript | 0 | 0 | 9,608 | 9,608 |
-| Total | 391,109 | 185 | 9,617 | 400,911 |
-
-The **185** review cases are R1 **169** + R2 **12** + R5 **3** + R6 **1**. Do not add the missing schedules to that category or classify all review cases as proven bugs. The original audit also checked **1,213 Date nodes** against the calendar and **655,858 Company–Date price edges**; **649,552** price timestamps matched the calendar close and **6,306** were later than the early close. Decode stored `is_trading_day` string values `1`/`0` explicitly when checking Date fields.
-
-For return disagreements, the earlier comparison selected Date from `returns_schedule.daily` converted to Eastern, joined that Date's `HAS_PRICE` to the **same Company**, and compared source-edge `daily_stock` with `daily_return`. It found:
-
-| Source → Company relationship | Finite paired values | Difference greater than 0.02 percentage points | Strictly opposite signs |
-|---|---:|---:|---:|
-| News `INFLUENCES` | 231,940 | 106,353 | 918 |
-| Report `PRIMARY_FILER` | 41,384 | 21,599 | 167 |
-| Report `REFERENCED_IN` | 445 | 246 | 3 |
-
-Another **117,660** pairs lacked at least one value and **2** pairs were nonfinite. These paired counts have a different scope from R8's full source inventory. They are relationship comparisons, not independent events/trades or proof every paired period is valid. Transcripts were excluded from this comparison because schedules were absent. Recheck any newly supported relationship types too. Exclude missing/nonfinite values explicitly and test opposite signs with `(a < 0 and b > 0) or (b < 0 and a > 0)`, not a multiplication shortcut that mishandles NaN.
-
-**Positive controls:** AAPL Report `0000320193-23-000005`, published **February 2, 2023, 4:30:33 PM EST**, has daily end **February 3, 4 PM EST**; source and Date both give **+2.44%** from **150.82 → 154.50**. Locally, February 2, 2023 at **11 AM EST** selects a daily end that afternoon at 4 PM, and **4:30 PM EST** selects February 3 at 4 PM; both still pass. Keep valid cases alongside failure cases so a fix cannot simply shift every source to the next day.
-
-### Code and evidence to inspect
-
-- `utils/market_session.py`: `MarketSessionClassifier.get_market_session`, `get_trading_hours`, `get_session_data_structure`, `get_start_time`, `get_end_time`, `get_interval_start_time`, `get_interval_end_time`, `get_1d_impact_times`.
-- `eventReturns/EventReturnsManager.py`: `_calculate_return_times` and the price-calculation path; `eventReturns/ReturnsProcessor.py`: readiness, scheduling and late-price updates.
-- `eventReturns/polygonClass.py`: `get_daily_market_summary`, `get_returns_indexed`, `get_last_trade`. The latter selects second-aggregate closes and can look backward up to five days; the caller currently loses the selected bar's timestamp. Verify actual endpoint freshness and valid fallback behavior.
-- `neograph/Neo4jInitializer.py` and `neograph/EventTraderNodes.py`: Date fields and `HAS_PRICE` values/timestamps; `neograph/mixins/news.py` and `redisDB/TranscriptProcessor.py`: source creation, edits and availability; `scripts/earnings/builders/inter_quarter_context.py:_norm_ret`: existing return normalization.
-- Native packages checked: **exchange_calendars 4.10** (`XNYS`, `session_close`, `date_to_session`, `previous_session`, `next_session`) and **polygon-api-client 1.14.4** (`get_grouped_daily_aggs` and aggregate requests). Recheck the installed versions and native APIs before changing code; the regular-close calendar capability already exists.
-- Prior machine-readable evidence, if still available: `/tmp/driver_explanation_review_a6f51esx/` contains `timing_review_20261113.json`, `return_comparison_corrected_20261113.json`, `audit_returns.json`, `native_checks.json` and `timing_review_source_hashes_20261113.json`. Temporary files are supporting evidence only; this section records the required findings independently. The corrected comparison supersedes the affected counts in `window_audit.json`. If files are gone, rerun the stated checks rather than assuming the issue disappeared.
-
-### Instructions and completion report for the next bot
-
-1. **Recheck before concluding.** Read current code and relevant plans; record the code revision/hashes, installed versions and audit time in Eastern. Run read-only Neo4j checks over the complete applicable population, preserving counts and reasons for valid, mismatching, missing and unverified cases. Do not describe this older audit as a new database check.
-2. **Check the whole class of errors.** Test ordinary days, before/premarket, regular trading, after-hours/closed-market releases, exact and early closes, weekends, holidays, daylight-saving changes and source edits. Derive expected boundaries independently from the native calendar and verified extended-hours policy. Examine hourly/session starts and ends as well as daily ends; native capabilities must be inspected and exercised before custom logic is added.
-3. **Fix at the existing boundary when repair work is authorized.** First reproduce failures with tests; then make the smallest general fix in the existing helper/writer, with positive controls, focused and relevant regression suites. A code fix does not repair saved database records automatically. **Database writes require the owner's explicit approval.** This documentation request itself authorizes no repairs, migrations or paid data/model runs.
-4. **Report the actual impact.** For each R1–R8 item, state whether it changes the selected Date, the measured return/sign, significant-move selection, prediction-time information availability or only metadata. Identify affected saved records and any explanations/evaluation results requiring recheck. Keep section 3's daily meaning unless evidence demonstrates a design conflict; bring any such conflict to the owner before changing that rule. Preserve the agreed point-in-time rule in section 7.
-5. **Close the loop in this document.** Update R1–R8 here with status, current counts, evidence, tests, remaining uncertainty and any approved correction. Finish with a short owner-readable statement of what is fixed, what remains unverified and whether the measurements are usable for the proposed trading evaluation. Do not mark the work complete because tests pass or the issue is described. Reconcile the final findings with DRIVER_RULES_Categorized.md during the agreed final-plan update.
-
 ## Old operating algorithm proposal — not agreed, to be reviewed
 
 *Copied from the deleted EXPLAINED_BY_SCRATCHPAD.md (13 Nov 2026), unchanged. Never approved; review before use.*

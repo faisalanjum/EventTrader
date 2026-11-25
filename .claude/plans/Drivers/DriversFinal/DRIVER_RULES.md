@@ -6,7 +6,7 @@ This file wins over every older document. For fact subjects, News and daily expl
 
 ### Final check before building
 
-  1. 🟡 EXPLAINED_BY: current design in [EXPLAINED_BY.md](EXPLAINED_BY.md), also drawing on [NewsMultipleSymbols.md](NewsMultipleSymbols.md) (added when news restarts, via Massive). Resolved: daily explanations start from Date, with the affected company on the EXPLAINED_BY link; one fact may explain several companies/days (A2); no DailyCompanyMoveEvent. Open: final owner check (at S5) and [§7–8](EXPLAINED_BY.md).
+  1. 🟡 EXPLAINED_BY: current design in [EXPLAINED_BY.md](EXPLAINED_BY.md), also drawing on [NewsMultipleSymbols.md](NewsMultipleSymbols.md) (added when news restarts, via Massive). Resolved: daily explanations start from Date, with the affected company on the EXPLAINED_BY link; one fact may explain several companies/days (A2); no DailyCompanyMoveEvent. Open: final owner check (at S5), remaining design choices and [return checks](DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements).
   2. 🟡 Test synonym checking and grouping before enabling `SAME_AS` (5.6, 7.1).
 
 # Driver rules
@@ -1278,7 +1278,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 
 - 9.7 **Daily price explanations are in this target version.** AI supplies judgments and code validates/saves them under A2.1–A2.8. Approval of this design does not certify or activate a producer.
 
-- 10.1 **Still to choose:** significant-move benchmarks, thresholds and measured intervals, including moves without a source; starting/ongoing source coverage, history limits and research budgets. Before returns drive triggers or trading evaluation, complete [EXPLAINED_BY.md §8](EXPLAINED_BY.md#8-return-measurements--open-checks-for-the-next-bot) or exclude unverified measurements. Missing/unusable returns remain unknown, never zero. *Affects:* source coverage, deeper research and return-based evaluation. *Decide when:* before each is enabled.
+- 10.1 **Still to choose:** significant-move benchmarks, thresholds and measured intervals, including moves without a source; starting/ongoing source coverage, history limits and research budgets. Before returns drive triggers or trading evaluation, complete [the return checks](DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements) or exclude unverified measurements. Missing/unusable returns remain unknown, never zero. *Affects:* source coverage, deeper research and return-based evaluation. *Decide when:* before each is enabled.
 
 - A2.1 The shared update process uses AI to judge which source-backed facts contributed to an observed move and why (8.16). Code validates the fact/source references, existing affected Company ID, trading Date and required fields, then saves through the existing shared validation/writing path. Timestamps alone never prove causation. A producer does not copy the core's validation or writing steps.
 - A2.2 A daily judgment is `Date → EXPLAINED_BY → DriverUpdate`, keyed by Date + affected Company ID + DriverUpdate ID + `llm_producer`. Separate facts and producers keep separate links; repeated claims from different sources are allowed.

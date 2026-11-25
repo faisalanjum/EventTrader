@@ -81,7 +81,7 @@ The [current rulebook](../DRIVER_RULES.md) governs. [ReasoningTasks.md](../Reaso
 
 **★ marks an open workflow design choice.** See [processing and service targets (P6, 10.3)](../DRIVER_RULES.md#s3--processing-timing--retries) and [price triggers and research limits (10.1)](../DRIVER_RULES.md#s5--price-move-explanations).
 
-The [handoff](../../../../../driver/Prompts/design_discussion_handoff.txt) lists the implementation and data checks for the reviewed issues.
+For dated findings and outstanding tests, see [Driver data, code and prompt checks](DriverDataAndCodeIssues.md).
 
 The existing [extraction units](https://app.notion.com/p/416a0a3f3106818cb2e9c7a0341cfeb9) and [readback](https://app.notion.com/p/416a0a3f3106813bae2ad0b1470b3cfb) are the SEC starting point.
 
@@ -171,7 +171,7 @@ Use common instructions plus any of the five fact-type sections to propose facts
 | Step | Implement and test | Rules |
 |---|---|---|
 | **38 ★** | Check official company eligibility and refresh the catalog under 1.21. Set coverage, history limits and research budgets from one company’s measured cost and time. Set schedules, alerts and service targets. | 1.20–1.21, 8.16; 10.1, 10.3 |
-| **39** | Verify publication availability, price inputs and trading windows before using returns. Resolve or exclude unverified measurements. | A2.7; **[EXPLAINED_BY §8](../EXPLAINED_BY.md#8-return-measurements--open-checks-for-the-next-bot)** |
+| **39** | Verify publication availability, price inputs and trading windows before using returns. Resolve or exclude unverified measurements. | A2.7; **[Return checks](DriverDataAndCodeIssues.md#return-measurements)** |
 | **40** | AI judges which facts, if any, contributed to each affected company’s daily move. Give the reason, direction, strength if known and confidence. Grade explanations as a set. | 3.12; 9.7; A2.1, A2.3–A2.4, A2.6, A2.8 |
 | **41** | Code validates daily judgments and keeps the latest completed result per company, day, fact and producer. Honor explicit withdrawals, guard against delayed writes, and apply the [live and replay cutoffs](../DRIVER_LearnerPredictor.md#input-cutoff). | A2.1–A2.2, A2.5 |
 | **42** | Retrieve missing original research evidence, including selected articles without tracked tickers. Use the same source/fact process and preserve the version’s public time when known. | 1.3–1.4, 1.17; 9.5; research-source rules |
