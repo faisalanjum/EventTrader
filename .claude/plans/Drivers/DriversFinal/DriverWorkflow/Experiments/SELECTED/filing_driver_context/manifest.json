@@ -1,0 +1,57 @@
+{
+  "selected_at": "2026-11-26T07:28:31.463171-05:00",
+  "status": "Best replayed Palo Alto ten-name result. Whole-filing recall and generalization remain unmeasured.",
+  "verified_checks": {
+    "Required context": [
+      36,
+      36
+    ],
+    "Unrelated passages excluded": [
+      10,
+      10
+    ],
+    "Disputed passages": [
+      8,
+      8
+    ],
+    "Expanded context and relevance": [
+      15,
+      15
+    ],
+    "Tagged source locations": [
+      6,
+      6
+    ],
+    "Chart decisions": [
+      10,
+      10
+    ],
+    "Later required source details": [
+      5,
+      5
+    ],
+    "Later unrelated details excluded": [
+      4,
+      4
+    ],
+    "Scope of distributor terms": [
+      1,
+      1
+    ],
+    "Capital needs excluded from subscription gross profit": [
+      1,
+      1
+    ]
+  },
+  "api_usd": "0.03986340",
+  "original_passage_assignments": 180,
+  "additional_passage_assignments": 7,
+  "complete_passage_assignments": 187,
+  "files": {
+    "README.md": "6d3eb20b847f7ca557e766e3f25c3aa240fd674c67ce21d4259545cdf59f8158",
+    "followup_checks.json": "8ac0856d30e23e6b9489b88ad8e921d47bba9e9f9cd87ff88e58d43d2dddcbd3",
+    "packets.md": "bd712f6e3fcbf0c1a5b55f3468ec5d47c7cffab8071063055f8c0edc585a9a4e",
+    "recorded_run.zip": "f5aa5ef466d7b0eeb6c48aa3c40970e6791cd3451aeaa882979e2694505c670c",
+    "replay.py": "7bcd28d400e4e0e0863de22e85bbedf8d94b9fa4de60daf80c663a3c6b5065be"
+  }
+}

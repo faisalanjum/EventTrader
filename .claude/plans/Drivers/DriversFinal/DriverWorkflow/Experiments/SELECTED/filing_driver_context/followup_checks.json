@@ -1,0 +1,95 @@
+{
+  "filing_sha256": "39f58d04fe118444dc9862736bd044b351f134b12dd846f897a1e361368b1fec",
+  "checks": [
+    {
+      "driver": 7,
+      "piece": 155,
+      "quote": "one-year renewal terms",
+      "keep": true,
+      "recorded_in_original": false,
+      "selected_now": true
+    },
+    {
+      "driver": 7,
+      "piece": 155,
+      "quote": "30 to 90 days written notice",
+      "keep": true,
+      "recorded_in_original": false,
+      "selected_now": true
+    },
+    {
+      "driver": 7,
+      "piece": 155,
+      "quote": "30 to 45 calendar days of the date we issue an invoice",
+      "keep": true,
+      "recorded_in_original": false,
+      "selected_now": true
+    },
+    {
+      "driver": 7,
+      "piece": 282,
+      "quote": "no contractual obligation to, and may not, renew",
+      "keep": true,
+      "recorded_in_original": false,
+      "selected_now": true
+    },
+    {
+      "driver": 7,
+      "piece": 282,
+      "quote": "shorter contract lengths",
+      "keep": true,
+      "recorded_in_original": false,
+      "selected_now": true
+    },
+    {
+      "driver": 9,
+      "piece": 89,
+      "quote": "cloud-delivered security services",
+      "keep": false,
+      "recorded_in_original": false,
+      "selected_now": false
+    },
+    {
+      "driver": 5,
+      "piece": 881,
+      "quote": "Remaining performance obligations were",
+      "keep": false,
+      "recorded_in_original": false,
+      "selected_now": false
+    },
+    {
+      "driver": 2,
+      "piece": 876,
+      "quote": "groups of similar products and services",
+      "keep": false,
+      "recorded_in_original": false,
+      "selected_now": false
+    },
+    {
+      "driver": 7,
+      "piece": 155,
+      "quote": "49.7% of our total revenue",
+      "keep": false,
+      "recorded_in_original": false,
+      "selected_now": false
+    },
+    {
+      "driver": 7,
+      "piece": 155,
+      "quote": "we sell our products and subscription and support offerings to our distributors",
+      "keep": true,
+      "selected_now": true,
+      "recorded_in_original": false,
+      "group": "Scope of distributor terms"
+    },
+    {
+      "driver": 5,
+      "piece": 653,
+      "quote": "Our future capital requirements",
+      "keep": false,
+      "selected_now": false,
+      "recorded_in_original": false,
+      "group": "Capital needs excluded from subscription gross profit"
+    }
+  ]
+}
