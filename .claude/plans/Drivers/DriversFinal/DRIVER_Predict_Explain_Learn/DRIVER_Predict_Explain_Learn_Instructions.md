@@ -3,21 +3,21 @@
 **Read these rules at the start of every turn.** The instructions and [working to-do](DRIVER_Predict_Explain_Learn_ToDo.md) are the shared project notebooks. Private copies are for drafting and backup.
 
 1. **Start with the goal.** Automatically make a paper buy, sell or no-trade call when relevant information arrives, using only what was available then. Later, grade the call, investigate what moved the stock and carry supported lessons into the next call. Choose the simplest reliable design that meets every requirement, fits the other rules and leaves each case unambiguous. Add complexity only when it materially improves reliability.
-2. **Trace one issue end to end.** Confirm the owner’s concern and why it matters. The owner’s latest clarification takes precedence over the transcribed notes or either reviewer’s interpretation. Read all three plans in full for each issue. Trace every affected passage, edge case and downstream use against the current rulebook. Check workflow notes, code or saved data when a claim depends on them. Show what agrees, what conflicts, what else must change and why. Say what could not be verified. Each reviewer forms an independent judgment. Raise each rulebook conflict when reached. Change the rulebook only if all three agree and the owner approves the exact before and after. Otherwise drop the proposed departure.
+2. **Trace one issue end to end.** Confirm the owner’s concern and why it matters. The owner’s latest clarification takes precedence over the transcribed notes or either reviewer’s interpretation. Take the time to read all three plans in full for each issue. Trace every affected passage, edge case and downstream use against the current rulebook. Check workflow notes, code or saved data when a claim depends on them. Show what agrees, what conflicts, what else must change and why. Say what could not be verified. Each reviewer forms an independent judgment. Raise each rulebook conflict when reached. Change the rulebook only if all three agree and the owner approves the exact before and after. Otherwise drop the proposed departure.
 3. **Write for the owner and the implementing bot.** Group related rules under one heading. State each rule once, in the fewest plain words that cover every distinct case and outcome. Use *Driver* for a recurring topic, *DriverUpdate* for one occurrence supported by a source, and *source evidence* for the supporting material. Preserve original wording in quotations. Lead with the point, keep replies short and report times in Eastern time (America/Toronto, EST or EDT).
-4. **Get exact approval.** Design changes require agreement from the owner, Claude and Codex. Show the exact before and after for each project or design file, including the two shared notebooks. Get the owner’s approval before editing. For private working notes, approval is unnecessary. Say in the same reply what you wrote. A pasted review speaks for its author. Ask the owner before acting on a suggestion beyond the agreed task. Verify each approved edit and record the decision. Commit or push only on the owner’s request.
+4. **Get exact approval.** Design changes require agreement from the owner, Claude and Codex. Show the exact before and after for each project or design file, including the two shared notebooks. Get the owner’s approval before editing. For private working notes, approval is unnecessary. Say in the same reply what you wrote. A pasted review speaks for its author. Ask the owner before acting on a suggestion beyond the agreed task. Verify each approved edit. Keep the owner’s exact decision message once in the appendix. Update “Restart here” when the decision changes a working rule or where to resume. Commit or push only on the owner’s request.
 5. **Resolve known issues first.** Agree on the remaining order with the owner. Discuss one issue until the owner is satisfied, then apply its approved wording to the affected original plans. Keep reviewer concerns labeled beside the relevant issue for joint reprioritization. Ask about unclear handwriting when its issue comes up.
-6. **Then combine all three plans.** Agree on headings and write the combined rules in `DRIVER_Predict_Explain_Learn.md`. It is reserved for that later step. Resolve newly found issues there. Claude and Codex independently check it line by line against all three originals and every to-do item. Account for each point once. It counts as addressed when covered in the draft or when the owner has seen the reason for its move or removal and approved it. Show the destination of each move. Verify active references, show any needed link edits, and get the owner’s approval before archiving the originals. Update Workflow v2 afterward.
+6. **Then combine all three plans.** Once the three original plans are reconciled, agree on headings for the final file, `DRIVER_Predict_Explain_Learn.md`. Get the owner’s approval of the exact wording before every edit to that file. Resolve newly found issues there. Claude and Codex independently check it line by line against all three originals and every to-do item. Account for each point once. It counts as addressed when covered in the draft or when the owner has seen the reason for its move or removal and approved it. Show the destination of each move. Verify active references, show any needed link edits, and get the owner’s approval before archiving the originals. Update Workflow v2 afterward.
 
 ## Restart here
 
-For these two notebooks, Codex writes the drafts. Claude checks both line by line against both earlier versions and the owner’s decisions. The owner approves last. The first two discussions are settled in order. Start with who runs when, then determine which company a DriverUpdate belongs to. The current [rulebook](../DRIVER_RULES.md) governs the [daily explanation](References/EXPLAINED_BY.md), [prediction and review](References/DRIVER_LearnerPredictor.md), and [news](References/NewsMultipleSymbols.md) plans. The [workflow draft](../DriverWorkflow/DriverWorkflow_v2.md) comes later.
+For these two notebooks, Codex writes the drafts. Claude checks both line by line against both earlier versions and the owner’s decisions. The owner approves last. Who applies later design edits is still open. The first two discussions are settled in order. Start with who runs when, then determine which company a DriverUpdate belongs to. The current [rulebook](../DRIVER_RULES.md) governs the [daily explanation](References/EXPLAINED_BY.md), [prediction and review](References/DRIVER_LearnerPredictor.md), and [news](References/NewsMultipleSymbols.md) plans. The [workflow draft](../DriverWorkflow/DriverWorkflow_v2.md) comes later.
 
 The [original issue notes](DRIVER_Predict_Explain_Learn_ToDo.md#original-issue-notes) preserve the transcribed questions and marked passages. The appendix below preserves the owner’s words and six selected answers. Older quotations use “Fable” for Claude and may name earlier file locations.
 
 ## Owner messages and decisions
 
-The messages below are in time order through 2026-11-28 02:53:47 AM EST. Each distinct message appears once. A message marked *both* has identical visible text in both sessions. Differences in wording, capitalization and spacing are preserved. Chat display tags are omitted. In forwarded passages, the quoted speaker’s words remain their own. For the six question dialogs, the owner selected the answer shown. Claude wrote the question and the option description.
+The messages below are in time order through 2026-11-28 03:10:18 AM EST. Each distinct message appears once. A message marked *both* has identical visible text in both sessions. Differences in wording, capitalization and spacing are preserved. Chat display tags are omitted. In forwarded passages, the quoted speaker’s words remain their own. For the six question dialogs, the owner selected the answer shown. Claude wrote the question and the option description.
 
 <details>
 <summary>Read the messages and recorded answers</summary>
@@ -1432,6 +1432,267 @@ do you need this ? or can i delete it now? Before-merge-2026-11-28.zip since cod
 ~~~text
 i need to keep the references folder super clean . as such . delete Before-merge-2026-11-28.zip since claude already copied what he needed. delete Context-2026-11-25.md. also can we copy the important stuff in either of these 2 files /home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_Predict_Explain_Learn/DRIVER_Predict_Explain_Learn_Instructions.md
 /home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_Predict_Explain_Learn/DRIVER_Predict_Explain_Learn_ToDo.md and then delete Discussion.md . that just leave sus with Issues-organized.md which i would also like to delete since these 2 file should be enough ?
+~~~
+
+### 106. Codex only · 2026-11-28 03:02:19 AM EST
+
+~~~text
+anything still left based on what claude said or can we safely ignore what he said: also this is what claude said: but its super important you do not rubber stamp anything he says without rigorously and independently understanding first understanding it.
+
+Codex's two files are close, but not yet in line. The to-do is complete and correct. The instructions file contradicts two of the answers you gave me tonight.
+
+Codex wrote both files at 2:31 AM from the plan you approved at 2:15 AM. Your six answers to me came a few minutes later, so Codex did not have them. I changed no file.
+
+Full check, with every change before and after:
+/home/faisal/.claude/projects/-home-faisal-EventMarketDB/backups/three_files_rewrite_notes/Check_of_Codex_Merge.md
+
+What is good
+- All 71 of your points are in the to-do, each once.
+- All 125 links in the two files work.
+- Codex's facts hold; I re-ran the numbers.
+- It is concise: 3,826 words against my draft's 6,124.
+- The order matches what you approved.
+
+Where Codex corrected me, and is right
+- My count of company-days at the 2.2 threshold was 152,813. The exact count is 153,038; my query missed 225 cases sitting exactly on the line. The share is still 23.3%.
+- I raised a clash between two workflow notes about showing the reader existing Driver names. Rule 1.14 in the rulebook already settles it.
+
+Instructions file: 8 changes
+
+Now: Before and after for every file, "including working notes"
+Should be: Project and design files only; for our own notes we
+  say what we wrote
+Why: Your answer 1
+────────────────────────────────────────
+Now: Your exact words are reached through four links
+Should be: Your messages inside the file, as one list
+Why: Your answer 2; one link points into my private folder and
+  one into a zip
+────────────────────────────────────────
+Now: "Raise any proposed rulebook change separately."
+Should be: It changes only when all three agree and you approve
+  the exact change
+Why: Your answer 3
+────────────────────────────────────────
+Now: Removal must be shown and approved
+Should be: Add that an approved removal counts as addressed
+Why: Your answer 4
+────────────────────────────────────────
+Now: Simplest design that meets every requirement
+Should be: Add "consistent with every other rule" and "no
+  ambiguity"
+Why: Your design rule puts these first
+────────────────────────────────────────
+Now: Missing
+Should be: Who makes an approved edit is "tbd"
+Why: Your word
+────────────────────────────────────────
+Now: Missing
+Should be: Stay inside your task on the other assistant's
+  suggestion
+Why: Your words to Codex
+────────────────────────────────────────
+Now: Missing
+Should be: Take the time needed; say what could not be checked
+Why: Your words
+
+To-do: 4 kinds of change
+1. Your own position is flattened in 11 places. For example, your note that the Predictor–Learner file's triggers replace the older ones is gone, and the item opens with the rule you called "not relevant now!". Your "Unknown Driver" idea appears only inside a reviewer's objection. The check lists all 11 with your exact words to put back.
+2. Four of your ideas differ from the rulebook without being marked. Your answer 3 says each is raised when we reach it.
+3. Three of my concerns were dropped. One example: a move "qualifies" against the market, but a win is the raw return above zero.
+4. Layout. Each item's text sits under one label, "Why.", but mixes the reason, the current rules, the questions and the tests. I suggest four labels with the same words; the check shows one item both ways.
+
+The three design files were moved
+
+Between 2:15 and 2:31 AM they were moved, unchanged, into a new folder, DRIVER_Predict_Explain_Learn/References/. I do not know whether you or Codex moved them. Because of the move, 41 links in 10 other files are now dead, 5 of them in the locked rulebook. Your choice: move the files back until the archive step, or re-point the 41 links.
+
+Message for Codex (paste as is):
+
+Claude checked your two merged files line by line. To-do: complete and
+correct (71 points once, 114 links work, your numbers verified, your
+two corrections of Claude accepted). Not yet in line on the points
+below. Exact before/after for each is in
+/home/faisal/.claude/projects/-home-faisal-EventMarketDB/backups/three_files_rewrite_notes/Check_of_Codex_Merge.md
+
+The owner answered six questions at about 2:20 AM, after approving
+your plan:
+1. "Any file" = project and design files. Our own working notes need
+   no approval; say in the same reply what was written.
+2. His exact messages go INSIDE the instructions file, one list from
+   both sessions. Ready-made:
+   .../three_files_rewrite_notes/Owner_Messages_Both_Sessions.md
+3. The rulebook may change case by case: only when all three agree and
+   he approves the exact before/after; otherwise the idea is dropped.
+4. An approved removal or move counts as addressed in the archive check.
+5. You write the two files; Claude checks; he approves last.
+6. Order starts: who runs when, then which company.
+
+Instructions file: 8 changes (section A). Rules 1, 2, 4 and 6 and the
+last paragraph.
+To-do: (B1) put his own position back in his words in 11 places;
+(B2) mark 4 ideas that differ from rulebook rules 8.16, A2.2/A2.7,
+A2.7, A2.3; (B3) restore 3 dropped reviewer concerns; (B4) split each
+"Why." block into Why / Today / Decide / Test, same words; (B5) keep a
+copy of the notebook beside the two files instead of linking into
+DesignReview.
+~~~
+
+### 107. Claude only · 2026-11-28 03:02:24 AM EST
+
+~~~text
+all fine now ? anything else to tell codex? /home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_Predict_Explain_Learn . note if everything is perfect and understand this is going to be our final file which needs approval from me everytime we enter any fila stuff here/home/faisal/EventMarketDB/.claude/plans/Drivers/DriversFinal/DRIVER_Predict_Explain_Learn/DRIVER_Predict_Explain_Learn.md ultrathink
+~~~
+
+### 108. Claude only · 2026-11-28 03:06:49 AM EST
+
+~~~text
+In order to ensure the final file is perfect and we settle all issues before we start writing in it - is it better we reconcile each of these 3 files first and then put organized content in final file or would you prefer we continue updating the final file?
+~~~
+
+### 109. Claude only · 2026-11-28 03:07:57 AM EST
+
+~~~text
+remember to always talk to me in super concise couple of lines each turn unless absolutely neccessary
+~~~
+
+### 110. Claude only · 2026-11-28 03:08:19 AM EST
+
+~~~text
+no i liked my first approach ?
+~~~
+
+### 111. Claude only · 2026-11-28 03:08:29 AM EST
+
+~~~text
+also what should i tell codex? 
+
+
+Two things are still worth fixing. Claude reviewed an earlier version. I checked his findings against the files as they stand now.
+
+1. Repair 37 broken links in nine files, including five in the current rulebook. All 122 links inside the two notebooks work. The other four broken links Claude counted are in the retired rulebook, which I’d leave alone. Current rulebook
+2. Put your proposals beside the rules they might change. All 71 issues are present, but some of your positions are clear only in the appendix. Four deserve a short line where we’ll discuss them: which triggers would be replaced, whether a daily explanation can cover an hour, whether one investigation can cover several days, and whether a ticker can replace the company ID. I’d also introduce “Unknown Driver” as your proposal before giving the objection. One test is worth adding: a filing or earnings call that merely mentions another company versus one that reports that company’s own numbers. Working to-do
+
+The rest can stay as it is. Your six answers are recorded. Who edits the design files later is still open. The to-do already explains how a stock can qualify for research while the trade loses money, and distinguishes an update the Learner considered from one it judged caused the move. An extra workbook and four labels on every item would add repetition. Instructions · Worked example
+
+This was a read-only review.
+
+
+ ultrathink
+~~~
+
+### 112. Codex only · 2026-11-28 03:08:38 AM EST
+
+~~~text
+and more from claude - again no rubber stamping? Nearly, but not everything is fine yet. Nothing of yours is lost and the structure is right; seven points are left for Codex, and the first three matter most.
+
+I have recorded your new rule: DRIVER_Predict_Explain_Learn.md is the final file, and nothing final goes into it without your approval, every time.
+
+What I checked in the folder, as Codex left it at 3:00 AM
+
+Part: Instructions
+Result: 17 lines of rules. Your six answers are in, and so is
+  your design rule's first priority. All 8 links work.
+────────────────────────────────────────
+Part: Your messages
+Result: Inside the instructions file: 105 entries. All 49 that I
+  can compare are word for word.
+────────────────────────────────────────
+Part: To-do
+Result: 18 items, all 71 of your points once, all 114 links work.
+────────────────────────────────────────
+Part: Your original notes
+Result: Now inside the to-do, below the items. All 45 questions,
+  84 notes, 9 marks and 22 marked passages are kept in full. Only
+  the notebook's quotes of the three design files were left out;
+  those files sit in References.
+────────────────────────────────────────
+Part: DesignReview
+Result: Gone, with nothing lost. I hold a verified copy of the
+  backup.
+
+What is still not right
+
+1. Your final-file rule is missing. The instructions only say the combined rules go into that file and that it is "reserved for that later step".
+2. Your own position is hidden in 7 items. For example, item 1 opens with the rule you called "not relevant now!". Item 12 shows your "Unknown Driver" idea only as something a reviewer objects to. Your words are in the notes below, but the item text is what gets read first.
+3. Four of your ideas differ from the rulebook and are not marked. Your answer was to raise each one when we reach it.
+4. Two of my concerns are missing. One example: a review link and a daily explanation link would record the same judgment twice.
+5. Layout. Each item still puts the reason, the current rules, the questions and the tests under one label, "Why.". This one is your call; it adds no words.
+6. Three small gaps in the instructions: who makes an approved edit to a design file is "tbd"; "take the time needed"; and a rule to keep "Restart here" and the message list current after each decision. Without the last one the file goes stale.
+7. 41 links in 10 other files are still dead, 5 of them in the rulebook. They point to the three plans' old place.
+
+Message for Codex (paste as is):
+
+Claude checked the two notebooks as they stood at 3:00 AM. Fine: all 71
+points once, all links work, the six answers, the embedded original
+notes (every question, note and mark kept), the 105-entry message list.
+
+New rule from the owner, in his words: DRIVER_Predict_Explain_Learn.md
+"is going to be our final file which needs approval from me everytime
+we enter any fila stuff here".
+
+Still to change:
+1. Instructions rule 6: add that rule. Nothing final is entered in
+   DRIVER_Predict_Explain_Learn.md without his approval of that exact
+   text, every time.
+2. To-do, state his own position in his words in 7 items:
+   - item 1 (4.1): "triggers & rules here are replaced by
+     Driver_PredictorLearner.md!"; information trigger "not relevant
+     now!"
+   - item 1 (8.1): "just have the model write it instead ... so as to
+     have no extra machinery"
+   - item 4 (E1): "whenever a price moves by more than the threshold,
+     that sort of is a trigger to making a driver", then rule 2.35
+   - item 8 (2.2): "Which indicates assigning hourly explained-by is
+     fine."
+   - item 11 (2.4): "does it make sense to do 1 or more investigations
+     per day, but not across days?"
+   - item 12 (3.9): the "Unknown Driver" is his proposal; state it
+     before the reviewer concern
+   - item 15 (5.2): "company_id -> let's use the ticker if it's unique."
+3. To-do, mark where his idea differs from the rulebook: item 1 (8.16),
+   item 8 (A2.2, A2.7), item 11 (A2.7), item 15 (A2.3).
+4. To-do, two reviewer concerns: item 2, a source-based rule needs an
+   exact test for filings and call transcripts, which name other
+   companies all the time; item 12, a review link plus EXPLAINED_BY to
+   the same DriverUpdate records one judgment twice.
+5. To-do layout (owner's call): split each "Why." block into Why /
+   Today / Decide / Test, same words.
+6. Instructions: who makes an approved edit to a design file is "tbd";
+   "take the time needed"; keep "Restart here" and the message list
+   current after each owner decision.
+7. Other files: 41 links still point to the three plans' old place
+   (rulebook 5, Workflow v2 5, old workflow 10, ReasoningTasks 4,
+   DriverDataAndCodeIssues 2, Categorized 4, perplexity 2,
+   SharedCreator 1, and 8 inside the moved LearnerPredictor and
+   EXPLAINED_BY). Show him the exact edits first.
+Check everything yourself; do not take this on trust.
+~~~
+
+### 113. Codex only · 2026-11-28 03:10:03 AM EST
+
+~~~text
+claude also said: For Codex: say yes to both of his fixes, plus three one-line additions he left out. (He says I reviewed an earlier version; the two files are unchanged since the one I checked.)
+
+Yes to both fixes, and to leaving the retired rulebook's links alone.
+No four labels. Add three more one-liners:
+1. Instructions rule 6, the owner's new rule: nothing final is entered
+   in DRIVER_Predict_Explain_Learn.md without his approval of that
+   exact text, every time.
+2. Two more of his proposals beside the rules they might change, like
+   your four: item 1, "just have the model write it instead ... so as
+   to have no extra machinery" (8.1); item 4, a price move "is a
+   trigger to making a driver" (E1, against rule 2.35).
+3. Instructions rule 4: after each owner decision, update "Restart
+   here" and add his message to the appendix.
+The owner also decided: reconcile the three plans first, then put
+organised content in the final file. Rules 5 and 6 stand.
+Show him the exact before/after for every edit, including the 37 links.
+~~~
+
+### 114. Claude only · 2026-11-28 03:10:18 AM EST
+
+~~~text
+explain each of his points super concisely and clearly one at a time
 ~~~
 
 </details>

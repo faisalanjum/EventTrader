@@ -29,7 +29,7 @@ Part of [DriverWorkflow.md](DriverWorkflow.md). Several readers use [base + copi
    - No approved identity → nothing saveable. Add only required companions (e.g. a surprise's matching result).
    - Use the existing skipped/held/rejected labels and field-level `unknown`; unrequested work isn't "skipped"; never claim "saved".
    - The sender tracks completion; a small request can't mark the whole source done.
-7. **Save:** a separate writer applies the rules, rechecks source, identity and links in one all-or-nothing write, and assigns IDs once identity is settled. Stock-move opinions stay separate ([EXPLAINED_BY](../EXPLAINED_BY.md)).
+7. **Save:** a separate writer applies the rules, rechecks source, identity and links in one all-or-nothing write, and assigns IDs once identity is settled. Stock-move opinions stay separate ([EXPLAINED_BY](../DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md)).
 
 ## 2. What the AI sees
 

@@ -4,7 +4,7 @@
 
 **Goal:** automatically signal buy, sell or no trade for a company as soon as relevant new information arrives. Paper trading for now.
 
-**How:** keep each company's history current automatically by recording DriverUpdates under their Drivers from internal sources and external research. Link two updates when the same source says one drove or offset the other (CAUSED_BY, OFFSET_BY). Link a daily price move to an update when evidence supports that explanation (EXPLAINED_BY). **Every update and every link is made automatically, with no human in the loop.** [Driver rules](../DRIVER_RULES.md) · [Price-move explanations](../EXPLAINED_BY.md)
+**How:** keep each company's history current automatically by recording DriverUpdates under their Drivers from internal sources and external research. Link two updates when the same source says one drove or offset the other (CAUSED_BY, OFFSET_BY). Link a daily price move to an update when evidence supports that explanation (EXPLAINED_BY). **Every update and every link is made automatically, with no human in the loop.** [Driver rules](../DRIVER_RULES.md) · [Price-move explanations](../DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md)
 
 **Replay:** build history quarter by quarter. Record the updates the Predictor proposes using only information available at prediction time. After the Learner sees the actual price move, compare its findings with the Predictor's. Record any DriverUpdate the Predictor missed, including one from a later disclosure, and any new price-move explanation of an existing update.
 
@@ -13,8 +13,8 @@
 ## Rough Stages
 
 - [ ] 1. **Drivers:** ([DRIVER_RULES.md](../DRIVER_RULES.md)) turn every *source into Drivers and DriverUpdates.
-- [ ] 2. **Explanations:** a workflow links each price move to the Driver updates behind it ([EXPLAINED_BY](../EXPLAINED_BY.md)).
-- [ ] 3. **Predictions and reviews.** See [Predictor and Learner rules](../DRIVER_LearnerPredictor.md).
+- [ ] 2. **Explanations:** a workflow links each price move to the Driver updates behind it ([EXPLAINED_BY](../DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md)).
+- [ ] 3. **Predictions and reviews.** See [Predictor and Learner rules](../DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md).
 
 ## Workflow
 
@@ -40,11 +40,11 @@
    3.5. Check if more connextions b/w driver updates are possible or lead to more driver/driverUpdates creation as well as linking possible - see Driver_Rules.md - for types of links which may be different than the ones for Explained_By
 
 4. **In between quarters**: 
-   4.1. Investigate [qualifying moves](../DRIVER_LearnerPredictor.md#qualifying-move) between quarterly updates.
+   4.1. Investigate [qualifying moves](../DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md#qualifying-move) between quarterly updates.
    4.2. Find reason from in house news etc as well as external sources if not found internally (perplexity/distilla/web etc) and create driverUpdates & ExplainedBy
    4.3. **live triggers** Create triggers (primarily for news) once in production to detect driverUpdates with high scores for each company and trigger a new predictor check for say freshness (has this already been priced in), materiality (based on company context as well as if previously this led to price change) and so on and trigger buy/sell/none signals - also once trade is done or after horizon period - log results and update score driver.
 
-5. **Context graph and Driver histories.** See [Predictor and Learner rules](../DRIVER_LearnerPredictor.md).
+5. **Context graph and Driver histories.** See [Predictor and Learner rules](../DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md).
 
 6. **Explained_By**: fill these details as well as other important driverUpdates including reupdating previous driverUpdates with new conditions (more context found)
 

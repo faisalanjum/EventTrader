@@ -6,7 +6,7 @@ This file wins over every older document. For fact subjects, News and daily expl
 
 ### Final check before building
 
-  1. 🟡 EXPLAINED_BY: current design in [EXPLAINED_BY.md](EXPLAINED_BY.md), also drawing on [NewsMultipleSymbols.md](NewsMultipleSymbols.md) (added when news restarts, via Massive). Resolved: daily explanations start from Date, with the affected company on the EXPLAINED_BY link; one fact may explain several companies/days (A2); no DailyCompanyMoveEvent. Open: final owner check (at S5), remaining design choices and [return checks](DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements).
+  1. 🟡 EXPLAINED_BY: current design in [EXPLAINED_BY.md](DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md), also drawing on [NewsMultipleSymbols.md](DRIVER_Predict_Explain_Learn/References/NewsMultipleSymbols.md) (added when news restarts, via Massive). Resolved: daily explanations start from Date, with the affected company on the EXPLAINED_BY link; one fact may explain several companies/days (A2); no DailyCompanyMoveEvent. Open: final owner check (at S5), remaining design choices and [return checks](DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements).
   2. 🟡 Test synonym checking and grouping before enabling `SAME_AS` (5.6, 7.1).
 
 # Driver rules
@@ -205,7 +205,7 @@ flowchart LR
     class report,owner,referenced,callCompany,tracked,transcript,news existing
 ```
 
-News: count distinct tickers before filtering. One total, tracked → INFLUENCES; 2+ total with any tracked → MENTIONS per tracked company. None tracked → skip new ordinary feed stories; save selected original research. [Full News rules](NewsMultipleSymbols.md).
+News: count distinct tickers before filtering. One total, tracked → INFLUENCES; 2+ total with any tracked → MENTIONS per tracked company. None tracked → skip new ordinary feed stories; save selected original research. [Full News rules](DRIVER_Predict_Explain_Learn/References/NewsMultipleSymbols.md).
 
 ```mermaid
 %%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":25,"rankSpacing":40,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
@@ -241,7 +241,7 @@ Sector/industry prices are optional context. NEXT means next calendar day. Repor
 
 #### Picture E · A fact explains a company's daily move
 
-Source owner, fact subject and affected company may differ; the affected company need not be named. [EXPLAINED_BY §6](EXPLAINED_BY.md#6-source-and-company-examples-simple-retrieval).
+Source owner, fact subject and affected company may differ; the affected company need not be named. [EXPLAINED_BY §6](DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md#6-source-and-company-examples-simple-retrieval).
 
 ```mermaid
 %%{init: {"theme":"base","flowchart":{"curve":"linear","nodeSpacing":28,"rankSpacing":45,"htmlLabels":true},"themeVariables":{"fontFamily":"Arial","fontSize":"16px","lineColor":"#657487","edgeLabelBackground":"#ffffff"}}}%%
@@ -1165,7 +1165,7 @@ Approved design, switched off until its proofs pass. If it is ever switched on:
 - 8.11 Old Guidance data is evidence only: it is never converted, replayed or bridged into Driver facts, and never used to fill a history gap. Whether to accept a measured temporary history gap or wait for fresh Driver history is decided only when the old data is retired. A read with no Driver facts returns an empty result, never old Guidance data. Retiring the old Guidance system keeps a complete, restorable copy; only explicitly approved parts are removed.
 
 - 9.4 **8-K item numbers** are filing information. A supporting passage may identify its item in `source_location`. Cite the actual exhibit passage or cells when the item only points there (1.17). Use no separate item field on the fact. Item numbers may not create, merge, type, rank or route a Driver or fact. Reopen only for a named user with a testable need, never with a hand-written item map, meaning shortcut or second reader.
-- 9.5 **Target sources:** Reports, Transcripts and News; every channel must pass its certification before activation. The starting source/channel set and ongoing coverage remain to be agreed (10.1); other source formats are not automatically admitted. News saving, ticker links, edits, return updates, readers and activation prerequisites follow [NewsMultipleSymbols.md](NewsMultipleSymbols.md). Selected original research articles may be saved without tracked tickers; new ordinary feed stories without tracked tickers remain skipped. Research-found filings/calls retain their Report/Transcript types.
+- 9.5 **Target sources:** Reports, Transcripts and News; every channel must pass its certification before activation. The starting source/channel set and ongoing coverage remain to be agreed (10.1); other source formats are not automatically admitted. News saving, ticker links, edits, return updates, readers and activation prerequisites follow [NewsMultipleSymbols.md](DRIVER_Predict_Explain_Learn/References/NewsMultipleSymbols.md). Selected original research articles may be saved without tracked tickers; new ordinary feed stories without tracked tickers remain skipped. Research-found filings/calls retain their Report/Transcript types.
 
 **Words used here** (from the original Word list)
 

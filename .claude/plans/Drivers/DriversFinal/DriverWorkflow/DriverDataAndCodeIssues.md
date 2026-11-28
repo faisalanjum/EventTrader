@@ -4,7 +4,7 @@ The [current Driver rules](../DRIVER_RULES.md) govern. The entries retain the or
 
 ## Return measurements
 
-R1–R8 are open. Before returns trigger research or grade a prediction, verify the measurements or exclude them (rule 10.1). Use the **Which Date a judgment explains** table for publication boundaries. Rules A2.7 and 7.6 govern daily returns and proof of publication. [Daily explanation plan](../EXPLAINED_BY.md)
+R1–R8 are open. Before returns trigger research or grade a prediction, verify the measurements or exclude them (rule 10.1). Use the **Which Date a judgment explains** table for publication boundaries. Rules A2.7 and 7.6 govern daily returns and proof of publication. [Daily explanation plan](../DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md)
 
 ### R1. Early closes
 
@@ -32,7 +32,7 @@ On November 21 the input accepted a blank public time and required a time zone f
 
 ### R5. Edited news (Entry 18)
 
-`bzNews_47218826`, `bzNews_50489449` and `bzNews_50957341` had one stored body each and daily ends matching `updated`. The last showed 3:29 AM EST and 4:06 PM EST on March 2, 2026. The window may be correct for the edit. Trace the cited version, schedule and return together. Test older, equal and newer updates, including equivalent times with different offsets. After replacement, the saved quote supports ordinary research. Earlier public availability needs separate proof. [News plan](../NewsMultipleSymbols.md)
+`bzNews_47218826`, `bzNews_50489449` and `bzNews_50957341` had one stored body each and daily ends matching `updated`. The last showed 3:29 AM EST and 4:06 PM EST on March 2, 2026. The window may be correct for the edit. Trace the cited version, schedule and return together. Test older, equal and newer updates, including equivalent times with different offsets. After replacement, the saved quote supports ordinary research. Earlier public availability needs separate proof. [News plan](../DRIVER_Predict_Explain_Learn/References/NewsMultipleSymbols.md)
 
 ### R6. Release exactly at the close
 

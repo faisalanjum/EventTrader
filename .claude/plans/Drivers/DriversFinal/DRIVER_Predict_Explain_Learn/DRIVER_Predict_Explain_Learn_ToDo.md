@@ -8,21 +8,23 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **1. What starts evidence gathering, a prediction or a review? Who does each job?**
 
-  **Why.** “All triggers; all conditions; who can create them, and when and why?” Evidence gathering, a call and a review may start at different times. Rule 8.16 processes relevant reports, transcripts and news even on quiet days. A significant move starts research even without news. Reuse saved evidence first.
+  **Why.** “All triggers; all conditions; who can create them, and when and why?” Evidence gathering, a call and a review may start at different times. You proposed using the Predictor/Learner triggers and marked the old information trigger “not relevant now!” Rule 8.16 processes relevant reports, transcripts and news even on quiet days. A significant move starts research even without news. Reuse saved evidence first.
 
-  The notes propose three historical triggers (earnings, between-quarter moves, watched Drivers) and two live/replay call triggers (earnings releases, watchlist hits). They assign moves to different agents. Which list governs which job? Is price research daily only? A watched update must be verified before it triggers a call. A completed move can prompt a later prediction on new information.
+  The notes propose three historical triggers (earnings, between-quarter moves, watched Drivers) and two live/replay call triggers (earnings releases, watchlist hits). They assign moves to different agents. Would the new triggers govern calls and reviews only, or also replace the evidence gathering required by rule 8.16? Is price research daily only? A watched update must be verified before it triggers a call. A completed move can prompt a later prediction on new information.
 
-  Rule 1.4 gives the Predictor a read role for Drivers. Either agent may submit evidence under 2.34. Only the shared process verifies evidence, reuses or creates the Driver, and saves the update. Should a Predictor start by creating updates or propose a separate future concern or context update? Does the Learner maintain the watchlist or supply daily judgments and review calls? Clarify the blank third item. For IDs, timestamps, change detection, eligibility and grading, decide what code does and what the model judges. Results must hold across retries. Summarize the answer in one row per trigger, naming who acts, who verifies and what gets saved. Test a quiet filing, a move without news and a qualifying update while a call is open.
+  Rule 1.4 gives the Predictor a read role for Drivers. Either agent may submit evidence under 2.34. Only the shared process verifies evidence, reuses or creates the Driver, and saves the update. Should a Predictor start by creating updates or propose a separate future concern or context update? Does the Learner maintain the watchlist or supply daily judgments and review calls? Clarify the blank third item. Summarize the answer in one row per trigger, naming who acts, who verifies and what gets saved. Test a quiet filing, a move without news and a qualifying update while a call is open.
+
+  For each value now assigned to code, compare computing it in code with having the model write it “in its normal process, so as to have no extra machinery”. Test IDs, timestamps, change detection, eligibility and grading, including retries. Choose the simplest reliable option for each. Rule A2.3 currently requires code to stamp when a completed daily judgment became available.
 
   [4.1](#41-which-trigger-design-is-current) · [4.2](#42-who-creates-driverupdates-and-when) · [4.4](#44-a-driverupdate-that-matches-the-watchlist) · [8.1](#81-code-owned-values) · [N.12](#n12-the-learners-primary-task) | [Update triggers](References/EXPLAINED_BY.md#1-one-update-process-two-triggers) · [Call triggers](References/DRIVER_LearnerPredictor.md#predictor)
 
 - [ ] **2. Whose DriverUpdate is it, and whose stock moved?**
 
-  **Why.** “never linking a driverUpdate if it's linked to multiple companies” could mean the story or the occurrence. Without a subject, can we retrieve company history or match a watchlist before any price explanation exists?
+  **Why.** You asked about “never linking a driverUpdate if it's linked to multiple companies”. Without an identified subject, can we retrieve company history or match a watchlist before any price explanation exists?
 
-  Rules 3.2 and 3.9–3.11 distinguish source owner, subject company and affected stock. A company-specific update has one immutable `FOR_COMPANY` link and the subject in its ID, with no extra subject field. A genuinely shared update has none. Hold or skip an unresolved subject. Compare dropping `FOR_COMPANY` and `MAPS_TO_MEMBER` whenever the source names several companies. Trace source and Driver links, periods, company calendars, filing concepts and breakdowns, guidance confirmations or withdrawals, surprises, causes and offsets. Period IDs and dates identify the period. Fiscal meaning stays with the update. A shared update needs its own period evidence.
+  Rules 3.2 and 3.9–3.11 distinguish source owner, subject company and affected stock. A company-specific update has one immutable `FOR_COMPANY` link and the subject in its ID, with no extra subject field. A genuinely shared update has none. Hold or skip an unresolved subject. Rule 6.9 allows `MAPS_TO_MEMBER` only for a matching financial breakdown of the update’s subject company. Compare your proposal to omit both links for (a) a source that names several companies, even when each update belongs to one, and (b) one DriverUpdate about several companies. Trace source and Driver links, periods, company calendars, filing concepts and breakdowns, guidance confirmations or withdrawals, surprises, causes and offsets. Period IDs and dates identify the period. Fiscal meaning stays with the update. A shared update needs its own period evidence.
 
-  Test equal revenue for two companies in one story, A’s filing reporting B’s metric, equal-valued separate deals versus retries, and one deal or Fed decision affecting stocks differently, including an unnamed company. Each stock can have its own direction and strength. Enable extraction only when IDs, links and context agree. With one story job or separate company jobs, A’s partial read or retry cannot finish or overwrite B’s work.
+  You marked the deal example “not sure” (1.4). Should buyer and seller share one deal DriverUpdate, with a separate `EXPLAINED_BY` link for each company whose move the evidence explains? Direction and strength can differ by company. Also test equal revenue for two companies in one story, A mentioning B versus reporting B’s own metric in a filing or earnings call, equal-valued separate deals versus retries, and a Fed decision affecting several stocks differently, including one it never names. Enable extraction only when IDs, links and context agree. With one story job or separate company jobs, A’s partial read or retry cannot finish or overwrite B’s work.
 
   **Reviewer concern.** Rule 3.9 says News needs no owner, then says to skip extraction without a unique owner. Which sources require the check? Test two clear company subjects in one story.
 
@@ -30,7 +32,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **3. What may each agent see, how does it get it, and by when?**
 
-  **Why.** A replay must reproduce what was knowable. The Predictor receives a briefing without direct database or web access. The Learner may search the database within its cutoff. Compare prompt-only access for both. Earlier Learner tooling allowed research. Who retrieves missing originals? Must each input be a DriverUpdate, or can quotes, documents, prices, calls and reviews supply context?
+  **Why.** A replay must reproduce what was knowable. The current plan gives the Predictor a briefing without direct database or web access and lets the Learner search the database within its cutoff. You propose supplying all context in the prompt and giving neither agent database access. Only the old Predictor was limited to files. The old Learner used helpers for Neo4j and Perplexity, with a cutoff in replays. Who would supply missing originals? Must each input be a DriverUpdate, or can quotes, documents, prices, calls and reviews supply context?
 
   Prove the exact source version was public strictly before the cutoff. Even source text can disclose the outcome (rule 1.25). Prior price windows must have ended and their verified results been available. Record each judgment’s actual save time and evidence cutoff. Its evidence cutoff must be no later than the call cutoff. The daily field list and rule A2.3 omit this second time.
 
@@ -40,7 +42,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **4. When do we create or reuse a Driver? When do we save a DriverUpdate?**
 
-  **Why.** A recurring topic and one occurrence need different tests. A price crossing or an analyst’s concern is a lead. The owner named “fiscal KPI”, “fiscal AI KPIs”, “perplexity KPIs”, “perplexity search we have”, “distill KPIs” and “distill search we have”. KPI means a measure of company performance. Confirm whether the first two overlap.
+  **Why.** A recurring topic and one occurrence need different tests. You said a move past the threshold “sort of is a trigger to making a driver”. Does it start a search or create the Driver? Test that distinction for analyst concerns too. The owner named “fiscal KPI”, “fiscal AI KPIs”, “perplexity KPIs”, “perplexity search we have”, “distill KPIs” and “distill search we have”. KPI means a measure of company performance. Confirm whether the first two overlap.
 
   **Driver.** Reuse an existing meaning. Creating one requires its first proven update (2.35). After initial company context, the first accepted metric new to that company triggers one oldest-first search of covered history within the 12 months before proven publication (8.16). If time is unknown, keep the update and skip the search. Results trigger no further search. Historical work must leave room for live work.
 
@@ -52,9 +54,11 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **5. Which news stories do we save, and which companies do they link to?**
 
-  **Why.** A broad story can move a stock it never names. Save one News record per story. Count distinct original feed tickers before filtering. One total ticker, tracked, gets `INFLUENCES` plus sector, industry and market links. Two or more total tickers get only `MENTIONS` to tracked companies, even with one tracked and one untracked. Skip new ordinary stories with none tracked. Selected original research, such as an untagged Fed release, may be saved without inventing company links. The November 28 check found 348,669 saved stories linked to one company, one linked to none and none linked to several.
+  **Why.** A broad story can move a stock it never names. Save one News record per story. Count distinct original feed tickers before filtering. One total ticker, tracked, gets `INFLUENCES` plus sector, industry and market links. Two or more total tickers get only `MENTIONS` to tracked companies, even with one tracked and one untracked. Skip new ordinary stories with none tracked. Under rule 9.5 and the news plan, an untagged Fed release selected for research may be saved without inventing a company tag or link. The November 28 check found 348,669 saved stories linked to one company, one linked to none and none linked to several.
 
-  Must research start from a company’s move? Should single-ticker research always use `MENTIONS`? Today the same News type and link rules apply. Filings and transcripts retain their types. Selective historical retrieval is allowed. Bulk loading is outside this change. The notes describe multi-ticker stories as generally broad. Ticker counts and measured returns alone prove no cause. Each company link carries hourly, session and daily stock, sector, industry and market returns. The calculator selects sector and industry benchmarks by company. SPY is the market benchmark.
+  Research always starts with one or more companies whose moves are being investigated. Every research article must be traceable to at least one such company. Should the article link to those companies directly, or is the affected company on `EXPLAINED_BY` for the article’s DriverUpdate enough? Test an article saved for two companies when it explains only one move or neither.
+
+  Tagged research currently uses the same News type and feed links. Should single-ticker research always use `MENTIONS`? Filings and transcripts retain their types. Selective historical retrieval is allowed. Bulk loading is outside this change. The notes describe multi-ticker stories as generally broad. Ticker counts and measured returns alone prove no cause. Each feed ticker link carries that company’s hourly, session and daily stock, sector, industry and market returns. The calculator selects sector and industry benchmarks by company. SPY is the market benchmark.
 
   [7.1](#71-when-a-research-article-is-saved) · [7.2](#72-a-research-articles-company-links) · [N.1](#n1-multi-ticker-news-is-usually-generic) · [N.6](#n6-multi-company-stories-and-mentions) · [N.15](#n15-relative-returns-without-sector-and-market-links) · [N.17](#n17-news-type-) · [N.21](#n21-historical-backfilling) | [News link rules](References/NewsMultipleSymbols.md#design) · [Research exception](References/NewsMultipleSymbols.md#research-exception--no-tracked-tickers) · [Return calculator](../../../../../eventReturns/EventReturnsManager.py)
 
@@ -62,7 +66,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
   **Why.** An edit changes what could have been known about a company. A newer complete version replaces text, tickers and affected links together. Retain valid prices and company work. Reprocess changed text as needed. Test one ticker becoming many, the reverse, and removal of the last tracked ticker. Older versions, partial versions and retries leave the record intact.
 
-  A late price fills only a missing value for the same company/window and leaves the story and times alone. The checked records held the latest version. Rule 7.6 allows a saved quote and version reference for research. An earlier call needs proof of wording and ticker membership as of its cutoff. What proof is worth keeping when old versions are unavailable?
+  A late price fills only a missing value for the same company/window and leaves the story and times alone. The checked records held the latest version. A saved quote and version reference can support research. Rule 7.6 requires proof that the exact version was public before the call’s cutoff. The news plan treats earlier wording and tickers as unverified if the earlier version was not saved. Is this “unverified” rule necessary and worth its cost? You prefer to save earlier versions only if essential. What is the least evidence that would establish what the call could see?
 
   [7.3](#73-unintended-effects-of-story-edits) · [7.4](#74-whether-the-unverified-rule-is-worth-it) · [N.16](#n16-last-tracked-ticker-removed) | [Story edits](References/NewsMultipleSymbols.md#when-a-story-changes) · [Evidence for older edits](../DriverWorkflow/DriverDataAndCodeIssues.md#r5-edited-news-entry-18)
 
@@ -78,9 +82,11 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **8. Does an explanation cover an hour, a session or a trading day?**
 
-  **Why.** A stock can rise in the morning and give it all back by the close. Today `Date → EXPLAINED_BY → DriverUpdate` records a contribution to one company’s regular close-to-close move. Several updates may explain a day, even pushing against its net direction. One update may explain several days or companies, each with support. An intraday move can prompt research with a directional call, a no-trade call or no call. Where should an intraday cause go? An hourly call’s update warrants a daily link only with evidence for the day.
+  **Why.** “Ques #1” refers to the first question on page 1 of the annotated EXPLAINED_BY (point 2.1). If a DriverUpdate came from an hourly call, should the trading Date also link to it? Under A2.2 and A2.7, `Date → EXPLAINED_BY → DriverUpdate` requires evidence for that company’s regular close-to-close move. Several updates may explain a day, even pushing against its net direction. One update may explain several days or companies, each with support.
 
-  Distinguish event time, source publication, financial period, trading Date and judgment time. For newly public information, first consider the window ending at the first actual regular close strictly after publication. Test two sources across a close, an exact or early close, after hours, weekends and holidays. Thursday’s update may contribute Friday. Saturday reporting may document Friday’s event. An event first occurring Saturday cannot cause Friday’s move. A transcript’s call start does not time individual remarks. A missing one-second feed limits verification. Clarify “Ques #1” if it affects this choice.
+  Your suggestion in point 2.2 is to use `EXPLAINED_BY` for a supported hourly cause even when the daily move is below the significance threshold. An intraday move can prompt research with a buy, sell or no-trade call, or with no call. First test a morning rise that reverses by the close. Could an hourly finding be mistaken for a daily cause, put a Driver on the daily watchlist, or inflate the number of explained days? Compare extending the link with recording a separate finding for the hour or session.
+
+  Distinguish event time, source publication, financial period, trading Date and judgment time. For newly public information, first consider the window ending at the first actual regular close strictly after publication. Test two sources across a close, an exact or early close, after hours, weekends and holidays. Thursday’s update may contribute Friday. Saturday reporting may document Friday’s event. An event first occurring Saturday cannot cause Friday’s move. A transcript’s call start does not time individual remarks. A missing one-second feed limits verification.
 
   [2.1](#21-linking-a-driverupdate-from-an-hourly-call-to-a-date) · [2.2](#22-explained_by-for-hourly-moves) · [5.6](#56-a-driverupdates-source-date-and-its-date-links) · [N.7](#n7-two-driverupdates-across-the-close) · [N.8](#n8-the-fridaysaturday-table) · [N.9](#n9-post-market-sources-and-the-next-date) | [Date and window table](References/EXPLAINED_BY.md#3-which-date-a-judgment-explains) · [Evidence for a day](References/EXPLAINED_BY.md#4-which-facts-may-explain-that-date)
 
@@ -108,7 +114,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
   **Call ends.** Briefly review every live call, including no trade, or only review a no-trade call after an exceptional move in its window? A deeper review due for the same event may cover both. Clarify the unfinished “Aside, if there was no BUY/SELL” note.
 
-  **Large move.** Investigate even without news or a call. Why wait until the close of the first trading day *after* the window’s Eastern end date? Why use that close as the replay cutoff? Decide whether one review may cover several calls or days. Each daily judgment still needs evidence for its company and day.
+  **Large move.** Investigate even without news or a call. Why wait until the close of the first trading day *after* the window’s Eastern end date? Why use that close as the replay cutoff? Can one review cover several calls? You asked about “1 or more investigations per day, but not across days”. Requiring that limit would change A2.7, which allows one investigation to support several dates. Each daily judgment still needs evidence for its company and day.
 
   **Before earnings.** Use the release date known at the prior trading day’s evening scan. Revisit each qualifying move once at the first preview after its initial review, explained or unexplained. **After earnings.** Distinguish predicting from reviewing results. Live review waits for the transcript. Replay stops just before the next release or at replay end, whichever comes first. If the release date was unknown at preview, catch up moves due a second look. Later evidence can correct an explanation.
 
@@ -118,9 +124,9 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
   **Why.** “Which update did the Learner identify for this call’s window?” This requires evidence for that hour, session or day. Today each completed review saves its company, event or windows, calls reviewed, feedback, cutoff, save time and replay ID if applicable. Retries reuse it.
 
-  Distinguish what the Predictor relied on, what the Learner considered or cited (proposed `CITED`), and what it judged explanatory. For each proposed link, who needs to query the answer directly, and would the saved feedback suffice? One call already supplies the interval when the review covers exactly that window. A joint morning/afternoon review must identify the call for each call-specific finding. A no-call review can still cite evidence, including an older update. If a separate review record is unnecessary, where do its author, scope and findings go? Clarify the diagram’s unlabeled Call 1 arrow to dU3.
+  Distinguish what the Predictor relied on, what the Learner considered or cited (proposed `CITED`), and what it judged explanatory. Who needs to query each answer directly, and would the saved feedback suffice? Test a review that considered two updates, judged one drove the morning move and found no cause for the day. If a review repeats an existing daily judgment, what would another link add? One call already supplies the interval when the review covers exactly that window. A joint morning/afternoon review must identify the call for each call-specific finding. A no-call review can still cite evidence, including an older update. If a separate review record is unnecessary, where do its author, scope and findings go? Clarify the diagram’s unlabeled Call 1 arrow to dU3.
 
-  **Reviewer concern.** A common “Unknown Driver” conflicts with rule 2.35’s proven first update. Distinguish an unexplained but reviewed move from one never reviewed. A missing daily link leaves the effect unknown.
+  You proposed a temporary `CITED` link to one shared “Unknown Driver” when no cause is known. **Reviewer concern.** Rule 2.35 requires a proven first update for every Driver. Distinguish an unexplained but reviewed move from one never reviewed. A missing daily link leaves the effect unknown.
 
   [E2](DRIVER_Predict_Explain_Learn_Instructions.md#60-codex-only--2026-11-27-095831-pm-est) · [3.7](#37-showing-one-review-across-several-calls) · [3.8](#38-cited-links-from-the-learner) · [2.5](#25-showing-a-review-across-time-horizons) · [3.9](#39-an-unknown-driver-for-moves-without-an-explanation) | [Review record and findings](References/DRIVER_LearnerPredictor.md#learner-reviews) · [Daily explanations](References/EXPLAINED_BY.md#2-what-links-to-what)
 
@@ -136,7 +142,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **14. Which histories and past examples help the next prediction?**
 
-  **Why.** How often calls worked and how often a Driver helped explain a move answer different questions. The plan calculates both on demand for the company, industry or sector, each with its own count. Count each graded buy/sell citing the Driver once. Show wins and total by horizon, with live and replay separate. Only live calls measure paper-trading performance. Separately, count distinct affected company-days explained, retaining direction and strength. Overlapping calls and repeated reports can reflect one move.
+  **Why.** How often calls worked and how often a Driver helped explain a move answer different questions. The plan calculates both on demand for the company, industry or sector, each with its own count. Count each graded buy/sell citing the Driver once. Show wins and total by the chosen hour, session or day. A stock can rise during the hour and fall by the close, so pooling windows hides which horizon the Driver helped predict. Keep live and replay counts separate. Live calls measure paper-trading decisions made at the time. Replays simulate calls at a historical cutoff and can revisit the same event. Pooling them would distort the live record. Separately, count distinct affected company-days explained, retaining direction and strength. Overlapping calls and repeated reports can reflect one move.
 
   Decide how to show losses, no-trades, ungraded calls and quiet days as well as wins. For the briefing, consider the new update and quote, older updates of its Driver, calls that used them, their reviews, explained days and prior price action. A new trigger can lead a call to cite older evidence. Decide whether to include original documents, which earlier feedback to retain, and whether similar changes come first. Apply item 3’s cutoff to everything shown.
 
@@ -146,7 +152,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
   **Why.** “Rethink each field one at a time, and keep only what's required, and why.” The plan stores eight fields. `company_id` identifies the affected company. `reason` explains how the update contributed that day. `stock_impact` records upward (`long`) or downward (`short`) pressure. `weightage` measures strength (0.1–1.0 by tenths, or absent). `confidence` measures certainty (0–100 by tens). `llm_producer` identifies the judge, `produced_mode` records live/backfill, and `created` gives the actual save time. Item 3 covers the Learner’s additional evidence cutoff.
 
-  Does strength help across multiple calls or explanations? Strengths vary independently, need not add to 100%, and repeated claims do not establish independent support. Rules A2.4–A2.6 allow relative measures on read. Unknown strengths stay unknown. Assess judgments together by net direction, size and ranking. Why keep explanation mode alongside the call’s live/replay mode? **Reviewer check.** All 796 company tickers were unique when checked. Documented renames include MMC → MRSH and PSTG → P. Could a ticker replace `company_id` across a rename?
+  Does strength help across multiple calls or explanations? Strengths vary independently, need not add to 100%, and repeated claims do not establish independent support. Rules A2.4–A2.6 allow relative measures on read. Unknown strengths stay unknown. Assess judgments together by net direction, size and ranking. Why keep explanation mode alongside the call’s live/replay mode? You proposed “company_id → let's use the ticker if it's unique.” Rules A2.2 and A2.3 use the affected company’s existing ID. **Reviewer check.** All 796 tickers were unique when checked. Would earlier records still identify the same company after MMC → MRSH or PSTG → P?
 
   Each judgment is keyed by trading Date, affected company, DriverUpdate and producer. The latest valid completed judgment wins across live/backfill by fixed save time. Replace all fields, clearing newly unknown values. Retries retain their times, older arrivals lose and equal-time conflicts are held. Only explicit withdrawal removes a judgment. Omission, failure or a partial run changes nothing. An older arrival after withdrawal cannot restore it. Earlier overwritten judgments disappear from this shared view. Can a past call still be audited from its own saved evidence?
 
@@ -174,7 +180,7 @@ The owner confirmed items 1 and 2 in this order. The remaining order is proposed
 
 - [ ] **18. Which document references are stale, and what work remains open?**
 
-  **Why.** A new implementer needs to know what is agreed, proposed or already done. The current authority is `DRIVER_RULES.md`. Two references in the explanation plan still name `DRIVER_RULES_Categorized.md`. The older `FINAL_DESIGN.md` reached a company through the source. Check which entries were settled (company links, replacements and decision-time evidence) and which still need work, including the source reader and writer contracts. Preserve genuine open choices on source coverage, historical research and resource limits. The old operating algorithm is an unapproved proposal. Ask what the otherwise blank “Explained_BY” heading meant when this item comes up.
+  **Why.** A new implementer needs to know what is agreed, proposed or already done. Both references in the explanation plan now name the current rulebook, `DRIVER_RULES.md`. The older `FINAL_DESIGN.md` reached a company through the source. Check which entries were settled (company links, replacements and decision-time evidence) and which still need work, including the source reader and writer contracts. Preserve genuine open choices on source coverage, historical research and resource limits. The old operating algorithm is an unapproved proposal. Ask what the otherwise blank “Explained_BY” heading meant when this item comes up.
 
   The former return-measurement section and the handoff’s outstanding code, data and prompt work were moved and pushed in `e8957f6fa`. That move is complete. Return checks R1–R8 and the mixed-basis closing-price check remain open. During the later combined rewrite, send technical work to its existing home and account for every approved move, merge or removal.
 
@@ -376,9 +382,10 @@ The workbook cites DLP, Predictor and input cutoff.
 
 The workbook cites DLP, input cutoff and Learner reviews; EXPLAINED_BY §1.
 
-**Alternative view:** use agents with no MCP access, like the earlier Predictor and Learner.
-- Those agents ran from specific skills, with no database read access and no web search, and got all their context in the prompt. That made them point-in-time by construction.
-- The skills still need adapting to the new design.
+**Alternative view:** supply all context in the prompt and give neither agent database access. The earlier skills still need adapting.
+
+- The old Predictor’s only tools were `Read`, `Write` and `Glob`. It read a prepared bundle and could read supporting files listed in it. [Earlier Predictor skill](../../../../skills/earnings-prediction/SKILL.md)
+- The old Learner’s step 5 used helper agents to search Neo4j and fill gaps with Perplexity. In replays, each helper received the cutoff and could use only evidence available by then. Live runs also allowed direct tools. [Earlier Learner skill, step 5](../../../../skills/earnings-learner/SKILL.md#phase-2--investigate)
 
 **DLP p6 note**, in the input-cutoff section: "Instead, we use agents with no MCP access, similar to the earlier versions of the Predictor and Learner."
 
@@ -446,6 +453,8 @@ The workbook cites EXPLAINED_BY §1; DLP, Learner reviews.
 
 **Question:** Do DLP's triggers replace the two triggers in EXPLAINED_BY §1?
 
+The workbook cites EXPLAINED_BY header and §1; DRIVER_RULES 8.16; DLP Predictor.
+
 **Alternative view:** DLP's triggers replace §1's. The information trigger is "not relevant now", and the price trigger's move means "Daily moves as captured by Date nodes".
 
 **p2 note**, above §1: "This design choice now seems old (see Driver.LearnerPredictor.md, which is current), since for historical there are 3 broader triggers for driverUpdate creation…" The rest of the note is in 4.2.
@@ -465,6 +474,8 @@ The workbook cites EXPLAINED_BY §1; DLP, Learner reviews.
 
 **Question:** What are all the triggers and conditions for creating driverUpdates? Who can create them, when and why?
 
+The workbook cites EXPLAINED_BY §1; DRIVER_RULES 8.16; DLP Predictor and Learner reviews.
+
 **Alternative view:** the Predictor creates driverUpdates when it's invoked, and the Learner may create them for EXPLAINED_BY. The p2 note lists 3 broader triggers for historical processing (maybe the same live). The DLP p4 note lists 2 triggering conditions for both replay and live.
 
 **p2 note**, above §1, continued from 4.1: "…since for historical there are 3 broader triggers for driverUpdate creation: ① every earnings season ② significant moves between quarters ③ checklisted driver triggered. All 3 are done by the predictor, while the learner reviews and may create driverUpdates for EXPLAINED BY!"
@@ -481,6 +492,8 @@ The workbook cites EXPLAINED_BY §1; DLP, Learner reviews.
 
 **Question:** What exactly is the "normal DriverUpdate workflow" that both agents' discoveries follow, and why and how is it used?
 
+The workbook cites DLP Learner reviews; EXPLAINED_BY §1.
+
 **DLP p8 note**, under the underlined "normal DriverUpdate workflow": "Exactly what, why & How?"
 
 **From notes:** #54 (DLP p8).
@@ -488,6 +501,8 @@ The workbook cites EXPLAINED_BY §1; DLP, Learner reviews.
 ### 4.4 A driverUpdate that matches the watchlist
 
 **Question:** Suppose a driverUpdate is detected because it's on the company's Driver watchlist. Is it done separately, without the Predictor? And may the Predictor create a separate driverUpdate when it sees a possible future concern, or for context?
+
+The workbook cites DLP Predictor; DRIVER_RULES 3.53.
 
 **Issues notes** (Scenario #1):
 - "Also, let's assume a driverUpdate is detected (since this driverUpdate was in this company's driver watchlist)."
@@ -528,6 +543,8 @@ The workbook cites DLP.
 ### 4.7 The Learner's triggers and threshold
 
 **Question:** Should the Learner create or update driverUpdates through EXPLAINED_BY on two triggers: when it reviews Predictor calls, and when a move is above a threshold of, say, 2.2% for all 3 horizons?
+
+The workbook cites DLP qualifying move; EXPLAINED_BY §7; DRIVER_RULES 10.1.
 
 **DLP p4 note**, at the bottom of the page: "The Learner creates/updates DriverUpdates via EXPLAINED_BY under these triggers: ① when it reviews Predictor calls ② when a move is above a threshold of, say, 2.2% (for all 3 horizons)."
 
@@ -597,6 +614,8 @@ The workbook cites EXPLAINED_BY §4, §5, §6.
 ### 5.4 The live/backfill mode
 
 **Question:** Why does each EXPLAINED_BY link store a live/backfill mode?
+
+The workbook cites EXPLAINED_BY §4 and §5; DLP fields table.
 
 **DLP p4 note:** "why?", with an arrow from the circled "live/backfill" in the daily EXPLAINED_BY row of the fields table.
 
@@ -733,6 +752,8 @@ The workbook cites NMS, Massive news reader.
 ### 8.1 Code-owned values
 
 **Question:** Wherever the docs say "code-owned", should the model write that value instead, in its normal process, so there's no extra machinery?
+
+The workbook cites EXPLAINED_BY §5 and §6.1 rule 2.
 
 **Issues note** (relates to p9): "Wherever it says "Code owned", we need to think about whether it makes sense to just have the model write it instead, in its normal process, so as to have no extra machinery."
 

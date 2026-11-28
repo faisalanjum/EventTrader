@@ -255,7 +255,7 @@ The official Computer MCP supports starting work, preserving its thread ID, chec
 
 Save the source/version, verified availability where known, discovery time, accepted facts, company subject, proposed effects, price window, decision time, decision and reasons. Retain skips and unresolved cases as well as trades; append outcomes later. Keep permitted excerpts, source references and our own findings rather than treating a subscription as ownership of a vendor's database.
 
-These records can later feed the agreed Driver design: facts retain their source and subject; an explanation link records a supported judgment about an affected company/day. A fresh fact need not have an explanation link. Keep pre-trade decisions in their own history so replacing a later explanation cannot rewrite what we knew before a trade. The governing graph rules remain [EXPLAINED_BY.md](EXPLAINED_BY.md).
+These records can later feed the agreed Driver design: facts retain their source and subject; an explanation link records a supported judgment about an affected company/day. A fresh fact need not have an explanation link. Keep pre-trade decisions in their own history so replacing a later explanation cannot rewrite what we knew before a trade. The governing graph rules remain [EXPLAINED_BY.md](DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md).
 
 Before relying on the workflow, run these concrete checks:
 
@@ -453,7 +453,7 @@ The useful finance workflows include earnings comparisons, company briefs, resea
 
 ## Enterprise Pro: seven useful roles for our system — ranked
 
-Based on [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorized.md), [EXPLAINED_BY.md](EXPLAINED_BY.md) and [DriverWorkflow.md](DriverWorkflow.md). Its main role is finding missing information and researching it faster. These are ranked by expected usefulness, not measured gains.
+Based on [DRIVER_RULES_Categorized.md](DRIVER_RULES_Categorized.md), [EXPLAINED_BY.md](DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md) and [DriverWorkflow.md](DriverWorkflow.md). Its main role is finding missing information and researching it faster. These are ranked by expected usefulness, not measured gains.
 
 1. **Fill gaps in company history:** Find earlier guidance, risks and business changes missing from our database, using historical filings and calls. [Historical coverage](https://quartr.com/customers/how-perplexity-leverages-quartr-api)
 2. **Investigate unexplained price moves:** When our existing sources do not explain a move, research possible causes and bring back supporting sources.

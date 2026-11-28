@@ -43,7 +43,7 @@ Acme lost a customer`"]
     style driver fill:#fff3cc,stroke:#ac8735,color:#493b17
 ```
 
-The price link holds Acme’s daily return. The explanation link records what the Learner judged pushed the stock that day. [Source and company links](EXPLAINED_BY.md#2-what-links-to-what) · [Business cause and offset links](DRIVER_RULES.md#picture-b--one-fact-and-its-record)
+The price link holds Acme’s daily return. The explanation link records what the Learner judged pushed the stock that day. [Source and company links](EXPLAINED_BY.md#2-what-links-to-what) · [Business cause and offset links](../../DRIVER_RULES.md#picture-b--one-fact-and-its-record)
 
 ### Picture C · What does the Learner save about a call?
 
@@ -102,7 +102,7 @@ The customer loss was shown but uncited`"] -.-> nextCall
 
 ## Qualifying move
 
-A move qualifies when the absolute difference between stock and SPY (S&P 500) returns over the same hourly, session or daily window is **at least 2.2 percentage points**. Use this single threshold for all move checks. Hourly and session checks require a timed source event. Without one, check the daily close-to-close move. Verify prices and windows before using returns for triggers or grading. [Driver rule 10.1](DRIVER_RULES.md) · [Return checks](DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements)
+A move qualifies when the absolute difference between stock and SPY (S&P 500) returns over the same hourly, session or daily window is **at least 2.2 percentage points**. Use this single threshold for all move checks. Hourly and session checks require a timed source event. Without one, check the daily close-to-close move. Verify prices and windows before using returns for triggers or grading. [Driver rule 10.1](../../DRIVER_RULES.md) · [Return checks](../../DriverWorkflow/DriverDataAndCodeIssues.md#return-measurements)
 
 ## Predictor
 
@@ -124,7 +124,7 @@ Seal one graph record per company, triggering source ID and version, separately 
 In live runs and replays, the Predictor sees only the context supplied by code and has no direct database access. Expect mainly DriverUpdates and their quotes. The exact contents, including whether to supply original documents, are tentative.
 When the briefing includes past examples for a Driver, show changes like the current one first (ordering details tentative).
 
-Code applies the cutoff when selecting evidence, watchlist entries and histories. Require proof the cited source version was public before the cutoff. A prior result requires a completed window and verified prices available by then. [Driver rule 7.6](DRIVER_RULES.md)
+Code applies the cutoff when selecting evidence, watchlist entries and histories. Require proof the cited source version was public before the cutoff. A prior result requires a completed window and verified prices available by then. [Driver rule 7.6](../../DRIVER_RULES.md)
 
 Each review and daily explanation keeps its actual save time (`created`) and the Learner’s evidence cutoff. Use either only when it is available in the call’s history and its evidence cutoff is at or before the call’s input cutoff.
 
@@ -133,7 +133,7 @@ Each review and daily explanation keeps its actual save time (`created`) and the
 
 ## Grading
 
-Use the live save time or replay decision time to fix the end of the Predictor’s chosen hour, session or day when the call is saved. Enter at the first verified tradable price **after** that starting time. If entry is at or beyond the end, or either price is missing or unverified, leave the call ungraded. [Existing window calculations](../../../../eventReturns/EventReturnsManager.py)
+Use the live save time or replay decision time to fix the end of the Predictor’s chosen hour, session or day when the call is saved. Enter at the first verified tradable price **after** that starting time. If entry is at or beyond the end, or either price is missing or unverified, leave the call ungraded. [Existing window calculations](../../../../../../eventReturns/EventReturnsManager.py)
 
 Code saves the stock return once on the original call as `100 × (end price − entry price) / entry price`, rounded to two decimals. A buy wins if the saved return is positive, a sell if it is negative. Zero wins neither. For no trade, record the move skipped without a directional grade. Only live calls measure paper-trading performance.
 
@@ -145,10 +145,10 @@ Save one record per completed review with its feedback, company and the event or
 |---|---|
 | Every live call’s horizon ends | Briefly review the result, reason and saved input, including for no trade. A deeper review due then for the same event covers both. |
 | At the close of the first trading day after the qualifying window’s end date (Eastern time) | Investigate the move, even without a prediction or news. This close is the replay cutoff. |
-| Earnings preview at the [evening calendar scan](../../../../k8s/processing/trade-ready-scanner.yaml) on the trading day before scheduled earnings | Use the release date known then. Revisit each qualifying move once at the first preview **after its initial review**, explained or unexplained. |
+| Earnings preview at the [evening calendar scan](../../../../../../k8s/processing/trade-ready-scanner.yaml) on the trading day before scheduled earnings | Use the release date known then. Revisit each qualifying move once at the first preview **after its initial review**, explained or unexplained. |
 | After every earnings event | Live, review the results and transcript when the transcript arrives. In replay, stop just before the next earnings release or at the replay end, whichever comes first. If the release date was unknown at preview time, revisit moves still due a second look after their first. New evidence may correct an earlier explanation. |
 
-The Learner may search the database directly, using the existing views for DriverUpdates (rule 7.11). Limit its reads to evidence available at the live review’s start or by its replay cutoff. Process later disclosures on arrival. They can inform subsequent calls without reopening an old move. Discoveries from either agent follow the [normal DriverUpdate workflow](DRIVER_RULES.md).
+The Learner may search the database directly, using the existing views for DriverUpdates (rule 7.11). Limit its reads to evidence available at the live review’s start or by its replay cutoff. Process later disclosures on arrival. They can inform subsequent calls without reopening an old move. Discoveries from either agent follow the [normal DriverUpdate workflow](../../DRIVER_RULES.md).
 
 Save supported daily explanations in the [run’s history](#input-cutoff). Update changed judgments or explicitly withdraw those the evidence no longer supports. Omission alone leaves them in place.
 

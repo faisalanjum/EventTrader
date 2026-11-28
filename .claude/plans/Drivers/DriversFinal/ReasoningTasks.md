@@ -114,7 +114,7 @@
 
 | # | Task | Answer | Jev so far (exploratory) |
 |---|---|---|---|
-| 57 | Identify the subject company or prove the fact is shared (3.9, 8.15). For shared watchlist updates, identify market-wide scope or parties from the passage. Unclear scope triggers no call. [Watchlist](DRIVER_LearnerPredictor.md#predictor) | company, shared (scope/parties when proven), or unresolved | |
+| 57 | Identify the subject company or prove the fact is shared (3.9, 8.15). For shared watchlist updates, identify market-wide scope or parties from the passage. Unclear scope triggers no call. [Watchlist](DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md#predictor) | company, shared (scope/parties when proven), or unresolved | |
 | 58 | Identify forecaster, stated decision date and movement. Keep a firm together across signers and personal estimates separate from consensus. Match an update only to its evidenced target. Never infer revisions from stored history (9.11). | credited forecaster and decision date when stated + introduced, raised, lowered, reaffirmed, withdrawn or unknown | |
 | 59 | Do passages in one source version describe the same claim, Driver and scope? Combine compatible details with each citation. Keep distinct decisions and conditional alternatives separate. No extra AI pass (5.2) | combine, separate or unresolved | |
 | 60 | During the fact check, flag shown definitions that appear equivalent or cite both when they clearly disagree. Code logs a disagreement only for names already joined. Independently judge each eligible new pair from its names, types and original evidence alone. Fact placement never waits (5.6) | flag or warning if warranted, yes/no on eligible pairs | |
@@ -126,6 +126,6 @@
 
 ## Later judgments
 
-- **Daily explanation.** Which facts contributed to this company’s close-to-close move? Give the reason, direction, strength if known and confidence for each. Leave unsupported moves unexplained. On review, revise or explicitly withdraw a judgment if warranted. [Explanation rules](EXPLAINED_BY.md#5-what-each-explanation-stores)
-- **Paper prediction.** From the briefing available at the cutoff, choose buy, sell or no trade and an hour, session or day. Give the reason and cite the supplied update IDs relied on. [Predictor](DRIVER_LearnerPredictor.md#predictor)
-- **Learner review.** Review the call’s reasoning and result using evidence available by the review cutoff. Classify every uncited explaining update as shown but uncited, public but absent, first public later, or unknown. [Review and evidence rules](DRIVER_LearnerPredictor.md#learner-reviews)
+- **Daily explanation.** Which facts contributed to this company’s close-to-close move? Give the reason, direction, strength if known and confidence for each. Leave unsupported moves unexplained. On review, revise or explicitly withdraw a judgment if warranted. [Explanation rules](DRIVER_Predict_Explain_Learn/References/EXPLAINED_BY.md#5-what-each-explanation-stores)
+- **Paper prediction.** From the briefing available at the cutoff, choose buy, sell or no trade and an hour, session or day. Give the reason and cite the supplied update IDs relied on. [Predictor](DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md#predictor)
+- **Learner review.** Review the call’s reasoning and result using evidence available by the review cutoff. Classify every uncited explaining update as shown but uncited, public but absent, first public later, or unknown. [Review and evidence rules](DRIVER_Predict_Explain_Learn/References/DRIVER_LearnerPredictor.md#learner-reviews)
