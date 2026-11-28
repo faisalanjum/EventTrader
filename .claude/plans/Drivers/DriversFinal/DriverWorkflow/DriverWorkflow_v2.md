@@ -49,6 +49,9 @@
 6. **Explained_By**: fill these details as well as other important driverUpdates including reupdating previous driverUpdates with new conditions (more context found)
 
 ### 6 driverUpdate workflow: `metric`, `guidance`, `surprise`, `action_event`, `expectation`, `others?`
+
+Across three 10-Ks with 50 drivers each, adding Flash to full Decider and cached Sol kept all 126 checked facts for 67% lower API fees. [Tested workflow](DriverUpdateWorkflow.md)
+
 1. Seperate prompt for running each driverUpdate seperately in a checklist workflow form & seperate for each *source if possible.
 2. Also seperate out basic rules in ([DRIVER_RULES.md](../DRIVER_RULES.md)) versus say checkers versus other processes so as to ensure every item has a home and that everything in these rules is covered. 
 

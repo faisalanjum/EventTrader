@@ -4,6 +4,8 @@ Updated 2026-11-15 (America/Toronto, EST). **Proposed experiment; not a proven e
 
 **Result (15 Nov):** this exact plan was run on 6 calls: 79/79 guidance claims found, but 0 complete, accepted records; study stopped. [Experiment results](Experiments/2026-11-15_decider_guidance/readme.md).
 
+On three 10-Ks, screening with Flash cut Decider fees by 67% and kept all 126 checked facts with cached Sol. [Driver update workflow](DriverUpdateWorkflow.md)
+
 ## Goal and boundaries
 
 Extract every eligible management forecast with correct fields, meaning and exact evidence, using **the local Decider plus existing code**. Target: 100% completeness and accuracy on independently checked, unseen sources; no guarantee for future documents. Correctness precedes speed.

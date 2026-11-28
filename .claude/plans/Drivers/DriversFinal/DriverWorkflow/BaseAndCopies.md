@@ -2,6 +2,8 @@
 
 **What it is:** load a document into Claude once (the "base"), then run copies that reuse it from cache. Each copy sees the whole document without paying to read it again. Used by step 3 of the [shared creator](SharedCreator.md).
 
+On three 10-Ks, Sol reused each filing section across 50 drivers and recovered a fee disclosure both Decider scans missed. [Driver update workflow](DriverUpdateWorkflow.md)
+
 ## How to run it
 
 - **Size:** count real input tokens (instructions, IDs, images) and leave room for reasoning and output. Never silently cut or compact evidence. Copies can't fix an oversized source: use a capable approved reader or report the limit (no automatic partial-view fallback).
