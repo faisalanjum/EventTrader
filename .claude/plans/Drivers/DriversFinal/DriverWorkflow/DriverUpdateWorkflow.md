@@ -42,12 +42,26 @@ Both routes used the same independent cached Sol Medium read. Fees are actual ho
 | Source | Evidence sent downstream | Reason |
 |---|---|---|
 | 10-K | Flash + full Decider and independent cached Sol. Send one combined packet per driver. | 212/213 reviewed facts across 20 filings. Flash forwards groups at 1% relevance. Full Decider keeps passages at ⅓ combined probability of direct or supporting evidence. |
-| 10-Q | Full Decider reads the filing and exhibits. | Full Decider and Flash followed by full Decider both found 27/28 on Palo Alto. Flash cut cost from 1.31¢ to 0.46¢ for eight drivers, but the packets differed for all eight. On Ovintiv, Flash missed the Canadian revenue table. Full Decider remains the default pending the quarterly trial. |
+| 10-Q | Full Decider reads the filing and exhibits. | On Ovintiv’s 50-driver test, Flash screened out a Canadian revenue table that full Decider kept. |
 | 8-K | On earnings filings and other events selected for processing, full Decider reads the filing **and exhibits**. | All 13 checked earnings facts came from the release. Other 8-Ks still need separate accuracy checks. |
 | Earnings-call transcript | Full Decider selects management guidance from prepared remarks and Q&A. | 79/79 checked forecasts across six calls. Creating complete updates from those passages remains untested. [Transcript evidence](Experiments/2026-11-15_decider_guidance/readme.md) |
 | Short news | Send the full dated story directly to the downstream reader. | The whole story kept 8/8 checks. Filtering lost two fiscal-year labels. |
 
 **Handoff.** Retrieval was tested with driver names alone. Give the downstream reader the existing definition, previous update when available, and original evidence with source locations. It checks the measure, value, unit, period and qualifications, then creates the update and links. Permit a focused search of the saved filing when a heading, definition or footnote could change the record. Leave unresolved fields open. A separate Decider-only transcript test produced zero complete accepted updates. [Driver rules](../DRIVER_RULES.md) · [Decider extraction](DeciderExtraction.md)
+
+## Quarterly Flash test
+
+Palo Alto 10-Q, eight drivers, no Sol. Replaying saved answers cost $0.
+
+| Method | Facts found | Median filing text per driver | Original API cost |
+|---|---:|---:|---:|
+| Full Decider | 27/28 | 1.65% | 1.31¢ |
+| Flash → full Decider | 27/28 | 2.52% | 0.46¢ |
+| Flash alone, keeping whole groups | 28/28 | 19.51% | 0.11¢ |
+
+The first two methods both missed that customers pay up front for subscription and support. Their packets differed for all eight drivers.
+
+**Next test.** The prepared 10-Qs have 83 driver names for Autodesk, 126 for Tyler Technologies, 88 for Nasdaq and 60 for Atlassian. Select 50 per company and verify the expected facts from each filing before running and scoring the comparison.
 
 ## Twenty 10-Ks, ten drivers per filing
 
