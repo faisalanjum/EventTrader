@@ -42,7 +42,7 @@ Both routes used the same independent cached Sol Medium read. Fees are actual ho
 | Source | Evidence sent downstream | Reason |
 |---|---|---|
 | 10-K | Flash + full Decider and independent cached Sol. Send one combined packet per driver. | 212/213 reviewed facts across 20 filings. Flash forwards groups at 1% relevance. Full Decider keeps passages at ⅓ combined probability of direct or supporting evidence. |
-| 10-Q | Full Decider reads the filing and exhibits. | Flash screened out Tyler’s fee-growth explanation and Ovintiv’s Canadian revenue table. [Quarterly test](#quarterly-flash-test) |
+| 10-Q | Full Decider reads the filing and exhibits. | The cheaper route twice missed Tyler’s fee-growth explanation and Ovintiv’s Canadian revenue table. [Quarterly test](#quarterly-flash-test) |
 | 8-K | On earnings filings and other events selected for processing, full Decider reads the filing **and exhibits**. | All 13 checked earnings facts came from the release. Other 8-Ks still need separate accuracy checks. |
 | Earnings-call transcript | Full Decider selects management guidance from prepared remarks and Q&A. | 79/79 checked forecasts across six calls. Creating complete updates from those passages remains untested. [Transcript evidence](Experiments/2026-11-15_decider_guidance/readme.md) |
 | Short news | Send the full dated story directly to the downstream reader. | The whole story kept 8/8 checks. Filtering lost two fiscal-year labels. |
@@ -59,7 +59,9 @@ Autodesk, Tyler Technologies, Nasdaq and Atlassian. Each method received the sam
 | Flash → full Decider | 139/141 | 135/138 | 23/28 | 2.60% | 7.52¢ |
 | Flash alone, keeping whole groups | 141/141 | 138/138 | 27/28 | 12.73% | 1.23¢ |
 
-**What changed.** Both narrow methods missed the inputs for Tyler’s SaaS recurring revenue and its growth. Flash screening kept Tyler’s transaction fee figures but dropped the explanation for their growth. It also recovered Autodesk’s $3.515bn in unbilled obligations that full Decider missed. Separately, both Flash routes dropped Ovintiv’s Canadian revenue table ($693m versus $782m). Flash scored its group at 0.87%, below the 1% cutoff. Full Decider kept it.
+**What changed.** Both narrow methods missed the inputs for Tyler’s SaaS recurring revenue and its growth. Adding Flash recovered Autodesk’s $3.515bn in unbilled obligations that full Decider missed.
+
+**Fresh repeat on Tyler and Ovintiv.** With the same 50 names per filing, both misses repeated. Flash passed Tyler’s fee-growth paragraph. Full Decider then scored it 27.8% on the filtered read and 41.3% on the full scan, against a 33⅓% cutoff. Both kept the fee figures. At Ovintiv, Flash scored the Canadian revenue table ($693m versus $782m) at 0.87%, below its 1% cutoff. Full Decider kept it. Repeating both methods on both filings cost **16.84¢**. [Repeat scores, source text and costs](ContextSearchEvidence/FlashQuarterlyRepeat_20261127.json)
 
 **Coverage and cost.** Of 200 drivers, 141 had a verified figure or inputs, 19 had only supporting details and 40 had no verified answer. The four deeper reviews searched the entire filing for one driver each. Check sets overlap. In 48 sampled passages per method, 10 were clearly irrelevant with full Decider, 9 with Flash → full and 27 with whole groups. Total paid was **49.08¢** across all methods, counting the shared Flash scan once. [Source passages, per-driver scores, API responses and offline replay](ContextSearchEvidence/FlashQuarterly50_20261127.zip)
 
