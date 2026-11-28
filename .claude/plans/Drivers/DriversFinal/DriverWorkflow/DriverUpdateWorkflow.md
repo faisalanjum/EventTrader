@@ -18,7 +18,7 @@
 
 Historical source counts from 796 companies were scaled to 700. Four 10-Ks at **50 names each** used **2.57¢ Flash + 21.89¢ full Decider**, versus **81.49¢** for the full scans. The budget applies this 70% saving to the $469 annual-filing baseline. The Mac estimate assumes the same forwarded workload; only Timken was measured locally. The earlier ten-name projection was $1,410 all hosted. Prices per million input tokens were $0.01 for Flash and $0.02 for full Decider. Totals exclude subscription quota, electricity, filing preparation and downstream work. [Pricing](https://docs.perplexity.ai/docs/getting-started/pricing.md) · [Cost evidence](Experiments/2026-11-27_sol_base_copies/RunpodCostTrial.json)
 
-**Potential savings.** For 10-Qs, compare Flash alone and Flash followed by full Decider against the $710 full-scan baseline. Adopt the cheapest route that preserves reported figures, definitions and footnotes on fresh quarterlies. For other 8-Ks, screen the event type and exhibit list before parsing. Most may prove skippable. Until that share is measured, budget $377 for processing all of them.
+**10-Q budget stays at $710.** Flash screening saved 82% in the quarterly test but dropped useful evidence. For other 8-Ks, screen the event type and exhibit list before parsing. Budget $377 until the share that can be skipped is measured.
 
 ## Fifty drivers each on three previously untested 10-Ks
 
@@ -42,7 +42,7 @@ Both routes used the same independent cached Sol Medium read. Fees are actual ho
 | Source | Evidence sent downstream | Reason |
 |---|---|---|
 | 10-K | Flash + full Decider and independent cached Sol. Send one combined packet per driver. | 212/213 reviewed facts across 20 filings. Flash forwards groups at 1% relevance. Full Decider keeps passages at ⅓ combined probability of direct or supporting evidence. |
-| 10-Q | Full Decider reads the filing and exhibits. | On Ovintiv’s 50-driver test, Flash screened out a Canadian revenue table that full Decider kept. |
+| 10-Q | Full Decider reads the filing and exhibits. | Flash screened out Tyler’s fee-growth explanation and Ovintiv’s Canadian revenue table. [Quarterly test](#quarterly-flash-test) |
 | 8-K | On earnings filings and other events selected for processing, full Decider reads the filing **and exhibits**. | All 13 checked earnings facts came from the release. Other 8-Ks still need separate accuracy checks. |
 | Earnings-call transcript | Full Decider selects management guidance from prepared remarks and Q&A. | 79/79 checked forecasts across six calls. Creating complete updates from those passages remains untested. [Transcript evidence](Experiments/2026-11-15_decider_guidance/readme.md) |
 | Short news | Send the full dated story directly to the downstream reader. | The whole story kept 8/8 checks. Filtering lost two fiscal-year labels. |
@@ -51,17 +51,19 @@ Both routes used the same independent cached Sol Medium read. Fees are actual ho
 
 ## Quarterly Flash test
 
-Palo Alto 10-Q, eight drivers, no Sol. Replaying saved answers cost $0.
+Autodesk, Tyler Technologies, Nasdaq and Atlassian. Each method received the same 50 driver names per company and the same quarterly filing and exhibits. Expected details were recorded before the scans. No Sol read the filings.
 
-| Method | Facts found | Median filing text per driver | Original API cost |
-|---|---:|---:|---:|
-| Full Decider | 27/28 | 1.65% | 1.31¢ |
-| Flash → full Decider | 27/28 | 2.52% | 0.46¢ |
-| Flash alone, keeping whole groups | 28/28 | 19.51% | 0.11¢ |
+| Method | Figures or calculation inputs | Supporting details | Details for 4 drivers reviewed more deeply | Median filing text per driver | Actual hosted cost |
+|---|---:|---:|---:|---:|---:|
+| **Full Decider** | 139/141 | 136/138 | 22/28 | 2.24% | 41.57¢ |
+| Flash → full Decider | 139/141 | 135/138 | 23/28 | 2.60% | 7.52¢ |
+| Flash alone, keeping whole groups | 141/141 | 138/138 | 27/28 | 12.73% | 1.23¢ |
 
-The first two methods both missed that customers pay up front for subscription and support. Their packets differed for all eight drivers.
+**What changed.** Both narrow methods missed the inputs for Tyler’s SaaS recurring revenue and its growth. Flash screening kept Tyler’s transaction fee figures but dropped the explanation for their growth. It also recovered Autodesk’s $3.515bn in unbilled obligations that full Decider missed. Separately, both Flash routes dropped Ovintiv’s Canadian revenue table ($693m versus $782m). Flash scored its group at 0.87%, below the 1% cutoff. Full Decider kept it.
 
-**Next test.** The prepared 10-Qs have 83 driver names for Autodesk, 126 for Tyler Technologies, 88 for Nasdaq and 60 for Atlassian. Select 50 per company and verify the expected facts from each filing before running and scoring the comparison.
+**Coverage and cost.** Of 200 drivers, 141 had a verified figure or inputs, 19 had only supporting details and 40 had no verified answer. The four deeper reviews searched the entire filing for one driver each. Check sets overlap. In 48 sampled passages per method, 10 were clearly irrelevant with full Decider, 9 with Flash → full and 27 with whole groups. Total paid was **49.08¢** across all methods, counting the shared Flash scan once. [Source passages, per-driver scores, API responses and offline replay](ContextSearchEvidence/FlashQuarterly50_20261127.zip)
+
+Earlier Palo Alto 10-Q, eight drivers. Full Decider and Flash → full both found 27/28 facts, missing that customers pay up front. They kept 1.65% and 2.52% of the filing per driver at the median and cost 1.31¢ and 0.46¢. Whole groups found 28/28, kept 19.51% and cost 0.11¢.
 
 ## Twenty 10-Ks, ten drivers per filing
 
